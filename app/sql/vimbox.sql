@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 10, 2016 at 03:41 AM
+-- Generation Time: Jun 18, 2016 at 04:40 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -27,41 +27,318 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `customers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `contact` varchar(20) NOT NULL,
+  `customer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `salutation` varchar(10) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `contact` int(20) NOT NULL,
   `email` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+  PRIMARY KEY (`customer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`id`, `name`, `contact`, `email`) VALUES
-(1, 'Mr Ngo Yu Sheng', '98765432', 'ngoyusheng@gmail.com'),
-(2, 'Mr Chow Chun Kit', '90028347', 'chowchunkit@gmail.com'),
-(3, 'Ms Pamela Seah', '90013457', 'pamelaseah@gmail.com');
+INSERT INTO `customers` (`customer_id`, `salutation`, `first_name`, `last_name`, `contact`, `email`) VALUES
+(1, 'Mr', 'chun kit', 'chow', 99873029, 'chunkit@gmail.com'),
+(3, 'Ms', 'pamela', 'seah', 90827736, 'pamela@gmail.com'),
+(4, 'Mr', '', 'Lim', 90083947, 'limahkau@gmail.com'),
+(5, 'Mr', 'subash ', 'ninabeh', 90008723, 'subash@gmail.com'),
+(6, 'Mr', 'khairul', 'anwar', 98873304, 'khairul@gmail.com'),
+(7, 'Mr', 'Wai Tuck', '', 98876253, '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customershistory`
+-- Table structure for table `customers_history`
 --
 
-CREATE TABLE IF NOT EXISTS `customershistory` (
-  `custid` int(11) NOT NULL,
-  `id` varchar(10) NOT NULL,
-  PRIMARY KEY (`custid`,`id`)
+CREATE TABLE IF NOT EXISTS `customers_history` (
+  `customer_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  PRIMARY KEY (`customer_id`,`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customers_history`
+--
+
+INSERT INTO `customers_history` (`customer_id`, `id`) VALUES
+(1, 47520567),
+(1, 284361538),
+(7, 17093618);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadcomment`
+--
+
+CREATE TABLE IF NOT EXISTS `leadcomment` (
+  `lead_id` int(10) NOT NULL,
+  `comment` varchar(255) NOT NULL,
+  PRIMARY KEY (`lead_id`,`comment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `items`
+-- Table structure for table `leadcustitem`
 --
 
-CREATE TABLE IF NOT EXISTS `items` (
+CREATE TABLE IF NOT EXISTS `leadcustitem` (
+  `lead_id` int(10) NOT NULL,
+  `itemname` varchar(100) NOT NULL,
+  `itemremark` varchar(255) NOT NULL,
+  `itemcharge` varchar(10) NOT NULL,
+  `itemqty` varchar(10) NOT NULL,
+  `itemunit` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadenquiry`
+--
+
+CREATE TABLE IF NOT EXISTS `leadenquiry` (
+  `lead_id` int(10) NOT NULL,
+  `enquiry` varchar(255) NOT NULL,
+  PRIMARY KEY (`lead_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadenquiry`
+--
+
+INSERT INTO `leadenquiry` (`lead_id`, `enquiry`) VALUES
+(255594632, 'customer dont want to go on anymore'),
+(284361538, 'yeah');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadinfo`
+--
+
+CREATE TABLE IF NOT EXISTS `leadinfo` (
+  `owner_user` varchar(100) NOT NULL,
+  `lead_id` int(10) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `tom` varchar(200) NOT NULL,
+  `dom` varchar(200) NOT NULL,
+  `datetime_of_creation` datetime NOT NULL,
+  `status` varchar(10) NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `source` varchar(20) NOT NULL,
+  `referral` varchar(200) NOT NULL,
+  PRIMARY KEY (`owner_user`,`lead_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadinfo`
+--
+
+INSERT INTO `leadinfo` (`owner_user`, `lead_id`, `type`, `customer_id`, `tom`, `dom`, `datetime_of_creation`, `status`, `reason`, `source`, `referral`) VALUES
+('admin', 255594632, 'Enquiry', 4, 'Residential|Office', '', '2016-06-10 10:02:12', 'Rejected', 'Customer kpkb', 'Call', 'Website'),
+('admin', 480987952, 'Sales', 1, '', '', '2016-06-10 09:46:06', 'Pending', '', 'Call', 'Friend'),
+('s9344895b', 284361538, 'Enquiry', 1, '', '', '2016-06-15 17:49:04', 'Pending', '', 'Call', 'Friend');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadmaterial`
+--
+
+CREATE TABLE IF NOT EXISTS `leadmaterial` (
+  `lead_id` int(10) NOT NULL,
+  `materialname` varchar(100) NOT NULL,
+  `materialqty` varchar(10) NOT NULL,
+  `materialcharge` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadmovefrom`
+--
+
+CREATE TABLE IF NOT EXISTS `leadmovefrom` (
+  `lead_id` int(10) NOT NULL,
+  `addressfrom` varchar(255) NOT NULL,
+  `storeysfrom` varchar(50) NOT NULL,
+  `pushingfrom` varchar(50) NOT NULL,
+  PRIMARY KEY (`lead_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadmovefrom`
+--
+
+INSERT INTO `leadmovefrom` (`lead_id`, `addressfrom`, `storeysfrom`, `pushingfrom`) VALUES
+(255594632, '864 Yishun Ave 4, Block 864_11_11_760864', ' ', ' '),
+(284361538, '', '', ''),
+(480987952, '', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadmoveto`
+--
+
+CREATE TABLE IF NOT EXISTS `leadmoveto` (
+  `lead_id` int(10) NOT NULL,
+  `addressto` varchar(255) NOT NULL,
+  `storeysto` varchar(50) NOT NULL,
+  `pushingto` varchar(50) NOT NULL,
+  PRIMARY KEY (`lead_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadmoveto`
+--
+
+INSERT INTO `leadmoveto` (`lead_id`, `addressto`, `storeysto`, `pushingto`) VALUES
+(255594632, '865 Yishun Street 81, Block 865_11_11_760865', ' ', ' '),
+(284361538, '', '', ''),
+(480987952, '', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadother`
+--
+
+CREATE TABLE IF NOT EXISTS `leadother` (
+  `lead_id` int(10) NOT NULL,
+  `other` varchar(100) NOT NULL,
+  `charge` varchar(10) NOT NULL,
+  PRIMARY KEY (`lead_id`,`other`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadother`
+--
+
+INSERT INTO `leadother` (`lead_id`, `other`, `charge`) VALUES
+(480987952, 'detourCharge', '0.00'),
+(480987952, 'markup', '0.00'),
+(480987952, 'materialCharge', '0.00'),
+(480987952, 'pushCharge', '0.00'),
+(480987952, 'storeyCharge', '0.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadremark`
+--
+
+CREATE TABLE IF NOT EXISTS `leadremark` (
+  `lead_id` int(10) NOT NULL,
+  `remark` varchar(255) NOT NULL,
+  PRIMARY KEY (`lead_id`,`remark`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadservice`
+--
+
+CREATE TABLE IF NOT EXISTS `leadservice` (
+  `lead_id` int(10) NOT NULL,
+  `service` varchar(100) NOT NULL,
+  `charge` varchar(10) NOT NULL,
+  `manpower` varchar(10) NOT NULL,
+  `remarks` varchar(255) NOT NULL,
+  PRIMARY KEY (`lead_id`,`service`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadvimboxitem`
+--
+
+CREATE TABLE IF NOT EXISTS `leadvimboxitem` (
+  `lead_id` int(10) NOT NULL,
+  `itemname` varchar(100) NOT NULL,
+  `itemremark` varchar(255) NOT NULL,
+  `itemcharge` varchar(10) NOT NULL,
+  `itemqty` varchar(10) NOT NULL,
+  `itemunit` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lead_followups`
+--
+
+CREATE TABLE IF NOT EXISTS `lead_followups` (
+  `lead_id` int(10) NOT NULL,
+  `followup` varchar(255) NOT NULL,
+  `datetime_of_creation` datetime NOT NULL,
+  PRIMARY KEY (`lead_id`,`datetime_of_creation`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `lead_followups`
+--
+
+INSERT INTO `lead_followups` (`lead_id`, `followup`, `datetime_of_creation`) VALUES
+(255594632, 'Called customer if wanna confirm but never pick up phone', '2016-06-10 10:01:49'),
+(284361538, 'testing', '2016-06-15 17:35:43'),
+(284361538, 'one more time', '2016-06-15 17:36:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `system_designations`
+--
+
+CREATE TABLE IF NOT EXISTS `system_designations` (
+  `designation` varchar(150) NOT NULL,
+  PRIMARY KEY (`designation`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `system_designations`
+--
+
+INSERT INTO `system_designations` (`designation`) VALUES
+('Finance Manager'),
+('HR Manager');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `system_designations_part_time`
+--
+
+CREATE TABLE IF NOT EXISTS `system_designations_part_time` (
+  `designation` varchar(150) NOT NULL,
+  PRIMARY KEY (`designation`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `system_designations_part_time`
+--
+
+INSERT INTO `system_designations_part_time` (`designation`) VALUES
+('Driver'),
+('Mover'),
+('Supervisor');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `system_items`
+--
+
+CREATE TABLE IF NOT EXISTS `system_items` (
   `name` varchar(50) NOT NULL,
   `description` varchar(100) NOT NULL,
   `dimensions` varchar(50) NOT NULL,
@@ -70,10 +347,10 @@ CREATE TABLE IF NOT EXISTS `items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `items`
+-- Dumping data for table `system_items`
 --
 
-INSERT INTO `items` (`name`, `description`, `dimensions`, `units`) VALUES
+INSERT INTO `system_items` (`name`, `description`, `dimensions`, `units`) VALUES
 ('Arm Chair', '', '', '4'),
 ('Bed (Bunk bed)', 'Double Single', '', '30'),
 ('Bed (Bunk bed)', 'Queen + Single', '', '34'),
@@ -143,229 +420,78 @@ INSERT INTO `items` (`name`, `description`, `dimensions`, `units`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `leadcomment`
+-- Table structure for table `system_lead_types`
 --
 
-CREATE TABLE IF NOT EXISTS `leadcomment` (
-  `leadid` varchar(10) NOT NULL,
-  `comment` varchar(255) NOT NULL,
-  PRIMARY KEY (`leadid`,`comment`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadcustitem`
---
-
-CREATE TABLE IF NOT EXISTS `leadcustitem` (
-  `leadid` varchar(10) NOT NULL,
-  `itemname` varchar(100) NOT NULL,
-  `itemremark` varchar(255) NOT NULL,
-  `itemcharge` varchar(10) NOT NULL,
-  `itemqty` varchar(10) NOT NULL,
-  `itemunit` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadenquiry`
---
-
-CREATE TABLE IF NOT EXISTS `leadenquiry` (
-  `leadid` varchar(10) NOT NULL,
-  `enquiry` varchar(255) NOT NULL,
-  PRIMARY KEY (`leadid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadfollowups`
---
-
-CREATE TABLE IF NOT EXISTS `leadfollowups` (
-  `id` varchar(10) NOT NULL,
-  `followup` varchar(255) NOT NULL,
-  `datetiming` datetime NOT NULL,
-  PRIMARY KEY (`id`,`datetiming`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadinfo`
---
-
-CREATE TABLE IF NOT EXISTS `leadinfo` (
-  `username` varchar(100) NOT NULL,
-  `leadid` varchar(10) NOT NULL,
-  `type` varchar(20) NOT NULL,
-  `custid` int(11) NOT NULL,
-  `tom` varchar(200) NOT NULL,
-  `dom` varchar(200) NOT NULL,
-  `datetiming` datetime NOT NULL,
-  `status` varchar(10) NOT NULL,
-  `reason` varchar(255) NOT NULL,
-  `source` varchar(20) NOT NULL,
-  `referral` varchar(200) NOT NULL,
-  PRIMARY KEY (`username`,`leadid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadmaterial`
---
-
-CREATE TABLE IF NOT EXISTS `leadmaterial` (
-  `leadid` varchar(10) NOT NULL,
-  `materialname` varchar(100) NOT NULL,
-  `materialqty` varchar(10) NOT NULL,
-  `materialcharge` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadmovefrom`
---
-
-CREATE TABLE IF NOT EXISTS `leadmovefrom` (
-  `leadid` varchar(10) NOT NULL,
-  `addressfrom` varchar(255) NOT NULL,
-  `storeysfrom` varchar(50) NOT NULL,
-  `pushingfrom` varchar(50) NOT NULL,
-  PRIMARY KEY (`leadid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadmoveto`
---
-
-CREATE TABLE IF NOT EXISTS `leadmoveto` (
-  `leadid` varchar(10) NOT NULL,
-  `addressto` varchar(255) NOT NULL,
-  `storeysto` varchar(50) NOT NULL,
-  `pushingto` varchar(50) NOT NULL,
-  PRIMARY KEY (`leadid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadother`
---
-
-CREATE TABLE IF NOT EXISTS `leadother` (
-  `leadid` varchar(10) NOT NULL,
-  `other` varchar(100) NOT NULL,
-  `charge` varchar(10) NOT NULL,
-  PRIMARY KEY (`leadid`,`other`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadremark`
---
-
-CREATE TABLE IF NOT EXISTS `leadremark` (
-  `leadid` varchar(10) NOT NULL,
-  `remark` varchar(255) NOT NULL,
-  PRIMARY KEY (`leadid`,`remark`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadservice`
---
-
-CREATE TABLE IF NOT EXISTS `leadservice` (
-  `leadid` varchar(10) NOT NULL,
-  `service` varchar(100) NOT NULL,
-  `charge` varchar(10) NOT NULL,
-  `manpower` varchar(10) NOT NULL,
-  `remarks` varchar(255) NOT NULL,
-  PRIMARY KEY (`leadid`,`service`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leadtype`
---
-
-CREATE TABLE IF NOT EXISTS `leadtype` (
+CREATE TABLE IF NOT EXISTS `system_lead_types` (
   `type` varchar(20) NOT NULL,
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `leadtype`
+-- Dumping data for table `system_lead_types`
 --
 
-INSERT INTO `leadtype` (`type`) VALUES
+INSERT INTO `system_lead_types` (`type`) VALUES
 ('Enquiry'),
 ('Sales');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `leadvimboxitem`
+-- Table structure for table `system_modules`
 --
 
-CREATE TABLE IF NOT EXISTS `leadvimboxitem` (
-  `leadid` varchar(10) NOT NULL,
-  `itemname` varchar(100) NOT NULL,
-  `itemremark` varchar(255) NOT NULL,
-  `itemcharge` varchar(10) NOT NULL,
-  `itemqty` varchar(10) NOT NULL,
-  `itemunit` varchar(10) NOT NULL
+CREATE TABLE IF NOT EXISTS `system_modules` (
+  `module` varchar(100) NOT NULL,
+  PRIMARY KEY (`module`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `system_modules`
+--
+
+INSERT INTO `system_modules` (`module`) VALUES
+('Sales'),
+('Ticket');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `movetype`
+-- Table structure for table `system_move_types`
 --
 
-CREATE TABLE IF NOT EXISTS `movetype` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `system_move_types` (
   `type` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`,`type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `movetype`
+-- Dumping data for table `system_move_types`
 --
 
-INSERT INTO `movetype` (`id`, `type`) VALUES
-(2, 'Residential'),
-(3, 'Office'),
-(4, 'Disposal'),
-(5, 'Storage');
+INSERT INTO `system_move_types` (`type`) VALUES
+('Disposal'),
+('Office'),
+('Residential'),
+('Storage');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `referrals`
+-- Table structure for table `system_referrals`
 --
 
-CREATE TABLE IF NOT EXISTS `referrals` (
+CREATE TABLE IF NOT EXISTS `system_referrals` (
   `source` varchar(30) NOT NULL,
   PRIMARY KEY (`source`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `referrals`
+-- Dumping data for table `system_referrals`
 --
 
-INSERT INTO `referrals` (`source`) VALUES
+INSERT INTO `system_referrals` (`source`) VALUES
 ('Friend'),
 ('Magazine'),
 ('Website');
@@ -373,10 +499,10 @@ INSERT INTO `referrals` (`source`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `services`
+-- Table structure for table `system_services`
 --
 
-CREATE TABLE IF NOT EXISTS `services` (
+CREATE TABLE IF NOT EXISTS `system_services` (
   `primary_service` varchar(50) NOT NULL,
   `secondary_service` varchar(50) NOT NULL,
   `formula` varchar(50) DEFAULT NULL,
@@ -385,10 +511,10 @@ CREATE TABLE IF NOT EXISTS `services` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `services`
+-- Dumping data for table `system_services`
 --
 
-INSERT INTO `services` (`primary_service`, `secondary_service`, `formula`, `description`) VALUES
+INSERT INTO `system_services` (`primary_service`, `secondary_service`, `formula`, `description`) VALUES
 ('Manpower', 'Internal Moving', '160 x MP', ''),
 ('Manpower', 'Manpower Request', '60 x MP', ''),
 ('Moving', 'Local', '4.8 x U + AC', 'Provision of Local Moving Service'),
@@ -398,38 +524,38 @@ INSERT INTO `services` (`primary_service`, `secondary_service`, `formula`, `desc
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sources`
+-- Table structure for table `system_sources`
 --
 
-CREATE TABLE IF NOT EXISTS `sources` (
+CREATE TABLE IF NOT EXISTS `system_sources` (
   `source` varchar(100) NOT NULL,
   PRIMARY KEY (`source`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `sources`
+-- Dumping data for table `system_sources`
 --
 
-INSERT INTO `sources` (`source`) VALUES
+INSERT INTO `system_sources` (`source`) VALUES
 ('Call'),
 ('Email');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `special_items`
+-- Table structure for table `system_special_items`
 --
 
-CREATE TABLE IF NOT EXISTS `special_items` (
+CREATE TABLE IF NOT EXISTS `system_special_items` (
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `special_items`
+-- Dumping data for table `system_special_items`
 --
 
-INSERT INTO `special_items` (`name`) VALUES
+INSERT INTO `system_special_items` (`name`) VALUES
 ('Bed (Compartment bed)'),
 ('Massage Chair'),
 ('Piano'),
@@ -439,36 +565,54 @@ INSERT INTO `special_items` (`name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ticketcomments`
---
-
-CREATE TABLE IF NOT EXISTS `ticketcomments` (
-  `id` varchar(8) NOT NULL,
-  `comment` varchar(255) NOT NULL,
-  `datetiming` datetime NOT NULL,
-  PRIMARY KEY (`id`,`datetiming`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tickets`
 --
 
 CREATE TABLE IF NOT EXISTS `tickets` (
-  `id` varchar(8) NOT NULL,
-  `owneruser` varchar(100) NOT NULL,
+  `ticket_id` int(8) NOT NULL,
+  `owner_user` varchar(100) NOT NULL,
+  `assigned_users` varchar(200) NOT NULL,
+  `customer_id` int(11) NOT NULL,
   `subject` varchar(100) NOT NULL,
-  `datetiming` datetime NOT NULL,
-  `assigned` varchar(200) NOT NULL,
-  `custname` varchar(100) NOT NULL,
-  `custcontact` varchar(20) NOT NULL,
+  `datetime_of_creation` datetime NOT NULL,
   `description` varchar(255) NOT NULL,
   `solution` varchar(255) NOT NULL,
   `status` varchar(10) NOT NULL,
-  `custemail` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`ticket_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tickets`
+--
+
+INSERT INTO `tickets` (`ticket_id`, `owner_user`, `assigned_users`, `customer_id`, `subject`, `datetime_of_creation`, `description`, `solution`, `status`) VALUES
+(17093618, 's9344895b', 's9344895b', 7, 'dsadda', '2016-06-15 18:28:50', 'duqiakfgdiuqwghf', '', 'Pending'),
+(47520567, 's9344895b', 's9344895b', 1, 'bla bla bla', '2016-06-15 13:38:12', 'bla bla bla', 'resolved', 'Resolved');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_comments`
+--
+
+CREATE TABLE IF NOT EXISTS `ticket_comments` (
+  `ticket_id` int(8) NOT NULL,
+  `comment` varchar(255) NOT NULL,
+  `datetime_of_creation` datetime NOT NULL,
+  PRIMARY KEY (`ticket_id`,`datetime_of_creation`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ticket_comments`
+--
+
+INSERT INTO `ticket_comments` (`ticket_id`, `comment`, `datetime_of_creation`) VALUES
+(47520567, 'i called', '2016-06-15 13:55:18'),
+(47520567, 'i called again', '2016-06-15 13:57:35'),
+(47520567, 'testing', '2016-06-15 13:58:28'),
+(47520567, 'testing again', '2016-06-15 13:58:57'),
+(47520567, 'one last test', '2016-06-15 13:59:29'),
+(47520567, 'testing again and again', '2016-06-15 14:02:22');
 
 -- --------------------------------------------------------
 
@@ -477,21 +621,43 @@ CREATE TABLE IF NOT EXISTS `tickets` (
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
+  `nric` varchar(10) NOT NULL,
   `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `fullname` varchar(100) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `gender` varchar(10) NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `date_joined` date NOT NULL,
+  `contact` int(11) NOT NULL,
+  `designation` varchar(100) NOT NULL,
   `modules` varchar(100) NOT NULL,
-  PRIMARY KEY (`username`)
+  PRIMARY KEY (`nric`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`username`, `password`, `fullname`, `modules`) VALUES
-('admin', 'password123', 'NGO Yu Sheng', 'ticket'),
-('chunkit', 'password', 'CHOW Chun Kit', 'ticket'),
-('khairul', 'password', 'KHAIRUL Anwar Bin Johari', 'ticket');
+INSERT INTO `users` (`nric`, `username`, `password`, `first_name`, `last_name`, `gender`, `date_of_birth`, `address`, `date_joined`, `contact`, `designation`, `modules`) VALUES
+('s9344895b', 'admin', 'password123', 'yu sheng', 'ngo', 'male', '2014-11-21', 'yishun ave 4 blk 864|#11-37|s760864', '2016-06-10', 97312965, '', 'ticket|sales');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_part_time`
+--
+
+CREATE TABLE IF NOT EXISTS `users_part_time` (
+  `nric` varchar(10) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `date_joined` date NOT NULL,
+  `contact` int(11) NOT NULL,
+  `designation` varchar(100) NOT NULL,
+  PRIMARY KEY (`nric`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

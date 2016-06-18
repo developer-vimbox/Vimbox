@@ -8,16 +8,16 @@ import java.util.ArrayList;
 
 public class LeadPopulationDAO {
 
-    private static final String GET_MOVE_TYPES = "SELECT type FROM movetype";
-    private static final String GET_LEAD_TYPES = "SELECT type FROM leadtype";
-    private static final String GET_SOURCES = "SELECT * FROM sources";
-    private static final String GET_REFERRALS = "SELECT * FROM referrals";
-    private static final String GET_EXISITING_ITEMS = "SELECT * FROM items";
-    private static final String GET_EXISITING_SPECIAL_ITEMS = "SELECT * FROM special_items";
-    private static final String GET_PRIMARY_SERVICES = "SELECT DISTINCT primary_service FROM services";
-    private static final String GET_SECONDARY_SERVICES = "SELECT secondary_service FROM services where primary_service=?";
-    private static final String GET_SECONDARY_SERVICE_FORMULA = "SELECT formula FROM services WHERE primary_service=? AND secondary_service=?";
-    private static final String GET_SECONDARY_SERVICE_DESCRIPTION = "SELECT description FROM services WHERE primary_service=? AND secondary_service=?";
+    private static final String GET_MOVE_TYPES = "SELECT * FROM system_move_types";
+    private static final String GET_LEAD_TYPES = "SELECT * FROM system_lead_types";
+    private static final String GET_SOURCES = "SELECT * FROM system_sources";
+    private static final String GET_REFERRALS = "SELECT * FROM system_referrals";
+    private static final String GET_EXISITING_ITEMS = "SELECT * FROM system_items";
+    private static final String GET_EXISITING_SPECIAL_ITEMS = "SELECT * FROM system_special_items";
+    private static final String GET_PRIMARY_SERVICES = "SELECT DISTINCT primary_service FROM system_services";
+    private static final String GET_SECONDARY_SERVICES = "SELECT secondary_service FROM system_services where primary_service=?";
+    private static final String GET_SECONDARY_SERVICE_FORMULA = "SELECT formula FROM system_services WHERE primary_service=? AND secondary_service=?";
+    private static final String GET_SECONDARY_SERVICE_DESCRIPTION = "SELECT system_services FROM services WHERE primary_service=? AND secondary_service=?";
 
     public static ArrayList<String> getLeadTypes() {
         ArrayList<String> results = new ArrayList<String>();

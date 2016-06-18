@@ -53,8 +53,7 @@
                 sc.removeAttribute("status");
                 out.println("<h2>Lead saved!</h2><br>");
             }
-            int random = new Random().nextInt(1000000000) + 1;
-            String leadId = String.format("%09d",random);
+            int leadId = new Random().nextInt(900000000) + 100000000;
         %>
         <h1>Create New Lead</h1>
 
@@ -87,64 +86,32 @@
             </table>
             <fieldset>
                 <legend>Customer Information</legend>
+                <input type="text" id="customer_search" placeholder="Enter customer name">
+                <button onclick='customerSearch("ticket");return false;'>Search</button>
+                <button onclick="addNewCustomer();return false;">Add New</button>
+
+                <div id="customer_modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('customer_modal')">×</span>
+                            <div id="customer_content"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="customer_error_modal" class="modal">
+                    <div class="error-modal-content">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('customer_error_modal')">×</span>
+                            <div id="customer_error_status"></div>
+                            <hr>
+                            <div id="customer_error_message"></div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 <table>
                     <col width="100">
-                    <tr>
-                        <td align="right"><b>Salutation :</b></td>
-                        <td>
-                            <select id="salutation" name="salutation" autofocus>
-                                <option value="Mr" selected>Mr</option>
-                                <option value="Ms">Ms</option>
-                                <option value="Mrs">Mrs</option>
-                                <option value="Mdm">Mdm</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>Name :</b></td>
-                        <td>
-                            <input type="text" id="name" name="name" required>
-                            <button onclick="searchName();
-                                    return false;">Search</button>
-                            <!-- The Modal -->
-                            <div id="snModal" class="modal">
-                                <!-- Modal content -->
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <span class="close" onclick="closeModal('snModal')">×</span>
-                                        <div id="snContent"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button onclick="addCustomer();
-                                    return false;">+</button>
-                            <!-- The Modal -->
-                            <div id="csModal" class="modal">
-                                <!-- Modal content -->
-                                <div class="error-modal-content">
-                                    <div class="modal-body">
-                                        <span class="close" onclick="closeModal('csModal')">×</span>
-                                        <div id="csStatus"></div>
-                                        <hr>
-                                        <div id="csMessage"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>Contact Number :</b></td>
-                        <td>
-                            <input type="text" id="contact" name="contact" pattern="[0-9]{8,13}" oninvalid="this.setCustomValidity('Please enter a valid contact number')" oninput="setCustomValidity('')">
-                            <input type="hidden" name="custId" id="custId" value="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>Email :</b></td>
-                        <td>
-                            <input type="text" id="email" name="email">
-                        </td>
-                    </tr>
                     <tr>
                         <td align="right"><b>Referred by :</b></td>
                         <td>
@@ -160,7 +127,42 @@
                         </td>
                     </tr>
                 </table>
-                                
+                <div id="customer_information_table" style="display:none">
+                    <input type="hidden" id="customer_id" name="customer_id">
+                    <table>
+                        <col width="100">
+                        <tr>
+                            <td align="right"><b>Salutation :</b></td>
+                            <td>
+                                <label id="customer_salutation"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right"><b>First Name :</b></td>
+                            <td>
+                                <label id="customer_first_name"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right"><b>Last Name :</b></td>
+                            <td>
+                                <label id="customer_last_name"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right"><b>Contact :</b></td>
+                            <td>
+                                <label id="customer_contact"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right"><b>Email :</b></td>
+                            <td>
+                                <label id="customer_email"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>        
             </fieldset>
             <br>
             <fieldset>

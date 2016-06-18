@@ -1,78 +1,55 @@
 package com.vimbox.ticket;
 
+import com.vimbox.customer.Customer;
 import com.vimbox.user.User;
 import java.util.ArrayList;
 import org.joda.time.DateTime;
 
 public class Ticket {
-    private User owner;
-    private String ticketid;
-    private String customerName;
-    private String contactNumber;
-    private String email;
-    private DateTime datetime;
+    private int ticket_id;
+    private User owner_user;
+    private ArrayList<User> assigned_users;
+    private Customer customer;
     private String subject;
-    private ArrayList<User> assigned;
+    private DateTime datetime_of_creation;
     private String description;
     private String solution;
     private String status;
 
-    // Constructor used for ticket generation //
-    public Ticket(User owner, String ticketid, String customerName, String contactNumber, String email, DateTime datetime, String subject, ArrayList<User> assigned, String description, String status) {
-        this.owner = owner;
-        this.ticketid = ticketid;
-        this.customerName = customerName;
-        this.contactNumber = contactNumber;
-        this.email = email;
-        this.datetime = datetime;
+    public Ticket(int ticket_id, User owner_user, ArrayList<User> assigned_users, Customer customer, String subject, DateTime datetime_of_creation, String description, String solution, String status) {
+        this.ticket_id = ticket_id;
+        this.owner_user = owner_user;
+        this.assigned_users = assigned_users;
+        this.customer = customer;
         this.subject = subject;
-        this.assigned = assigned;
-        this.description = description;
-        this.status = status;
-        this.solution = "";
-    }
-
-    // Constructor used for ticket forum //
-    public Ticket(User owner, String ticketid, String customerName, String contactNumber, String email, DateTime datetime, String subject, ArrayList<User> assigned, String description, String solution, String status) {
-        this.owner = owner;
-        this.ticketid = ticketid;
-        this.customerName = customerName;
-        this.contactNumber = contactNumber;
-        this.email = email;
-        this.datetime = datetime;
-        this.subject = subject;
-        this.assigned = assigned;
+        this.datetime_of_creation = datetime_of_creation;
         this.description = description;
         this.solution = solution;
         this.status = status;
     }
 
-    public User getOwner() {
-        return owner;
+    public int getTicket_id() {
+        return ticket_id;
     }
 
-    public String getTicketid() {
-        return ticketid;
+    public User getOwner_user() {
+        return owner_user;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public ArrayList<User> getAssigned_users() {
+        return assigned_users;
     }
 
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public DateTime getDatetime() {
-        return datetime;
+    public Customer getCustomer() {
+        return customer;
     }
 
     public String getSubject() {
         return subject;
     }
 
-    public ArrayList<User> getAssigned() {
-        return assigned;
+    public DateTime getDatetime_of_creation() {
+        return datetime_of_creation;
     }
 
     public String getDescription() {
@@ -85,9 +62,5 @@ public class Ticket {
 
     public String getStatus() {
         return status;
-    }
-
-    public String getEmail() {
-        return email;
     }
 }

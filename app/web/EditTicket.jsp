@@ -1,7 +1,9 @@
-<%@page import="com.vimbox.util.Converter"%>
+<%@page import="com.vimbox.customer.Customer"%>
+<%@page import="com.vimbox.database.UserDAO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.vimbox.ticket.Ticket"%>
+<%@page import="com.vimbox.database.TicketDAO"%>
 <%@include file="ValidateLogin.jsp"%>
-<%@include file="PopulateAssigned.jsp"%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -9,152 +11,215 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Edit Ticket</title>
         <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="JS/CustomerFunctions.js"></script>
-        <script src="JS/ModalFunctions.js"></script>
+        <style>
+            #additionalAssigned{
+                display:none;
+            }
+        </style>
     </head>
     <body>
-        <%@include file="EditTicketCheck.jsp"%>
-        <a href="MyTickets.jsp">Back</a><br>
         <%
-            if(ticket!=null){
-                String customerName = ticket.getCustomerName();
-                String salutation = "";
-                String name = "";
-                if(!customerName.isEmpty()){
-                    salutation = customerName.substring(0,customerName.indexOf(" "));
-                    name = customerName.substring(customerName.indexOf(" ")+1);
-                }
-                String contact = ticket.getContactNumber();
-                String email = ticket.getEmail();
-                String subject = ticket.getSubject();
-                String description = ticket.getDescription();
-                ArrayList<User> assigned = ticket.getAssigned();
+            int ticket_id = Integer.parseInt(request.getParameter("ticket_id"));
+            Ticket ticket = TicketDAO.getTicketById(ticket_id);
+            ArrayList<User> users = UserDAO.getUsers();
+            Customer customer = ticket.getCustomer();
         %>
-        <form method="POST" action="EditTicketController" autocomplete="on">
+        <h1>Ticket Details</h1>
+        <table>
+            <tr>
+                <td align="right"><b>Ticket ID :</b></td>
+                <td>
+                    <input type='hidden' id='ticket_id' value='<%=ticket_id%>'><%=ticket_id%>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <fieldset>
+            <legend>Customer Information</legend>
+            <input type="text" id="customer_search" placeholder="Enter customer name">
+            <button onclick='customerSearch("ticket");return false;'>Search</button>
+            <button onclick="addNewCustomer();return false;">Add New</button>
+
+            <div id="customer_modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <span class="close" onclick="closeModal('customer_modal')">×</span>
+                        <div id="customer_content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="customer_error_modal" class="modal">
+                <div class="error-modal-content">
+                    <div class="modal-body">
+                        <span class="close" onclick="closeModal('customer_error_modal')">×</span>
+                        <div id="customer_error_status"></div>
+                        <hr>
+                        <div id="customer_error_message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="customer_information_table">
+                <hr>
+                <input type="hidden" id="customer_id" name="customer_id" value="<%=customer.getCustomer_id()%>">
+                <table>
+                    <tr>
+                        <td align="right"><b>Salutation :</b></td>
+                        <td>
+                            <label id="customer_salutation"><%=customer.getSalutation()%></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><b>First Name :</b></td>
+                        <td>
+                            <label id="customer_first_name"><%=customer.getFirst_name()%></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><b>Last Name :</b></td>
+                        <td>
+                            <label id="customer_last_name"><%=customer.getLast_name()%></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><b>Contact Number :</b></td>
+                        <td>
+                            <label id="customer_contact">
+                            <%
+                                int contact = customer.getContact();
+                                if(contact != 0){
+                                    out.println(contact + "");
+                                }
+                            %>    
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><b>Email :</b></td>
+                        <td>
+                            <label id="customer_email"><%=customer.getEmail()%></label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>Ticket Information</legend>
             <table>
                 <tr>
-                    <td align="right"><b>Ticket ID :</b></td>
-                <input type='hidden' name='ticketId' value='<%=ticket.getTicketid()%>'><td><%=ticket.getTicketid()%></td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Salutation :</b></td>
-                    <td>
-                        <select name="salutation" autofocus>
-                            <%
-                                String[] sals = new String[]{"Mr","Ms","Mrs","Mdm"};
-                                for(String sal:sals){
-                                    if(sal.equals(salutation)){
-                                        out.println("<option value='" + sal + "' selected>" + sal + "</option>");
-                                    }else{
-                                        out.println("<option value='" + sal + "'>" + sal + "</option>");
-                                    }
-                                }
-                            %>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Name :</b></td>
-                    <td>
-                        <input type="text" id="name" name="name" value='<%=name%>' autofocus>
-                        <button class="customer-search" onclick="searchName();return false;">Search</button>
-                        <!-- The Modal -->
-                        <div id="snModal" class="modal">
-                            <!-- Modal content -->
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <span class="close" onclick="closeModal('snModal')">×</span>
-                                    <div id="snContent"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Contact Number :</b></td>
-                    <td>
-                        <input type="number" id="contact" name="contact" value='<%=contact%>' autofocus>
-                        <input type="hidden" name="dbExist" id="dbExist" value='<%=contact%>'>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Email :</b></td>
-                    <td>
-                        <input type="text" id="email" name="email" value='<%=email%>' autofocus>
-                    </td>
+                    <td align="right"><b>Status :</b></td>
+                    <td><%=ticket.getStatus()%></td>
                 </tr>
                 <tr>
                     <td align="right"><b>Assigned To :</b></td>
                     <td>
                         <div id="dynamicInput">
                         <%
-                            for(int i = 0; i<assigned.size(); i++){
-                                User assign = assigned.get(i);
-                                out.println("<div id='" + i + "'><table><tr><td><select name='assigned'>");
-                                for(String fullname:fullnames){
-                                    if(fullname.equals(assign.getFullname())){
-                                        out.println("<option value='" + fullname + "' selected>"+ fullname + "</option>");
-                                    }else{
-                                        out.println("<option value='" + fullname + "'>"+ fullname + "</option>");
-                                    }
-                                }
-                                out.println("</select></td><td>");
+                            ArrayList<User> assigned_users = ticket.getAssigned_users();
+                            for(int i=0; i<assigned_users.size(); i++){
+                                String nric = assigned_users.get(i).getNric();
                                 if(i == 0){
-                                    out.println("<input type='button' value='+' onClick=\"addInput('dynamicInput');\">");
+                        %>
+                            <div id="<%=i%>">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <select name="assigned">
+                                                <%
+                                                    for (User assignee : users) {
+                                                        String userNric = assignee.getNric();
+                                                        if(userNric.equals(nric)){
+                                                            out.println("<option value='" + assignee.getNric() + "' selected>" + assignee + "</option>");
+                                                        }else{
+                                                            out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
+                                                        }
+                                                    }
+                                                %>
+                                            </select>
+                                        </td>
+                                        <td><input type="button" value="+" onClick="addInput('dynamicInput');"></td>
+                                    </tr>    
+                                </table>
+                            </div>
+                        <%
                                 }else{
-                                    out.println("<input type='button' value='x' onClick='removeInput("+i+");'>");
+                        %>
+                            <div id="<%=i%>">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <select name="assigned">
+                                                <%
+                                                    for (User assignee : users) {
+                                                        String userNric = assignee.getNric();
+                                                        if(userNric.equals(nric)){
+                                                            out.println("<option value='" + assignee.getNric() + "' selected>" + assignee + "</option>");
+                                                        }else{
+                                                            out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
+                                                        }
+                                                    }
+                                                %>
+                                            </select>
+                                        </td>
+                                        <td><input type='button' value='x' onClick='removeAdditional(this);'></td>
+                                    </tr>    
+                                </table>
+                            </div>
+                        <%
                                 }
-                                out.println("</td></tr></table></div>");
                             }
-
                         %>
                         </div>
+                        <div id="additionalAssigned">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <select name="assigned">
+                                            <%
+                                                for (User assignee : users) {
+                                                    out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
+                                                }
+                                            %>
+                                        </select>
+                                    </td>
+                                    <td><input type='button' value='x' onClick='removeAdditional(this);'></td>
+                                </tr>    
+                            </table>
+                        </div>                    
                     </td>
                 </tr>
                 <tr>
                     <td align="right"><b>Subject :</b></td>
                     <td>
-                        <input type="text" required name="subject" size="84" autofocus oninvalid="this.setCustomValidity('Please enter a subject title')" oninput="setCustomValidity('')" value='<%=subject%>'>
+                        <input type="text" id="subject" size="67" value="<%=ticket.getSubject()%>">
                     </td>
                 </tr>
                 <tr>
                     <td align="right"><b>Description :</b></td>
                     <td>
-                        <textarea required name="description" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter ticket description')" oninput="setCustomValidity('')"><%=description%></textarea>
+                        <textarea id="description" cols="60" rows="6"><%=ticket.getDescription()%></textarea>
                     </td>
                 </tr>
-                <tr>
-                    <td align="right"><b>Status :</b></td>
-                    <td>Pending</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type="submit" name="submit" value="Edit Ticket">
-                    </td>
-                </tr>
-            </table>  
-        </form>
-        
-        <%
-            }
-        %>
-        <script>
-            var counter = 10000;
-            function addInput(divName){
-                var newdiv = document.createElement('div');
-                var stringDiv = "";
-                var jsArray = <%= Converter.toJavascriptArray(fullnames) %>;
-                stringDiv += "<div id='" + counter + "'><table><tr><td><select name='assigned'>";
-                for (i = 0; i < jsArray.length; i++) { 
-                    stringDiv += "<option value='" + jsArray[i] + "'>" + jsArray[i] + "</option>";
-                }
-                stringDiv +="</select></td><td><input type='button' value='x' onClick='removeInput("+counter+");'></td></tr></table></div>";
-                newdiv.innerHTML = stringDiv;
-                document.getElementById(divName).appendChild(newdiv);
-                counter++;
-            }
-        </script>
+            </table>
+        </fieldset>
+        <br>                               
+        <table>
+            <tr>
+                <td><button onclick="updateTicket()">Update Ticket</button></td>
+            </tr>
+        </table> 
+                                            
+        <div id="ticket_error_modal" class="modal">
+            <div class="error-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('ticket_error_modal')">×</span>
+                    <div id="ticket_error_status"></div>
+                    <hr>
+                    <div id="ticket_error_message"></div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

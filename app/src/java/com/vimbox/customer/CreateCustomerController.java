@@ -27,23 +27,62 @@ public class CreateCustomerController extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
         PrintWriter out = response.getWriter();
+        
+        String salutation = request.getParameter("salutation");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String con = request.getParameter("contact");
+        int contact = 0;
+        String email = request.getParameter("email");
 
-        String name = request.getParameter("getName");
-        String contact = request.getParameter("getContact");
-        String email = request.getParameter("getEmail");
-
-        int id = CustomerDAO.createCustomer(name, contact, email);
+        boolean nameError = false;
+        boolean emconError = false;
+        String errorMsg = "";
+        
+        if(firstName.isEmpty() && lastName.isEmpty()){
+            nameError = true;
+            errorMsg += "Please enter a first name or last name<br>";
+        }
+        
+        if(con.isEmpty() && email.isEmpty()){
+            emconError = true;
+            errorMsg += "Please enter a contact or email address<br>";
+        }else{
+            if(!con.isEmpty()){
+                try{
+                    contact = Integer.parseInt(con);
+                }catch(NumberFormatException nfe){
+                    emconError = true;
+                    errorMsg += "Please enter a valid contact<br>";
+                }
+            }
+            
+            if(!email.isEmpty() && !email.contains("@")){
+                emconError = true;
+                errorMsg += "Please enter a valid email<br>";
+            }
+        }
 
         JsonObject jsonOutput = new JsonObject();
-        if(id == -1){
+        if(nameError || emconError){
             jsonOutput.addProperty("status", "ERROR");
-            jsonOutput.addProperty("message", "Customer already exists!");
-            id = CustomerDAO.getCustomerIdByNCE(name, contact, email);
+            jsonOutput.addProperty("message", errorMsg);
         }else{
-            jsonOutput.addProperty("status", "SUCCESS");
-            jsonOutput.addProperty("message", "Customer added");
+            int customer_id = CustomerDAO.createCustomer(salutation, firstName, lastName, contact, email);
+            if(customer_id == -1){
+                jsonOutput.addProperty("status", "ERROR");
+                jsonOutput.addProperty("message", "Customer already exists!");
+            }else{
+                jsonOutput.addProperty("status", "SUCCESS");
+                jsonOutput.addProperty("message", "Customer added!");
+                jsonOutput.addProperty("customer_id", customer_id);
+                jsonOutput.addProperty("customer_salutation", salutation);
+                jsonOutput.addProperty("customer_first_name", firstName);
+                jsonOutput.addProperty("customer_last_name", lastName);
+                jsonOutput.addProperty("customer_contact", con);
+                jsonOutput.addProperty("customer_email", email);
+            }
         }
-        jsonOutput.addProperty("custId", id);
 
         out.println(jsonOutput);
     }

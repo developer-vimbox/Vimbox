@@ -1,7 +1,9 @@
 package com.vimbox.ticket;
 
+import com.google.gson.JsonObject;
 import com.vimbox.database.TicketDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,24 +25,29 @@ public class ResolveTicketController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String solution = request.getParameter("solution");
+        response.setContentType("application/json;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache");
+        PrintWriter out = response.getWriter();
+        
+        String solution = request.getParameter("resolve_ticket_solution");
         
         String errorMsg = "";
         if(solution.isEmpty()){
             errorMsg+="Please enter a solution";
         }
         
-        ServletContext sc = request.getServletContext();
+        JsonObject jsonOutput = new JsonObject();
         if(errorMsg.isEmpty()){
-            String id = request.getParameter("id");
-            TicketDAO.resolveTicket(id, solution);
-            errorMsg = "success";
+            int ticket_id = Integer.parseInt(request.getParameter("resolve_ticket_id"));
+            TicketDAO.resolveTicket(ticket_id, solution);
+            jsonOutput.addProperty("status", "SUCCESS");
+            jsonOutput.addProperty("message", "Ticket resolved!");
+        }else{
+            jsonOutput.addProperty("status", "ERROR");
+            jsonOutput.addProperty("message", errorMsg);
         }
         
-        sc.setAttribute("action","resolve");
-        sc.setAttribute("errorMsg", errorMsg);
-        response.sendRedirect("MyTickets.jsp");
-        return;
+        out.println(jsonOutput);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

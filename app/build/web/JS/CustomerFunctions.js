@@ -1,77 +1,112 @@
-function addCustomer() {
-    var modal = document.getElementById("csModal");
-    var csStatus = document.getElementById("csStatus");
-    var csMessage = document.getElementById("csMessage");
-
-    var name = document.getElementById("name").value;
-    if (name.length === 0 || !name.trim()) {
-        csStatus.innerHTML = "<b>ERROR</b>";
-        csMessage.innerHTML = "Please enter a customer name";
-    } else {
-        name = document.getElementById("salutation").value + " " + name;
-        var contact = document.getElementById("contact").value;
-        var email = document.getElementById("email").value;
-        if (contact.trim().length != 0 || email.trim().length != 0) {
-            var contactB = true;
-            var emailB = true;
-            var errorMsg = "";
-            if (contact.trim().length != 0) {
-                if (isNaN(contact) || !/^[0-9]{8,20}$/.test(contact)) {
-                    contactB = false;
-                    errorMsg += "Invalid contact<br>";
-                }
-            }
-
-            if (email.trim().length != 0) {
-                if (email.indexOf("@") === -1) {
-                    emailB = false;
-                    errorMsg += "Invalid email<br>";
-                }
-            }
-
-            if (!contactB || !emailB) {
-                csStatus.innerHTML = "<b>ERROR</b>";
-                csMessage.innerHTML = errorMsg;
-            } else {
-                $.getJSON('CreateCustomerController', {getName: name, getContact: contact, getEmail: email}, function (data) {
-                    var status = data.status;
-                    var message = data.message;
-                    var custId = data.custId;
-                    document.getElementById("custId").value = custId;
-                    csStatus.innerHTML = "<b>" + status + "</b>";
-                    csMessage.innerHTML = message;
-                    
-                });
-            }
-        } else {
-            csStatus.innerHTML = "<b>ERROR</b>";
-            csMessage.innerHTML = "Please enter a contact or email";
-        }
-    }
-    modal.style.display = "block";
-}
-
-function searchName() {
-    var modal = document.getElementById("snModal");
-    var name = document.getElementById("name").value;
-    var snContent = document.getElementById("snContent");
-    $.get("SearchCustomersByName.jsp", {getName: name, getAction: "ticket"}, function (data) {
-        snContent.innerHTML = data;
+function customerSearch(module) {
+    var modal = document.getElementById("customer_modal");
+    var name = $('#customer_search').val();
+    var content = document.getElementById("customer_content");
+    $.get("SearchCustomersByName.jsp", {getName: name, getAction: module}, function (data) {
+        content.innerHTML = data;
     });
     modal.style.display = "block";
 }
-function selectCustomer(custid, custname, custcontact, custemail) {
-    var salutation = document.getElementById("salutation");
-    var name = document.getElementById("name");
-    var contact = document.getElementById("contact");
-    var cId = document.getElementById("custId");
-    var email = document.getElementById("email");
 
-    salutation.value = custname.substring(0,custname.indexOf(" "));
-    name.value = custname.substring(custname.indexOf(" ") + 1);
-    contact.value = custcontact;
-    cId.value = custid;
-    email.value = custemail;
+function addNewCustomer() {
+    var modal = document.getElementById("customer_modal");
+    $("#customer_content").load("CreateCustomer.jsp");
+    modal.style.display = "block";
+}
 
-    closeModal("snModal");
+function createCustomer() {
+    var create_salutation = $('#create_salutation').val();
+    var create_first_name = $('#create_first_name').val();
+    var create_last_name = $('#create_last_name').val();
+    var create_contact = $('#create_contact').val();
+    var create_email = $('#create_email').val();
+
+    var errorModal = document.getElementById("customer_error_modal");
+    var errorStatus = document.getElementById("customer_error_status");
+    var errorMessage = document.getElementById("customer_error_message");
+    $.getJSON("CreateCustomerController", {salutation: create_salutation, firstName: create_first_name, lastName: create_last_name, contact: create_contact, email: create_email})
+            .done(function (data) {
+                var status = data.status;
+                var errorMsg = data.message;
+                if (status === "SUCCESS") {
+                    document.getElementById("customer_modal").style.display = "none";
+                    $('#customer_id').val(data.customer_id);
+                    $("#customer_salutation").html(data.customer_salutation);
+                    $("#customer_first_name").html(data.customer_first_name);
+                    $("#customer_last_name").html(data.customer_last_name);
+                    $("#customer_contact").html(data.customer_contact);
+                    $("#customer_email").html(data.customer_email);
+                    document.getElementById("customer_information_table").style.display = "block";
+                }
+                errorStatus.innerHTML = status;
+                errorMessage.innerHTML = errorMsg;
+                errorModal.style.display = "block";
+            })
+            .fail(function (error) {
+                errorStatus.innerHTML = "ERROR";
+                errorMessage.innerHTML = error;
+                errorModal.style.display = "block";
+            });
+}
+
+function selectCustomer(customer_id, customer_salutation, customer_first_name, customer_last_name, customer_contact, customer_email) {
+    document.getElementById("customer_modal").style.display = "none";
+    $('#customer_id').val(customer_id);
+    $("#customer_salutation").html(customer_salutation);
+    $("#customer_first_name").html(customer_first_name);
+    $("#customer_last_name").html(customer_last_name);
+    $("#customer_contact").html(customer_contact);
+    $("#customer_email").html(customer_email);
+    document.getElementById("customer_information_table").style.display = "block";
+}
+
+function editCustomer(customer_id){
+    var modal = document.getElementById("edit_customer_modal");
+    var content = document.getElementById("edit_customer_content");
+    $.get("EditCustomer.jsp", {getId: customer_id}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
+}
+
+function updateCustomer(){
+    var customer_id = $('#customer_id').val();
+    var edit_salutation = $('#edit_salutation').val();
+    var edit_first_name = $('#edit_first_name').val();
+    var edit_last_name = $('#edit_last_name').val();
+    var edit_contact = $('#edit_contact').val();
+    var edit_email = $('#edit_email').val();
+    
+    var errorModal = document.getElementById("customer_error_modal");
+    var errorStatus = document.getElementById("customer_error_status");
+    var errorMessage = document.getElementById("customer_error_message");
+    $.getJSON("EditCustomerController", {customer_id: customer_id, salutation: edit_salutation, firstName: edit_first_name, lastName: edit_last_name, contact: edit_contact, email: edit_email})
+            .done(function (data) {
+                var status = data.status;
+                var errorMsg = data.message;
+                errorStatus.innerHTML = status;
+                errorMessage.innerHTML = errorMsg;
+                errorModal.style.display = "block";
+                if (status === "SUCCESS") {
+                    document.getElementById("edit_customer_modal").style.display = "none";
+                    window.onbeforeunload = function() {
+                        sessionStorage.setItem("customer_search", $('#customer_search').val());
+                    }
+                    setTimeout(function() {location.reload()},1000);
+                }
+            })
+            .fail(function (error) {
+                errorStatus.innerHTML = "ERROR";
+                errorMessage.innerHTML = error;
+                errorModal.style.display = "block";
+            });
+}
+
+function reload(){
+    var customer_search = sessionStorage.getItem("customer_search");
+    if (customer_search !== null){
+        $('#customer_search').val(customer_search);
+        sessionStorage.removeItem("customer_search");
+        customerSearch("crm");
+    }
 }

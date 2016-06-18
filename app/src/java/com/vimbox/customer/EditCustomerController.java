@@ -1,8 +1,9 @@
 package com.vimbox.customer;
 
+import com.google.gson.JsonObject;
 import com.vimbox.database.CustomerDAO;
 import java.io.IOException;
-import javax.servlet.ServletContext;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,50 +24,58 @@ public class EditCustomerController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ServletContext sc = request.getServletContext();
-
-        String name = request.getParameter("name");
-        String contact = request.getParameter("contact");
-        String custId = request.getParameter("custId");
+        response.setContentType("application/json;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache");
+        PrintWriter out = response.getWriter();
+        
+        int customer_id = Integer.parseInt(request.getParameter("customer_id"));
+        String salutation = request.getParameter("salutation");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String con = request.getParameter("contact");
+        int contact = 0;
         String email = request.getParameter("email");
 
+        boolean nameError = false;
+        boolean emconError = false;
         String errorMsg = "";
-        if (name == null || name.trim().isEmpty()) {
-            errorMsg += "Please enter a customer name\n";
-        } else {
-            if (!contact.trim().isEmpty() || !email.trim().isEmpty()) {
-                boolean contactB = true;
-                boolean emailB = true;
-                if (!contact.trim().isEmpty()) {
-                    if (!contact.matches("[0-9]{8,20}")) {
-                        contactB = false;
-                        errorMsg += "Invalid contact\n";
-                    }
+        
+        if(firstName.isEmpty() && lastName.isEmpty()){
+            nameError = true;
+            errorMsg += "Please enter a first name or last name<br>";
+        }
+        
+        if(con.isEmpty() && email.isEmpty()){
+            emconError = true;
+            errorMsg += "Please enter a contact or email address<br>";
+        }else{
+            if(!con.isEmpty()){
+                try{
+                    contact = Integer.parseInt(con);
+                }catch(NumberFormatException nfe){
+                    emconError = true;
+                    errorMsg += "Please enter a valid contact<br>";
                 }
-
-                if (!email.trim().isEmpty()) {
-                    if (!email.contains("@")) {
-                        emailB = false;
-                        errorMsg += "Invalid email\n";
-                    }
-                }
-
-                if (contactB && emailB) {
-                    CustomerDAO.updateCustomer(name, contact, email,Integer.parseInt(custId));
-                    sc.setAttribute("status", "success");
-                    response.sendRedirect("SearchCustomers.jsp");
-                    return;
-                }
-            } else {
-                errorMsg += "Please enter a contact or email\n";
+            }
+            
+            if(!email.isEmpty() && !email.contains("@")){
+                emconError = true;
+                errorMsg += "Please enter a valid email<br>";
             }
         }
-        sc.setAttribute("errorMsg", errorMsg);
-        sc.setAttribute("name", name);
-        sc.setAttribute("contact", contact);
-        sc.setAttribute("email", email);
-        sc.setAttribute("custId", custId);
-        response.sendRedirect("EditCustomer.jsp");
+
+        JsonObject jsonOutput = new JsonObject();
+        if(nameError || emconError){
+            jsonOutput.addProperty("status", "ERROR");
+            jsonOutput.addProperty("message", errorMsg);
+        }else{
+            CustomerDAO.updateCustomer(customer_id, salutation, firstName, lastName, contact, email);
+            jsonOutput.addProperty("status", "SUCCESS");
+            jsonOutput.addProperty("message", "Customer updated!");
+            
+        }
+
+        out.println(jsonOutput);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

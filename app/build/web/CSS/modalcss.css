@@ -23,6 +23,17 @@
     overflow: auto; /* Enable scroll if needed */
 }
 
+.form-modal{
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+}
+
 /* Modal Content */
 .modal-content {
     position: relative;
@@ -37,6 +48,21 @@
     animation-name: animatetop;
     animation-duration: 0.4s
 }
+
+.message-modal-content{
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 10px 5px 20px 5px;
+    border: 1px solid #888;
+    width: 300px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
 
 .search-modal-content{
     position: relative;
@@ -59,6 +85,20 @@
     padding: 10px 5px 20px 5px;
     border: 1px solid #888;
     width: 1000px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+.employee-form-modal-content{
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 10px 5px 20px 5px;
+    border: 1px solid #888;
+    width: 500px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;

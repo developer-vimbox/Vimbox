@@ -1,6 +1,5 @@
 package com.vimbox.sales;
 
-import com.vimbox.database.CustomerDAO;
 import com.vimbox.database.CustomerHistoryDAO;
 import com.vimbox.database.LeadDAO;
 import com.vimbox.user.User;
@@ -33,7 +32,7 @@ public class CreateLeadController extends HttpServlet {
         //---------------------//
         
         // Lead ID //
-        String leadId = request.getParameter("leadId");
+        int leadId = Integer.parseInt(request.getParameter("leadId"));
         String dt = Converter.convertDateDatabase(new DateTime());
         String status = request.getParameter("status");
         String source = request.getParameter("source");
@@ -43,31 +42,21 @@ public class CreateLeadController extends HttpServlet {
         }
         String[] leadTypes = request.getParameterValues("leadType");
         String leadType = "";
-        for(int i=0; i<leadTypes.length; i++){
-            String lt = leadTypes[i];
-            leadType += lt;
-            if(i<leadTypes.length-1){
-                leadType += "|";
+        if(leadTypes != null){
+            for(int i=0; i<leadTypes.length; i++){
+                String lt = leadTypes[i];
+                leadType += lt;
+                if(i<leadTypes.length-1){
+                    leadType += "|";
+                }
             }
         }
         //---------//
         
         // Customer details //
-        String cId = request.getParameter("custId");
+        String cId = request.getParameter("customer_id");
         int custId = -1;
-        if(cId.isEmpty()){
-            String name = request.getParameter("name");
-            String contact = request.getParameter("contact");
-            String email = request.getParameter("email");
-            
-            if(!name.isEmpty() || !contact.isEmpty() || !email.isEmpty()){
-                String salutation = request.getParameter("salutation");
-                name = salutation + " " + name;
-                // Enter into customer database //
-                custId = CustomerDAO.createCustomer(name, contact, email);
-                //------------------------------//
-            }
-        }else{
+        if(!cId.isEmpty()){
             custId = Integer.parseInt(cId);
         }
         //------------------//

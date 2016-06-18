@@ -1,3 +1,4 @@
+<%@page import="com.vimbox.customer.Customer"%>
 <%@page import="com.vimbox.user.User"%>
 <%@page import="com.vimbox.util.Converter"%>
 <%@page import="com.vimbox.database.TicketDAO"%>
@@ -15,7 +16,7 @@
         <h2>Tickets History</h2><hr>
         <%
             String custId = request.getParameter("getId");
-            ArrayList<String> ids = CustomerHistoryDAO.getCustomerTicketIds(Integer.parseInt(custId));
+            ArrayList<Integer> ids = CustomerHistoryDAO.getCustomerTicketIds(Integer.parseInt(custId));
             if(ids.isEmpty()){
         %>
             No results found
@@ -27,7 +28,7 @@
                     out.println(ids.size() + " records found");
                 }
                 ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-                for(String id:ids){
+                for(int id:ids){
                     tickets.add(TicketDAO.getTicketById(id));
                 }
         %>
@@ -45,21 +46,19 @@
             </tr>
         <%
                 for(Ticket ticket:tickets){
-                    String ticketId = ticket.getTicketid();
-                    String customerName = ticket.getCustomerName();
-                    if(customerName.isEmpty()){
-                        customerName = "N/A";
-                    }
-                    String contact  = ticket.getContactNumber();
-                    if(contact.isEmpty()){
+                    int ticketId = ticket.getTicket_id();
+                    Customer customer = ticket.getCustomer();
+                    String customerName = customer.toString();
+                    String contact  = customer.getContact() + "";
+                    if(contact.equals("0")){
                         contact = "N/A";
                     }
-                    String email = ticket.getEmail();
+                    String email = customer.getEmail();
                     if(email.isEmpty()){
                         email = "N/A";
                     }
                     String subject = ticket.getSubject();
-                    String dateTime = Converter.convertDate(ticket.getDatetime());
+                    String dateTime = Converter.convertDate(ticket.getDatetime_of_creation());
                     String status = ticket.getStatus();
         %>
             <tr>
@@ -90,19 +89,19 @@
                                     </tr>
                                     <tr>
                                         <td align="right">Ticket Owner :</td>
-                                        <td><%=ticket.getOwner().getFullname()%></td>
+                                        <td><%=ticket.getOwner_user().toString()%></td>
                                     </tr>
                                     <tr>
                                         <td align="right">Assigned To :</td>
                                         <td>
                                             <%
-                                                ArrayList<User> assigned = ticket.getAssigned();
+                                                ArrayList<User> assigned = ticket.getAssigned_users();
                                                 if(assigned.size() > 1){
                                                     for(User assignee:assigned){
-                                                        out.println("<li>" + assignee.getFullname() + "</li>");
+                                                        out.println("<li>" + assignee.toString() + "</li>");
                                                     }
                                                 }else if(assigned.size() == 1){
-                                                    out.println(assigned.get(0).getFullname());
+                                                    out.println(assigned.get(0).toString());
                                                 }
                                             %>
                                         </td>

@@ -3,20 +3,20 @@ package com.vimbox.ticket;
 import org.joda.time.DateTime;
 
 public class TicketComment {
-    private String ticketId;
+    private int ticket_id;
     private String comment;
     private DateTime datetime;
 
-    public TicketComment(String ticketId, String comment, DateTime datetime) {
-        this.ticketId = ticketId;
+    public TicketComment(int ticket_id, String comment, DateTime datetime) {
+        this.ticket_id = ticket_id;
         this.comment = comment;
         this.datetime = datetime;
     }
 
-    public String getTicketId() {
-        return ticketId;
+    public int getTicket_id() {
+        return ticket_id;
     }
-
+    
     public String getComment() {
         return comment;
     }

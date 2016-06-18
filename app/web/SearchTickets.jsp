@@ -1,3 +1,4 @@
+<%@page import="com.vimbox.customer.Customer"%>
 <%@page import="com.vimbox.user.User"%>
 <%@page import="com.vimbox.util.Converter"%>
 <%@page import="com.vimbox.database.TicketDAO"%>
@@ -12,16 +13,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Ticket Results</title>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script>src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
     </head>
     <body>
         
         <h2>Search Results</h2><hr>
         <%
             String keyword = request.getParameter("getKeyword");
-            String action = request.getParameter("getAction");
+            String status = request.getParameter("getStatus");
             
             ArrayList<Ticket> results = null;
             int num = 0;
@@ -40,11 +38,11 @@
             }
             
             if(num!=0){
-                results = TicketDAO.getSearchTicketsByNumber(keyword, action);
+                results = TicketDAO.getSearchTicketsByNumber(keyword, status);
             }else if(dt != null){
-                results = TicketDAO.getSearchTicketsByDate(keyword, action);
+                results = TicketDAO.getSearchTicketsByDate(keyword, status);
             }else{
-                results = TicketDAO.getSearchTicketsByString(keyword, action);
+                results = TicketDAO.getSearchTicketsByString(keyword, status);
             }
             
             if(results.isEmpty()){  
@@ -73,23 +71,20 @@
                 </tr>
         <%
             for(Ticket ticket:results){
-                String ticketId = ticket.getTicketid();
-                String customerName = ticket.getCustomerName();
-                if(customerName.isEmpty()){
-                    customerName = "N/A";
-                }
-                String contact  = ticket.getContactNumber();
-                if(contact.isEmpty()){
+                int ticketId = ticket.getTicket_id();
+                Customer customer = ticket.getCustomer();
+                String customerName = customer.toString();
+                String contact  = customer.getContact() + "";
+                if(contact.equals("0")){
                     contact = "N/A";
                 }
-                String email = ticket.getEmail();
+                String email = customer.getEmail();
                 if(email.isEmpty()){
                     email = "N/A";
                 }
-                
                 String subject = ticket.getSubject();
-                String dateTime = Converter.convertDate(ticket.getDatetime());
-                String status = ticket.getStatus();
+                String dateTime = Converter.convertDate(ticket.getDatetime_of_creation());
+                String ticket_status = ticket.getStatus();
         %>
                 <tr>
                     <td><%=ticketId%></td>
@@ -98,7 +93,7 @@
                     <td><%=email%></td>
                     <td><%=subject%></td>
                     <td><%=dateTime%></td>
-                    <td><%=status%></td>
+                    <td><%=ticket_status%></td>
                     <td>
                         <button onclick="viewTicket('<%=ticketId%>')">VT</button>
                         <button onclick="viewComments('<%=ticketId%>')">VC</button>

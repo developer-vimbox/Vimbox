@@ -9,7 +9,7 @@
 <%@page import="java.util.ArrayList"%>
 <%
     String leadId = request.getParameter("getLid");
-    Lead lead = LeadDAO.getLeadById(leadId);
+    Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
 %>
 <div class="row" style="display:table;width:100%;">
   <div class="col" style="display: table-cell;width: 50%;"><h2>Lead Details</h2></div>
@@ -30,7 +30,7 @@
                     if(customer != null){
                         out.println("<tr>");
                         out.println("<td align='right'><b>Name :</b></td>");
-                        out.println("<td>" + customer.getName() + "</td>");
+                        out.println("<td>" + customer.toString() + "</td>");
                         out.println("</tr>");
                         
                         out.println("<tr>");

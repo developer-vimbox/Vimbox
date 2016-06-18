@@ -12,16 +12,16 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 public class LeadFollowupDAO {
-    private static final String CREATE_LEAD_FOLLOWUP = "INSERT INTO leadfollowups (id,followup,datetiming) values (?,?,?)";
-    private static final String GET_LEAD_FOLLOWUPS_BY_ID = "SELECT * FROM leadfollowups where id=? ORDER BY datetiming DESC";
+    private static final String CREATE_LEAD_FOLLOWUP = "INSERT INTO lead_followups (lead_id, followup, datetime_of_creation) values (?,?,?)";
+    private static final String GET_LEAD_FOLLOWUPS_BY_ID = "SELECT * FROM lead_followups where lead_id=? ORDER BY datetime_of_creation DESC";
     
-    public static void createLeadFollowup(String id, String followup, DateTime dt){
+    public static void createLeadFollowup(int lead_id, String followup, DateTime dt){
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(CREATE_LEAD_FOLLOWUP);
-            ps.setString(1, id);
+            ps.setInt(1, lead_id);
             ps.setString(2, followup);
             ps.setString(3, Converter.convertDateDatabase(dt));
             ps.executeUpdate();
@@ -32,7 +32,7 @@ public class LeadFollowupDAO {
         }
     }
     
-    public static ArrayList<LeadFollowup> getLeadFollowupsById(String id){
+    public static ArrayList<LeadFollowup> getLeadFollowupsById(int lead_id){
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         ArrayList<LeadFollowup> leadFollowups = new ArrayList<LeadFollowup>();
         Connection con = null;
@@ -41,17 +41,16 @@ public class LeadFollowupDAO {
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_LEAD_FOLLOWUPS_BY_ID);
-            ps.setString(1, id);
+            ps.setInt(1, lead_id);
             rs = ps.executeQuery();
             while (rs.next()) {
-                String leadId = rs.getString("id");
                 String followup = rs.getString("followup");
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
-                leadFollowups.add(new LeadFollowup(leadId,followup,dt));
+                leadFollowups.add(new LeadFollowup(lead_id,followup,dt));
             }
         } catch (SQLException se) {
             se.printStackTrace();

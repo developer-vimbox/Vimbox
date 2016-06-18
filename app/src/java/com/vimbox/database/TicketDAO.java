@@ -1,5 +1,6 @@
 package com.vimbox.database;
 
+import com.vimbox.customer.Customer;
 import com.vimbox.ticket.Ticket;
 import com.vimbox.user.User;
 import com.vimbox.util.Converter;
@@ -13,88 +14,75 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 public class TicketDAO {
-    private static final String CREATE_TICKET = "INSERT INTO tickets (id,owneruser,subject,datetiming,assigned,custname,custcontact,description,solution,status,custemail) values (?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String GET_TICKETS = "SELECT * FROM tickets";
-    private static final String GET_PENDING_TICKETS = "SELECT * FROM tickets WHERE status='Pending'";
-    private static final String GET_RESOLVED_TICKETS = "SELECT * FROM tickets WHERE status='Resolved'";
-    private static final String GET_SEARCH_BY_STRING = "SELECT * FROM tickets WHERE (subject like ? or custname like ? or custemail like ?) and status=?";
-    private static final String GET_SEARCH_BY_NUMBER = "SELECT * FROM tickets WHERE (id like ? or custcontact like ?) and status=?";
-    private static final String GET_SEARCH_BY_DATE = "SELECT * FROM tickets WHERE datetiming like ? and status=?";
-    private static final String GET_TICKETS_BY_ASSIGNED_USER = "SELECT * FROM tickets WHERE assigned LIKE ? AND status='Pending' ORDER BY datetiming DESC";
-    private static final String GET_TICKETS_BY_OWNER_USER = "SELECT * FROM tickets WHERE owneruser=? AND status='Pending' ORDER BY datetiming DESC";
-    private static final String GET_TICKET_BY_ID = "SELECT * FROM tickets WHERE id=?";
-    private static final String UPDATE_TICKET = "UPDATE tickets SET subject=?, assigned=?, custname=?, custcontact=?, custemail=?, description=? WHERE id=?";
-    private static final String RESOLVE_TICKET = "UPDATE tickets SET solution=?, status=? WHERE id=?";
+    private static final String CREATE_TICKET = "INSERT INTO tickets (ticket_id, owner_user, assigned_users, customer_id, subject, datetime_of_creation, description, solution, status) values (?,?,?,?,?,?,?,?,?)";
+    private static final String GET_TICKETS_BY_OWNER_USER = "SELECT * FROM tickets WHERE owner_user=? AND status='Pending' ORDER BY datetime_of_creation DESC";
+    private static final String GET_TICKETS_BY_ASSIGNED_USER = "SELECT * FROM tickets WHERE assigned_users LIKE ? AND status='Pending' ORDER BY datetime_of_creation DESC";
+    private static final String GET_TICKET_BY_ID = "SELECT * FROM tickets WHERE ticket_id=?";
+    private static final String DELETE_TICKET = "DELETE FROM tickets WHERE ticket_id=?";
+    private static final String RESOLVE_TICKET = "UPDATE tickets SET solution=?, status=? WHERE ticket_id=?";
+    private static final String GET_PENDING_TICKETS = "SELECT * FROM tickets WHERE status='Pending' ORDER BY datetime_of_creation DESC";
+    private static final String GET_RESOLVED_TICKETS = "SELECT * FROM tickets WHERE status='Resolved' ORDER BY datetime_of_creation DESC";
+    private static final String GET_SEARCH_BY_STRING = "SELECT * FROM tickets,customers WHERE tickets.customer_id = customers.customer_id AND (subject like ? or first_name like ? or last_name like ? or email like ?) AND status=?";
+    private static final String GET_SEARCH_BY_NUMBER = "SELECT * FROM tickets,customers WHERE tickets.customer_id = customers.customer_id AND (ticket_id like ? or contact like ?) AND status=?";
+    private static final String GET_SEARCH_BY_DATE = "SELECT * FROM tickets WHERE datetime_of_creation like ? and status=?";
     
-    public static Ticket createTicket(User owner, String ticketId, String customerName, String contactNumber, DateTime dt, String subject, ArrayList<User> assignedUsers, String description, String status, String email){
-        Ticket ticket = null;
+    public static void createTicket(int ticket_id, String owner_user, String assigned_users, int customer_id, DateTime datetime_of_creation, String subject, String description, String status){
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(CREATE_TICKET);
-            ps.setString(1, ticketId);
-            ps.setString(2, owner.getUsername());
-            ps.setString(3, subject);
-            ps.setString(4, Converter.convertDateDatabase(dt));
-            
-            String assigned = "";
-            for(User user:assignedUsers){
-                assigned+=(user.getFullname()+",");
-            }
-            ps.setString(5, assigned.substring(0,assigned.length()-1));
-            
-            ps.setString(6, customerName);
-            ps.setString(7, contactNumber);
-            ps.setString(8, description);
-            ps.setString(9, "");
-            ps.setString(10, status);
-            ps.setString(11, email);
+            ps.setInt(1, ticket_id);
+            ps.setString(2, owner_user);
+            ps.setString(3, assigned_users);
+            ps.setInt(4, customer_id);
+            ps.setString(5, subject);
+            ps.setString(6, Converter.convertDateDatabase(datetime_of_creation));
+            ps.setString(7, description);
+            ps.setString(8, "");
+            ps.setString(9, status);
             ps.executeUpdate();
-            ticket = new Ticket(owner, ticketId, customerName, contactNumber, email, dt, subject, assignedUsers, description, status);
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
             ConnectionManager.close(con, ps, null);
         }
-        return ticket;
     }
     
-    public static ArrayList<Ticket> getTickets(){
+    public static ArrayList<Ticket> getTicketsByOwnerUser(User user){
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-       
+        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
         try {
             con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_TICKETS);
+            ps = con.prepareStatement(GET_TICKETS_BY_OWNER_USER);
+            ps.setString(1,user.getNric());
             rs = ps.executeQuery();
             while (rs.next()) {
-                User owner = UserDAO.getUserByUsername(rs.getString("owneruser"));
-                String ticketId = rs.getString("id");
-                String customerName = rs.getString("custname");
-                String contactNumber = rs.getString("custcontact");
-                String email = rs.getString("custemail");
+                int ticket_id = rs.getInt("ticket_id");
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String assignedString = rs.getString("assigned_users");
+                ArrayList<User> assigned_users = new ArrayList<User>();
+                String[] assign = assignedString.split("\\|");
+                for(String assignName:assign){
+                    assigned_users.add(UserDAO.getUserByNRIC(assignName));
+                }
+                
+                int customer_id = rs.getInt("customer_id");
+                Customer customer = CustomerDAO.getCustomerById(customer_id);
+                
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
                 String subject = rs.getString("subject");
-                
-                String assignedString = rs.getString("assigned");
-                ArrayList<User> assigned = new ArrayList<User>();
-                String[] assign = assignedString.split(",");
-                for(String assignName:assign){
-                    assigned.add(UserDAO.getUserByUsername(assignName));
-                }
-                
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
-                tickets.add(new Ticket(owner,ticketId,customerName,contactNumber,email,dt,subject,assigned,description,solution,status));
+                
+                tickets.add(new Ticket(ticket_id, user, assigned_users, customer, subject, dt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -104,145 +92,126 @@ public class TicketDAO {
         return tickets;
     }
     
-    public static ArrayList<Ticket> getSearchTicketsByString(String keyword, String action){
+    public static ArrayList<Ticket> getTicketsByAssignedUser(User user){
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        ArrayList<Ticket> results = new ArrayList<Ticket>();
-        keyword = "%" + keyword + "%";
+        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_SEARCH_BY_STRING);
-            ps.setString(1, keyword);
-            ps.setString(2, keyword);
-            ps.setString(3, keyword);
-            ps.setString(4, action);
+            ps = con.prepareStatement(GET_TICKETS_BY_ASSIGNED_USER);
+            ps.setString(1, "%" + user.getNric() + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
-                User owner = UserDAO.getUserByUsername(rs.getString("owneruser"));
-                String ticketId = rs.getString("id");
-                String customerName = rs.getString("custname");
-                String contactNumber = rs.getString("custcontact");
-                String email = rs.getString("custemail");
+                int ticket_id = rs.getInt("ticket_id");
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String ownerString = rs.getString("owner_user");
+                User owner_user = UserDAO.getUserByNRIC(ownerString);
+                
+                String assignedString = rs.getString("assigned_users");
+                ArrayList<User> assigned_users = new ArrayList<User>();
+                String[] assign = assignedString.split("\\|");
+                for(String assignName:assign){
+                    assigned_users.add(UserDAO.getUserByNRIC(assignName));
+                }
+                
+                int customer_id = rs.getInt("customer_id");
+                Customer customer = CustomerDAO.getCustomerById(customer_id);
+                
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
                 String subject = rs.getString("subject");
-                
-                String assignedString = rs.getString("assigned");
-                ArrayList<User> assigned = new ArrayList<User>();
-                String[] assign = assignedString.split(",");
-                for(String assignName:assign){
-                    assigned.add(UserDAO.getUserByUsername(assignName));
-                }
-                
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
-                results.add(new Ticket(owner,ticketId,customerName,contactNumber,email,dt,subject,assigned,description,solution,status));
+                
+                tickets.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
             ConnectionManager.close(con, ps, rs);
         }
-        return results;
+        return tickets;
     }
     
-    public static ArrayList<Ticket> getSearchTicketsByNumber(String keyword, String action){
+    public static Ticket getTicketById(int ticket_id){
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        ArrayList<Ticket> results = new ArrayList<Ticket>();
-        keyword = "%" + keyword + "%";
+        Ticket ticket = null;
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_SEARCH_BY_NUMBER);
-            ps.setString(1, keyword);
-            ps.setString(2, keyword);
-            ps.setString(3, action);
+            ps = con.prepareStatement(GET_TICKET_BY_ID);
+            ps.setInt(1, ticket_id);
             rs = ps.executeQuery();
-            while (rs.next()) {
-                User owner = UserDAO.getUserByUsername(rs.getString("owneruser"));
-                String ticketId = rs.getString("id");
-                String customerName = rs.getString("custname");
-                String contactNumber = rs.getString("custcontact");
-                String email = rs.getString("custemail");
+            if(rs.next()) {
+                String ownerString = rs.getString("owner_user");
+                User owner_user = UserDAO.getUserByNRIC(ownerString);
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String assignedString = rs.getString("assigned_users");
+                ArrayList<User> assigned_users = new ArrayList<User>();
+                String[] assign = assignedString.split("\\|");
+                for(String assignName:assign){
+                    assigned_users.add(UserDAO.getUserByNRIC(assignName));
+                }
+                
+                int customer_id = rs.getInt("customer_id");
+                Customer customer = CustomerDAO.getCustomerById(customer_id);
+                
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
                 String subject = rs.getString("subject");
-                
-                String assignedString = rs.getString("assigned");
-                ArrayList<User> assigned = new ArrayList<User>();
-                String[] assign = assignedString.split(",");
-                for(String assignName:assign){
-                    assigned.add(UserDAO.getUserByUsername(assignName));
-                }
-                
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
-                results.add(new Ticket(owner,ticketId,customerName,contactNumber,email,dt,subject,assigned,description,solution,status));
+                
+                ticket = new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status);
             }
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
             ConnectionManager.close(con, ps, rs);
         }
-        return results;
+        return ticket;
     }
     
-    public static ArrayList<Ticket> getSearchTicketsByDate(String keyword, String action){
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        ArrayList<Ticket> results = new ArrayList<Ticket>();
-        keyword = "%" + keyword + "%";
+    public static void deleteTicket(int ticket_id){
         Connection con = null;
         PreparedStatement ps = null;
-        ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_SEARCH_BY_DATE);
-            ps.setString(1, keyword);
-            ps.setString(2, action);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                User owner = UserDAO.getUserByUsername(rs.getString("owneruser"));
-                String ticketId = rs.getString("id");
-                String customerName = rs.getString("custname");
-                String contactNumber = rs.getString("custcontact");
-                String email = rs.getString("custemail");
-                
-                String tempDateTimeString = rs.getString("datetiming");
-                String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
-                DateTime dt = formatter.parseDateTime(datetimeString);
-                
-                String subject = rs.getString("subject");
-                
-                String assignedString = rs.getString("assigned");
-                ArrayList<User> assigned = new ArrayList<User>();
-                String[] assign = assignedString.split(",");
-                for(String assignName:assign){
-                    assigned.add(UserDAO.getUserByUsername(assignName));
-                }
-                
-                String description = rs.getString("description");
-                String solution = rs.getString("solution");
-                String status = rs.getString("status");
-                results.add(new Ticket(owner,ticketId,customerName,contactNumber,email,dt,subject,assigned,description,solution,status));
-            }
+            ps = con.prepareStatement(DELETE_TICKET);
+            ps.setInt(1, ticket_id);
+            ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
-            ConnectionManager.close(con, ps, rs);
+            ConnectionManager.close(con, ps, null);
         }
-        return results;
+    }
+    
+    public static void resolveTicket(int ticket_id, String solution){
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(RESOLVE_TICKET);
+            ps.setString(1, solution);
+            ps.setString(2, "Resolved");
+            ps.setInt(3, ticket_id);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
     }
     
     public static ArrayList<Ticket> getPendingTickets(){
@@ -256,29 +225,31 @@ public class TicketDAO {
             ps = con.prepareStatement(GET_PENDING_TICKETS);
             rs = ps.executeQuery();
             while (rs.next()) {
-                User owner = UserDAO.getUserByUsername(rs.getString("owneruser"));
-                String ticketId = rs.getString("id");
-                String customerName = rs.getString("custname");
-                String contactNumber = rs.getString("custcontact");
-                String email = rs.getString("custemail");
+                int ticket_id = rs.getInt("ticket_id");
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String ownerString = rs.getString("owner_user");
+                User owner_user = UserDAO.getUserByNRIC(ownerString);
+                
+                String assignedString = rs.getString("assigned_users");
+                ArrayList<User> assigned_users = new ArrayList<User>();
+                String[] assign = assignedString.split("\\|");
+                for(String assignName:assign){
+                    assigned_users.add(UserDAO.getUserByNRIC(assignName));
+                }
+                
+                int customer_id = rs.getInt("customer_id");
+                Customer customer = CustomerDAO.getCustomerById(customer_id);
+                
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
                 String subject = rs.getString("subject");
-                
-                String assignedString = rs.getString("assigned");
-                ArrayList<User> assigned = new ArrayList<User>();
-                String[] assign = assignedString.split(",");
-                for(String assignName:assign){
-                    assigned.add(UserDAO.getUserByFullname(assignName));
-                }
-                
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
-                tickets.add(new Ticket(owner,ticketId,customerName,contactNumber,email,dt,subject,assigned,description,solution,status));
+                
+                tickets.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -299,29 +270,31 @@ public class TicketDAO {
             ps = con.prepareStatement(GET_RESOLVED_TICKETS);
             rs = ps.executeQuery();
             while (rs.next()) {
-                User owner = UserDAO.getUserByUsername(rs.getString("owneruser"));
-                String ticketId = rs.getString("id");
-                String customerName = rs.getString("custname");
-                String contactNumber = rs.getString("custcontact");
-                String email = rs.getString("custemail");
+                int ticket_id = rs.getInt("ticket_id");
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String ownerString = rs.getString("owner_user");
+                User owner_user = UserDAO.getUserByNRIC(ownerString);
+                
+                String assignedString = rs.getString("assigned_users");
+                ArrayList<User> assigned_users = new ArrayList<User>();
+                String[] assign = assignedString.split("\\|");
+                for(String assignName:assign){
+                    assigned_users.add(UserDAO.getUserByNRIC(assignName));
+                }
+                
+                int customer_id = rs.getInt("customer_id");
+                Customer customer = CustomerDAO.getCustomerById(customer_id);
+                
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
                 String subject = rs.getString("subject");
-                
-                String assignedString = rs.getString("assigned");
-                ArrayList<User> assigned = new ArrayList<User>();
-                String[] assign = assignedString.split(",");
-                for(String assignName:assign){
-                    assigned.add(UserDAO.getUserByFullname(assignName));
-                }
-                
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
-                tickets.add(new Ticket(owner,ticketId,customerName,contactNumber,email,dt,subject,assigned,description,solution,status));
+                
+                tickets.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -331,176 +304,151 @@ public class TicketDAO {
         return tickets;
     }
     
-    public static ArrayList<Ticket> getTicketsByAssignedUser(User user){
+    public static ArrayList<Ticket> getSearchTicketsByDate(String keyword, String keyStatus){
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+        ArrayList<Ticket> results = new ArrayList<Ticket>();
+        keyword = "%" + keyword + "%";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_TICKETS_BY_ASSIGNED_USER);
-            ps.setString(1, "%"+user.getFullname()+"%");
+            ps = con.prepareStatement(GET_SEARCH_BY_DATE);
+            ps.setString(1, keyword);
+            ps.setString(2, keyStatus);
             rs = ps.executeQuery();
             while (rs.next()) {
-                User owner = UserDAO.getUserByUsername(rs.getString("owneruser"));
-                String ticketId = rs.getString("id");
-                String customerName = rs.getString("custname");
-                String contactNumber = rs.getString("custcontact");
-                String email = rs.getString("custemail");
+                int ticket_id = rs.getInt("ticket_id");
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String ownerString = rs.getString("owner_user");
+                User owner_user = UserDAO.getUserByNRIC(ownerString);
+                
+                String assignedString = rs.getString("assigned_users");
+                ArrayList<User> assigned_users = new ArrayList<User>();
+                String[] assign = assignedString.split("\\|");
+                for(String assignName:assign){
+                    assigned_users.add(UserDAO.getUserByNRIC(assignName));
+                }
+                
+                int customer_id = rs.getInt("customer_id");
+                Customer customer = CustomerDAO.getCustomerById(customer_id);
+                
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
                 String subject = rs.getString("subject");
-                
-                String assignedString = rs.getString("assigned");
-                ArrayList<User> assigned = new ArrayList<User>();
-                String[] assign = assignedString.split(",");
-                for(String assignName:assign){
-                    if(!assignName.equals(user.getFullname())){
-                        assigned.add(UserDAO.getUserByFullname(assignName));
-                    }else{
-                        assigned.add(user);
-                    }
-                }
-                
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
-                tickets.add(new Ticket(owner,ticketId,customerName,contactNumber,email,dt,subject,assigned,description,solution,status));
+                
+                results.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
             ConnectionManager.close(con, ps, rs);
         }
-        return tickets;
+        return results;
     }
     
-    public static ArrayList<Ticket> getTicketsByOwnerUser(User user){
+    public static ArrayList<Ticket> getSearchTicketsByString(String keyword, String keyStatus){
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+        ArrayList<Ticket> results = new ArrayList<Ticket>();
+        keyword = "%" + keyword + "%";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_TICKETS_BY_OWNER_USER);
-            ps.setString(1,user.getUsername());
+            ps = con.prepareStatement(GET_SEARCH_BY_STRING);
+            ps.setString(1, keyword);
+            ps.setString(2, keyword);
+            ps.setString(3, keyword);
+            ps.setString(4, keyword);
+            ps.setString(5, keyStatus);
             rs = ps.executeQuery();
             while (rs.next()) {
-                String ticketId = rs.getString("id");
-                String customerName = rs.getString("custname");
-                String contactNumber = rs.getString("custcontact");
-                String email = rs.getString("custemail");
+                int ticket_id = rs.getInt("ticket_id");
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String ownerString = rs.getString("owner_user");
+                User owner_user = UserDAO.getUserByNRIC(ownerString);
+                
+                String assignedString = rs.getString("assigned_users");
+                ArrayList<User> assigned_users = new ArrayList<User>();
+                String[] assign = assignedString.split("\\|");
+                for(String assignName:assign){
+                    assigned_users.add(UserDAO.getUserByNRIC(assignName));
+                }
+                
+                int customer_id = rs.getInt("customer_id");
+                Customer customer = CustomerDAO.getCustomerById(customer_id);
+                
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
                 String subject = rs.getString("subject");
-                
-                String assignedString = rs.getString("assigned");
-                ArrayList<User> assigned = new ArrayList<User>();
-                String[] assign = assignedString.split(",");
-                for(String assignName:assign){
-                    assigned.add(UserDAO.getUserByUsername(assignName));
-                }
-                
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
-                tickets.add(new Ticket(user,ticketId,customerName,contactNumber,email,dt,subject,assigned,description,solution,status));
+                
+                results.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
             ConnectionManager.close(con, ps, rs);
         }
-        return tickets;
+        return results;
     }
     
-    public static Ticket getTicketById(String id){
+    public static ArrayList<Ticket> getSearchTicketsByNumber(String keyword, String keyStatus){
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        Ticket ticket = null;
+        ArrayList<Ticket> results = new ArrayList<Ticket>();
+        keyword = "%" + keyword + "%";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_TICKET_BY_ID);
-            ps.setString(1, id);
+            ps = con.prepareStatement(GET_SEARCH_BY_NUMBER);
+            ps.setString(1, keyword);
+            ps.setString(2, keyword);
+            ps.setString(3, keyStatus);
             rs = ps.executeQuery();
-            if(rs.next()) {
-                User owner = UserDAO.getUserByUsername(rs.getString("owneruser"));
-                String ticketId = rs.getString("id");
-                String customerName = rs.getString("custname");
-                String contactNumber = rs.getString("custcontact");
-                String email = rs.getString("custemail");
+            while (rs.next()) {
+                int ticket_id = rs.getInt("ticket_id");
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String ownerString = rs.getString("owner_user");
+                User owner_user = UserDAO.getUserByNRIC(ownerString);
+                
+                String assignedString = rs.getString("assigned_users");
+                ArrayList<User> assigned_users = new ArrayList<User>();
+                String[] assign = assignedString.split("\\|");
+                for(String assignName:assign){
+                    assigned_users.add(UserDAO.getUserByNRIC(assignName));
+                }
+                
+                int customer_id = rs.getInt("customer_id");
+                Customer customer = CustomerDAO.getCustomerById(customer_id);
+                
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
                 String subject = rs.getString("subject");
-                
-                String assignedString = rs.getString("assigned");
-                ArrayList<User> assigned = new ArrayList<User>();
-                String[] assign = assignedString.split(",");
-                for(String assignName:assign){
-                    assigned.add(UserDAO.getUserByFullname(assignName));
-                }
-                
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
-                ticket = new Ticket(owner,ticketId,customerName,contactNumber,email,dt,subject,assigned,description,solution,status);
+                
+                results.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
             ConnectionManager.close(con, ps, rs);
         }
-        return ticket;
-    }
-    
-    public static void resolveTicket(String ticketId, String solution){
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(RESOLVE_TICKET);
-            ps.setString(1, solution);
-            ps.setString(2, "Resolved");
-            ps.setString(3, ticketId);
-            ps.executeUpdate();
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } finally {
-            ConnectionManager.close(con, ps, null);
-        }
-    }
-    
-    public static void updateTicket(String subject, String assigned, String custname, String custcontact, String custemail, String description, String id){
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(UPDATE_TICKET);
-            ps.setString(1, subject);
-            ps.setString(2, assigned);
-            ps.setString(3, custname);
-            ps.setString(4, custcontact);
-            ps.setString(5, custemail);
-            ps.setString(6, description);
-            ps.setString(7, id);
-            ps.executeUpdate();
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } finally {
-            ConnectionManager.close(con, ps, null);
-        }
+        return results;
     }
 }

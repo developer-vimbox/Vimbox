@@ -1,3 +1,5 @@
+<%@page import="com.vimbox.customer.Customer"%>
+<%@page import="com.vimbox.database.CustomerDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -7,61 +9,64 @@
     </head>
     <body>
         <%
-            String name = "";
+            int customer_id = Integer.parseInt(request.getParameter("getId"));
+            Customer customer = CustomerDAO.getCustomerById(customer_id);
             String contact = "";
-            String email = "";
-            String custId = "";
-            
-            ServletContext sc = request.getServletContext();
-            String errorMsg = (String) sc.getAttribute("errorMsg");
-            if (errorMsg != null) {
-                sc.removeAttribute("errorMsg");
-                out.println("<h2>ERROR!</h2>");
-                out.println(errorMsg + "<br>");
-                name = (String) sc.getAttribute("name");
-                contact = (String) sc.getAttribute("contact");
-                email = (String) sc.getAttribute("email");
-                custId = (String) sc.getAttribute("custId");
-                sc.removeAttribute("name");
-                sc.removeAttribute("contact");
-                sc.removeAttribute("custId");
-                sc.removeAttribute("email");
-            } else {
-                name = request.getParameter("getName");
-                contact = request.getParameter("getContact");
-                custId = request.getParameter("getId");;
-                email = request.getParameter("getEmail");
+            if(customer.getContact() > 0){
+                contact = customer.getContact() + "";
             }
         %>
         <h2>Customer Details</h2><hr>
-        <form action="EditCustomerController">
-            <table>
-                <tr>
-                    <td align="right">Name :</td>
-                    <td>
-                        <input type="text" name="name" value="<%=name%>" required>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">Contact :</td>
-                    <td>
-                        <input type="text" name="contact" value="<%=contact%>" pattern="[0-9]{8,13}" autofocus oninvalid="this.setCustomValidity('Please enter a valid contact number')" oninput="setCustomValidity('')">
-                        <input type="hidden" name="custId" value="<%=custId%>">
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">Email :</td>
-                    <td>
-                        <input type="text" name="email" value="<%=email%>">
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type="submit" value="Edit">
-                    </td>
-                </tr>
-            </table>
-        </form>
+        <input type="hidden" id="customer_id" value="<%=customer_id%>"> 
+        <table>
+            <tr>
+                <td align="right"><b>Salutation :</b></td>
+                <td>
+                    <select id="edit_salutation" autofocus>
+                    <%
+                        String[] salutations = {"Mr", "Ms", "Mrs", "Mdm"};
+                        for(String salutation:salutations){
+                            if(salutation.equals(customer.getSalutation())){
+                                out.println("<option value='" + salutation + "' selected>" + salutation + "</option>");
+                            }else{
+                                out.println("<option value='" + salutation + "'>" + salutation + "</option>");
+                            }
+                        }
+
+                    %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right"><b>First Name :</b></td>
+                <td>
+                    <input type="text" id="edit_first_name" value="<%=customer.getFirst_name()%>" required>
+                </td>
+            </tr>
+            <tr>
+                <td align="right"><b>Last Name :</b></td>
+                <td>
+                    <input type="text" id="edit_last_name" value="<%=customer.getLast_name()%>" required>
+                </td>
+            </tr>
+            <tr>
+                <td align="right"><b>Contact :</b></td>
+                <td>
+                    <input type="number" id="edit_contact" value="<%=contact%>">
+                </td>
+            </tr>
+            <tr>
+                <td align="right"><b>Email :</b></td>
+                <td>
+                    <input type="text" id="edit_email" value="<%=customer.getEmail()%>">
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <button onclick="updateCustomer();return false;">Edit</button>
+                </td>
+            </tr>
+        </table>
     </body>
 </html>

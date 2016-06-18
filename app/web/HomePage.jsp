@@ -7,6 +7,10 @@
         <title>Home Page</title>
     </head>
     <body>
+        <a href="CreateEmployee.jsp">Create Employee</a><br>
+        <a href="FullTimeEmployees.jsp">Full Time Employees</a><br>
+        <a href="PartTimeEmployees.jsp">Part Time Employees</a><br>
+        <a href="Payslips.jsp">Payslips</a><br>
         <a href="CreateLead.jsp">Create Lead</a><br>
         <a href="MyLeads.jsp">My Leads</a><br>
         <a href="CreateTicket.jsp">Create Ticket</a><br> 

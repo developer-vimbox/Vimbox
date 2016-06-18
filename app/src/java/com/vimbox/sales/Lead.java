@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 
 public class Lead {
     private User owner;
-    private String id;
+    private int id;
     private String type;
     private Customer customer;
     private String status;
@@ -33,7 +33,7 @@ public class Lead {
     private ArrayList<String> comments;
     private ArrayList<String> remarks;
 
-    public Lead(User owner, String id, String type, Customer customer, String status, String reason, String source, String referral, String enquiry, DateTime dt, String tom, String dom, ArrayList<String[]> addressFrom, ArrayList<String[]> addressTo, ArrayList<Item> customerItems, ArrayList<Item> vimboxItems, ArrayList<Item> materials, ArrayList<String[]> services, HashMap<String,String> otherCharges, ArrayList<String> comments, ArrayList<String> remarks) {
+    public Lead(User owner, int id, String type, Customer customer, String status, String reason, String source, String referral, String enquiry, DateTime dt, String tom, String dom, ArrayList<String[]> addressFrom, ArrayList<String[]> addressTo, ArrayList<Item> customerItems, ArrayList<Item> vimboxItems, ArrayList<Item> materials, ArrayList<String[]> services, HashMap<String,String> otherCharges, ArrayList<String> comments, ArrayList<String> remarks) {
         this.owner = owner;
         this.id = id;
         this.type = type;
@@ -129,7 +129,7 @@ public class Lead {
         return otherCharges;
     }
     
-    public String getId() {
+    public int getId() {
         return id;
     }
 

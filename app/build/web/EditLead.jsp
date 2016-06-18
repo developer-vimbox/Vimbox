@@ -1,3 +1,5 @@
+<%@page import="com.vimbox.sales.Lead"%>
+<%@page import="com.vimbox.database.LeadDAO"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="com.vimbox.sales.Item"%>
 <%@page import="com.vimbox.customer.Customer"%>
@@ -47,7 +49,10 @@
         </style>
     </head>
     <body onload="setup()">
-        <%@include file="EditLeadCheck.jsp"%>
+        <%
+            String lId = request.getParameter("lId");
+            Lead lead = LeadDAO.getLeadById(Integer.parseInt(lId));
+        %>
         <a href="MyLeads.jsp">Back</a><br>
         <form method="POST" action="EditLeadController" autocomplete="on">
             <table style="width:250px;">
@@ -79,89 +84,35 @@
             </table>
             <fieldset>
                 <legend>Customer Information</legend>
+                <input type="text" id="customer_search" placeholder="Enter customer name">
+                <button onclick='customerSearch("ticket");return false;'>Search</button>
+                <button onclick="addNewCustomer();return false;">Add New</button>
+
+                <div id="customer_modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('customer_modal')">×</span>
+                            <div id="customer_content"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="customer_error_modal" class="modal">
+                    <div class="error-modal-content">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('customer_error_modal')">×</span>
+                            <div id="customer_error_status"></div>
+                            <hr>
+                            <div id="customer_error_message"></div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 <%
                     Customer customer = lead.getCustomer();
-                    String salutation = "";
-                    String name = "";
-                    String contact = "";
-                    String email = "";
-                    String id = "";
-                    
-                    if(customer != null){
-                        String custName = customer.getName();
-                        salutation = custName.substring(0, custName.indexOf(" "));
-                        
-                        name = custName.substring(custName.indexOf(" ")+1);
-                        contact = customer.getContact();
-                        email = customer.getEmail();
-                        id = customer.getId() + "";
-                    }
                 %>
                 <table>
                     <col width="100">
-                    <tr>
-                        <td align="right"><b>Salutation :</b></td>
-                        <td>
-                            <select id="salutation" name="salutation" autofocus>
-                                <%
-                                    String[] salutations = {"Mr","Ms","Mrs","Mdm"};
-                                    for(String sal : salutations){
-                                        String s = "<option value='" + sal + "' ";
-                                        if(sal.equals(salutation)){
-                                            s+="selected";
-                                        }
-                                        s += (">" + sal + "</option>");
-                                        out.println(s);
-                                    }
-                                %>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>Name :</b></td>
-                        <td>
-                            <input type="text" id="name" name="name" required value="<%=name%>">
-                            <button onclick="searchName();
-                                    return false;">Search</button>
-                            <!-- The Modal -->
-                            <div id="snModal" class="modal">
-                                <!-- Modal content -->
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <span class="close" onclick="closeModal('snModal')">×</span>
-                                        <div id="snContent"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button onclick="addCustomer();
-                                    return false;">+</button>
-                            <!-- The Modal -->
-                            <div id="csModal" class="modal">
-                                <!-- Modal content -->
-                                <div class="error-modal-content">
-                                    <div class="modal-body">
-                                        <span class="close" onclick="closeModal('csModal')">×</span>
-                                        <div id="csStatus"></div>
-                                        <hr>
-                                        <div id="csMessage"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>Contact Number :</b></td>
-                        <td>
-                            <input type="text" id="contact" name="contact" pattern="[0-9]{8,13}" value="<%=contact%>" oninvalid="this.setCustomValidity('Please enter a valid contact number')" oninput="setCustomValidity('')">
-                            <input type="hidden" name="custId" id="custId" value="<%=id%>">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>Email :</b></td>
-                        <td>
-                            <input type="text" id="email" name="email" value="<%=email%>">
-                        </td>
-                    </tr>
                     <tr>
                         <td align="right"><b>Referred by :</b></td>
                         <td>
@@ -194,6 +145,42 @@
                         </td>
                     </tr>
                 </table>
+                <div id="customer_information_table" <%if(customer == null){out.println("style='display:none'");}else{out.println("style='display:block'");}%>>
+                    <input type="hidden" id="customer_id" name="customer_id" <%if(customer != null){out.println("value='" + customer.getCustomer_id() + "'");}%>>
+                    <table>
+                        <col width="100">
+                        <tr>
+                            <td align="right"><b>Salutation :</b></td>
+                            <td>
+                                <label id="customer_salutation"><%if(customer != null){out.println(customer.getSalutation());}%></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right"><b>First Name :</b></td>
+                            <td>
+                                <label id="customer_first_name"><%if(customer != null){out.println(customer.getFirst_name());}%></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right"><b>Last Name :</b></td>
+                            <td>
+                                <label id="customer_last_name"><%if(customer != null){out.println(customer.getLast_name());}%></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right"><b>Contact :</b></td>
+                            <td>
+                                <label id="customer_contact"><%if(customer != null){out.println(customer.getContact());}%></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right"><b>Email :</b></td>
+                            <td>
+                                <label id="customer_email"><%if(customer != null){out.println(customer.getEmail());}%></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>        
             </fieldset>
             <br>
             <fieldset>

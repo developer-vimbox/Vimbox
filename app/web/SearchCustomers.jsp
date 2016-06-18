@@ -6,30 +6,48 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Customers</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script>src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js" ></script>
+        <script src="JS/CustomerFunctions.js"></script>
+        <script src="JS/TicketFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
+        <script src="JS/ModalFunctions.js"></script>
         <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
     </head>
-    <body>
-        <%
-            ServletContext sc = request.getServletContext();
-            String status = (String) sc.getAttribute("status");
-            if(status != null){
-                sc.removeAttribute("status");
-                out.println("<h2>SUCCESS!</h2>");
-                out.println("Customer details have been updated!<br><br>");
-            }
-        %>
+    <body onload='reload()'>
         <table>
             <tr>
                 <td>
-                    <input type="text" id="name" name="name" autofocus>
+                    <input type="text" id="customer_search" autofocus>
                 </td>
                 <td>
-                    <button onclick="searchName()">Search</button>
+                    <button onclick='customerSearch("crm")'>Search</button>
                 </td>
             </tr>
         </table>
-        <div id="results"></div>
+        
+        <div id="customer_modal">
+            <div id="customer_content"></div>
+        </div>
+        
+        <div id="edit_customer_modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('edit_customer_modal')">×</span>
+                    <div id="edit_customer_content"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="customer_error_modal" class="modal">
+            <div class="error-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('customer_error_modal')">×</span>
+                    <div id="customer_error_status"></div>
+                    <hr>
+                    <div id="customer_error_message"></div>
+                </div>
+            </div>
+        </div>
+        
         <div id="ticketsHistoryModel" class="modal">
             <!-- Modal content -->
             <div class="search-modal-content">
@@ -39,42 +57,15 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            function closeModal(modalName) {
-                var modal = document.getElementById(modalName);
-                modal.style.display = "none";
-            }
-
-            function searchName() {
-                var name = document.getElementById("name").value;
-                var results = document.getElementById("results");
-                $.get("SearchCustomersByName.jsp", {getName: name, getAction: "crm"}, function (data) {
-                    results.innerHTML = data;
-                });
-            }
-
-            function viewTicketsHistory(custId) {
-                var modal = document.getElementById("ticketsHistoryModel");
-                var ticketsHistoryContent = document.getElementById("ticketsHistoryContent");
-                $.get("TicketsHistory.jsp", {getId: custId}, function (data) {
-                    ticketsHistoryContent.innerHTML = data;
-                });
-                modal.style.display = "block";
-            }
-
-            function viewTicket(ticketId) {
-                var modal = document.getElementById("viewTicketModal" + ticketId);
-                modal.style.display = "block";
-            }
-            function viewComments(ticketId) {
-                var modal = document.getElementById("viewCommentsModal" + ticketId);
-                var div1 = document.getElementById("commentsContent" + ticketId);
-                $.get("RetrieveTicketComment.jsp", {getTid: ticketId}, function (data) {
-                    div1.innerHTML = data;
-                });
-                modal.style.display = "block";
-            }
-        </script>
+        
+        <div id="leadsHistoryModel" class="modal">
+            <!-- Modal content -->
+            <div class="search-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('leadsHistoryModel')">×</span>
+                    <div id="leadsHistoryContent"></div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

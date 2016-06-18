@@ -12,16 +12,16 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 public class TicketCommentDAO {
-    private static final String CREATE_TICKET_COMMENT = "INSERT INTO ticketcomments (id,comment,datetiming) values (?,?,?)";
-    private static final String GET_TICKET_COMMENT_BY_ID = "SELECT * FROM ticketcomments where id=? ORDER BY datetiming DESC";
+    private static final String CREATE_TICKET_COMMENT = "INSERT INTO ticket_comments (ticket_id, comment, datetime_of_creation) values (?,?,?)";
+    private static final String GET_TICKET_COMMENT_BY_ID = "SELECT * FROM ticket_comments where ticket_id=? ORDER BY datetime_of_creation DESC";
     
-    public static void createTicketComment(String id, String comment, DateTime dt){
+    public static void createTicketComment(int ticket_id, String comment, DateTime dt){
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(CREATE_TICKET_COMMENT);
-            ps.setString(1, id);
+            ps.setInt(1, ticket_id);
             ps.setString(2, comment);
             ps.setString(3, Converter.convertDateDatabase(dt));
             ps.executeUpdate();
@@ -32,7 +32,7 @@ public class TicketCommentDAO {
         }
     }
     
-    public static ArrayList<TicketComment> getTicketCommentsById(String id){
+    public static ArrayList<TicketComment> getTicketCommentsById(int ticket_id){
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         ArrayList<TicketComment> ticketComments = new ArrayList<TicketComment>();
         Connection con = null;
@@ -41,17 +41,16 @@ public class TicketCommentDAO {
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_TICKET_COMMENT_BY_ID);
-            ps.setString(1, id);
+            ps.setInt(1, ticket_id);
             rs = ps.executeQuery();
             while (rs.next()) {
-                String ticketId = rs.getString("id");
                 String comment = rs.getString("comment");
                 
-                String tempDateTimeString = rs.getString("datetiming");
+                String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
-                ticketComments.add(new TicketComment(ticketId,comment,dt));
+                ticketComments.add(new TicketComment(ticket_id,comment,dt));
             }
         } catch (SQLException se) {
             se.printStackTrace();

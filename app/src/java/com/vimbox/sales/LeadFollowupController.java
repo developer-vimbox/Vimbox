@@ -1,6 +1,8 @@
 package com.vimbox.sales;
 
+import com.google.gson.JsonObject;
 import com.vimbox.database.LeadFollowupDAO;
+import com.vimbox.database.TicketCommentDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletContext;
@@ -29,25 +31,30 @@ public class LeadFollowupController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String comment = request.getParameter("followup");
+        response.setContentType("application/json;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache");
+        PrintWriter out = response.getWriter();
+        
+        String comment = request.getParameter("comment_lead_followup");
         
         String errorMsg = "";
         if(comment.isEmpty()){
-            errorMsg+="Please enter a follow up comment";
+            errorMsg+="Please enter a follow-up comment<br>";
         }
         
-        ServletContext sc = request.getServletContext();
+        JsonObject jsonOutput = new JsonObject();
         if(errorMsg.isEmpty()){
-            String id = request.getParameter("id");
+            int lead_id = Integer.parseInt(request.getParameter("comment_lead_id"));
             DateTime dt = new DateTime();
-            LeadFollowupDAO.createLeadFollowup(id, comment, dt);
-            errorMsg = "success";
+            LeadFollowupDAO.createLeadFollowup(lead_id, comment, dt);
+            jsonOutput.addProperty("status", "SUCCESS");
+            jsonOutput.addProperty("message", "Lead follow-up comment added!");
+        }else{
+            jsonOutput.addProperty("status", "ERROR");
+            jsonOutput.addProperty("message", errorMsg);
         }
         
-        sc.setAttribute("action","followup");
-        sc.setAttribute("errorMsg", errorMsg);
-        response.sendRedirect("MyLeads.jsp");
-        return;
+        out.println(jsonOutput);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

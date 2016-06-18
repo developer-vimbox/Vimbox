@@ -11,6 +11,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>My Leads</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
         <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
     </head>
     <body>
@@ -37,7 +39,7 @@
                     out.println("<tr>");
                     out.println("<td>" + lead.getId() + "</td>");
                     Customer customer = lead.getCustomer();
-                    out.println("<td>" + customer.getName() + "</td>");
+                    out.println("<td>" + customer.toString() + "</td>");
                     out.println("<td>" + customer.getContact() + "</td>");
                     out.println("<td>" + customer.getEmail() + "</td>");
                     out.println("<td>" + lead.getStatus() + "</td>");
@@ -57,19 +59,20 @@
                         <div class="modal-body">
                             <span class="close" onclick="closeModal('commentModal<%=lead.getId()%>')">×</span>
                             <h3>Add Comment</h3>
-                            <form method="post" action="LeadFollowupController">
-                                <table>
-                                    <tr>
-                                        <td>Lead ID :</td>
-                                        <td><%=lead.getId()%><input type="hidden" name="id" value="<%=lead.getId()%>" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Follow Up :</td>
-                                        <td><textarea required name="followup" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea></td>
-                                    </tr>  
-                                </table>
-                                <input type="submit" value="Add Follow-Up">
-                            </form>
+                            <table>
+                                <tr>
+                                    <td>Lead ID :</td>
+                                    <td><%=lead.getId()%><input type="hidden" id="comment_lead_id<%=lead.getId()%>" value="<%=lead.getId()%>" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Follow Up :</td>
+                                    <td><textarea id="comment_lead_followup<%=lead.getId()%>" cols="75" rows="6" autofocus></textarea></td>
+                                </tr>  
+                                <tr>
+                                    <td></td>
+                                    <td><button onclick="followupLead(<%=lead.getId()%>)">Add Follow-Up</button></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -105,32 +108,17 @@
             <%
                 }
             %>
-        </table>    
-        <script>
-            function closeModal(modalName) {
-                var modal = document.getElementById(modalName);
-                modal.style.display = "none";
-            }
-            function addFollowup(leadId) {
-                var modal = document.getElementById("commentModal" + leadId);
-                modal.style.display = "block";
-            }
-            function viewLead(leadId){
-                var modal = document.getElementById("viewLeadModal" + leadId);
-                var div1 = document.getElementById("leadContent" + leadId);
-                $.get("RetrieveLeadDetails.jsp", {getLid: leadId}, function (data) {
-                    div1.innerHTML = data;
-                });
-                modal.style.display = "block";
-            }
-            function viewFollowups(leadId) {
-                var modal = document.getElementById("viewCommentsModal" + leadId);
-                var div1 = document.getElementById("commentsContent" + leadId);
-                $.get("RetrieveLeadFollowup.jsp", {getLid: leadId}, function (data) {
-                    div1.innerHTML = data;
-                });
-                modal.style.display = "block";
-            }
-        </script>
+        </table>  
+        
+        <div id="lead_error_modal" class="modal">
+            <div class="error-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('lead_error_modal')">×</span>
+                    <div id="lead_error_status"></div>
+                    <hr>
+                    <div id="lead_error_message"></div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

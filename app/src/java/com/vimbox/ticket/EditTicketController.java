@@ -1,15 +1,21 @@
 package com.vimbox.ticket;
 
+import com.google.gson.JsonObject;
 import com.vimbox.database.CustomerHistoryDAO;
 import com.vimbox.database.TicketDAO;
+import com.vimbox.user.User;
+import com.vimbox.util.Converter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.joda.time.DateTime;
 
 @WebServlet(name = "EditTicketController", urlPatterns = {"/EditTicketController"})
 public class EditTicketController extends HttpServlet {
@@ -25,73 +31,60 @@ public class EditTicketController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String buttonPushed = request.getParameter("submit");
-        if (buttonPushed == null) {
-            response.sendRedirect("MyTickets.jsp");
-            return;
-        }
+        response.setContentType("application/json;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache");
+        PrintWriter out = response.getWriter();
         
         // Validating fields //
         String errorMsg = "";
  
         String subject = request.getParameter("subject");
         if(subject.isEmpty()){
-            errorMsg+="Please enter a subject title:";
+            errorMsg+="Please enter a subject title<br>";
         }
         
-        String[] assigned = request.getParameterValues("assigned");
-        ArrayList<String> assignees = new ArrayList<String>();
-        for(String name:assigned){
-            if(!assignees.contains(name)){
-                assignees.add(name);
-            }
-        }
+        String assigned_users = Converter.convertDuplicates(request.getParameter("assigned_users"));
+        
         
         String description = request.getParameter("description");
         if(description.isEmpty()){
-            errorMsg+="Please enter a ticket description:";
+            errorMsg+="Please enter a ticket description<br>";
         }
         
-        String ticketId = request.getParameter("ticketId");
+        String c_id = request.getParameter("customer_id");
+        int customer_id = 0;
+        try{
+            customer_id = Integer.parseInt(c_id);
+        }catch(NumberFormatException nfe){
+            errorMsg+="Please choose or add a customer<br>";
+        }    
         
-        // Setting error or no error paths //
-        ServletContext sc = request.getServletContext();
+        JsonObject jsonOutput = new JsonObject();
         if(errorMsg.isEmpty()){
+            int ticket_id = Integer.parseInt(request.getParameter("ticket_id"));
             
-            // Retrieve customer details if available //
-            String salutation = request.getParameter("salutation");
-            String name = request.getParameter("name");
-            String customerName = "";
-            if(!name.isEmpty()){
-                customerName = salutation + " " + name;
-            }
-            String contactNumber = request.getParameter("contact");
-            String email = request.getParameter("email");
+            // Remove the existing instance //
+            TicketDAO.deleteTicket(ticket_id);
+            CustomerHistoryDAO.deleteCustomerHistory(ticket_id);
             
-            String custId = request.getParameter("custId");
-            if(custId != null){
-                CustomerHistoryDAO.updateCustomerHistory(Integer.parseInt(custId), ticketId);
-            }
+            CustomerHistoryDAO.updateCustomerHistory(customer_id, ticket_id);
             
-            // Retrieve the assigned users //
-            String assignedUsers = "";
-            for(int i=0; i<assignees.size(); i++){
-                String aname = assignees.get(i);
-                assignedUsers += aname;
-                if(i+1 < assigned.length){
-                    assignedUsers += ",";
-                }
-            }
+            // Retrieve user owner //
+            User owner = (User) request.getSession().getAttribute("session");
+            String owner_user = owner.getNric();
             
-            TicketDAO.updateTicket(subject, assignedUsers, customerName, contactNumber, email,description, ticketId);
-            sc.setAttribute("action", "update");
-            response.sendRedirect("MyTickets.jsp");
-            return;
+            // Retrieve date time of ticket creation // 
+            DateTime dt = new DateTime();
+            
+            TicketDAO.createTicket(ticket_id, owner_user, assigned_users, customer_id, dt, subject, description, "Pending");
+            jsonOutput.addProperty("status", "SUCCESS");
+            jsonOutput.addProperty("message", "Ticket updated!");
         }else{
-            sc.setAttribute("errorMsg", errorMsg);
-            response.sendRedirect("EditTicket.jsp?tId=" + ticketId);
-            return;
+            jsonOutput.addProperty("status", "ERROR");
+            jsonOutput.addProperty("message", errorMsg);
         }
+        
+        out.println(jsonOutput);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

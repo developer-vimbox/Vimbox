@@ -9,7 +9,7 @@
         <title>Customer Search</title>
     </head>
     <body>
-        <h2>Search Results</h2><hr>
+        <h2>Search Results</h2>
         <%
             String name = request.getParameter("getName");
             String module = request.getParameter("getAction");
@@ -17,18 +17,19 @@
             if(module.equals("crm")){
                 try{
                     int num = Integer.parseInt(name);
-                    results = CustomerDAO.getCustomersByNumber(num);
+                    results = CustomerDAO.getCustomersByContact(num);
                 }catch (NumberFormatException nfe){
                     results = CustomerDAO.getCustomersByString(name);
                 }
             }else{
                results = CustomerDAO.getCustomersByName(name);
+               out.println("<button onclick='addNewCustomer();return false;'>Add New</button>");
             }
-             
-            if(results.isEmpty()){  
         %>
-            No results found
-        <%
+        <hr>
+        <%     
+            if(results.isEmpty()){  
+                out.println("No results found");
             }else{
                 if(results.size()==1){
                     out.println(results.size() + " record found");
@@ -47,9 +48,16 @@
                 </tr>
         <%
                 for(Customer customer:results){
-                    int custId = customer.getId();
-                    String customerName = customer.getName();
-                    String customerContact = customer.getContact();
+                    int custId = customer.getCustomer_id();
+                    String saluation = customer.getSalutation();
+                    String firstName = customer.getFirst_name();
+                    String lastName = customer.getLast_name();
+                    String customerName = customer.toString();
+                    int contact = customer.getContact();
+                    String customerContact = "";
+                    if(contact != 0){
+                        customerContact = contact + "";
+                    }
                     String customerEmail = customer.getEmail();
         %>
                 <tr>
@@ -60,12 +68,12 @@
         <%
                     if(module.equals("ticket")){
         %>            
-                        <button onclick="selectCustomer('<%=custId%>','<%=customerName%>','<%=customerContact%>','<%=customerEmail%>');return false;">Select</button>
+                        <button onclick="selectCustomer('<%=custId%>','<%=saluation%>','<%=firstName%>','<%=lastName%>','<%=customerContact%>','<%=customerEmail%>');return false;">Select</button>
         <%
                     }else{
         %>
-                        <input type="button" value="Edit" onclick="window.location.href='EditCustomer.jsp?getId=<%=custId%>&getName=<%=customerName%>&getContact=<%=customerContact%>&getEmail=<%=customerEmail%>'">
-                        <button>VS</button>
+                        <button onclick="editCustomer(<%=custId%>)">Edit</button>
+                        <button onclick="viewLeadsHistory('<%=custId%>')">VS</button>
                         <button onclick="viewTicketsHistory('<%=custId%>')">VT</button>
         <%
                     }

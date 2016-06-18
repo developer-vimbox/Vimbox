@@ -1,3 +1,4 @@
+<%@page import="com.vimbox.customer.Customer"%>
 <%@page import="com.vimbox.util.Converter"%>
 <%@page import="com.vimbox.database.TicketDAO"%>
 <%@page import="com.vimbox.ticket.Ticket"%>
@@ -11,10 +12,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>My Tickets</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/TicketFunctions.js"></script>
+        <script src="JS/CustomerFunctions.js"></script>
         <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
     </head>
     <body>
-        <%@include file="MyTicketsAction.jsp"%>
         <%
             ArrayList<Ticket> myTickets = TicketDAO.getTicketsByOwnerUser(user);
             ArrayList<Ticket> assignedTickets = TicketDAO.getTicketsByAssignedUser(user);
@@ -34,21 +37,19 @@
             </tr>
         <%
             for(Ticket myTicket:myTickets){
-                String ticketId = myTicket.getTicketid();
-                String customerName = myTicket.getCustomerName();
-                if(customerName.isEmpty()){
-                    customerName = "Not provided";
+                int ticketId = myTicket.getTicket_id();
+                Customer customer = myTicket.getCustomer();
+                String customerName = customer.toString();
+                String contact  = customer.getContact() + "";
+                if(contact.equals("0")){
+                    contact = "N/A";
                 }
-                String contact  = myTicket.getContactNumber();
-                if(contact.isEmpty()){
-                    contact = "Not provided";
-                }
-                String email = myTicket.getEmail();
+                String email = customer.getEmail();
                 if(email.isEmpty()){
                     email = "N/A";
                 }
                 String subject = myTicket.getSubject();
-                String dateTime = Converter.convertDate(myTicket.getDatetime());
+                String dateTime = Converter.convertDate(myTicket.getDatetime_of_creation());
                 String status = myTicket.getStatus();
         %>
             <tr>
@@ -63,7 +64,15 @@
             <%
                 if(status.equals("Pending")){
             %>
-                <a href="EditTicket.jsp?tId=<%=ticketId%>">Edit</a>
+                <button onclick="editTicket(<%=ticketId%>)">Edit</button>
+                <div id="edit_ticket_modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('edit_ticket_modal')">×</span>
+                            <div id="edit_ticket_content"></div>
+                        </div>
+                    </div>
+                </div>
             <%
                 }
             %>
@@ -90,22 +99,19 @@
             </tr>
         <%
             for(Ticket ticket:assignedTickets){
-                String ticketId = ticket.getTicketid();
-                String customerName = ticket.getCustomerName();
-                if(customerName.isEmpty()){
-                    customerName = "N/A";
-                }
-                String contact  = ticket.getContactNumber();
-                if(contact.isEmpty()){
+                int ticketId = ticket.getTicket_id();
+                Customer customer = ticket.getCustomer();
+                String customerName = customer.toString();
+                String contact  = customer.getContact() + "";
+                if(contact.equals("0")){
                     contact = "N/A";
                 }
-                String email = ticket.getEmail();
+                String email = customer.getEmail();
                 if(email.isEmpty()){
                     email = "N/A";
                 }
-                
                 String subject = ticket.getSubject();
-                String dateTime = Converter.convertDate(ticket.getDatetime());
+                String dateTime = Converter.convertDate(ticket.getDatetime_of_creation());
                 String status = ticket.getStatus();
         %>
         <tr>
@@ -117,7 +123,7 @@
             <td><%=dateTime%></td>
             <td><%=status%></td>
             <td>
-                <button onclick="addComment('<%=ticketId%>')">C</button>
+                <button onclick="commentTicket('<%=ticketId%>')">C</button>
                 <!-- The Modal -->
                 <div id="commentModal<%=ticketId%>" class="modal">
                     <!-- Modal content -->
@@ -125,43 +131,45 @@
                         <div class="modal-body">
                             <span class="close" onclick="closeModal('commentModal<%=ticketId%>')">×</span>
                             <h3>Add Comment</h3>
-                            <form method="post" action="TicketCommentController">
-                                <table>
-                                    <tr>
-                                        <td>Ticket ID :</td>
-                                        <td><%=ticketId%><input type="hidden" name="id" value="<%=ticketId%>" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Comment :</td>
-                                        <td><textarea required name="comment" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea></td>
-                                    </tr>  
-                                </table>
-                                <input type="submit" value="Add Comment">
-                            </form>
+                            <table>
+                                <tr>
+                                    <td>Ticket ID :</td>
+                                    <td><%=ticketId%><input type="hidden" id="comment_ticket_id<%=ticketId%>" value="<%=ticketId%>" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Comment :</td>
+                                    <td><textarea id="ticket_comment<%=ticketId%>" cols="75" rows="6" autofocus></textarea></td>
+                                </tr>  
+                                <tr>
+                                    <td></td>
+                                    <td><button onclick="followupTicket(<%=ticketId%>)">Add Comment</button></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
 
-                <button onclick="resolve('<%=ticketId%>')">R</button>
+                <button onclick="closeTicket('<%=ticketId%>')">R</button>
                 <div id="resolveModal<%=ticketId%>" class="modal">
                     <!-- Modal content -->
                     <div class="modal-content">
                         <div class="modal-body">
                             <span class="close" onclick="closeModal('resolveModal<%=ticketId%>')">×</span>
                             <h3>Resolve Ticket</h3>
-                            <form method="post" action="ResolveTicketController">
-                                <table>
-                                    <tr>
-                                        <td>Ticket ID :</td>
-                                        <td><%=ticketId%><input type="hidden" name="id" value="<%=ticketId%>" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Solution :</td>
-                                        <td><textarea required name="solution" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea></td>
-                                    </tr>  
-                                </table>
-                                <input type="submit" value="Resolve">
-                            </form>
+                            <table>
+                                <tr>
+                                    <td>Ticket ID :</td>
+                                    <td><%=ticketId%><input type="hidden" id="resolve_ticket_id<%=ticketId%>" value="<%=ticketId%>" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Solution :</td>
+                                    <td><textarea id="resolve_ticket_solution<%=ticketId%>" cols="75" rows="6" autofocus></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><button onclick="resolveTicket(<%=ticketId%>)">Resolve Ticket</button></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -187,19 +195,19 @@
                                 </tr>
                                 <tr>
                                     <td align="right">Ticket Owner :</td>
-                                    <td><%=ticket.getOwner().getFullname()%></td>
+                                    <td><%=ticket.getOwner_user().toString()%></td>
                                 </tr>
                                 <tr>
                                     <td align="right">Assigned To :</td>
                                     <td>
                                         <%
-                                            ArrayList<User> assigned = ticket.getAssigned();
+                                            ArrayList<User> assigned = ticket.getAssigned_users();
                                             if(assigned.size() > 1){
                                                 for(User assignee:assigned){
-                                                    out.println("<li>" + assignee.getFullname() + "</li>");
+                                                    out.println("<li>" + assignee.toString() + "</li>");
                                                 }
                                             }else if(assigned.size() == 1){
-                                                out.println(assigned.get(0).getFullname());
+                                                out.println(assigned.get(0).toString());
                                             }
                                         %>
                                     </td>
@@ -249,33 +257,17 @@
         <%
             }
         %>
-            
         </table>
-        <script>
-            function closeModal(modalName){
-                var modal = document.getElementById(modalName);
-                modal.style.display = "none";
-            }
-            function addComment(ticketId){
-                var modal = document.getElementById("commentModal" + ticketId);
-                modal.style.display = "block";
-            }
-            function resolve(ticketId){
-                var modal = document.getElementById("resolveModal" + ticketId);
-                modal.style.display = "block";
-            }
-            function viewTicket(ticketId){
-                var modal = document.getElementById("viewTicketModal" + ticketId);
-                modal.style.display = "block";
-            }
-            function viewComments(ticketId){
-                var modal = document.getElementById("viewCommentsModal" + ticketId);
-                var div1 = document.getElementById("commentsContent" + ticketId);
-                $.get("RetrieveTicketComment.jsp",{getTid:ticketId}, function(data) {
-                    div1.innerHTML = data;
-                });
-                modal.style.display = "block";
-            }
-        </script>
+        
+        <div id="ticket_error_modal" class="modal">
+            <div class="error-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('ticket_error_modal')">×</span>
+                    <div id="ticket_error_status"></div>
+                    <hr>
+                    <div id="ticket_error_message"></div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

@@ -3,7 +3,7 @@
 <%@page import="com.vimbox.database.TicketCommentDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%
-    String ticketId = request.getParameter("getTid");
+    int ticketId = Integer.parseInt(request.getParameter("getTid"));
     ArrayList<TicketComment> comments = TicketCommentDAO.getTicketCommentsById(ticketId);
     out.println("<h2>Comment History</h2><hr>");
     out.println("Ticket ID :" + ticketId + "<br><br>");

@@ -1,8 +1,9 @@
 package com.vimbox.ticket;
 
+import com.google.gson.JsonObject;
 import com.vimbox.database.TicketCommentDAO;
 import java.io.IOException;
-import javax.servlet.ServletContext;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,25 +25,30 @@ public class TicketCommentController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String comment = request.getParameter("comment");
+        response.setContentType("application/json;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache");
+        PrintWriter out = response.getWriter();
+        
+        String comment = request.getParameter("ticket_comment");
         
         String errorMsg = "";
         if(comment.isEmpty()){
             errorMsg+="Please enter a comment";
         }
         
-        ServletContext sc = request.getServletContext();
+        JsonObject jsonOutput = new JsonObject();
         if(errorMsg.isEmpty()){
-            String id = request.getParameter("id");
+            int ticket_id = Integer.parseInt(request.getParameter("comment_ticket_id"));
             DateTime dt = new DateTime();
-            TicketCommentDAO.createTicketComment(id, comment, dt);
-            errorMsg = "success";
+            TicketCommentDAO.createTicketComment(ticket_id, comment, dt);
+            jsonOutput.addProperty("status", "SUCCESS");
+            jsonOutput.addProperty("message", "Ticket comment added!");
+        }else{
+            jsonOutput.addProperty("status", "ERROR");
+            jsonOutput.addProperty("message", errorMsg);
         }
         
-        sc.setAttribute("action","comment");
-        sc.setAttribute("errorMsg", errorMsg);
-        response.sendRedirect("MyTickets.jsp");
-        return;
+        out.println(jsonOutput);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -2,7 +2,6 @@ package com.vimbox.sales;
 
 import com.vimbox.database.LeadDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +23,7 @@ public class CancelLeadController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String leadId = request.getParameter("lId");
+        int leadId = Integer.parseInt(request.getParameter("lId"));
         String reason = request.getParameter("reason");
         LeadDAO.cancelLead(leadId,reason);
         
