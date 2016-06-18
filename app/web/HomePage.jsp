@@ -7,16 +7,21 @@
         <title>Home Page</title>
     </head>
     <body>
+        HR<br>
         <a href="CreateEmployee.jsp">Create Employee</a><br>
         <a href="FullTimeEmployees.jsp">Full Time Employees</a><br>
         <a href="PartTimeEmployees.jsp">Part Time Employees</a><br>
         <a href="Payslips.jsp">Payslips</a><br>
+        <br>SALES<br>
         <a href="CreateLead.jsp">Create Lead</a><br>
         <a href="MyLeads.jsp">My Leads</a><br>
+        <br>TICKET<br>
         <a href="CreateTicket.jsp">Create Ticket</a><br> 
         <a href="MyTickets.jsp">My Tickets</a><br>
         <a href="TicketForum.jsp">Ticket Forum</a><br>
+        <br>CRM<br>
         <a href="SearchCustomers.jsp">Search Customers</a><br>
+        <br>USER<br>
         <a href="ChangePassword.jsp">Change Password</a><br>
         <a href="Logout.jsp">Logout</a>
     </body>
