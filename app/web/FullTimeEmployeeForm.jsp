@@ -35,14 +35,6 @@
             </td>
         </tr>
         <tr>
-            <td align="right"><b>Gender :</b></td>
-            <td><input type="radio" name="ft_gender" value="Male">Male <input type="radio" name="ft_gender" value="Female">Female</td>
-        </tr>
-        <tr>
-            <td align="right"><b>Date Of Birth :</b></td>
-            <td><input type="date" id="ft_dob" style="width: 155px;"></td>
-        </tr>
-        <tr>
             <td align="right"><b>Contact :</b></td>
             <td><input type="number" id="ft_contact"></td>
         </tr>
@@ -94,20 +86,6 @@
         <tr>
             <td align="right"><b>Password :</b></td>
             <td><input type="password" id="ft_password"></td>
-        </tr>
-        <tr>
-            <td align="right"><b>Modules :</b></td>
-            <td>
-                <select multiple id="ft_modules" style="width: 160px;">
-                    <option value="">------------Select------------</option>
-                    <%
-                        ArrayList<String> modules = UserPopulationDAO.getUserModules();
-                        for(String module:modules){
-                            out.println("<option value='" + module + "'>" + module + "</option>");
-                        }
-                    %>
-                </select>
-            </td>
         </tr>
     </table>
 </fieldset>
