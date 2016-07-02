@@ -47,9 +47,6 @@
 }
 
 /* Modal Content */
-/* CreateTicket.jsp */
-/* MyTickets.jsp */
-/* TicketForum.jsp */
 .modal-content {
     position: relative;
     background-color: #fefefe;
@@ -64,6 +61,7 @@
     animation-duration: 0.4s
 }
 
+<<<<<<< HEAD
 .attendance-modal-content{
     position: relative;
     background-color: #fefefe;
@@ -93,6 +91,8 @@
 }
 
 /* login.jsp */
+=======
+>>>>>>> origin/master
 .message-modal-content{
     position: relative;
     background-color: #fefefe;
@@ -107,7 +107,7 @@
     animation-duration: 0.4s
 }
 
-/* TicketForum.jsp */
+
 .search-modal-content{
     position: relative;
     background-color: #fefefe;
@@ -150,8 +150,6 @@
     animation-duration: 0.4s
 }
 
-/* CreateTicket.jsp */
-/* MyTickets.jsp */
 .error-modal-content{
     position: relative;
     background-color: #fefefe;
