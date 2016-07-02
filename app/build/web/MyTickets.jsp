@@ -23,65 +23,6 @@
         <script src="assets/globals/plugins/modernizr/modernizr.min.js"></script>
 
     </head>
-<<<<<<< HEAD
-    <body>
-        <%
-            ArrayList<Ticket> myTickets = TicketDAO.getTicketsByOwnerUser(user);
-            ArrayList<Ticket> assignedTickets = TicketDAO.getTicketsByAssignedUser(user);
-            
-        %>
-        <h1>My Tickets</h1>
-        <table border="1">
-            <tr>
-                <th>Ticket ID</th>
-                <th>Cust Name</th>
-                <th>Cust Contact</th>
-                <th>Cust Email</th>
-                <th>Subject</th>
-                <th>Date & Time</th>
-                <th>Edited on</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        <%
-            for(Ticket myTicket:myTickets){
-                int ticketId = myTicket.getTicket_id();
-                Customer customer = myTicket.getCustomer();
-                String customerName = customer.toString();
-                String contact  = customer.getContact() + "";
-                if(contact.equals("0")){
-                    contact = "N/A";
-                }
-                String email = customer.getEmail();
-                if(email.isEmpty()){
-                    email = "N/A";
-                }
-                String subject = myTicket.getSubject();
-                String dateTime = Converter.convertDate(myTicket.getDatetime_of_creation());
-                String edited = Converter.convertDate(myTicket.getDatetime_of_edit());
-                String status = myTicket.getStatus();
-        %>
-            <tr>
-                <td><%=ticketId%></td>
-                <td><%=customerName%></td>
-                <td><%=contact%></td>
-                <td><%=email%></td>
-                <td><%=subject%></td>
-                <td><%=dateTime%></td>
-                <td><%=edited%></td>
-                <td><%=status%></td>
-                <td>
-            <%
-                if(status.equals("Pending")){
-            %>
-                <button onclick="editTicket(<%=ticketId%>)">Edit</button>
-                <div id="edit_ticket_modal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <span class="close" onclick="closeModal('edit_ticket_modal')">×</span>
-                            <div id="edit_ticket_content"></div>
-                        </div>
-=======
     <body onload='reload()'>
         <div class="nav-bar-container">
             <!-- BEGIN ICONS -->
@@ -157,7 +98,6 @@
                     <div class="form-group">
                         <input type="text" id="customer_search" class="form-control" placeholder="Search Customer">
                         <button onclick='customerSearch("crm")' class="btn btn-default"><i class="ion-search"></i></button>
->>>>>>> origin/master
                     </div>
                 </div><!--.search-->
 
@@ -245,40 +185,45 @@
                         <h1>My Tickets</h1>
                         <table border="1">
                             <tr>
-                                <th>Ticket ID</th>
-                                <th>Cust Name</th>
-                                <th>Cust Contact</th>
-                                <th>Cust Email</th>
-                                <th>Subject</th>
-                                <th>Date & Time</th>
-                                <th>Status</th>
-                                <th>Action</th>
+								<th>Ticket ID</th>
+								<th>Cust Name</th>
+								<th>Cust Contact</th>
+								<th>Cust Email</th>
+								<th>Subject</th>
+								<th>Date & Time</th>
+								<th>Edited on</th>
+								<th>Status</th>
+								<th>Action</th>
                             </tr>
-                            <%            for (Ticket myTicket : myTickets) {
-                                    int ticketId = myTicket.getTicket_id();
-                                    Customer customer = myTicket.getCustomer();
-                                    String customerName = customer.toString();
-                                    String contact = customer.getContact() + "";
-                                    if (contact.equals("0")) {
-                                        contact = "N/A";
-                                    }
-                                    String email = customer.getEmail();
-                                    if (email.isEmpty()) {
-                                        email = "N/A";
-                                    }
-                                    String subject = myTicket.getSubject();
-                                    String dateTime = Converter.convertDate(myTicket.getDatetime_of_creation());
-                                    String status = myTicket.getStatus();
+                            <%            
+								for(Ticket myTicket:myTickets){
+									int ticketId = myTicket.getTicket_id();
+									Customer customer = myTicket.getCustomer();
+									String customerName = customer.toString();
+									String contact  = customer.getContact() + "";
+									if(contact.equals("0")){
+										contact = "N/A";
+									}
+									String email = customer.getEmail();
+									if(email.isEmpty()){
+										email = "N/A";
+									}
+									String subject = myTicket.getSubject();
+									String dateTime = Converter.convertDate(myTicket.getDatetime_of_creation());
+									String edited = Converter.convertDate(myTicket.getDatetime_of_edit());
+									String status = myTicket.getStatus();
                             %>
+							
                             <tr>
-                                <td><%=ticketId%></td>
-                                <td><%=customerName%></td>
-                                <td><%=contact%></td>
-                                <td><%=email%></td>
-                                <td><%=subject%></td>
-                                <td><%=dateTime%></td>
-                                <td><%=status%></td>
-                                <td>
+								<td><%=ticketId%></td>
+								<td><%=customerName%></td>
+								<td><%=contact%></td>
+								<td><%=email%></td>
+								<td><%=subject%></td>
+								<td><%=dateTime%></td>
+								<td><%=edited%></td>
+								<td><%=status%></td>
+								<td>
                                     <%
                                         if (status.equals("Pending")) {
                                     %>

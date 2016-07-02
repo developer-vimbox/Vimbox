@@ -16,29 +16,6 @@
         <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
         <script src="assets/globals/plugins/modernizr/modernizr.min.js"></script>
     </head>
-<<<<<<< HEAD
-    <body>
-        HR<br>
-        
-        <a href="FullTimeEmployees.jsp">Full Time Employees</a><br>
-        <a href="PartTimeEmployees.jsp">Part Time Employees</a><br>
-        <a href="Payslips.jsp">Payslips</a><br>
-        <a href="TakeAttendance.jsp">Take Attendance</a><br>
-        <a href="ViewAttendance.jsp">View Attendance</a><br>
-        <a href="CreateLeaveMC.jsp">Create Leave/MC</a><br>
-        <br>SALES<br>
-        <a href="CreateLead.jsp">Create Lead</a><br>
-        <a href="MyLeads.jsp">My Leads</a><br>
-        <br>TICKET<br>
-        <a href="CreateTicket.jsp">Create Ticket</a><br> 
-        <a href="MyTickets.jsp">My Tickets</a><br>
-        <a href="TicketForum.jsp">Ticket Forum</a><br>
-        <br>CRM<br>
-        <a href="SearchCustomers.jsp">Search Customers</a><br>
-        <br>USER<br>
-        <a href="ChangePassword.jsp">Change Password</a><br>
-        <a href="Logout.jsp">Logout</a>
-=======
     <body onload='reload()'>
         <div class="nav-bar-container">
             <!-- BEGIN ICONS -->
@@ -83,10 +60,12 @@
                     <li>
                         <a href="javascript:;">Human Resource</a>
                         <ul class="child-menu">
-                            <li><a href="CreateEmployee.jsp">Create Employee</a></li>
-                            <li><a href="FullTimeEmployees.jsp">Full Time Employees</a></li>
-                            <li><a href="PartTimeEmployees.jsp">Part Time Employees</a></li>
-                            <li><a href="Payslips.jsp">Payslips</a></li>
+							<li><a href="FullTimeEmployees.jsp">Full Time Employees</a></li>
+							<li><a href="PartTimeEmployees.jsp">Part Time Employees</a></li>
+							<li><a href="Payslips.jsp">Payslips</a></li>
+							<li><a href="TakeAttendance.jsp">Take Attendance</a></li>
+							<li><a href="ViewAttendance.jsp">View Attendance</a></li>
+							<li><a href="CreateLeaveMC.jsp">Create Leave/MC</a></li>
                         </ul>
                     </li>
                     <li>
@@ -204,6 +183,5 @@
                                             });
         </script>
         <!-- END INITIALIZATION-->
->>>>>>> origin/master
     </body>
 </html>
