@@ -28,7 +28,7 @@
             ArrayList<User> users = UserDAO.getFullTimeUsers();
             HashMap<String, LeaveMC> statuses = null;
             HashMap<String, String> attendance_record = null;
-            HashMap<String, Double> late_record = null;
+            HashMap<String, Integer> late_record = null;
             if (date == null || date.trim().isEmpty()) {
                 response.sendRedirect("TakeAttendance.jsp");
                 return;
@@ -170,6 +170,9 @@
                                 window.location.href = "TakeAttendance.jsp"
                             }, 1000);
                         }else{
+                            setTimeout(function () {
+                                window.location.href = "ViewAttendance.jsp"
+                            }, 1000);
                         }
                         
                     }

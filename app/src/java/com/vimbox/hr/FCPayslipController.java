@@ -11,6 +11,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import static org.joda.time.format.ISODateTimeFormat.dateTime;
 
 @WebServlet(name = "FCPayslipController", urlPatterns = {"/FCPayslipController"})
 public class FCPayslipController extends HttpServlet {
@@ -29,32 +33,32 @@ public class FCPayslipController extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
         PrintWriter out = response.getWriter();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd");
+
         String errorMsg = "";
-        
+
         String fc_paymentdate = request.getParameter("fc_paymentdate");
-        Date paymentDate = null;
-        if(fc_paymentdate.isEmpty()){
-            errorMsg+="Please enter a payment date<br>";
-        }else{
-            try{
-                paymentDate = format.parse(fc_paymentdate);
-            }catch(Exception e){
+        DateTime paymentDate = null;
+        if (fc_paymentdate.isEmpty()) {
+            errorMsg += "Please enter a payment date<br>";
+        } else {
+            try {
+                paymentDate = format.parseDateTime(fc_paymentdate);
+            } catch (Exception e) {
                 errorMsg += "Please enter a valid payment date<br>";
             }
         }
 
         JsonObject jsonOutput = new JsonObject();
-        if(errorMsg.isEmpty()){
+        if (errorMsg.isEmpty()) {
             PayslipDAO.fastCreatePayslips(paymentDate);
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "Payslips added!");
-        }else{
+        } else {
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);
         }
-        
+
         out.println(jsonOutput);
     }
 

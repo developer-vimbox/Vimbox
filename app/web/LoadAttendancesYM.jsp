@@ -60,7 +60,7 @@
                                             if (d < 10) {
                                                 day = 0 + day;
                                             }
-                                            out.println("<th>" + day + "</th>");
+                                            out.println("<th>" + day + "<br><button onclick=\"window.location.href='EditAttendance.jsp?date=" + Converter.convertDateHtml(attendance.getDate()) + "&action=2'\">Edit</button></th>");
                                         }
                                     %>
                             </tr>
@@ -73,7 +73,7 @@
                                 <td align="center"><%=employee%></td>
                                 <%
                                     for (Attendance attendance : attendances) {
-                                        out.println("<td align='center'>" + attendance.getUserAttendance(nric) + "</td>");
+                                        out.println("<td align='center'>" + attendance.getUserAttendance(nric).substring(0,2) + "</td>");
                                     }
                                 %>
                             </tr>

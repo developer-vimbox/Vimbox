@@ -60,12 +60,12 @@
                     <li>
                         <a href="javascript:;">Human Resource</a>
                         <ul class="child-menu">
-							<li><a href="FullTimeEmployees.jsp">Full Time Employees</a></li>
-							<li><a href="PartTimeEmployees.jsp">Part Time Employees</a></li>
-							<li><a href="Payslips.jsp">Payslips</a></li>
-							<li><a href="TakeAttendance.jsp">Take Attendance</a></li>
-							<li><a href="ViewAttendance.jsp">View Attendance</a></li>
-							<li><a href="CreateLeaveMC.jsp">Create Leave/MC</a></li>
+                            <li><a href="FullTimeEmployees.jsp">Full Time Employees</a></li>
+                            <li><a href="PartTimeEmployees.jsp">Part Time Employees</a></li>
+                            <li><a href="Payslips.jsp">Payslips</a></li>
+                            <li><a href="TakeAttendance.jsp">Take Attendance</a></li>
+                            <li><a href="ViewAttendance.jsp">View Attendance</a></li>
+                            <li><a href="CreateLeaveMC.jsp">Create Leave/MC</a></li>
                         </ul>
                     </li>
                     <li>
@@ -177,10 +177,10 @@
 
         <!-- BEGIN INITIALIZATION-->
         <script>
-                                            $(document).ready(function () {
-                                                Pleasure.init();
-                                                Layout.init();
-                                            });
+                                        $(document).ready(function () {
+                                            Pleasure.init();
+                                            Layout.init();
+                                        });
         </script>
         <!-- END INITIALIZATION-->
     </body>

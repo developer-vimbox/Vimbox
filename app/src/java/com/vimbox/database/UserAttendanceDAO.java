@@ -15,7 +15,7 @@ import org.joda.time.format.DateTimeFormatter;
 public class UserAttendanceDAO {
 
     private static final String GET_ATTENDANCE_BY_DATE = "SELECT * FROM users_attendance_record WHERE date=?";
-    private static final String GET_YEARMONTHS= "SELECT date FROM users_attendance_record GROUP BY Month(date);";
+    private static final String GET_YEARMONTHS = "SELECT date FROM users_attendance_record GROUP BY Month(date);";
     private static final String GET_YEARMONTHS_BY_KEYWORD = "SELECT date FROM users_attendance_record WHERE date LIKE ? GROUP BY Month(date)";
     private static final String GET_ATTENDANCES_BY_YEARMONTH = "SELECT * FROM users_attendance_record WHERE date LIKE ? ORDER BY date";
     private static final String CREATE_ATTENDANCE = "INSERT INTO users_attendance_record VALUES (?,?,?,?)";
@@ -36,16 +36,16 @@ public class UserAttendanceDAO {
         }
     }
 
-    public static ArrayList<String> getYearMonthByKeyword(String keyword){
+    public static ArrayList<String> getYearMonthByKeyword(String keyword) {
         ArrayList<String> results = new ArrayList<String>();
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
-            if(keyword.isEmpty()){
+            if (keyword.isEmpty()) {
                 ps = con.prepareStatement(GET_YEARMONTHS);
-            }else{
+            } else {
                 ps = con.prepareStatement(GET_YEARMONTHS_BY_KEYWORD);
                 ps.setString(1, "%" + keyword + "%");
             }
@@ -59,10 +59,10 @@ public class UserAttendanceDAO {
         } finally {
             ConnectionManager.close(con, ps, rs);
         }
-        
+
         return results;
     }
-    
+
     public static ArrayList<Attendance> getAttendancesByYearMonth(String keyword) {
         ArrayList<Attendance> results = new ArrayList<Attendance>();
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
@@ -76,7 +76,7 @@ public class UserAttendanceDAO {
             rs = ps.executeQuery();
             if (rs.next()) {
                 HashMap<String, String> attendance_record = new HashMap<String, String>();
-                HashMap<String, Double> late_record = new HashMap<String, Double>();
+                HashMap<String, Integer> late_record = new HashMap<String, Integer>();
                 String startDt = rs.getString("date");
                 DateTime dateTime = dtf.parseDateTime(startDt);
 
@@ -84,29 +84,31 @@ public class UserAttendanceDAO {
                 String status = rs.getString("status");
                 attendance_record.put(nric, status);
 
-                double duration = rs.getDouble("duration");
+                int duration = rs.getInt("duration");
                 if (duration > 0) {
                     late_record.put(nric, duration);
                 }
 
                 while (rs.next()) {
                     String nextDt = rs.getString("date");
-                    if(!nextDt.equals(startDt)){
+
+                    if (!nextDt.equals(startDt)) {
                         results.add(new Attendance(dateTime, attendance_record, late_record));
                         attendance_record = new HashMap<String, String>();
-                        late_record = new HashMap<String, Double>();
+                        late_record = new HashMap<String, Integer>();
                         dateTime = dtf.parseDateTime(nextDt);
+                        startDt = nextDt;
                     }
                     nric = rs.getString("nric");
                     status = rs.getString("status");
                     attendance_record.put(nric, status);
 
-                    duration = rs.getDouble("duration");
+                    duration = rs.getInt("duration");
                     if (duration > 0) {
                         late_record.put(nric, duration);
                     }
                 }
-                
+
                 results.add(new Attendance(dateTime, attendance_record, late_record));
             }
         } catch (SQLException se) {
@@ -116,7 +118,7 @@ public class UserAttendanceDAO {
         }
         return results;
     }
-    
+
     public static Attendance getAttendanceByDate(DateTime date) {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
         Attendance attendance = null;
@@ -129,18 +131,18 @@ public class UserAttendanceDAO {
             ps.setDate(1, new java.sql.Date(date.toDate().getTime()));
             rs = ps.executeQuery();
             HashMap<String, String> attendance_record = null;
-            HashMap<String, Double> late_record = null;
+            HashMap<String, Integer> late_record = null;
             DateTime dateTime = null;
             if (rs.next()) {
                 attendance_record = new HashMap<String, String>();
-                late_record = new HashMap<String, Double>();
+                late_record = new HashMap<String, Integer>();
                 dateTime = dtf.parseDateTime(rs.getString("date"));
 
                 String nric = rs.getString("nric");
                 String status = rs.getString("status");
                 attendance_record.put(nric, status);
 
-                double duration = rs.getDouble("duration");
+                int duration = rs.getInt("duration");
                 if (duration > 0) {
                     late_record.put(nric, duration);
                 }
@@ -150,7 +152,7 @@ public class UserAttendanceDAO {
                     status = rs.getString("status");
                     attendance_record.put(nric, status);
 
-                    duration = rs.getDouble("duration");
+                    duration = rs.getInt("duration");
                     if (duration > 0) {
                         late_record.put(nric, duration);
                     }
