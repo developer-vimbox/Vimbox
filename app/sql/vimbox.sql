@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 18, 2016 at 04:40 AM
+-- Generation Time: Jun 29, 2016 at 04:14 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -42,10 +42,10 @@ CREATE TABLE IF NOT EXISTS `customers` (
 
 INSERT INTO `customers` (`customer_id`, `salutation`, `first_name`, `last_name`, `contact`, `email`) VALUES
 (1, 'Mr', 'chun kit', 'chow', 99873029, 'chunkit@gmail.com'),
-(3, 'Ms', 'pamela', 'seah', 90827736, 'pamela@gmail.com'),
+(3, 'Mr', 'pamela', 'seah', 90827736, 'pamela@gmail.com'),
 (4, 'Mr', '', 'Lim', 90083947, 'limahkau@gmail.com'),
 (5, 'Mr', 'subash ', 'ninabeh', 90008723, 'subash@gmail.com'),
-(6, 'Mr', 'khairul', 'anwar', 98873304, 'khairul@gmail.com'),
+(6, 'Ms', 'khairul', 'anwar', 98873304, 'khairul@gmail.com'),
 (7, 'Mr', 'Wai Tuck', '', 98876253, '');
 
 -- --------------------------------------------------------
@@ -66,7 +66,10 @@ CREATE TABLE IF NOT EXISTS `customers_history` (
 
 INSERT INTO `customers_history` (`customer_id`, `id`) VALUES
 (1, 47520567),
+(1, 62685761),
 (1, 284361538),
+(3, 61890614),
+(3, 97636300),
 (7, 17093618);
 
 -- --------------------------------------------------------
@@ -296,41 +299,102 @@ INSERT INTO `lead_followups` (`lead_id`, `followup`, `datetime_of_creation`) VAL
 -- --------------------------------------------------------
 
 --
--- Table structure for table `system_designations`
+-- Table structure for table `payslips`
 --
 
-CREATE TABLE IF NOT EXISTS `system_designations` (
-  `designation` varchar(150) NOT NULL,
-  PRIMARY KEY (`designation`)
+CREATE TABLE IF NOT EXISTS `payslips` (
+  `payslip_id` int(8) NOT NULL,
+  `nric` varchar(10) NOT NULL,
+  `payment_mode` varchar(20) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `payment_date` date NOT NULL,
+  `basic` double NOT NULL,
+  `allowance` double NOT NULL,
+  `deduction` double NOT NULL,
+  `overtime_hr` double NOT NULL,
+  `overtime` double NOT NULL,
+  `additional` double NOT NULL,
+  `employer_cpf` double NOT NULL,
+  PRIMARY KEY (`payslip_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `system_designations`
+-- Dumping data for table `payslips`
 --
 
-INSERT INTO `system_designations` (`designation`) VALUES
-('Finance Manager'),
-('HR Manager');
+INSERT INTO `payslips` (`payslip_id`, `nric`, `payment_mode`, `start_date`, `end_date`, `payment_date`, `basic`, `allowance`, `deduction`, `overtime_hr`, `overtime`, `additional`, `employer_cpf`) VALUES
+(36655443, 'S9876543C', 'Cheque', '2016-06-22', '2016-06-30', '2016-06-30', 1909.09, 0, 381.82, 0, 0, 0, 324.55),
+(67930275, 'S9344895B', 'Cheque', '2016-07-01', '2016-07-31', '2016-07-31', 6000, 0, 1200, 0, 0, 0, 1020),
+(84168962, 'S9876543C', 'Cheque', '2016-07-22', '2016-07-31', '2016-07-31', 1714.29, 0, 342.86, 0, 0, 0, 291.43),
+(99383226, 'S9344895B', 'Cheque', '2016-06-10', '2016-06-30', '2016-06-30', 4090.91, 0, 818.18, 0, 0, 0, 695.45);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `system_designations_part_time`
+-- Table structure for table `payslips_abd`
 --
 
-CREATE TABLE IF NOT EXISTS `system_designations_part_time` (
-  `designation` varchar(150) NOT NULL,
-  PRIMARY KEY (`designation`)
+CREATE TABLE IF NOT EXISTS `payslips_abd` (
+  `payslip_id` int(8) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `breakdown` double NOT NULL,
+  PRIMARY KEY (`payslip_id`,`description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `system_designations_part_time`
+-- Dumping data for table `payslips_abd`
 --
 
-INSERT INTO `system_designations_part_time` (`designation`) VALUES
-('Driver'),
-('Mover'),
-('Supervisor');
+INSERT INTO `payslips_abd` (`payslip_id`, `description`, `breakdown`) VALUES
+(36655443, '', 0),
+(84168962, '', 0),
+(99383226, '', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payslips_apbd`
+--
+
+CREATE TABLE IF NOT EXISTS `payslips_apbd` (
+  `payslip_id` int(8) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `breakdown` double NOT NULL,
+  PRIMARY KEY (`payslip_id`,`description`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `payslips_apbd`
+--
+
+INSERT INTO `payslips_apbd` (`payslip_id`, `description`, `breakdown`) VALUES
+(36655443, '', 0),
+(84168962, '', 0),
+(99383226, '', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payslips_dbd`
+--
+
+CREATE TABLE IF NOT EXISTS `payslips_dbd` (
+  `payslip_id` int(8) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `breakdown` double NOT NULL,
+  PRIMARY KEY (`payslip_id`,`description`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `payslips_dbd`
+--
+
+INSERT INTO `payslips_dbd` (`payslip_id`, `description`, `breakdown`) VALUES
+(36655443, 'Employee''s CPF Deduction', 381.82),
+(67930275, 'Employee''s CPF Deduction', 1200),
+(84168962, 'Employee''s CPF Deduction', 342.86),
+(99383226, 'Employee''s CPF Deduction', 818.18);
 
 -- --------------------------------------------------------
 
@@ -443,17 +507,21 @@ INSERT INTO `system_lead_types` (`type`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `system_modules` (
-  `module` varchar(100) NOT NULL,
-  PRIMARY KEY (`module`)
+  `type` varchar(5) NOT NULL,
+  `department` varchar(100) NOT NULL,
+  `designation` varchar(100) NOT NULL,
+  `modules` varchar(200) NOT NULL,
+  `working_days` int(11) NOT NULL,
+  PRIMARY KEY (`type`,`department`,`designation`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `system_modules`
 --
 
-INSERT INTO `system_modules` (`module`) VALUES
-('Sales'),
-('Ticket');
+INSERT INTO `system_modules` (`type`, `department`, `designation`, `modules`, `working_days`) VALUES
+('Full', 'IT', 'Manager', 'Ticket|Sales', 5),
+('Full', 'Operations', 'Mover', '', 6);
 
 -- --------------------------------------------------------
 
@@ -475,6 +543,25 @@ INSERT INTO `system_move_types` (`type`) VALUES
 ('Office'),
 ('Residential'),
 ('Storage');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `system_payment_modes`
+--
+
+CREATE TABLE IF NOT EXISTS `system_payment_modes` (
+  `mode` varchar(50) NOT NULL,
+  PRIMARY KEY (`mode`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `system_payment_modes`
+--
+
+INSERT INTO `system_payment_modes` (`mode`) VALUES
+('Cash'),
+('Cheque');
 
 -- --------------------------------------------------------
 
@@ -575,6 +662,7 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `customer_id` int(11) NOT NULL,
   `subject` varchar(100) NOT NULL,
   `datetime_of_creation` datetime NOT NULL,
+  `datetime_of_edit` datetime NOT NULL,
   `description` varchar(255) NOT NULL,
   `solution` varchar(255) NOT NULL,
   `status` varchar(10) NOT NULL,
@@ -585,9 +673,8 @@ CREATE TABLE IF NOT EXISTS `tickets` (
 -- Dumping data for table `tickets`
 --
 
-INSERT INTO `tickets` (`ticket_id`, `owner_user`, `assigned_users`, `customer_id`, `subject`, `datetime_of_creation`, `description`, `solution`, `status`) VALUES
-(17093618, 's9344895b', 's9344895b', 7, 'dsadda', '2016-06-15 18:28:50', 'duqiakfgdiuqwghf', '', 'Pending'),
-(47520567, 's9344895b', 's9344895b', 1, 'bla bla bla', '2016-06-15 13:38:12', 'bla bla bla', 'resolved', 'Resolved');
+INSERT INTO `tickets` (`ticket_id`, `owner_user`, `assigned_users`, `customer_id`, `subject`, `datetime_of_creation`, `datetime_of_edit`, `description`, `solution`, `status`) VALUES
+(62685761, 'S9344895B', 'S9876543C|S9344895B', 1, 'he sucks', '2016-06-24 11:14:51', '2016-06-24 11:15:46', 'he sucks', '', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -602,18 +689,6 @@ CREATE TABLE IF NOT EXISTS `ticket_comments` (
   PRIMARY KEY (`ticket_id`,`datetime_of_creation`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `ticket_comments`
---
-
-INSERT INTO `ticket_comments` (`ticket_id`, `comment`, `datetime_of_creation`) VALUES
-(47520567, 'i called', '2016-06-15 13:55:18'),
-(47520567, 'i called again', '2016-06-15 13:57:35'),
-(47520567, 'testing', '2016-06-15 13:58:28'),
-(47520567, 'testing again', '2016-06-15 13:58:57'),
-(47520567, 'one last test', '2016-06-15 13:59:29'),
-(47520567, 'testing again and again', '2016-06-15 14:02:22');
-
 -- --------------------------------------------------------
 
 --
@@ -622,17 +697,15 @@ INSERT INTO `ticket_comments` (`ticket_id`, `comment`, `datetime_of_creation`) V
 
 CREATE TABLE IF NOT EXISTS `users` (
   `nric` varchar(10) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL,
-  `gender` varchar(10) NOT NULL,
-  `date_of_birth` date NOT NULL,
-  `address` varchar(200) NOT NULL,
   `date_joined` date NOT NULL,
-  `contact` int(11) NOT NULL,
+  `mailing_address` varchar(200) NOT NULL,
+  `registered_address` varchar(200) NOT NULL,
+  `department` varchar(100) NOT NULL,
   `designation` varchar(100) NOT NULL,
-  `modules` varchar(100) NOT NULL,
+  `salary` int(10) NOT NULL,
+  `type` varchar(5) NOT NULL,
   PRIMARY KEY (`nric`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -640,24 +713,162 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`nric`, `username`, `password`, `first_name`, `last_name`, `gender`, `date_of_birth`, `address`, `date_joined`, `contact`, `designation`, `modules`) VALUES
-('s9344895b', 'admin', 'password123', 'yu sheng', 'ngo', 'male', '2014-11-21', 'yishun ave 4 blk 864|#11-37|s760864', '2016-06-10', 97312965, '', 'ticket|sales');
+INSERT INTO `users` (`nric`, `first_name`, `last_name`, `date_joined`, `mailing_address`, `registered_address`, `department`, `designation`, `salary`, `type`) VALUES
+('S0987654A', 'testing ', 'testing ', '2016-06-28', 'testing', '', 'Operations', 'Mover', 2000, 'Full'),
+('S1234567A', 'test', 'test', '2016-06-28', 'testing', '', 'IT', 'Manager', 2000, 'Full'),
+('S9344895B', 'Yu Sheng', 'Ngo', '2016-06-18', 'Yishun Ave 4 Blk 864 #11-37 S760864', '', 'IT', 'Manager', 6000, 'Full'),
+('S9876543C', 'Chee Bai', 'Chow', '2016-06-20', 'Blk 39 Cambridge Road #13-129 S210039', '', 'IT', 'Manager', 6000, 'Full');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users_part_time`
+-- Table structure for table `users_account`
 --
 
-CREATE TABLE IF NOT EXISTS `users_part_time` (
+CREATE TABLE IF NOT EXISTS `users_account` (
   `nric` varchar(10) NOT NULL,
-  `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL,
-  `date_joined` date NOT NULL,
-  `contact` int(11) NOT NULL,
-  `designation` varchar(100) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_account`
+--
+
+INSERT INTO `users_account` (`nric`, `username`, `password`) VALUES
+('S9344895B', 'admin', 'password'),
+('S9876543C', 'chunkit@gmail.com', 'password'),
+('S1234567A', 'test@test.com', 'password'),
+('S0987654A', 'testing@testing.com', 'password');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_bank`
+--
+
+CREATE TABLE IF NOT EXISTS `users_bank` (
+  `nric` varchar(10) NOT NULL,
+  `payment_mode` varchar(50) NOT NULL,
+  `bank_name` varchar(100) NOT NULL,
+  `account_name` varchar(100) NOT NULL,
+  `account_no` varchar(50) NOT NULL,
   PRIMARY KEY (`nric`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_bank`
+--
+
+INSERT INTO `users_bank` (`nric`, `payment_mode`, `bank_name`, `account_name`, `account_no`) VALUES
+('S0987654A', 'Cash', 'testing', 'testing', 'testing'),
+('S1234567A', 'Cash', 'test', 'test', 'test'),
+('S9344895B', 'Cheque', 'DBS', 'yusheng account', '123-4567-8'),
+('S9876543C', 'Cheque', 'DBS', 'chunkit-account', '123-45678-9');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_contact`
+--
+
+CREATE TABLE IF NOT EXISTS `users_contact` (
+  `nric` varchar(10) NOT NULL,
+  `phone_no` int(11) NOT NULL,
+  `fax_no` int(11) NOT NULL,
+  `home_no` int(11) NOT NULL,
+  PRIMARY KEY (`nric`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_contact`
+--
+
+INSERT INTO `users_contact` (`nric`, `phone_no`, `fax_no`, `home_no`) VALUES
+('S0987654A', 12345678, 0, 0),
+('S1234567A', 12345678, 0, 0),
+('S9344895B', 97312965, 0, 67580571),
+('S9876543C', 98311269, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_emergency`
+--
+
+CREATE TABLE IF NOT EXISTS `users_emergency` (
+  `nric` varchar(10) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `relationship` varchar(100) NOT NULL,
+  `contact_no` int(11) NOT NULL,
+  `office_no` int(11) NOT NULL,
+  PRIMARY KEY (`nric`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_emergency`
+--
+
+INSERT INTO `users_emergency` (`nric`, `name`, `relationship`, `contact_no`, `office_no`) VALUES
+('S0987654A', 'testing', 'testing', 12345678, 0),
+('S1234567A', 'test', 'test', 12345678, 0),
+('S9344895B', 'Phua Kuee Hoy', 'Mother', 85732675, 0),
+('S9876543C', 'Chow Yun Fat', 'Father', 90087654, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_leave`
+--
+
+CREATE TABLE IF NOT EXISTS `users_leave` (
+  `nric` varchar(10) NOT NULL,
+  `date_joined` date NOT NULL,
+  `leave` double NOT NULL,
+  `mc` int(11) NOT NULL,
+  `used_leave` double NOT NULL,
+  `used_mc` int(11) NOT NULL,
+  PRIMARY KEY (`nric`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_leave`
+--
+
+INSERT INTO `users_leave` (`nric`, `date_joined`, `leave`, `mc`, `used_leave`, `used_mc`) VALUES
+('S0987654A', '2016-06-28', 63, 14, 0, 0),
+('S1234567A', '2016-06-28', 63, 14, 0, 0),
+('S9344895B', '2016-06-18', 63, 14, 54, 0),
+('S9876543C', '2016-06-20', 63, 14, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_leave_record`
+--
+
+CREATE TABLE IF NOT EXISTS `users_leave_record` (
+  `leave_type` varchar(10) NOT NULL,
+  `leave_name` varchar(20) NOT NULL,
+  `nric` varchar(10) NOT NULL,
+  `date` date NOT NULL,
+  `leave_duration` double NOT NULL,
+  `img` varchar(100) NOT NULL,
+  PRIMARY KEY (`nric`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_leave_record`
+--
+
+INSERT INTO `users_leave_record` (`leave_type`, `leave_name`, `nric`, `date`, `leave_duration`, `img`) VALUES
+('Paid', 'Leave', 'S9344895B', '2016-06-28', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-06-29', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-06-30', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-07-01', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-07-02', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-07-03', 9, '');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

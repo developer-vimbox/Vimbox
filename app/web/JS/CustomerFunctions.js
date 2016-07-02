@@ -92,7 +92,7 @@ function updateCustomer(){
                     window.onbeforeunload = function() {
                         sessionStorage.setItem("customer_search", $('#customer_search').val());
                     }
-                    setTimeout(function() {location.reload()},1000);
+                    setTimeout(function() {location.reload()},500);
                 }
             })
             .fail(function (error) {

@@ -32,6 +32,7 @@
                 <th>Cust Email</th>
                 <th>Subject</th>
                 <th>Date & Time</th>
+                <th>Edited on</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -50,6 +51,7 @@
                 }
                 String subject = myTicket.getSubject();
                 String dateTime = Converter.convertDate(myTicket.getDatetime_of_creation());
+                String edited = Converter.convertDate(myTicket.getDatetime_of_edit());
                 String status = myTicket.getStatus();
         %>
             <tr>
@@ -59,6 +61,7 @@
                 <td><%=email%></td>
                 <td><%=subject%></td>
                 <td><%=dateTime%></td>
+                <td><%=edited%></td>
                 <td><%=status%></td>
                 <td>
             <%

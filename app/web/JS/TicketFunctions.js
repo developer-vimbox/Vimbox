@@ -63,11 +63,12 @@ function updateTicket(){
     });
     var subject = $('#subject').val();
     var description = $('#description').val();
+    var datetime_of_creation = $('#datetime_of_creation').val();
     
     var errorModal = document.getElementById("ticket_error_modal");
     var errorStatus = document.getElementById("ticket_error_status");
     var errorMessage = document.getElementById("ticket_error_message");
-    $.getJSON("EditTicketController", {ticket_id: ticket_id, customer_id: customer_id, assigned_users: assigned_users, subject: subject, description: description})
+    $.getJSON("EditTicketController", {ticket_id: ticket_id, customer_id: customer_id, assigned_users: assigned_users, subject: subject, description: description, datetime_of_creation: datetime_of_creation})
             .done(function (data) {
                 var status = data.status;
                 var errorMsg = data.message;

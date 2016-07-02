@@ -17,20 +17,20 @@
         <%
             String custId = request.getParameter("getId");
             ArrayList<Integer> ids = CustomerHistoryDAO.getCustomerTicketIds(Integer.parseInt(custId));
-            if(ids.isEmpty()){
+            if (ids.isEmpty()) {
         %>
-            No results found
+        No results found
         <%
-            }else{
-                if(ids.size()==1){
-                    out.println(ids.size() + " record found");
-                }else{
-                    out.println(ids.size() + " records found");
-                }
-                ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-                for(int id:ids){
-                    tickets.add(TicketDAO.getTicketById(id));
-                }
+        } else {
+            if (ids.size() == 1) {
+                out.println(ids.size() + " record found");
+            } else {
+                out.println(ids.size() + " records found");
+            }
+            ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+            for (int id : ids) {
+                tickets.add(TicketDAO.getTicketById(id));
+            }
         %>
         <br><br>
         <table border="1" width="100%">
@@ -44,23 +44,23 @@
                 <th>Status</th>
                 <th>View</th>
             </tr>
-        <%
-                for(Ticket ticket:tickets){
+            <%
+                for (Ticket ticket : tickets) {
                     int ticketId = ticket.getTicket_id();
                     Customer customer = ticket.getCustomer();
                     String customerName = customer.toString();
-                    String contact  = customer.getContact() + "";
-                    if(contact.equals("0")){
+                    String contact = customer.getContact() + "";
+                    if (contact.equals("0")) {
                         contact = "N/A";
                     }
                     String email = customer.getEmail();
-                    if(email.isEmpty()){
+                    if (email.isEmpty()) {
                         email = "N/A";
                     }
                     String subject = ticket.getSubject();
                     String dateTime = Converter.convertDate(ticket.getDatetime_of_creation());
                     String status = ticket.getStatus();
-        %>
+            %>
             <tr>
                 <td><%=ticketId%></td>
                 <td><%=customerName%></td>
@@ -96,11 +96,11 @@
                                         <td>
                                             <%
                                                 ArrayList<User> assigned = ticket.getAssigned_users();
-                                                if(assigned.size() > 1){
-                                                    for(User assignee:assigned){
+                                                if (assigned.size() > 1) {
+                                                    for (User assignee : assigned) {
                                                         out.println("<li>" + assignee.toString() + "</li>");
                                                     }
-                                                }else if(assigned.size() == 1){
+                                                } else if (assigned.size() == 1) {
                                                     out.println(assigned.get(0).toString());
                                                 }
                                             %>
@@ -148,10 +148,11 @@
                     </div>
                 </td>
             </tr>
-        </table>
-        <%          
+            <%
+                    }
                 }
-            }
-        %>
+            %>
+        </table>
+
     </body>
 </html>

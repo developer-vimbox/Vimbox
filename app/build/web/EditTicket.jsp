@@ -1,3 +1,4 @@
+<%@page import="com.vimbox.util.Converter"%>
 <%@page import="com.vimbox.customer.Customer"%>
 <%@page import="com.vimbox.database.UserDAO"%>
 <%@page import="java.util.ArrayList"%>
@@ -21,7 +22,7 @@
         <%
             int ticket_id = Integer.parseInt(request.getParameter("ticket_id"));
             Ticket ticket = TicketDAO.getTicketById(ticket_id);
-            ArrayList<User> users = UserDAO.getUsers();
+            ArrayList<User> users = UserDAO.getFullTimeUsers();
             Customer customer = ticket.getCustomer();
         %>
         <h1>Ticket Details</h1>
@@ -107,6 +108,7 @@
         <br>
         <fieldset>
             <legend>Ticket Information</legend>
+            <input type="hidden" id="datetime_of_creation" value="<%=Converter.convertDateDatabase(ticket.getDatetime_of_creation())%>">
             <table>
                 <tr>
                     <td align="right"><b>Status :</b></td>

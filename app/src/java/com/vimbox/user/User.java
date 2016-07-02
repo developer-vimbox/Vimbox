@@ -5,54 +5,49 @@ import org.joda.time.DateTime;
 
 public class User {
     private String nric;
-    private String username;
-    private String password;
     private String first_name;
     private String last_name;
-    private String gender;
-    private DateTime date_of_birth;
+    private double leave;
+    private int mc;
+    private double used_leave;
+    private int used_mc;
+    private Account account;
+    private String type;
     private DateTime date_joined;
-    private Address address;
-    private int contact;
+    private String mailing_address;
+    private String registered_address;
+    private Contact contact;
+    private Emergency emergency;
+    private String department;
     private String designation;
+    private int salary;
     private ArrayList<Module> modules;
+    private Bank bank;
 
-    // Used for full-time //
-    public User(String nric, String username, String password, String first_name, String last_name, String gender, DateTime date_of_birth, DateTime date_joined, Address address, int contact, String designation, ArrayList<Module> modules) {
+    public User(String nric, String first_name, String last_name, double leave, int mc, double used_leave, int used_mc, Account account, String type, DateTime date_joined, String mailing_address, String registered_address, Contact contact, Emergency emergency, String department, String designation, int salary, ArrayList<Module> modules, Bank bank) {
         this.nric = nric;
-        this.username = username;
-        this.password = password;
         this.first_name = first_name;
         this.last_name = last_name;
-        this.gender = gender;
-        this.date_of_birth = date_of_birth;
+        this.leave = leave;
+        this.mc = mc;
+        this.used_leave = used_leave;
+        this.used_mc = used_mc;
+        this.account = account;
+        this.type = type;
         this.date_joined = date_joined;
-        this.address = address;
+        this.mailing_address = mailing_address;
+        this.registered_address = registered_address;
         this.contact = contact;
+        this.emergency = emergency;
+        this.department = department;
         this.designation = designation;
+        this.salary = salary;
         this.modules = modules;
+        this.bank = bank;
     }
-    
-    // Used for part-time //
-    public User(String nric, String first_name, String last_name, DateTime date_joined, int contact, String designation) {
-        this.nric = nric;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.date_joined = date_joined;
-        this.contact = contact;
-        this.designation = designation;
-    }
-    
+
     public String getNric() {
         return nric;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getFirst_name() {
@@ -63,36 +58,68 @@ public class User {
         return last_name;
     }
 
-    public String getGender() {
-        return gender;
+    public double getLeave() {
+        return leave;
+    }
+    
+    public int getMc() {
+        return mc;
     }
 
-    public DateTime getDate_of_birth() {
-        return date_of_birth;
+    public double getUsed_leave() {
+        return used_leave;
+    }
+
+    public int getUsed_mc() {
+        return used_mc;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public DateTime getDate_joined() {
         return date_joined;
     }
 
-    public Address getAddress() {
-        return address;
+    public String getMailing_address() {
+        return mailing_address;
     }
 
-    public int getContact() {
+    public String getRegistered_address() {
+        return registered_address;
+    }
+
+    public Contact getContact() {
         return contact;
     }
 
-    public String getDesignation(){
+    public Emergency getEmergency() {
+        return emergency;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public String getDesignation() {
         return designation;
     }
-    
+
+    public int getSalary() {
+        return salary;
+    }
+
     public ArrayList<Module> getModules() {
         return modules;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public Bank getBank() {
+        return bank;
     }
     
     public String toString(){

@@ -71,7 +71,7 @@ public class CreateTicketController extends HttpServlet {
             // Retrieve date time of ticket creation // 
             DateTime dt = new DateTime();
             
-            TicketDAO.createTicket(ticket_id, owner_user, assigned_users, customer_id, dt, subject, description, "Pending");
+            TicketDAO.createTicket(ticket_id, owner_user, assigned_users, customer_id, dt, dt, subject, description, "Pending");
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "Ticket submitted!");
         }else{

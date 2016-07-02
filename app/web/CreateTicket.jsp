@@ -20,7 +20,7 @@
         </style>
     </head>
     <body>
-        <%            ArrayList<User> users = UserDAO.getUsers();
+        <%            ArrayList<User> users = UserDAO.getFullTimeUsers();
         %>
         <h1>Create A Ticket</h1>
         <fieldset>

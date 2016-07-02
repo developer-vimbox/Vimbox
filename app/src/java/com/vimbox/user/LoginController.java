@@ -37,7 +37,8 @@ public class LoginController extends HttpServlet {
         
         if (user != null) {
             // Checks if user login //
-            String currPassword = user.getPassword();
+            Account account = user.getAccount();
+            String currPassword = account.getPassword();
             if (currPassword.equals(password)) {
                 HttpSession session = request.getSession();
                 session.setAttribute("session", user);

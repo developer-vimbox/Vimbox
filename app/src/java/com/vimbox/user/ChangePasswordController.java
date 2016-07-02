@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.vimbox.database.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -66,8 +65,8 @@ public class ChangePasswordController extends HttpServlet {
         if(errorMsg.isEmpty()){
             String user_id = request.getParameter("user_id");
             User user = UserDAO.getUserByNRIC(user_id);
-            String current_password = user.getPassword();
-            boolean changed = false;
+            Account account = user.getAccount();
+            String current_password = account.getPassword();
             
             if(oldPassword.equals(current_password)){
                 UserDAO.updateUserPassword(newPassword, user_id);

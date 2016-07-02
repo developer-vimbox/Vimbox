@@ -7,15 +7,14 @@ import com.vimbox.user.User;
 import com.vimbox.util.Converter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Random;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 @WebServlet(name = "EditTicketController", urlPatterns = {"/EditTicketController"})
 public class EditTicketController extends HttpServlet {
@@ -74,9 +73,11 @@ public class EditTicketController extends HttpServlet {
             String owner_user = owner.getNric();
             
             // Retrieve date time of ticket creation // 
-            DateTime dt = new DateTime();
+            DateTime edt = new DateTime();
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+            DateTime dt = formatter.parseDateTime(request.getParameter("datetime_of_creation"));
             
-            TicketDAO.createTicket(ticket_id, owner_user, assigned_users, customer_id, dt, subject, description, "Pending");
+            TicketDAO.createTicket(ticket_id, owner_user, assigned_users, customer_id, dt, edt, subject, description, "Pending");
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "Ticket updated!");
         }else{

@@ -36,7 +36,7 @@ public class CustomerDAO {
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
-            ConnectionManager.close(con, ps, null);
+            ConnectionManager.close(con, ps, rs);
         }
         return false;
     }
@@ -67,7 +67,7 @@ public class CustomerDAO {
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
-            ConnectionManager.close(con, ps, null);
+            ConnectionManager.close(con, ps, rs);
         }
         return id;
     }
@@ -94,7 +94,7 @@ public class CustomerDAO {
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
-            ConnectionManager.close(con, ps, null);
+            ConnectionManager.close(con, ps, rs);
         }
         return customer;
     }
@@ -123,7 +123,7 @@ public class CustomerDAO {
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
-            ConnectionManager.close(con, ps, null);
+            ConnectionManager.close(con, ps, rs);
         }
         return customers;
     }
@@ -153,7 +153,7 @@ public class CustomerDAO {
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
-            ConnectionManager.close(con, ps, null);
+            ConnectionManager.close(con, ps, rs);
         }
         return customers;
     } 
@@ -181,7 +181,7 @@ public class CustomerDAO {
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
-            ConnectionManager.close(con, ps, null);
+            ConnectionManager.close(con, ps, rs);
         }
         return customers;
     } 

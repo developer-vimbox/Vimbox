@@ -1,19 +1,17 @@
-package com.vimbox.user;
+package com.vimbox.hr;
 
 import com.google.gson.JsonObject;
 import com.vimbox.database.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CreatePartTimeController", urlPatterns = {"/CreatePartTimeController"})
-public class CreatePartTimeController extends HttpServlet {
+@WebServlet(name = "DeleteEmployeeController", urlPatterns = {"/DeleteEmployeeController"})
+public class DeleteEmployeeController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,57 +27,12 @@ public class CreatePartTimeController extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
         PrintWriter out = response.getWriter();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        
-        // Validating fields //
-        String errorMsg = "";
- 
-        String pt_first_name = request.getParameter("pt_first_name");
-        String pt_last_name = request.getParameter("pt_last_name");
-        if(pt_first_name.isEmpty()){ 
-            errorMsg+="Please enter employee's first name<br>";
-        }
-        if(pt_last_name.isEmpty()){
-            errorMsg+="Please enter employee's last name<br>";
-        }
-        
-        String pt_nric = request.getParameter("pt_nric");
-        if(pt_nric.length() != 9){
-            errorMsg+="Please enter a valid NRIC<br>";
-        }
-        
-        String pt_contact = request.getParameter("pt_contact");
-        if(pt_contact.length() < 8){
-            errorMsg+="Please enter a valid contact number<br>";
-        }
-        
-        String pt_dj = request.getParameter("pt_dj");
-        Date dj = null;
-        if(pt_dj.isEmpty()){
-            errorMsg+="Please enter employee's date joined<br>";
-        }else{
-            try{
-                dj = format.parse(pt_dj);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        
-        String pt_designation = request.getParameter("pt_designation");
-        if(pt_designation.isEmpty()){
-            errorMsg+="Please enter employee's designation<br>";
-        }
         
         JsonObject jsonOutput = new JsonObject();
-        if(errorMsg.isEmpty()){
-            UserDAO.createPartTimeUser(pt_nric, pt_first_name, pt_last_name, dj, Integer.parseInt(pt_contact), pt_designation);
-            jsonOutput.addProperty("status", "SUCCESS");
-            jsonOutput.addProperty("message", "Full-Time employee added!");
-        }else{
-            jsonOutput.addProperty("status", "ERROR");
-            jsonOutput.addProperty("message", errorMsg);
-        }
-        
+        String old_nric = request.getParameter("old_nric");
+        UserDAO.deleteUser(old_nric);
+        jsonOutput.addProperty("status", "SUCCESS");
+        jsonOutput.addProperty("message", "Employee removed!");
         out.println(jsonOutput);
     }
 

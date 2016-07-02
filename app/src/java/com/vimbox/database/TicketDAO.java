@@ -14,7 +14,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 public class TicketDAO {
-    private static final String CREATE_TICKET = "INSERT INTO tickets (ticket_id, owner_user, assigned_users, customer_id, subject, datetime_of_creation, description, solution, status) values (?,?,?,?,?,?,?,?,?)";
+    private static final String CREATE_TICKET = "INSERT INTO tickets (ticket_id, owner_user, assigned_users, customer_id, subject, datetime_of_creation, datetime_of_edit, description, solution, status) values (?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_TICKETS_BY_OWNER_USER = "SELECT * FROM tickets WHERE owner_user=? AND status='Pending' ORDER BY datetime_of_creation DESC";
     private static final String GET_TICKETS_BY_ASSIGNED_USER = "SELECT * FROM tickets WHERE assigned_users LIKE ? AND status='Pending' ORDER BY datetime_of_creation DESC";
     private static final String GET_TICKET_BY_ID = "SELECT * FROM tickets WHERE ticket_id=?";
@@ -26,7 +26,7 @@ public class TicketDAO {
     private static final String GET_SEARCH_BY_NUMBER = "SELECT * FROM tickets,customers WHERE tickets.customer_id = customers.customer_id AND (ticket_id like ? or contact like ?) AND status=?";
     private static final String GET_SEARCH_BY_DATE = "SELECT * FROM tickets WHERE datetime_of_creation like ? and status=?";
     
-    public static void createTicket(int ticket_id, String owner_user, String assigned_users, int customer_id, DateTime datetime_of_creation, String subject, String description, String status){
+    public static void createTicket(int ticket_id, String owner_user, String assigned_users, int customer_id, DateTime datetime_of_creation, DateTime datetime_of_edit, String subject, String description, String status){
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -38,9 +38,10 @@ public class TicketDAO {
             ps.setInt(4, customer_id);
             ps.setString(5, subject);
             ps.setString(6, Converter.convertDateDatabase(datetime_of_creation));
-            ps.setString(7, description);
-            ps.setString(8, "");
-            ps.setString(9, status);
+            ps.setString(7, Converter.convertDateDatabase(datetime_of_edit));
+            ps.setString(8, description);
+            ps.setString(9, "");
+            ps.setString(10, status);
             ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();
@@ -77,12 +78,16 @@ public class TicketDAO {
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
+                String tempEditDateTimeString = rs.getString("datetime_of_edit");
+                String editDatetimeString = tempEditDateTimeString.substring(0,tempEditDateTimeString.lastIndexOf("."));
+                DateTime edt = formatter.parseDateTime(editDatetimeString);
+                
                 String subject = rs.getString("subject");
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
                 
-                tickets.add(new Ticket(ticket_id, user, assigned_users, customer, subject, dt, description, solution, status));
+                tickets.add(new Ticket(ticket_id, user, assigned_users, customer, subject, dt, edt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -123,12 +128,16 @@ public class TicketDAO {
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
+                String tempEditDateTimeString = rs.getString("datetime_of_edit");
+                String editDatetimeString = tempEditDateTimeString.substring(0,tempEditDateTimeString.lastIndexOf("."));
+                DateTime edt = formatter.parseDateTime(editDatetimeString);
+                
                 String subject = rs.getString("subject");
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
                 
-                tickets.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
+                tickets.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, edt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -167,12 +176,16 @@ public class TicketDAO {
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
+                String tempEditDateTimeString = rs.getString("datetime_of_edit");
+                String editDatetimeString = tempEditDateTimeString.substring(0,tempEditDateTimeString.lastIndexOf("."));
+                DateTime edt = formatter.parseDateTime(editDatetimeString);
+                
                 String subject = rs.getString("subject");
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
                 
-                ticket = new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status);
+                ticket = new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, edt, description, solution, status);
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -244,12 +257,16 @@ public class TicketDAO {
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
+                String tempEditDateTimeString = rs.getString("datetime_of_edit");
+                String editDatetimeString = tempEditDateTimeString.substring(0,tempEditDateTimeString.lastIndexOf("."));
+                DateTime edt = formatter.parseDateTime(editDatetimeString);
+                
                 String subject = rs.getString("subject");
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
                 
-                tickets.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
+                tickets.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, edt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -289,12 +306,16 @@ public class TicketDAO {
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
+                String tempEditDateTimeString = rs.getString("datetime_of_edit");
+                String editDatetimeString = tempEditDateTimeString.substring(0,tempEditDateTimeString.lastIndexOf("."));
+                DateTime edt = formatter.parseDateTime(editDatetimeString);
+                
                 String subject = rs.getString("subject");
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
                 
-                tickets.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
+                tickets.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, edt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -337,12 +358,16 @@ public class TicketDAO {
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
+                String tempEditDateTimeString = rs.getString("datetime_of_edit");
+                String editDatetimeString = tempEditDateTimeString.substring(0,tempEditDateTimeString.lastIndexOf("."));
+                DateTime edt = formatter.parseDateTime(editDatetimeString);
+                
                 String subject = rs.getString("subject");
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
                 
-                results.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
+                results.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, edt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -388,12 +413,16 @@ public class TicketDAO {
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
+                String tempEditDateTimeString = rs.getString("datetime_of_edit");
+                String editDatetimeString = tempEditDateTimeString.substring(0,tempEditDateTimeString.lastIndexOf("."));
+                DateTime edt = formatter.parseDateTime(editDatetimeString);
+                
                 String subject = rs.getString("subject");
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
                 
-                results.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
+                results.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, edt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -437,12 +466,16 @@ public class TicketDAO {
                 String datetimeString = tempDateTimeString.substring(0,tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
                 
+                String tempEditDateTimeString = rs.getString("datetime_of_edit");
+                String editDatetimeString = tempEditDateTimeString.substring(0,tempEditDateTimeString.lastIndexOf("."));
+                DateTime edt = formatter.parseDateTime(editDatetimeString);
+                
                 String subject = rs.getString("subject");
                 String description = rs.getString("description");
                 String solution = rs.getString("solution");
                 String status = rs.getString("status");
                 
-                results.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, description, solution, status));
+                results.add(new Ticket(ticket_id, owner_user, assigned_users, customer, subject, dt, edt, description, solution, status));
             }
         } catch (SQLException se) {
             se.printStackTrace();
