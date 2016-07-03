@@ -31,7 +31,7 @@
         <h1>Attendance Taking for <%=dtString%></h1><hr><br>
         <%
             HashMap<String, String> attendance_record = null;
-            HashMap<String, Double> late_record = null;
+            HashMap<String, Integer> late_record = null;
 
             if (attendance != null) {
                 attendance_record = attendance.getAttendance_record();

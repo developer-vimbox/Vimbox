@@ -5,18 +5,18 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home Page</title>
-        <link rel="stylesheet" href="assets/admin1/css/admin1.css">
-        <link rel="stylesheet" href="assets/globals/css/elements.css">
-        <link rel="stylesheet" href="assets/globals/css/plugins.css">
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="assets/globals/plugins/modernizr/modernizr.min.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
         <script src="JS/TicketFunctions.js"></script>
         <script src="JS/LeadFunctions.js"></script>
         <script src="JS/ModalFunctions.js"></script>
         <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
-        <script src="assets/globals/plugins/modernizr/modernizr.min.js"></script>
+        <link rel="stylesheet" href="assets/admin1/css/admin1.css">
+        <link rel="stylesheet" href="assets/globals/css/elements.css">
+        <link rel="stylesheet" href="assets/globals/css/plugins.css">
     </head>
-    <body onload='reload()'>
+    <body onload="reload()">
         <div class="nav-bar-container">
             <!-- BEGIN ICONS -->
             <div class="nav-menu">

@@ -12,6 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>My Tickets</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="assets/globals/plugins/modernizr/modernizr.min.js"></script>
         <script src="JS/ModalFunctions.js"></script>
         <script src="JS/TicketFunctions.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
@@ -19,9 +20,6 @@
         <link rel="stylesheet" href="assets/admin1/css/admin1.css">
         <link rel="stylesheet" href="assets/globals/css/elements.css">
         <link rel="stylesheet" href="assets/globals/css/plugins.css">
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="assets/globals/plugins/modernizr/modernizr.min.js"></script>
-
     </head>
     <body onload='reload()'>
         <div class="nav-bar-container">

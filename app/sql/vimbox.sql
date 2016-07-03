@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 29, 2016 at 04:14 AM
+-- Generation Time: Jul 03, 2016 at 08:58 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -65,12 +65,7 @@ CREATE TABLE IF NOT EXISTS `customers_history` (
 --
 
 INSERT INTO `customers_history` (`customer_id`, `id`) VALUES
-(1, 47520567),
-(1, 62685761),
-(1, 284361538),
-(3, 61890614),
-(3, 97636300),
-(7, 17093618);
+(1, 62685761);
 
 -- --------------------------------------------------------
 
@@ -324,10 +319,10 @@ CREATE TABLE IF NOT EXISTS `payslips` (
 --
 
 INSERT INTO `payslips` (`payslip_id`, `nric`, `payment_mode`, `start_date`, `end_date`, `payment_date`, `basic`, `allowance`, `deduction`, `overtime_hr`, `overtime`, `additional`, `employer_cpf`) VALUES
-(36655443, 'S9876543C', 'Cheque', '2016-06-22', '2016-06-30', '2016-06-30', 1909.09, 0, 381.82, 0, 0, 0, 324.55),
-(67930275, 'S9344895B', 'Cheque', '2016-07-01', '2016-07-31', '2016-07-31', 6000, 0, 1200, 0, 0, 0, 1020),
-(84168962, 'S9876543C', 'Cheque', '2016-07-22', '2016-07-31', '2016-07-31', 1714.29, 0, 342.86, 0, 0, 0, 291.43),
-(99383226, 'S9344895B', 'Cheque', '2016-06-10', '2016-06-30', '2016-06-30', 4090.91, 0, 818.18, 0, 0, 0, 695.45);
+(52044433, 'S9876543C', 'Cheque', '2016-07-01', '2016-07-31', '2016-07-31', 6000, 0, 1200, 0, 0, 0, 1020),
+(52322776, 'S9344895B', 'Cheque', '2016-07-01', '2016-07-31', '2016-07-31', 6000, 0, 1200, 0, 0, 0, 1020),
+(79127095, 'S1234567A', 'Cash', '2016-07-01', '2016-07-31', '2016-07-31', 2000, 0, 590.48, 0, 0, 0, 340),
+(79645851, 'S0987654A', 'Cash', '2016-07-01', '2016-07-31', '2016-07-31', 2000, 0, 400.14, 0, 0, 0, 340);
 
 -- --------------------------------------------------------
 
@@ -342,15 +337,6 @@ CREATE TABLE IF NOT EXISTS `payslips_abd` (
   PRIMARY KEY (`payslip_id`,`description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `payslips_abd`
---
-
-INSERT INTO `payslips_abd` (`payslip_id`, `description`, `breakdown`) VALUES
-(36655443, '', 0),
-(84168962, '', 0),
-(99383226, '', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -363,15 +349,6 @@ CREATE TABLE IF NOT EXISTS `payslips_apbd` (
   `breakdown` double NOT NULL,
   PRIMARY KEY (`payslip_id`,`description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `payslips_apbd`
---
-
-INSERT INTO `payslips_apbd` (`payslip_id`, `description`, `breakdown`) VALUES
-(36655443, '', 0),
-(84168962, '', 0),
-(99383226, '', 0);
 
 -- --------------------------------------------------------
 
@@ -391,10 +368,13 @@ CREATE TABLE IF NOT EXISTS `payslips_dbd` (
 --
 
 INSERT INTO `payslips_dbd` (`payslip_id`, `description`, `breakdown`) VALUES
-(36655443, 'Employee''s CPF Deduction', 381.82),
-(67930275, 'Employee''s CPF Deduction', 1200),
-(84168962, 'Employee''s CPF Deduction', 342.86),
-(99383226, 'Employee''s CPF Deduction', 818.18);
+(52044433, 'Employee''s CPF Deduction', 1200),
+(52322776, 'Employee''s CPF Deduction', 1200),
+(79127095, 'Absent For Work - 1 day(s)', 95.24),
+(79127095, 'Employee''s CPF Deduction', 400),
+(79127095, 'Unpaid Leave - 1 day(s) ', 95.24),
+(79645851, 'Employee''s CPF Deduction', 400),
+(79645851, 'Late For Work - 4 hours(s) 10 min(s)', 35.61);
 
 -- --------------------------------------------------------
 
@@ -745,6 +725,34 @@ INSERT INTO `users_account` (`nric`, `username`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `users_attendance_record`
+--
+
+CREATE TABLE IF NOT EXISTS `users_attendance_record` (
+  `nric` varchar(10) NOT NULL,
+  `date` date NOT NULL,
+  `status` varchar(10) NOT NULL,
+  `duration` int(11) NOT NULL,
+  PRIMARY KEY (`nric`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_attendance_record`
+--
+
+INSERT INTO `users_attendance_record` (`nric`, `date`, `status`, `duration`) VALUES
+('S0987654A', '2016-07-01', 'Present', 0),
+('S0987654A', '2016-07-02', 'Late', 250),
+('S1234567A', '2016-07-01', 'Absent', 0),
+('S1234567A', '2016-07-02', 'Present', 0),
+('S9344895B', '2016-07-01', 'Leave', 0),
+('S9344895B', '2016-07-02', 'Leave', 0),
+('S9876543C', '2016-07-01', 'Present', 0),
+('S9876543C', '2016-07-02', 'Present', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users_bank`
 --
 
@@ -839,7 +847,7 @@ CREATE TABLE IF NOT EXISTS `users_leave` (
 INSERT INTO `users_leave` (`nric`, `date_joined`, `leave`, `mc`, `used_leave`, `used_mc`) VALUES
 ('S0987654A', '2016-06-28', 63, 14, 0, 0),
 ('S1234567A', '2016-06-28', 63, 14, 0, 0),
-('S9344895B', '2016-06-18', 63, 14, 54, 0),
+('S9344895B', '2016-06-18', 63, 14, 57, 0),
 ('S9876543C', '2016-06-20', 63, 14, 0, 0);
 
 -- --------------------------------------------------------
@@ -853,6 +861,7 @@ CREATE TABLE IF NOT EXISTS `users_leave_record` (
   `leave_name` varchar(20) NOT NULL,
   `nric` varchar(10) NOT NULL,
   `date` date NOT NULL,
+  `time_string` varchar(20) NOT NULL,
   `leave_duration` double NOT NULL,
   `img` varchar(100) NOT NULL,
   PRIMARY KEY (`nric`,`date`)
@@ -862,13 +871,15 @@ CREATE TABLE IF NOT EXISTS `users_leave_record` (
 -- Dumping data for table `users_leave_record`
 --
 
-INSERT INTO `users_leave_record` (`leave_type`, `leave_name`, `nric`, `date`, `leave_duration`, `img`) VALUES
-('Paid', 'Leave', 'S9344895B', '2016-06-28', 9, ''),
-('Paid', 'Leave', 'S9344895B', '2016-06-29', 9, ''),
-('Paid', 'Leave', 'S9344895B', '2016-06-30', 9, ''),
-('Paid', 'Leave', 'S9344895B', '2016-07-01', 9, ''),
-('Paid', 'Leave', 'S9344895B', '2016-07-02', 9, ''),
-('Paid', 'Leave', 'S9344895B', '2016-07-03', 9, '');
+INSERT INTO `users_leave_record` (`leave_type`, `leave_name`, `nric`, `date`, `time_string`, `leave_duration`, `img`) VALUES
+('Unpaid', 'Leave', 'S1234567A', '2016-07-12', '0900 - 1800', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-06-27', '0900-1800', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-06-28', '0900-1800', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-06-29', '0900-1800', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-06-30', '0900-1800', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-07-01', '0900 - 1800', 9, ''),
+('Paid', 'Leave', 'S9344895B', '2016-07-02', '0900 - 1800', 9, ''),
+('Paid', 'Timeoff', 'S9344895B', '2016-07-04', '0900-1200', 3, '');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
