@@ -128,7 +128,6 @@ public class PayslipDAO {
                     int late = 0;
                     for(Attendance attendance : attendances){
                         String status = attendance.getUserAttendance(user.getNric());
-                        System.out.println(status);
                         switch(status){
                             case "Absent":
                                 absent++;
@@ -141,7 +140,7 @@ public class PayslipDAO {
                         ps = con.prepareStatement(CREATE_PAYSLIP_DBD);
                         ps.setInt(1, payslip_id);
                         ps.setString(2, "Absent - " + absent + " day(s)");
-                        ps.setDouble(3, Double.parseDouble(df.format(((double)user.getSalary() / totalWorkingDays) * absent)));
+                        ps.setDouble(3, Double.parseDouble(df.format(((double)user.getSalary() / totalWorkingDays) * absent * 1.5)));
                         deduction += ((double)user.getSalary() / totalWorkingDays) * absent;
                         ps.executeUpdate();
                     }

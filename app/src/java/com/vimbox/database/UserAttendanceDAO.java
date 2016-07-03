@@ -18,6 +18,7 @@ public class UserAttendanceDAO {
     private static final String GET_YEARMONTHS = "SELECT date FROM users_attendance_record GROUP BY Month(date);";
     private static final String GET_YEARMONTHS_BY_KEYWORD = "SELECT date FROM users_attendance_record WHERE date LIKE ? GROUP BY Month(date)";
     private static final String GET_ATTENDANCES_BY_YEARMONTH = "SELECT * FROM users_attendance_record WHERE date LIKE ? ORDER BY date";
+    private static final String GET_USER_ATTENDANCES_BETWEEN_TWO_DATES = "SELECT * FROM users_attendance_record WHERE (date BETWEEN ? AND ?) ORDER BY date";
     private static final String CREATE_ATTENDANCE = "INSERT INTO users_attendance_record VALUES (?,?,?,?)";
     private static final String DELETE_ATTENDANCE_BY_DATE = "DELETE FROM users_attendance_record WHERE date=?";
 
@@ -63,6 +64,63 @@ public class UserAttendanceDAO {
         return results;
     }
 
+    public static ArrayList<Attendance> getAttendancesBetweenTwoDates(DateTime sd, DateTime ed) {
+        ArrayList<Attendance> results = new ArrayList<Attendance>();
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_USER_ATTENDANCES_BETWEEN_TWO_DATES);
+            ps.setDate(1, new java.sql.Date(sd.toDate().getTime()));
+            ps.setDate(2, new java.sql.Date(ed.toDate().getTime()));
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                HashMap<String, String> attendance_record = new HashMap<String, String>();
+                HashMap<String, Integer> late_record = new HashMap<String, Integer>();
+                String startDt = rs.getString("date");
+                DateTime dateTime = dtf.parseDateTime(startDt);
+
+                String nric = rs.getString("nric");
+                String status = rs.getString("status");
+                attendance_record.put(nric, status);
+
+                int duration = rs.getInt("duration");
+                if (duration > 0) {
+                    late_record.put(nric, duration);
+                }
+
+                while (rs.next()) {
+                    String nextDt = rs.getString("date");
+
+                    if (!nextDt.equals(startDt)) {
+                        results.add(new Attendance(dateTime, attendance_record, late_record));
+                        attendance_record = new HashMap<String, String>();
+                        late_record = new HashMap<String, Integer>();
+                        dateTime = dtf.parseDateTime(nextDt);
+                        startDt = nextDt;
+                    }
+                    nric = rs.getString("nric");
+                    status = rs.getString("status");
+                    attendance_record.put(nric, status);
+
+                    duration = rs.getInt("duration");
+                    if (duration > 0) {
+                        late_record.put(nric, duration);
+                    }
+                }
+
+                results.add(new Attendance(dateTime, attendance_record, late_record));
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
+    }
+    
     public static ArrayList<Attendance> getAttendancesByYearMonth(String keyword) {
         ArrayList<Attendance> results = new ArrayList<Attendance>();
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");

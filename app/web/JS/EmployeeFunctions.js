@@ -284,6 +284,7 @@ $(document).on('change', '#payslip_employee', function () {
                 $('#payslip_startDate').val('');
                 $('#payslip_endDate').val('');
                 $('#payslip_paymentDate').val('');
+                prorate = 1;
                 var basic = (Number(data.basic) * prorate).toFixed(2);
                 $('#payslip_paymentMode').val(data.payment_mode);
                 $('#original_basic').val(basic);
@@ -335,7 +336,64 @@ function calculateProrate(employee, startdate, enddate) {
                     var original_basic = Number($('#original_basic').val());
                     document.getElementById('payslip_basic').innerHTML = (original_basic * prorate).toFixed(2);
                     var basic = Number(document.getElementById('payslip_basic').innerHTML);
-
+                    
+                    var totalDays = Number(data.totalDays);
+                    
+                    var absent = Number(data.absent);
+                    if(absent > 0){
+                        var tr = "<tr>";
+                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Absent - " + absent + " day(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * absent * 1.5).toFixed(2) + "' placeholder='amount'></td>";
+                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "</tr>";
+                        $(tr).prependTo("#payslip_dbd > tbody");
+                    }
+                    
+                    var late = Number(data.late);
+                    if(late > 0){
+                        var tr = "<tr>";
+                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Late - " + (late/60) + " hours(s) " + (late%60) + " min(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9 * 60)) * late).toFixed(2) + "' placeholder='amount'></td>";
+                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "</tr>";
+                        $(tr).prependTo("#payslip_dbd > tbody");
+                    }
+                    
+                    var mc = Number(data.mc);
+                    if(mc > 0){
+                        var tr = "<tr>";
+                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Unpaid MC - " + mc + " day(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * mc).toFixed(2) + "' placeholder='amount'></td>";
+                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "</tr>";
+                        $(tr).prependTo("#payslip_dbd > tbody");
+                    }
+                    
+                    var timeoff = Number(data.timeoff);
+                    if(timeoff > 0){
+                        var tr = "<tr>";
+                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Unpaid Time Off - " + (timeoff / 9) + " hour(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * timeoff).toFixed(2) + "' placeholder='amount'></td>";
+                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "</tr>";
+                        $(tr).prependTo("#payslip_dbd > tbody");
+                    }
+                    
+                    var leave = Number(data.leave);
+                    if(leave > 0){
+                        var leaveString = "Unpaid Leave - ";
+                        var leaveDays = leave/9;
+                        if(leaveDays > 0) leaveString += leaveDays + " day(s) ";
+                        var leaveHours = leave%9;
+                        if(leaveHours > 0) leaveString += leaveHours + " hour(s) ";
+                        var tr = "<tr>";
+                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"" + leaveString + "\" placeholder='description'></td>";
+                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * leave).toFixed(2) + "' placeholder='amount'></td>";
+                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "</tr>";
+                        $(tr).prependTo("#payslip_dbd > tbody");
+                    }
+                    
                     var table = document.getElementById("payslip_dbd");
 
                     for (var i = 0, row; row = table.rows[i]; i++) {
@@ -478,19 +536,22 @@ function updatepayslip_apbd() {
 }
 
 function clearBdTables() {
-    var table = document.getElementById("payslip_abd");
-    for (var i = 0, row; row = table.rows[i]; i++) {
-        row.parentNode.removeChild(row);
+    var abdTable = document.getElementById("payslip_abd");
+    for (var i = 0, abdRow; abdRow = abdTable.rows[i]; i++) {
+        abdRow.parentNode.removeChild(abdRow);
+        i--;
     }
 
-    var table = document.getElementById("payslip_dbd");
-    for (var i = 0, row; row = table.rows[i]; i++) {
-        row.parentNode.removeChild(row);
+    var dbdTable = document.getElementById("payslip_dbd");
+    for (var i = 0, dbdRow; dbdRow = dbdTable.rows[i]; i++) {
+        dbdRow.parentNode.removeChild(dbdRow);
+        i--;
     }
 
-    var table = document.getElementById("payslip_apbd");
-    for (var i = 0, row; row = table.rows[i]; i++) {
-        row.parentNode.removeChild(row);
+    var apbdTable = document.getElementById("payslip_apbd");
+    for (var i = 0, apbdRow; apbdRow = apbdTable.rows[i]; i++) {
+        apbdRow.parentNode.removeChild(apbdRow);
+        i--;
     }
 }
 
