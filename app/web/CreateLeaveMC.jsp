@@ -171,7 +171,7 @@
 
                     if (data.status === "SUCCESS") {
                         setTimeout(function () {
-                            location.reload()
+                            window.location.href = "LeaveMCs.jsp";
                         }, 500);
                     }
                 },

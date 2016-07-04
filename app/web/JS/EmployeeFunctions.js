@@ -6,6 +6,16 @@ Date.prototype.toDateInputValue = (function () {
     return local.toJSON().slice(0, 10);
 });
 
+function loadLeaveMCs(keyword){
+    $.get("LoadLeaveMC.jsp", {keyword: keyword}, function (data) {
+        document.getElementById('leave_mc_table').innerHTML = data;
+    });
+}
+
+function leaveMc_setup(){
+    loadLeaveMCs("");
+}
+
 function loadEmployees(keyword, timer) {
     $.get("LoadEmployees.jsp", {keyword: keyword, timer: timer}, function (data) {
         document.getElementById('employees_table').innerHTML = data;
@@ -139,7 +149,7 @@ function confirmDelete(id, action) {
     var status = document.getElementById(action + "_error_status");
     var message = document.getElementById(action + "_error_message");
     status.innerHTML = "<b>Delete Confirmation</b>";
-    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this " + action + " record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"delete" + method + "('" + id + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal(" + action + "'_error_modal')\">No</button></td></tr></table>";
+    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"delete" + method + "('" + id + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal(" + action + "'_error_modal')\">No</button></td></tr></table>";
     modal.style.display = "block";
 }
 
@@ -181,6 +191,30 @@ function deletePayslip(id) {
                 if (dataStatus === "SUCCESS") {
                     setTimeout(function () {
                         window.location.href = "Payslips.jsp";
+                    }, 500);
+                }
+            })
+            .fail(function (error) {
+                status.innerHTML = "ERROR";
+                message.innerHTML = error;
+                modal.style.display = "block";
+            });
+}
+
+function deleteLeave_mc(id) {
+    var modal = document.getElementById("leave_mc_error_modal");
+    var status = document.getElementById("leave_mc_error_status");
+    var message = document.getElementById("leave_mc_error_message");
+    $.getJSON("DeleteLeaveMCController", {leaveMcId: id})
+            .done(function (data) {
+                var dataStatus = data.status;
+                var errorMsg = data.message;
+                status.innerHTML = dataStatus;
+                message.innerHTML = errorMsg;
+                modal.style.display = "block";
+                if (dataStatus === "SUCCESS") {
+                    setTimeout(function () {
+                        window.location.href = "LeaveMCs.jsp";
                     }, 500);
                 }
             })

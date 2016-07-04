@@ -224,7 +224,7 @@
                 </div>
             </div>
 
-            <button onclick="loadLeaveMC('<%=user.getNric()%>')">L & MC</button>
+            <button onclick="loadLeaveMCNric('<%=user.getNric()%>')">L & MC</button>
             <div id="view_leavemc_modal" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content">

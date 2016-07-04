@@ -65,7 +65,7 @@
                             <li><a href="Payslips.jsp">Payslips</a></li>
                             <li><a href="TakeAttendance.jsp">Take Attendance</a></li>
                             <li><a href="ViewAttendance.jsp">View Attendance</a></li>
-                            <li><a href="CreateLeaveMC.jsp">Create Leave/MC</a></li>
+                            <li><a href="LeaveMCs.jsp">Leave/MC</a></li>
                         </ul>
                     </li>
                     <li>

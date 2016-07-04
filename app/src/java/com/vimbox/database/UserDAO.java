@@ -27,9 +27,9 @@ public class UserDAO {
     private static final String UPDATE_USER_PASSWORD = "UPDATE users_account SET password=? WHERE nric=?";
     private static final String GET_USERS = "SELECT * FROM users";
     private static final String GET_FULL_TIME_USERS = "SELECT * FROM users WHERE type='Full'";
-    private static final String GET_FULL_TIME_USERS_BY_NAME = "SELECT * FROM users WHERE type='Full' AND (first_name like ? OR last_name like ?)";
-    private static final String GET_FT_USERS_BY_KEYWORD = "SELECT * FROM users WHERE (nric like ? OR first_name like ? OR last_name like ? OR date_joined like ? OR department like ? OR designation like ?) AND type='Full'";
-    private static final String GET_PT_USERS_BY_KEYWORD = "SELECT * FROM users WHERE (nric like ? OR first_name like ? OR last_name like ? OR date_joined like ? OR department like ? OR designation like ?) AND type='Part'";
+    private static final String GET_FULL_TIME_USERS_BY_NAME = "SELECT * FROM users WHERE type='Full' AND (first_name LIKE ? OR last_name LIKE ? OR CONCAT(last_name, ' ', first_name) LIKE ?)";
+    private static final String GET_FT_USERS_BY_KEYWORD = "SELECT * FROM users WHERE (nric like ? OR first_name like ? OR last_name like ? OR CONCAT(last_name, ' ', first_name) LIKE ? OR date_joined like ? OR department like ? OR designation like ?) AND type='Full'";
+    private static final String GET_PT_USERS_BY_KEYWORD = "SELECT * FROM users WHERE (nric like ? OR first_name like ? OR last_name like ? OR CONCAT(last_name, ' ', first_name) LIKE ? OR date_joined like ? OR department like ? OR designation like ?) AND type='Part'";
     private static final String CREATE_USER = "INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String CREATE_USER_CONTACT = "INSERT INTO users_contact VALUES (?,?,?,?)";
     private static final String CREATE_USER_EMERGENCY = "INSERT INTO users_emergency VALUES (?,?,?,?,?)";
@@ -269,6 +269,7 @@ public class UserDAO {
             ps = con.prepareStatement(GET_FULL_TIME_USERS_BY_NAME);
             ps.setString(1, "%" + keyword + "%");
             ps.setString(2, "%" + keyword + "%");
+            ps.setString(3, "%" + keyword + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 String nric = rs.getString("nric");
@@ -584,6 +585,7 @@ public class UserDAO {
             ps.setString(4, "%" + keyword + "%");
             ps.setString(5, "%" + keyword + "%");
             ps.setString(6, "%" + keyword + "%");
+            ps.setString(7, "%" + keyword + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 String nric = rs.getString("nric");
@@ -673,6 +675,7 @@ public class UserDAO {
             ps.setString(4, "%" + keyword + "%");
             ps.setString(5, "%" + keyword + "%");
             ps.setString(6, "%" + keyword + "%");
+            ps.setString(7, "%" + keyword + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 String nric = rs.getString("nric");
@@ -777,6 +780,42 @@ public class UserDAO {
                         double used_leave = rs.getDouble("used_leave");
                         ps = con.prepareStatement(UPDATE_USER_LEAVE);
                         ps.setDouble(1, used_leave + number);
+                        ps.setString(2, nric);
+                        ps.executeUpdate();
+                }
+
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+    }
+    
+    public static void restoreUserUsedLeaveMC(String nric, String leaveName, double number) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_USER_LEAVEMC_BY_NRIC);
+            ps.setString(1, nric);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                switch (leaveName) {
+                    case "MC":
+                        double used_mc = rs.getInt("used_mc");
+                        ps = con.prepareStatement(UPDATE_USER_MC);
+                        ps.setInt(1, (int) (used_mc - number));
+                        ps.setString(2, nric);
+                        ps.executeUpdate();
+                        break;
+                    default:
+                        double used_leave = rs.getDouble("used_leave");
+                        ps = con.prepareStatement(UPDATE_USER_LEAVE);
+                        ps.setDouble(1, used_leave - number);
                         ps.setString(2, nric);
                         ps.executeUpdate();
                 }
