@@ -234,10 +234,6 @@
                     </div>
                 </div>
             </div>
-
-            <button onclick="confirmDelete('<%=user.getNric()%>')">Delete</button>
-
-
         </td>
     </tr>
     <%

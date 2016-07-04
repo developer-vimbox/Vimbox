@@ -29,7 +29,7 @@ public class ImageServlet extends HttpServlet {
     public void init() throws ServletException {
 
         // Define base path somehow. You can define it as init-param of the servlet.
-        this.imagePath = "\\app\\web\\Images";
+        this.imagePath = "C:\\Users\\NYuSheng\\Documents\\GitHub\\Vimbox\\app\\web\\Images\\MC";
 
         // In a Windows environment with the Applicationserver running on the
         // c: volume, the above path is exactly the same as "c:\var\webapp\images".

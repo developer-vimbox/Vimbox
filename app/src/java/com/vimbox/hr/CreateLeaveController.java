@@ -131,8 +131,8 @@ public class CreateLeaveController extends HttpServlet {
             if (fileName == null) {
                 errorMsg += "Please upload image proof for MC<br>";
             } else {
-                path = System.getProperty("user.dir") + "/MC" + File.separator + fileName;
-                //path = "C:\\Users\\NYuSheng\\Documents\\GitHub\\Vimbox\\app\\build\\web\\Images\\MC" + File.separator + fileName;
+                //path = System.getProperty("user.dir") + "/MC" + File.separator + fileName;
+                path = "C:\\Users\\NYuSheng\\Documents\\GitHub\\Vimbox\\app\\web\\Images\\MC" + File.separator + fileName;
             }
         }
 

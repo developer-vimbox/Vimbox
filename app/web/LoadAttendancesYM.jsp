@@ -73,7 +73,11 @@
                                 <td align="center"><%=employee%></td>
                                 <%
                                     for (Attendance attendance : attendances) {
-                                        out.println("<td align='center'>" + attendance.getUserAttendance(nric).substring(0,2) + "</td>");
+                                        String employeeAttendance = attendance.getUserAttendance(nric);
+                                        if(employeeAttendance == null){
+                                            employeeAttendance = "NA";
+                                        }
+                                        out.println("<td align='center'>" + employeeAttendance.substring(0,2) + "</td>");
                                     }
                                 %>
                             </tr>
@@ -82,7 +86,7 @@
                             %>
                         </table>
                         <br>
-                        <b>Pr:</b> Present &nbsp; <b>Ab:</b> Absent &nbsp; <b>La:</b> Late &nbsp; <b>Le:</b> Leave &nbsp; <b>MC:</b> MC 
+                        <b>Pr:</b> Present &nbsp; <b>Ab:</b> Absent &nbsp; <b>La:</b> Late &nbsp; <b>Le:</b> Leave &nbsp; <b>MC:</b> MC &nbsp; <b>NA:</b> Not Available
                     </div>
                 </div>
             </div>

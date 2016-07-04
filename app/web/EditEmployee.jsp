@@ -11,7 +11,6 @@
     User user = UserDAO.getUserByNRIC(nric);
 %>
 <h1>Edit Employee</h1>
-<input type="hidden" id="old_nric" value="<%=nric%>">
 <input type="hidden" id="user_leave" value="<%=user.getLeave()%>">
 <input type="hidden" id="user_used_leave" value="<%=user.getUsed_leave()%>">
 <input type="hidden" id="user_mc" value="<%=user.getMc()%>">
@@ -32,34 +31,7 @@
         </tr>
         <tr>
             <td align="right"><b>NRIC :</b></td>
-            <td>
-                <select id="user_nric_first_alphabet">
-                    <%
-                        char[] first_alphabets = {'S', 'T', 'F', 'G'};
-                        for (char alphabet : first_alphabets) {
-                            if (alphabet == nric.charAt(0)) {
-                                out.println("<option value='" + alphabet + "' selected>" + alphabet + "</option>");
-                            } else {
-                                out.println("<option value='" + alphabet + "'>" + alphabet + "</option>");
-                            }
-                        }
-                    %>
-                </select>&nbsp;
-                <input type="number" id="user_nric" value="<%=nric.substring(1, nric.length() - 1)%>">&nbsp;
-                <select id="user_nric_last_alphabet">
-                    <%
-                        char[] last_alphabets = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-                        for (char alphabet : last_alphabets) {
-                            if (alphabet == nric.charAt(nric.length() - 1)) {
-                                out.println("<option value='" + alphabet + "' selected>" + alphabet + "</option>");
-                            } else {
-                                out.println("<option value='" + alphabet + "'>" + alphabet + "</option>");
-                            }
-                        }
-
-                    %>
-                </select>
-            </td>
+            <td><%=nric%><input type="hidden" id="user_nric" value="<%=nric%>"></td>
         </tr>
         <tr>
             <td align="right"><b>Date Joined :</b></td>

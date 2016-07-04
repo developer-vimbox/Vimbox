@@ -45,15 +45,15 @@ public class PayslipDAO {
             ps = con.prepareStatement(DELETE_PAYSLIP);
             ps.setInt(1, payslip_id);
             ps.executeUpdate();
-            
+
             ps = con.prepareStatement(DELETE_PAYSLIP_ABD);
             ps.setInt(1, payslip_id);
             ps.executeUpdate();
-            
+
             ps = con.prepareStatement(DELETE_PAYSLIP_DBD);
             ps.setInt(1, payslip_id);
             ps.executeUpdate();
-            
+
             ps = con.prepareStatement(DELETE_PAYSLIP_APBD);
             ps.setInt(1, payslip_id);
             ps.executeUpdate();
@@ -102,7 +102,7 @@ public class PayslipDAO {
 
         String yearMonth = Converter.convertYearMonthPayslip(p_d);
         ArrayList<Attendance> attendances = UserAttendanceDAO.getAttendancesByYearMonth(yearMonth);
-        
+
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -114,7 +114,7 @@ public class PayslipDAO {
                     int totalWorkingDays = Converter.getWorkingDaysBetweenTwoDates(firstDayOfMonth, lastDayOfMonth, UserPopulationDAO.getUserWorkingDays(user.getDepartment(), user.getDesignation()));
                     int payslip_id = new Random().nextInt(90000000) + 10000000;
                     double deduction = 0;
-                    
+
                     // Employee's CPF //
                     ps = con.prepareStatement(CREATE_PAYSLIP_DBD);
                     ps.setInt(1, payslip_id);
@@ -122,48 +122,50 @@ public class PayslipDAO {
                     ps.setDouble(3, Double.parseDouble(df.format(user.getSalary() * 0.2)));
                     deduction += user.getSalary() * 0.2;
                     ps.executeUpdate();
-                    
+
                     // Absent and Late //
                     int absent = 0;
                     int late = 0;
-                    for(Attendance attendance : attendances){
+                    for (Attendance attendance : attendances) {
                         String status = attendance.getUserAttendance(user.getNric());
-                        switch(status){
-                            case "Absent":
-                                absent++;
-                                break;
-                            case "Late":
-                                late += attendance.getUserLateDuration(user.getNric());
+                        if (status != null) {
+                            switch (status) {
+                                case "Absent":
+                                    absent++;
+                                    break;
+                                case "Late":
+                                    late += attendance.getUserLateDuration(user.getNric());
+                            }
                         }
                     }
-                    if(absent > 0){
+                    if (absent > 0) {
                         ps = con.prepareStatement(CREATE_PAYSLIP_DBD);
                         ps.setInt(1, payslip_id);
                         ps.setString(2, "Absent - " + absent + " day(s)");
-                        ps.setDouble(3, Double.parseDouble(df.format(((double)user.getSalary() / totalWorkingDays) * absent * 1.5)));
-                        deduction += ((double)user.getSalary() / totalWorkingDays) * absent;
+                        ps.setDouble(3, Double.parseDouble(df.format(((double) user.getSalary() / totalWorkingDays) * absent * 1.5)));
+                        deduction += ((double) user.getSalary() / totalWorkingDays) * absent;
                         ps.executeUpdate();
                     }
-                    
-                    if(late > 0){
+
+                    if (late > 0) {
                         ps = con.prepareStatement(CREATE_PAYSLIP_DBD);
                         ps.setInt(1, payslip_id);
-                        ps.setString(2, "Late - " + (late/60) + " hours(s) " + (late%60) + " min(s)");
-                        ps.setDouble(3, Double.parseDouble(df.format(((double)user.getSalary() / (totalWorkingDays * 9 * 60)) * late)));
-                        deduction += (double)user.getSalary() / (totalWorkingDays * 9 * 60);
+                        ps.setString(2, "Late - " + (late / 60) + " hours(s) " + (late % 60) + " min(s)");
+                        ps.setDouble(3, Double.parseDouble(df.format(((double) user.getSalary() / (totalWorkingDays * 9 * 60)) * late)));
+                        deduction += (double) user.getSalary() / (totalWorkingDays * 9 * 60);
                         ps.executeUpdate();
                     }
-                    
+
                     // Leave, MC and Time-Offs //
                     ArrayList<LeaveMC> leaveMcs = UserLeaveDAO.getUnpaidLeaveMCRecordByNricDate(user.getNric(), yearMonth);
-                    if(!leaveMcs.isEmpty()){
+                    if (!leaveMcs.isEmpty()) {
                         int mc = 0;
                         int leave = 0;
-                        int timeoff = 0; 
-                        
-                        for(LeaveMC leaveMc : leaveMcs){
+                        int timeoff = 0;
+
+                        for (LeaveMC leaveMc : leaveMcs) {
                             String leaveName = leaveMc.getLeaveName();
-                            switch(leaveName){
+                            switch (leaveName) {
                                 case "MC":
                                     mc++;
                                     break;
@@ -172,40 +174,44 @@ public class PayslipDAO {
                                     leave += leaveMc.getLeaveDuration();
                             }
                         }
-                        
-                        if(mc > 0){
+
+                        if (mc > 0) {
                             ps = con.prepareStatement(CREATE_PAYSLIP_DBD);
                             ps.setInt(1, payslip_id);
                             ps.setString(2, "Unpaid MC - " + mc + " day(s)");
-                            ps.setDouble(3, Double.parseDouble(df.format(((double)user.getSalary() / totalWorkingDays) * mc)));
-                            deduction += ((double)user.getSalary() / totalWorkingDays) * mc;
+                            ps.setDouble(3, Double.parseDouble(df.format(((double) user.getSalary() / totalWorkingDays) * mc)));
+                            deduction += ((double) user.getSalary() / totalWorkingDays) * mc;
                             ps.executeUpdate();
                         }
-                        
-                        if(timeoff > 0){
+
+                        if (timeoff > 0) {
                             ps = con.prepareStatement(CREATE_PAYSLIP_DBD);
                             ps.setInt(1, payslip_id);
                             ps.setString(2, "Unpaid Time Off - " + (timeoff / 9) + " hour(s)");
-                            ps.setDouble(3, Double.parseDouble(df.format(((double)user.getSalary() / (totalWorkingDays * 9)) * timeoff)));
-                            deduction += ((double)user.getSalary() / (totalWorkingDays * 9)) * timeoff;
+                            ps.setDouble(3, Double.parseDouble(df.format(((double) user.getSalary() / (totalWorkingDays * 9)) * timeoff)));
+                            deduction += ((double) user.getSalary() / (totalWorkingDays * 9)) * timeoff;
                             ps.executeUpdate();
                         }
-                        
-                        if(leave > 0){
+
+                        if (leave > 0) {
                             ps = con.prepareStatement(CREATE_PAYSLIP_DBD);
                             ps.setInt(1, payslip_id);
                             String leaveString = "Unpaid Leave - ";
-                            int leaveDays = leave/9;
-                            if(leaveDays > 0) leaveString += leaveDays + " day(s) ";
-                            int leaveHours = leave%9;
-                            if(leaveHours > 0) leaveString += leaveHours + " hour(s) ";
+                            int leaveDays = leave / 9;
+                            if (leaveDays > 0) {
+                                leaveString += leaveDays + " day(s) ";
+                            }
+                            int leaveHours = leave % 9;
+                            if (leaveHours > 0) {
+                                leaveString += leaveHours + " hour(s) ";
+                            }
                             ps.setString(2, leaveString);
-                            ps.setDouble(3, Double.parseDouble(df.format(((double)user.getSalary() / (totalWorkingDays * 9)) * leave)));
-                            deduction += ((double)user.getSalary() / (totalWorkingDays * 9)) * leave;
+                            ps.setDouble(3, Double.parseDouble(df.format(((double) user.getSalary() / (totalWorkingDays * 9)) * leave)));
+                            deduction += ((double) user.getSalary() / (totalWorkingDays * 9)) * leave;
                             ps.executeUpdate();
                         }
                     }
-                    
+
                     ps = con.prepareStatement(CREATE_PAYSLIP);
                     ps.setInt(1, payslip_id);
                     ps.setString(2, user.getNric());

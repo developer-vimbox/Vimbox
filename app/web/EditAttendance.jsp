@@ -25,10 +25,11 @@
             String date = request.getParameter("date");
             DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
             Attendance attendance = null;
-            ArrayList<User> users = UserDAO.getFullTimeUsers();
+            ArrayList<User> users = new ArrayList<User>();
             HashMap<String, LeaveMC> statuses = null;
             HashMap<String, String> attendance_record = null;
             HashMap<String, Integer> late_record = null;
+            
             if (date == null || date.trim().isEmpty()) {
                 response.sendRedirect("TakeAttendance.jsp");
                 return;
@@ -41,6 +42,10 @@
                 statuses = UserLeaveDAO.getLeaveMCRecordByDate(dtf.parseDateTime(date));
                 attendance_record = attendance.getAttendance_record();
                 late_record = attendance.getLate_record();
+                ArrayList<String> userStrings = attendance.getUsers();
+                for(String userString: userStrings){
+                    users.add(UserDAO.getUserByNRIC(userString));
+                }
             }
         %>
         <h1>Edit Attendance for <%=date%></h1><hr><br>

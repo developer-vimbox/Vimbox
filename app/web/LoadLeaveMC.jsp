@@ -7,6 +7,9 @@
 <%
     String nric = request.getParameter("nric");
     ArrayList<LeaveMC> leaveMCs = UserLeaveDAO.getLeaveMCRecordByNric(nric);
+    if (leaveMCs.isEmpty()) {
+        out.println("No results found");
+    } else {
 %>
 <table border="1" width="100%">
     <col width="18%">
@@ -15,7 +18,7 @@
     <col width="18%">
     <col width="18%">
     <col width="10%">
-    
+
     <tr>
         <th>Date</th>
         <th>Time</th>
@@ -58,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <%
                 }
             %>
@@ -66,5 +69,6 @@
         </td>
     </tr>
     <%        }
+        }
     %>
 </table>

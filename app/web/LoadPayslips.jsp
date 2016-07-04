@@ -59,7 +59,7 @@
                 </div>
             </div>
         </div>
-                
+
         <button onclick="viewPayslip('<%=employee.getNric() + Converter.convertYearMonthPayslip(payslip.getStartDate())%>')">View</button>
         <div id="viewPayslipModal<%=employee.getNric() + Converter.convertYearMonthPayslip(payslip.getStartDate())%>" class="payslip-modal">
             <!-- Modal content -->
@@ -308,9 +308,22 @@
                 </div>
             </div>
         </div>
+        <button onclick="confirmDelete('<%=payslip.getPayslip_id()%>', 'payslip')">Delete</button>
     </td>
     <%
             out.println("</tr>");
         }
     %>
 </table>
+
+<div id="payslip_error_modal" class="modal">
+    <!-- Modal content -->
+    <div class="message-modal-content">
+        <div class="modal-body">
+            <span class="close" onclick="closeModal('payslip_error_modal')">×</span>
+            <div id="payslip_error_status"></div>
+            <hr>
+            <div id="payslip_error_message"></div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 package com.vimbox.hr;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.joda.time.DateTime;
 
@@ -16,6 +17,10 @@ public class Attendance {
 
     public DateTime getDate() {
         return date;
+    }
+    
+    public ArrayList<String> getUsers(){
+        return new ArrayList(attendance_record.keySet());
     }
 
     public HashMap<String, String> getAttendance_record() {

@@ -45,9 +45,6 @@ public class EditEmployeeController extends HttpServlet {
         }
         
         String user_nric = request.getParameter("user_nric");
-        if(user_nric.length() != 9){
-            errorMsg+="Please enter a valid NRIC<br>";
-        }
         
         String user_dj = request.getParameter("user_dj");
         Date dj = null;
@@ -169,14 +166,12 @@ public class EditEmployeeController extends HttpServlet {
         
         JsonObject jsonOutput = new JsonObject();
         if(errorMsg.isEmpty()){
-            String old_nric = request.getParameter("old_nric");
-            UserDAO.deleteUser(old_nric);
+            UserDAO.deleteUser(user_nric);
             UserDAO.createUser(user_nric, user_first_name, user_last_name, dj, user_madd, user_radd, user_department, user_designation, Integer.parseInt(user_salary), employeeType);
             UserDAO.createUserContact(user_nric, Integer.parseInt(user_phone), Integer.parseInt(user_fax), Integer.parseInt(user_home));
             UserDAO.createUserEmergency(user_nric, emergency_name, emergency_relationship, Integer.parseInt(emergency_contact), Integer.parseInt(emergency_office));
             UserDAO.createUserBank(user_nric, user_payment_mode, user_bank_name, user_account_name, user_account_no);
             if (employeeType.equals("Full")) {
-                UserDAO.updateUserAccount(old_nric, user_nric);
                 UserDAO.createUserLeave(user_nric, dj, Double.parseDouble(request.getParameter("user_leave")), Integer.parseInt(request.getParameter("user_mc")), Double.parseDouble(request.getParameter("user_used_leave")), Integer.parseInt(request.getParameter("user_used_mc")));
             }
             jsonOutput.addProperty("status", "SUCCESS");

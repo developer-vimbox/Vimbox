@@ -83,12 +83,14 @@ public class ProrateController extends HttpServlet {
                 ArrayList<Attendance> attendances = UserAttendanceDAO.getAttendancesBetweenTwoDates(sd, ed);
                 for (Attendance attendance : attendances) {
                     String status = attendance.getUserAttendance(nric);
-                    switch (status) {
-                        case "Absent":
-                            absent++;
-                            break;
-                        case "Late":
-                            late += attendance.getUserLateDuration(nric);
+                    if (status != null) {
+                        switch (status) {
+                            case "Absent":
+                                absent++;
+                                break;
+                            case "Late":
+                                late += attendance.getUserLateDuration(nric);
+                        }
                     }
                 }
 

@@ -133,12 +133,13 @@ function editEmployee(empId) {
     modal.style.display = "block";
 }
 
-function confirmDelete(empId) {
-    var modal = document.getElementById("employee_error_modal");
-    var status = document.getElementById("employee_error_status");
-    var message = document.getElementById("employee_error_message");
+function confirmDelete(id, action) {
+    var method = action.charAt(0).toUpperCase() + action.slice(1);
+    var modal = document.getElementById(action + "_error_modal");
+    var status = document.getElementById(action + "_error_status");
+    var message = document.getElementById(action + "_error_message");
     status.innerHTML = "<b>Delete Confirmation</b>";
-    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this employee record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"deleteEmployee('" + empId + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal('employee_error_modal')\">No</button></td></tr></table>";
+    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this " + action + " record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"delete" + method + "('" + id + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal(" + action + "'_error_modal')\">No</button></td></tr></table>";
     modal.style.display = "block";
 }
 
@@ -166,16 +167,39 @@ function deleteEmployee(empId) {
             });
 }
 
+function deletePayslip(id) {
+    var modal = document.getElementById("payslip_error_modal");
+    var status = document.getElementById("payslip_error_status");
+    var message = document.getElementById("payslip_error_message");
+    $.getJSON("DeletePayslipController", {payslip_id: id})
+            .done(function (data) {
+                var dataStatus = data.status;
+                var errorMsg = data.message;
+                status.innerHTML = dataStatus;
+                message.innerHTML = errorMsg;
+                modal.style.display = "block";
+                if (dataStatus === "SUCCESS") {
+                    setTimeout(function () {
+                        window.location.href = "Payslips.jsp";
+                    }, 500);
+                }
+            })
+            .fail(function (error) {
+                status.innerHTML = "ERROR";
+                message.innerHTML = error;
+                modal.style.display = "block";
+            });
+}
+
 function updateEmployee() {
     var modal = document.getElementById("employee_error_modal");
     var status = document.getElementById("employee_error_status");
     var message = document.getElementById("employee_error_message");
 
     var employeeType = $('#employeeType').val();
-    var old_nric = $('#old_nric').val();
     var user_first_name = $('#user_first_name').val();
     var user_last_name = $('#user_last_name').val();
-    var user_nric = $('#user_nric_first_alphabet').val() + $('#user_nric').val() + $('#user_nric_last_alphabet').val();
+    var user_nric = $('#user_nric').val();
     var user_dj = $('#user_dj').val();
     var user_madd = $('#user_madd').val();
     var user_radd = $('#user_radd').val();
@@ -198,7 +222,7 @@ function updateEmployee() {
     var user_mc = $('#user_mc').val();
     var user_used_mc = $('#user_used_mc').val();
 
-    $.getJSON("EditEmployeeController", {old_nric: old_nric, employeeType: employeeType, user_first_name: user_first_name, user_last_name: user_last_name, user_nric: user_nric, user_dj: user_dj, user_madd: user_madd, user_radd: user_radd, user_phone: user_phone, user_fax: user_fax, user_home: user_home
+    $.getJSON("EditEmployeeController", {employeeType: employeeType, user_first_name: user_first_name, user_last_name: user_last_name, user_nric: user_nric, user_dj: user_dj, user_madd: user_madd, user_radd: user_radd, user_phone: user_phone, user_fax: user_fax, user_home: user_home
         , user_designation: user_designation, user_department: user_department, user_salary: user_salary, emergency_name: emergency_name
         , emergency_relationship: emergency_relationship, emergency_contact: emergency_contact, emergency_office: emergency_office
         , user_payment: user_payment, user_bank_name: user_bank_name, user_account_name: user_account_name, user_account_no: user_account_no
@@ -784,7 +808,6 @@ $(document).on('change', '#start_date', function () {
 });
 
 $(document).on('change', '.attendance_radio', function(){
-    console.log($(this).val());
     
     var value = $(this).val();
     var name = $(this).attr('name');
