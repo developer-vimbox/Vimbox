@@ -260,13 +260,14 @@ public class CreateLeadController extends HttpServlet {
             //----------//
 
             // Others //
-            String[] others = {"storeyCharge","pushCharge","detourCharge","materialCharge","markup"};
+            String[] others = {"storeyCharge","pushCharge","detourCharge","materialCharge","markup","discount"};
             String[] otherCharges = new String[5];
             otherCharges[0] = request.getParameter("storeyCharge");
             otherCharges[1] = request.getParameter("pushCharge"); 
             otherCharges[2] = request.getParameter("detourCharge");
             otherCharges[3] = request.getParameter("materialCharge");
             otherCharges[4] = request.getParameter("markup");
+            otherCharges[5] = request.getParameter("discount");
                 // Enter into leadother database //
                 LeadDAO.createLeadOther(leadId, others, otherCharges);
                 //----------------------------------//

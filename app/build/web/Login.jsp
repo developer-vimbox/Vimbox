@@ -5,13 +5,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Vimbox</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
         <script src="JS/ModalFunctions.js"></script>
         <script src="JS/UserFunctions.js"></script>
         <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
         <link rel="stylesheet" href="assets/admin1/css/admin1.css">
         <link rel="stylesheet" href="assets/globals/css/elements.css">
         <link rel="stylesheet" href="assets/globals/css/plugins.css">
-
         <script src="assets/globals/plugins/modernizr/modernizr.min.js"></script>
     </head>
     <body class="bg-login printable">
@@ -34,27 +35,28 @@
                 <div id="pane-login" class="panel-body active">
                     <h2>Login to Vimbox</h2>
                     
+                    <form action="LoginController" method="POST" id="login_form">
                         <div class="form-body">
                             <div class="form-group">
                                 <div class="inputer">
                                     <div class="input-wrapper">
-                                        <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+                                        <input type="text" class="form-control" name="username" placeholder="Enter your username" required>
                                     </div>
                                 </div>
                             </div><!--.form-group-->
                             <div class="form-group">
                                 <div class="inputer">
                                     <div class="input-wrapper">
-                                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                                        <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
                                     </div>
                                 </div>
                             </div><!--.form-group-->
                         </div>
                         <div class="form-buttons clearfix">
                             <label class="pull-left"><input type="checkbox" name="remember" value="1"> Remember me</label>
-                            <button onclick="login()" class="btn btn-success pull-right">Login</button>
+                            <input type="submit" class="btn btn-success pull-right" value="Login">
                         </div><!--.form-buttons-->
-                   
+                    </form>
                 </div><!--#login.panel-body-->
 
             </div><!--.blur-content-->

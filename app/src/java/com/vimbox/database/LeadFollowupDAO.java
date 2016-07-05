@@ -55,7 +55,7 @@ public class LeadFollowupDAO {
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
-            ConnectionManager.close(con, ps, null);
+            ConnectionManager.close(con, ps, rs);
         }
         return leadFollowups;
     }

@@ -656,6 +656,16 @@
                                                                         </table>
                                                                     </td>
                                                                 </tr>
+                                                                <tr height="5%">
+                                                                    <td>
+                                                                        <table width="100%">
+                                                                            <tr>
+                                                                                <td align="left">Discount :</td>
+                                                                                <td align="right">$ <input type="number" step="0.01" min="0" id="discount" name="discount" value="0.00"></td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
                                                             </table>
                                                         </td>
                                                         <td>
@@ -891,6 +901,10 @@ $("#detourCharge").on('change keyup paste', function () {
     update_total();
 });
 
+$("#discount").on('change keyup paste', function () {
+    update_total();
+});
+
 
 jQuery('#itemName').on('input', function () {
     var value = $('#itemName').val();
@@ -1013,7 +1027,7 @@ function update_total() {
     $('#servicesTable > tbody  > tr').each(function () {
         sum += Number(this.getElementsByTagName("input")[1].value);
     });
-    sum += (Number($('#markup').val()) + Number($('#materialCharge').val()) + Number($('#pushCharge').val()) + Number($('#storeyCharge').val()) + Number($('#detourCharge').val()));
+    sum += (Number($('#markup').val()) + Number($('#materialCharge').val()) + Number($('#pushCharge').val()) + Number($('#storeyCharge').val()) + Number($('#detourCharge').val()) - Number($('#discount').val()));
     $('#totalPrice').val(Number(sum).toFixed(2));
 }
 
