@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 03, 2016 at 08:58 AM
+-- Generation Time: Jul 15, 2016 at 04:58 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -65,7 +65,20 @@ CREATE TABLE IF NOT EXISTS `customers_history` (
 --
 
 INSERT INTO `customers_history` (`customer_id`, `id`) VALUES
-(1, 62685761);
+(1, 62685761),
+(1, 75679886),
+(1, 126044431),
+(1, 242688375),
+(1, 337677098),
+(1, 577991034),
+(1, 767237515),
+(1, 793320386),
+(4, 760603001),
+(5, 402975721),
+(5, 815400039),
+(5, 989798174),
+(6, 839219369),
+(7, 248126253);
 
 -- --------------------------------------------------------
 
@@ -106,14 +119,6 @@ CREATE TABLE IF NOT EXISTS `leadenquiry` (
   PRIMARY KEY (`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `leadenquiry`
---
-
-INSERT INTO `leadenquiry` (`lead_id`, `enquiry`) VALUES
-(255594632, 'customer dont want to go on anymore'),
-(284361538, 'yeah');
-
 -- --------------------------------------------------------
 
 --
@@ -140,9 +145,8 @@ CREATE TABLE IF NOT EXISTS `leadinfo` (
 --
 
 INSERT INTO `leadinfo` (`owner_user`, `lead_id`, `type`, `customer_id`, `tom`, `dom`, `datetime_of_creation`, `status`, `reason`, `source`, `referral`) VALUES
-('admin', 255594632, 'Enquiry', 4, 'Residential|Office', '', '2016-06-10 10:02:12', 'Rejected', 'Customer kpkb', 'Call', 'Website'),
-('admin', 480987952, 'Sales', 1, '', '', '2016-06-10 09:46:06', 'Pending', '', 'Call', 'Friend'),
-('s9344895b', 284361538, 'Enquiry', 1, '', '', '2016-06-15 17:49:04', 'Pending', '', 'Call', 'Friend');
+('S9344895B', 762325398, 'Site Survey', -1, '', '', '2016-07-14 19:49:59', 'Pending', '', 'Call', 'Friend'),
+('S9344895B', 793320386, 'Site Survey', 1, '', '', '2016-07-14 19:47:27', 'Pending', '', 'Call', 'Friend');
 
 -- --------------------------------------------------------
 
@@ -176,9 +180,8 @@ CREATE TABLE IF NOT EXISTS `leadmovefrom` (
 --
 
 INSERT INTO `leadmovefrom` (`lead_id`, `addressfrom`, `storeysfrom`, `pushingfrom`) VALUES
-(255594632, '864 Yishun Ave 4, Block 864_11_11_760864', ' ', ' '),
-(284361538, '', '', ''),
-(480987952, '', '', '');
+(762325398, '8 Boon Lay Way_8_115_609964', ' ', ' '),
+(793320386, '864 Yishun Ave 4, Block 864_11_11_760864', ' ', ' ');
 
 -- --------------------------------------------------------
 
@@ -199,9 +202,8 @@ CREATE TABLE IF NOT EXISTS `leadmoveto` (
 --
 
 INSERT INTO `leadmoveto` (`lead_id`, `addressto`, `storeysto`, `pushingto`) VALUES
-(255594632, '865 Yishun Street 81, Block 865_11_11_760865', ' ', ' '),
-(284361538, '', '', ''),
-(480987952, '', '', '');
+(762325398, '', '', ''),
+(793320386, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -215,17 +217,6 @@ CREATE TABLE IF NOT EXISTS `leadother` (
   `charge` varchar(10) NOT NULL,
   PRIMARY KEY (`lead_id`,`other`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `leadother`
---
-
-INSERT INTO `leadother` (`lead_id`, `other`, `charge`) VALUES
-(480987952, 'detourCharge', '0.00'),
-(480987952, 'markup', '0.00'),
-(480987952, 'materialCharge', '0.00'),
-(480987952, 'pushCharge', '0.00'),
-(480987952, 'storeyCharge', '0.00');
 
 -- --------------------------------------------------------
 
@@ -282,15 +273,6 @@ CREATE TABLE IF NOT EXISTS `lead_followups` (
   PRIMARY KEY (`lead_id`,`datetime_of_creation`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `lead_followups`
---
-
-INSERT INTO `lead_followups` (`lead_id`, `followup`, `datetime_of_creation`) VALUES
-(255594632, 'Called customer if wanna confirm but never pick up phone', '2016-06-10 10:01:49'),
-(284361538, 'testing', '2016-06-15 17:35:43'),
-(284361538, 'one more time', '2016-06-15 17:36:51');
-
 -- --------------------------------------------------------
 
 --
@@ -319,10 +301,11 @@ CREATE TABLE IF NOT EXISTS `payslips` (
 --
 
 INSERT INTO `payslips` (`payslip_id`, `nric`, `payment_mode`, `start_date`, `end_date`, `payment_date`, `basic`, `allowance`, `deduction`, `overtime_hr`, `overtime`, `additional`, `employer_cpf`) VALUES
-(52044433, 'S9876543C', 'Cheque', '2016-07-01', '2016-07-31', '2016-07-31', 6000, 0, 1200, 0, 0, 0, 1020),
-(52322776, 'S9344895B', 'Cheque', '2016-07-01', '2016-07-31', '2016-07-31', 6000, 0, 1200, 0, 0, 0, 1020),
-(79127095, 'S1234567A', 'Cash', '2016-07-01', '2016-07-31', '2016-07-31', 2000, 0, 590.48, 0, 0, 0, 340),
-(79645851, 'S0987654A', 'Cash', '2016-07-01', '2016-07-31', '2016-07-31', 2000, 0, 400.14, 0, 0, 0, 340);
+(50798345, 'S0987654A', 'Cash', '2016-07-01', '2016-07-31', '2016-07-31', 2000, 0, 477.07, 0, 0, 0, 340),
+(53503519, 'S9876543C', 'Cheque', '2016-07-01', '2016-07-31', '2016-07-31', 6000, 0, 1771.43, 0, 0, 0, 1020),
+(70771807, 'S9872635A', 'Cheque', '2016-07-01', '2016-07-31', '2016-07-31', 2000, 0, 590.48, 0, 0, 0, 340),
+(83081223, 'S1234567A', 'Cash', '2016-07-01', '2016-07-31', '2016-07-31', 2000, 0, 685.71, 0, 0, 0, 340),
+(90435136, 'S9344895B', 'Cheque', '2016-07-01', '2016-07-31', '2016-07-31', 6000, 0, 1200, 0, 0, 0, 1020);
 
 -- --------------------------------------------------------
 
@@ -368,13 +351,46 @@ CREATE TABLE IF NOT EXISTS `payslips_dbd` (
 --
 
 INSERT INTO `payslips_dbd` (`payslip_id`, `description`, `breakdown`) VALUES
-(52044433, 'Employee''s CPF Deduction', 1200),
-(52322776, 'Employee''s CPF Deduction', 1200),
-(79127095, 'Absent For Work - 1 day(s)', 95.24),
-(79127095, 'Employee''s CPF Deduction', 400),
-(79127095, 'Unpaid Leave - 1 day(s) ', 95.24),
-(79645851, 'Employee''s CPF Deduction', 400),
-(79645851, 'Late For Work - 4 hours(s) 10 min(s)', 35.61);
+(50798345, 'Absent - 1 day(s)', 115.38),
+(50798345, 'Employee''s CPF Deduction', 400),
+(50798345, 'Late - 6 hours(s) 10 min(s)', 52.71),
+(53503519, 'Absent - 1 day(s)', 428.57),
+(53503519, 'Employee''s CPF Deduction', 1200),
+(53503519, 'Unpaid Leave - 1 day(s) ', 285.71),
+(70771807, 'Absent - 1 day(s)', 142.86),
+(70771807, 'Employee''s CPF Deduction', 400),
+(70771807, 'Unpaid Leave - 1 day(s) ', 95.24),
+(83081223, 'Absent - 2 day(s)', 285.71),
+(83081223, 'Employee''s CPF Deduction', 400),
+(83081223, 'Unpaid Leave - 1 day(s) ', 95.24),
+(90435136, 'Employee''s CPF Deduction', 1200);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sitesurvey_assigned`
+--
+
+CREATE TABLE IF NOT EXISTS `sitesurvey_assigned` (
+  `lead_id` int(10) NOT NULL,
+  `ss_user` varchar(10) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `start_datetime` datetime NOT NULL,
+  `end_datetime` datetime NOT NULL,
+  `timeslot` varchar(255) NOT NULL,
+  `remarks` varchar(255) NOT NULL,
+  PRIMARY KEY (`lead_id`,`start_datetime`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sitesurvey_assigned`
+--
+
+INSERT INTO `sitesurvey_assigned` (`lead_id`, `ss_user`, `address`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`) VALUES
+(762325398, 'S9234875A', '8 Boon Lay Way #8-115 S609964|', '2016-07-11 15:00:00', '2016-07-11 15:30:00', '1500 - 1530', ''),
+(793320386, 'S9234875A', '864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-07-11 13:00:00', '2016-07-11 13:30:00', '1300 - 1400<br>1430 - 1500', ''),
+(793320386, 'S9234875A', '864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-07-11 13:30:00', '2016-07-11 14:00:00', '1300 - 1400<br>1430 - 1500', ''),
+(793320386, 'S9234875A', '864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-07-11 14:30:00', '2016-07-11 15:00:00', '1300 - 1400<br>1430 - 1500', '');
 
 -- --------------------------------------------------------
 
@@ -478,7 +494,8 @@ CREATE TABLE IF NOT EXISTS `system_lead_types` (
 
 INSERT INTO `system_lead_types` (`type`) VALUES
 ('Enquiry'),
-('Sales');
+('Sales'),
+('Site Survey');
 
 -- --------------------------------------------------------
 
@@ -501,7 +518,8 @@ CREATE TABLE IF NOT EXISTS `system_modules` (
 
 INSERT INTO `system_modules` (`type`, `department`, `designation`, `modules`, `working_days`) VALUES
 ('Full', 'IT', 'Manager', 'Ticket|Sales', 5),
-('Full', 'Operations', 'Mover', '', 6);
+('Full', 'Operations', 'Mover', '', 6),
+('Full', 'Sales', 'Surveyor', '', 5);
 
 -- --------------------------------------------------------
 
@@ -654,7 +672,7 @@ CREATE TABLE IF NOT EXISTS `tickets` (
 --
 
 INSERT INTO `tickets` (`ticket_id`, `owner_user`, `assigned_users`, `customer_id`, `subject`, `datetime_of_creation`, `datetime_of_edit`, `description`, `solution`, `status`) VALUES
-(62685761, 'S9344895B', 'S9876543C|S9344895B', 1, 'he sucks', '2016-06-24 11:14:51', '2016-06-24 11:15:46', 'he sucks', '', 'Pending');
+(75679886, 'S9344895B', 'S9344895B|S9234875A', 1, 'Damaged Items', '2016-07-11 13:43:15', '2016-07-11 13:43:15', 'Items were damaged during moving ...', 'Issue resolved', 'Resolved');
 
 -- --------------------------------------------------------
 
@@ -668,6 +686,13 @@ CREATE TABLE IF NOT EXISTS `ticket_comments` (
   `datetime_of_creation` datetime NOT NULL,
   PRIMARY KEY (`ticket_id`,`datetime_of_creation`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ticket_comments`
+--
+
+INSERT INTO `ticket_comments` (`ticket_id`, `comment`, `datetime_of_creation`) VALUES
+(75679886, 'Called customer but did not pick up.', '2016-07-11 13:45:50');
 
 -- --------------------------------------------------------
 
@@ -694,9 +719,12 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`nric`, `first_name`, `last_name`, `date_joined`, `mailing_address`, `registered_address`, `department`, `designation`, `salary`, `type`) VALUES
-('S0987654A', 'testing ', 'testing ', '2016-06-28', 'testing', '', 'Operations', 'Mover', 2000, 'Full'),
+('S0987654A', 'subash', 'hello', '2016-06-28', 'testing', '', 'Operations', 'Mover', 2000, 'Full'),
 ('S1234567A', 'test', 'test', '2016-06-28', 'testing', '', 'IT', 'Manager', 2000, 'Full'),
+('S9234875A', 'Subash', 'T', '2016-07-08', 'vaizo', '', 'Sales', 'Surveyor', 2000, 'Full'),
 ('S9344895B', 'Yu Sheng', 'Ngo', '2016-06-18', 'Yishun Ave 4 Blk 864 #11-37 S760864', '', 'IT', 'Manager', 6000, 'Full'),
+('S9548323A', 'chai kun', 'lai', '2016-07-12', 'test test test', '', 'Sales', 'Surveyor', 2000, 'Full'),
+('S9872635A', 'chun kit', 'chow', '2016-07-04', 'testing', '', 'IT', 'Manager', 2000, 'Full'),
 ('S9876543C', 'Chee Bai', 'Chow', '2016-06-20', 'Blk 39 Cambridge Road #13-129 S210039', '', 'IT', 'Manager', 6000, 'Full');
 
 -- --------------------------------------------------------
@@ -718,7 +746,10 @@ CREATE TABLE IF NOT EXISTS `users_account` (
 
 INSERT INTO `users_account` (`nric`, `username`, `password`) VALUES
 ('S9344895B', 'admin', 'password'),
+('S9548323A', 'chaikun@gmail.com', 'password'),
 ('S9876543C', 'chunkit@gmail.com', 'password'),
+('S9872635A', 'ck@cck.com', 'password'),
+('S9234875A', 'subash@subash.com', 'password'),
 ('S1234567A', 'test@test.com', 'password'),
 ('S0987654A', 'testing@testing.com', 'password');
 
@@ -743,12 +774,21 @@ CREATE TABLE IF NOT EXISTS `users_attendance_record` (
 INSERT INTO `users_attendance_record` (`nric`, `date`, `status`, `duration`) VALUES
 ('S0987654A', '2016-07-01', 'Present', 0),
 ('S0987654A', '2016-07-02', 'Late', 250),
+('S0987654A', '2016-07-03', 'Late', 120),
+('S0987654A', '2016-07-04', 'Absent', 0),
 ('S1234567A', '2016-07-01', 'Absent', 0),
 ('S1234567A', '2016-07-02', 'Present', 0),
+('S1234567A', '2016-07-03', 'Absent', 0),
+('S1234567A', '2016-07-04', 'Present', 0),
 ('S9344895B', '2016-07-01', 'Leave', 0),
 ('S9344895B', '2016-07-02', 'Leave', 0),
+('S9344895B', '2016-07-03', 'Present', 0),
+('S9344895B', '2016-07-04', 'Present', 0),
+('S9872635A', '2016-07-04', 'Absent', 0),
 ('S9876543C', '2016-07-01', 'Present', 0),
-('S9876543C', '2016-07-02', 'Present', 0);
+('S9876543C', '2016-07-02', 'Present', 0),
+('S9876543C', '2016-07-03', 'Present', 0),
+('S9876543C', '2016-07-04', 'Absent', 0);
 
 -- --------------------------------------------------------
 
@@ -772,7 +812,10 @@ CREATE TABLE IF NOT EXISTS `users_bank` (
 INSERT INTO `users_bank` (`nric`, `payment_mode`, `bank_name`, `account_name`, `account_no`) VALUES
 ('S0987654A', 'Cash', 'testing', 'testing', 'testing'),
 ('S1234567A', 'Cash', 'test', 'test', 'test'),
+('S9234875A', 'Cheque', 'dbs', 'subash account', '123456789'),
 ('S9344895B', 'Cheque', 'DBS', 'yusheng account', '123-4567-8'),
+('S9548323A', 'Cheque', 'dbs', 'chaikun - account', '123456789'),
+('S9872635A', 'Cheque', 'dbs', 'wafhweuifh', '123456789'),
 ('S9876543C', 'Cheque', 'DBS', 'chunkit-account', '123-45678-9');
 
 -- --------------------------------------------------------
@@ -796,7 +839,10 @@ CREATE TABLE IF NOT EXISTS `users_contact` (
 INSERT INTO `users_contact` (`nric`, `phone_no`, `fax_no`, `home_no`) VALUES
 ('S0987654A', 12345678, 0, 0),
 ('S1234567A', 12345678, 0, 0),
+('S9234875A', 12345678, 0, 0),
 ('S9344895B', 97312965, 0, 67580571),
+('S9548323A', 12345678, 0, 0),
+('S9872635A', 12345678, 0, 0),
 ('S9876543C', 98311269, 0, 0);
 
 -- --------------------------------------------------------
@@ -821,7 +867,10 @@ CREATE TABLE IF NOT EXISTS `users_emergency` (
 INSERT INTO `users_emergency` (`nric`, `name`, `relationship`, `contact_no`, `office_no`) VALUES
 ('S0987654A', 'testing', 'testing', 12345678, 0),
 ('S1234567A', 'test', 'test', 12345678, 0),
+('S9234875A', 'sub', 'mother', 12345678, 0),
 ('S9344895B', 'Phua Kuee Hoy', 'Mother', 85732675, 0),
+('S9548323A', 'test', 'mother', 12345467, 0),
+('S9872635A', 'test', 'mother', 12345678, 0),
 ('S9876543C', 'Chow Yun Fat', 'Father', 90087654, 0);
 
 -- --------------------------------------------------------
@@ -847,7 +896,10 @@ CREATE TABLE IF NOT EXISTS `users_leave` (
 INSERT INTO `users_leave` (`nric`, `date_joined`, `leave`, `mc`, `used_leave`, `used_mc`) VALUES
 ('S0987654A', '2016-06-28', 63, 14, 0, 0),
 ('S1234567A', '2016-06-28', 63, 14, 0, 0),
-('S9344895B', '2016-06-18', 63, 14, 57, 0),
+('S9234875A', '2016-07-08', 63, 14, 0, 0),
+('S9344895B', '2016-06-18', 63, 14, 54, 0),
+('S9548323A', '2016-07-12', 63, 14, 0, 0),
+('S9872635A', '2016-07-04', 63, 14, 0, 0),
 ('S9876543C', '2016-06-20', 63, 14, 0, 0);
 
 -- --------------------------------------------------------
@@ -872,14 +924,14 @@ CREATE TABLE IF NOT EXISTS `users_leave_record` (
 --
 
 INSERT INTO `users_leave_record` (`leave_type`, `leave_name`, `nric`, `date`, `time_string`, `leave_duration`, `img`) VALUES
-('Unpaid', 'Leave', 'S1234567A', '2016-07-12', '0900 - 1800', 9, ''),
 ('Paid', 'Leave', 'S9344895B', '2016-06-27', '0900-1800', 9, ''),
 ('Paid', 'Leave', 'S9344895B', '2016-06-28', '0900-1800', 9, ''),
 ('Paid', 'Leave', 'S9344895B', '2016-06-29', '0900-1800', 9, ''),
 ('Paid', 'Leave', 'S9344895B', '2016-06-30', '0900-1800', 9, ''),
 ('Paid', 'Leave', 'S9344895B', '2016-07-01', '0900 - 1800', 9, ''),
 ('Paid', 'Leave', 'S9344895B', '2016-07-02', '0900 - 1800', 9, ''),
-('Paid', 'Timeoff', 'S9344895B', '2016-07-04', '0900-1200', 3, '');
+('Unpaid', 'Leave', 'S9872635A', '2016-07-12', '0900 - 1800', 9, ''),
+('Unpaid', 'Leave', 'S9876543C', '2016-07-14', '0900 - 1800', 9, '');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

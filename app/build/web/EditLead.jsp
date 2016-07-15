@@ -1,3 +1,4 @@
+<%@page import="com.vimbox.sitesurvey.SiteSurvey"%>
 <%@page import="com.vimbox.sales.Lead"%>
 <%@page import="com.vimbox.database.LeadDAO"%>
 <%@page import="java.util.HashMap"%>
@@ -5,7 +6,6 @@
 <%@page import="com.vimbox.customer.Customer"%>
 <%@include file="ValidateLogin.jsp"%>
 <%@include file="PopulateLeadFields.jsp"%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,6 +14,8 @@
         <title>Edit Lead</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
         <script src="JS/jquery.hotkeys.js"></script>
         <script src="JS/ModalFunctions.js"></script>
         <script src="JS/AddressSearch.js"></script>
@@ -23,42 +25,41 @@
             table.salesTable td {
                 padding: 5px;
             }
-            
+
             table.serviceTable{
                 width:100%;
                 height:50px;
             }
-            
+
             table.dynamicDomTable{
                 width:100px;
             }
-            
+
             .sales{
                 width:200px;
                 height:200px;
             }
-            
+
             table{
                 width:100%;
                 height:100%;
             }
-            
+
             img#loader {
                 display: none;
             }
         </style>
     </head>
-    <body onload="setup()">
-        <%
-            String lId = request.getParameter("lId");
+    <body onload="edit_leadSetup()">
+        <%            String lId = request.getParameter("lId");
             Lead lead = LeadDAO.getLeadById(Integer.parseInt(lId));
         %>
         <a href="MyLeads.jsp">Back</a><br>
-        <form method="POST" action="EditLeadController" autocomplete="on">
+        <form method="POST" action="EditLeadController" autocomplete="on" id="edit_lead_form">
             <table style="width:250px;">
                 <tr>
                     <td align="right"><b>Lead ID :</b></td>
-                    <td><%=lead.getId()%><input type="hidden" name="leadId" value="<%=lead.getId()%>"></td>
+                    <td><%=lead.getId()%><input type="hidden" id="leadId" name="leadId" value="<%=lead.getId()%>"></td>
                 </tr>
                 <tr>
                     <td align="right"><b>Status :</b></td>
@@ -69,15 +70,15 @@
                     <td>
                         <%
                             String src = lead.getSource();
-                            for(int i=0; i<sources.size(); i++){
+                            for (int i = 0; i < sources.size(); i++) {
                                 String source = sources.get(i);
-                                if(src.equals(source)){
+                                if (src.equals(source)) {
                                     out.println("<input type='radio' name='source' value='" + source + "' checked>" + source);
-                                }else{
+                                } else {
                                     out.println("<input type='radio' name='source' value='" + source + "'>" + source);
                                 }
                             }
-                        
+
                         %>
                     </td>
                 </tr>
@@ -85,8 +86,10 @@
             <fieldset>
                 <legend>Customer Information</legend>
                 <input type="text" id="customer_search" placeholder="Enter customer name">
-                <button onclick='customerSearch("ticket");return false;'>Search</button>
-                <button onclick="addNewCustomer();return false;">Add New</button>
+                <button onclick='customerSearch("ticket");
+                        return false;'>Search</button>
+                <button onclick="addNewCustomer();
+                        return false;">Add New</button>
 
                 <div id="customer_modal" class="modal">
                     <div class="modal-content">
@@ -108,8 +111,7 @@
                     </div>
                 </div>
                 <hr>
-                <%
-                    Customer customer = lead.getCustomer();
+                <%                    Customer customer = lead.getCustomer();
                 %>
                 <table>
                     <col width="100">
@@ -117,66 +119,82 @@
                         <td align="right"><b>Referred by :</b></td>
                         <td>
                             <select name="referral" id="referral" onchange="showfield(this.options[this.selectedIndex].value)">
-                            <%
-                                String ref = lead.getReferral();
-                                boolean selected = false;
-                                for(String referral:referrals){
-                                    if(referral.equals(ref)){
-                                        selected = true;
-                                        out.println("<option value='" + referral + "' selected>" + referral + "</option>");
-                                    }else{
-                                        out.println("<option value='" + referral + "'>" + referral + "</option>");
+                                <%
+                                    String ref = lead.getReferral();
+                                    boolean selected = false;
+                                    for (String referral : referrals) {
+                                        if (referral.equals(ref)) {
+                                            selected = true;
+                                            out.println("<option value='" + referral + "' selected>" + referral + "</option>");
+                                        } else {
+                                            out.println("<option value='" + referral + "'>" + referral + "</option>");
+                                        }
                                     }
-                                }
-                                if(!selected){
-                                    out.println("<option value='Others' selected>Others</option>");
-                                }else{
-                                    out.println("<option value='Others'>Others</option>");
-                                }
-                            %>
+                                    if (!selected) {
+                                        out.println("<option value='Others' selected>Others</option>");
+                                    } else {
+                                        out.println("<option value='Others'>Others</option>");
+                                    }
+                                %>
                             </select>
                             <div id='referralOthers' style='display:inline-block'>
-                            <%
-                                if(!selected){
-                                    out.println("Others: <input type='text' name='referralOthers' value='" + ref + "' />");
-                                }
-                            %>
+                                <%
+                                    if (!selected) {
+                                        out.println("Others: <input type='text' name='referralOthers' value='" + ref + "' />");
+                                    }
+                                %>
                             </div>
                         </td>
                     </tr>
                 </table>
-                <div id="customer_information_table" <%if(customer == null){out.println("style='display:none'");}else{out.println("style='display:block'");}%>>
-                    <input type="hidden" id="customer_id" name="customer_id" <%if(customer != null){out.println("value='" + customer.getCustomer_id() + "'");}%>>
+                <div id="customer_information_table" <%if (customer == null) {
+                        out.println("style='display:none'");
+                    } else {
+                        out.println("style='display:block'");
+                    }%>>
+                    <input type="hidden" id="customer_id" name="customer_id" <%if (customer != null) {
+                            out.println("value='" + customer.getCustomer_id() + "'");
+                        }%>>
                     <table>
                         <col width="100">
                         <tr>
                             <td align="right"><b>Salutation :</b></td>
                             <td>
-                                <label id="customer_salutation"><%if(customer != null){out.println(customer.getSalutation());}%></label>
+                                <label id="customer_salutation"><%if (customer != null) {
+                                        out.println(customer.getSalutation());
+                                    }%></label>
                             </td>
                         </tr>
                         <tr>
                             <td align="right"><b>First Name :</b></td>
                             <td>
-                                <label id="customer_first_name"><%if(customer != null){out.println(customer.getFirst_name());}%></label>
+                                <label id="customer_first_name"><%if (customer != null) {
+                                        out.println(customer.getFirst_name());
+                                    }%></label>
                             </td>
                         </tr>
                         <tr>
                             <td align="right"><b>Last Name :</b></td>
                             <td>
-                                <label id="customer_last_name"><%if(customer != null){out.println(customer.getLast_name());}%></label>
+                                <label id="customer_last_name"><%if (customer != null) {
+                                        out.println(customer.getLast_name());
+                                    }%></label>
                             </td>
                         </tr>
                         <tr>
                             <td align="right"><b>Contact :</b></td>
                             <td>
-                                <label id="customer_contact"><%if(customer != null){out.println(customer.getContact());}%></label>
+                                <label id="customer_contact"><%if (customer != null) {
+                                        out.println(customer.getContact());
+                                    }%></label>
                             </td>
                         </tr>
                         <tr>
                             <td align="right"><b>Email :</b></td>
                             <td>
-                                <label id="customer_email"><%if(customer != null){out.println(customer.getEmail());}%></label>
+                                <label id="customer_email"><%if (customer != null) {
+                                        out.println(customer.getEmail());
+                                    }%></label>
                             </td>
                         </tr>
                     </table>
@@ -192,17 +210,17 @@
                         <td>
                             <%
                                 String[] tom = lead.getTom().split("\\|");
-                                
+
                                 for (String type : moveTypes) {
                                     boolean present = false;
-                                    for(String tm:tom){
-                                        if(tm.equals(type)){
+                                    for (String tm : tom) {
+                                        if (tm.equals(type)) {
                                             present = true;
                                         }
                                     }
-                                    if(present){
+                                    if (present) {
                                         out.println("<input type='checkbox' name='tom' value='" + type + "' checked>" + type);
-                                    }else{
+                                    } else {
                                         out.println("<input type='checkbox' name='tom' value='" + type + "'>" + type);
                                     }
                                 }
@@ -217,40 +235,40 @@
                                     <table class="dynamicDomTable">
                                         <%
                                             String dom = lead.getDom();
-                                            if(dom.isEmpty()){
+                                            if (dom.isEmpty()) {
                                         %>
-                                            <tr>
-                                                <td><input type="date" name="dom"></td>
-                                                <td><input type="button" value="+" onClick="addDom('dynamicDom');"></td>
-                                            </tr>
+                                        <tr>
+                                            <td><input type="date" name="dom"></td>
+                                            <td><input type="button" value="+" onClick="addDom('dynamicDom');"></td>
+                                        </tr>
                                         <%
-                                            }else{
+                                            } else {
                                                 int counter = 2;
                                                 String[] dates = dom.split("\\|");
-                                                for(int i=0; i<dates.length; i++){
+                                                for (int i = 0; i < dates.length; i++) {
                                                     String date = dates[i];
-                                                    if(i==0){
+                                                    if (i == 0) {
                                                         out.println("<tr>");
                                                         out.println("<td><input type='date' name'dom' value='" + date + "'></td>");
                                                         out.println("<td><input type='button' value='+' onClick=\"addDom('dynamicDom');\"></td>");
                                                         out.println("</tr></table></div>");
-                                                    }else{
+                                                    } else {
                                                         out.println("<div id='" + counter + "'>");
                                                         out.println("<table class='dynamicDomTable'>");
                                                         out.println("<tr>");
                                                         out.println("<td><input type='date' name'dom' value='" + date + "'></td>");
-                                                        out.println("<td><input type='button' value='x' onClick='removeInput("+counter+");'></td>");
+                                                        out.println("<td><input type='button' value='x' onClick='removeInput(" + counter + ");'></td>");
                                                         out.println("</tr></table></div>");
                                                         counter++;
                                                     }
                                                 }
                                             }
                                         %>
-                                            
+
                                     </table>
                                 </div>
                             </div>
-                            
+
                         </td>
                     </tr>
                 </table>
@@ -264,12 +282,12 @@
                         <%
                             ArrayList<String[]> addressFrom = lead.getAddressFrom();
                             int counter = 0;
-                            for(String[] addFrom : addressFrom){
+                            for (String[] addFrom : addressFrom) {
                                 String[] address = addFrom[0].split("_");
                                 String storeys = addFrom[1];
                                 String pushingDistance = addFrom[2];
                                 String stringDiv = "";
-                                if(address.length > 1){
+                                if (address.length > 1) {
                                     stringDiv = "<div class='address-box' id='from" + counter + "'><span class='close' onClick=\"removeAddress('from" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
                                     stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressfrom' size='30' value='" + address[0] + "'>");
                                     stringDiv += " #<input type='text' name='addressfrom' size='2' value='" + address[1] + "'>-<input type='text' name='addressfrom' size='3' value='" + address[2] + "'>";
@@ -293,12 +311,12 @@
                     <div id="to">
                         <%
                             ArrayList<String[]> addressTo = lead.getAddressTo();
-                            for(String[] addTo : addressTo){
+                            for (String[] addTo : addressTo) {
                                 String[] address = addTo[0].split("_");
                                 String storeys = addTo[1];
                                 String pushingDistance = addTo[2];
                                 String stringDiv = "";
-                                if(address.length > 1){
+                                if (address.length > 1) {
                                     stringDiv = "<div class='address-box' id='from" + counter + "'><span class='close' onClick=\"removeAddress('from" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
                                     stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressto' size='30' value='" + address[0] + "'>");
                                     stringDiv += " #<input type='text' name='addressto' size='2' value='" + address[1] + "'>-<input type='text' name='addressto' size='3' value='" + address[2] + "'>";
@@ -323,23 +341,23 @@
                         <td align="right"><b>Lead Type :</b></td>
                         <td>
                             <div id="leadInfo">
-                            <%
-                                String[] lts = lead.getType().split("\\|");
-                                for(String type:types){
-                                    boolean check = false;
-                                    for(String lt:lts){
-                                        if(type.equals(lt)){
-                                            check = true;
-                                            break;
+                                <%
+                                    String[] lts = lead.getType().split("\\|");
+                                    for (String type : types) {
+                                        boolean check = false;
+                                        for (String lt : lts) {
+                                            if (type.equals(lt)) {
+                                                check = true;
+                                                break;
+                                            }
+                                        }
+                                        if (check) {
+                                            out.println("<input type='checkbox' name='leadType' value='" + type + "' checked>" + type);
+                                        } else {
+                                            out.println("<input type='checkbox' name='leadType' value='" + type + "'>" + type);
                                         }
                                     }
-                                    if(check){
-                                        out.println("<input type='checkbox' name='leadType' value='" + type + "' checked>" + type);
-                                    }else{
-                                        out.println("<input type='checkbox' name='leadType' value='" + type + "'>" + type);
-                                    }
-                                }
-                            %>
+                                %>
                             </div>
                         </td>
                     </tr>
@@ -359,6 +377,112 @@
                         </table>
                     </fieldset>
                 </div>
+                                
+                <div id="SiteSurvey" style="display:none">
+                    <br>
+                    <fieldset>
+                        <b><u>Site Survey Details</u></b><br><br>
+                        <table>
+                            <col width="100">
+                            <tr>
+                                <td align="right"><b>Survey Date :</b></td>
+                                <td>
+                                    <input type="date" id="sitesurvey_date">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right"><b>Surveyor :</b></td>
+                                <td>
+                                    <input type="text" id="employee_search" placeholder="Enter site surveyor name">
+                                    <button onclick="viewSchedule();
+                                            return false;">View Schedule</button>
+                                </td>
+                            </tr>
+                        </table>
+                        <div id="schedule_modal" class="modal">
+                            <div class="survey-modal-content">
+                                <div class="modal-body">
+                                    <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                                    <div id="schedule_content"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="survey">
+                            <%
+                                ArrayList<SiteSurvey> surveys = lead.getSiteSurveys();
+                                String ss = "";
+                                String sId = "";
+                                String sName = "";
+                                String sRem = "";
+                                ArrayList<String> timeslots = new ArrayList<String>();
+                                ArrayList<String> addresses = new ArrayList<String>();
+                                for(int i=0; i<surveys.size(); i++){
+                                    SiteSurvey survey = surveys.get(i);
+                                    String s = survey.getDate();
+                                    if(i == 0){
+                                        ss = s;
+                                        sId = survey.getSiteSurveyor().getNric();
+                                        sName = survey.getSiteSurveyor().toString();
+                                        sRem = survey.getRemarks();
+                                    }
+                                    
+                                    if(!s.equals(ss)){
+                                        out.println("<div id='" + ss + "'><span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
+                                        out.println("<hr><table><col width='100'>");
+                                        out.println("<tr><td align='right'><b>Date :</b></td><td><input type='hidden' name='siteSurvey_date' value='" + ss + "'>" + ss + "</td></tr>");
+                                        out.println("<tr><td align='right'><b>Timeslot :</b></td><td><table>");
+                                        for (int j = 0; j < timeslots.size(); j++) {
+                                            out.println("<tr><td><input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) + "</td></tr>");
+                                        }
+                                        out.println("</table></td></tr>");
+                                        out.println("<tr><td align='right'><b>Address :</b></td><td><table>");
+                                        for (int j = 0; j < addresses.size(); j++) {
+                                            out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "</td></tr>");
+                                        }
+                                        out.println("</table></td></tr>");
+                                        out.println("<tr><td align='right'><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName + "</td></tr>");
+                                        out.println("<tr><td align='right'><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem + "</td></tr>");
+                                        out.println("</table></div>");
+                                        
+                                        ss = s;
+                                        sId = survey.getSiteSurveyor().getNric();
+                                        sName = survey.getSiteSurveyor().toString();
+                                        sRem = survey.getRemarks();
+                                        timeslots = new ArrayList<String>();
+                                        addresses = new ArrayList<String>();
+                                    }
+                                    
+                                    if(!timeslots.contains(survey.getTimeSlot())){
+                                        timeslots.add(survey.getTimeSlot());
+                                    }
+                                    if(!addresses.contains(survey.getAddress())){
+                                        addresses.add(survey.getAddress());
+                                    }
+                                    if(i == surveys.size()-1){
+                                        out.println("<div id='" + ss + "'><span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
+                                        out.println("<hr><table><col width='100'>");
+                                        out.println("<tr><td align='right'><b>Date :</b></td><td><input type='hidden' name='siteSurvey_date' value='" + ss + "'>" + ss + "</td></tr>");
+                                        out.println("<tr><td align='right'><b>Timeslot :</b></td><td><table>");
+                                        for (int j = 0; j < timeslots.size(); j++) {
+                                            out.println("<tr><td><input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) + "</td></tr>");
+                                        }
+                                        out.println("</table></td></tr>");
+                                        out.println("<tr><td align='right'><b>Address :</b></td><td><table>");
+                                        for (int j = 0; j < addresses.size(); j++) {
+                                            out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "</td></tr>");
+                                        }
+                                        out.println("</table></td></tr>");
+                                        out.println("<tr><td align='right'><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName + "</td></tr>");
+                                        out.println("<tr><td align='right'><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem + "</td></tr>");
+                                        out.println("</table></div>");
+                                    }
+                                }
+                            %>
+                        </div>
+                    </fieldset>
+                </div>
+                                
                 <div id="Sales" style="display:none">
                     <br>
                     <fieldset>
@@ -379,7 +503,8 @@
                                                         <td align="right">Quantity :</td>
                                                         <td>
                                                             <input type="number" min="0" id="customerBoxUnit">
-                                                            <button onclick="addCustomerBox();return false;">Add box</button>
+                                                            <button onclick="addCustomerBox();
+                                                                    return false;">Add box</button>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -432,7 +557,8 @@
                                                     <tr>
                                                         <td></td>
                                                         <td>
-                                                            <button onclick="addItem();return false;">Add item</button>
+                                                            <button onclick="addItem();
+                                                                    return false;">Add item</button>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -484,7 +610,8 @@
                                                     <tr>
                                                         <td></td>
                                                         <td>
-                                                            <button onclick="addSpecialItem();return false;">Add special</button>
+                                                            <button onclick="addSpecialItem();
+                                                                    return false;">Add special</button>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -502,7 +629,8 @@
                                                         <td align="right">Quantity :</td>
                                                         <td>
                                                             <input type="number" min="0" id="vimboxBoxUnit">
-                                                            <button onclick="addVimboxBox();return false;">Add box</button>
+                                                            <button onclick="addVimboxBox();
+                                                                    return false;">Add box</button>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -534,7 +662,8 @@
                                                     <tr>
                                                         <td></td>
                                                         <td>
-                                                            <button onclick="addVimboxMaterial();return false;">Add material</button>
+                                                            <button onclick="addVimboxMaterial();
+                                                                    return false;">Add material</button>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -555,7 +684,7 @@
                                                         <div class="service-body">
                                                             <span class="close" onclick="closeModal('serviceModal')">×</span>
                                                             <div id="serviceContent">
-                                                                
+
                                                                 <table width="100%" border="1" style="table-layout: fixed;" id="serviceTable">
                                                                     <%
                                                                         ArrayList<String[]> services = lead.getServices();
@@ -571,11 +700,11 @@
                                                                                     out.println("<td bgcolor='#6698FF' align='center'>" + serviceChargeArray[0] + "</br>");
                                                                                     String sid = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
                                                                                     out.println("<input type='hidden' value='" + sid + "'>");
-                                                                                    if(serviceTable[0][j].equals("Manpower")){
+                                                                                    if (serviceTable[0][j].equals("Manpower")) {
                                                                                         String mp = "";
                                                                                         String mr = "";
-                                                                                        for(String[] svc : services){
-                                                                                            if(svc[0].replaceAll(" ","_").equals(sid)){
+                                                                                        for (String[] svc : services) {
+                                                                                            if (svc[0].replaceAll(" ", "_").equals(sid)) {
                                                                                                 mp = svc[3];
                                                                                                 mr = svc[4];
                                                                                                 break;
@@ -586,8 +715,9 @@
                                                                                     }
                                                                                     try {
                                                                                         out.println("<input type='hidden' name='svcTableCell' value='{" + serviceTable[0][j] + "|" + serviceChargeArray[0] + "," + serviceChargeArray[1] + "}'>");
-                                                                                    } catch (IndexOutOfBoundsException e) {}
-                                                                                    
+                                                                                    } catch (IndexOutOfBoundsException e) {
+                                                                                    }
+
                                                                                     out.println("</td>");
                                                                                 }
                                                                             }
@@ -613,7 +743,8 @@
                                                             <input type="text" size="40" id="customerComment" placeholder="Enter customer comment">
                                                         </td>
                                                         <td>
-                                                            <button onclick="addCustomerComment();return false;">Add Comment</button>
+                                                            <button onclick="addCustomerComment();
+                                                                    return false;">Add Comment</button>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -628,7 +759,8 @@
                                                             <input type="text" size="40" id="customerRemark" placeholder="Enter remark for customer">
                                                         </td>
                                                         <td>
-                                                            <button onclick="addCustomerRemark();return false;">Add Remark</button>
+                                                            <button onclick="addCustomerRemark();
+                                                                    return false;">Add Remark</button>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -648,262 +780,99 @@
                                                         <th style="width:10%">Quantity</th>
                                                         <th style="width:10%">Units</th>
                                                         <th style="width:20%"><div id="totalUnits"></div></th>
-                                                    </tr> 
-                                                    <tr>
-                                                        <td colspan="6">
+                                        </tr> 
+                                        <tr>
+                                            <td colspan="6">
+                                                <table border="1">
+                                                    <tr height="50%">
+                                                        <td>
                                                             <table border="1">
-                                                                <tr height="50%">
-                                                                    <td>
-                                                                        <table border="1">
-                                                                            <tr style="background-color:DarkOrange" height="10%">
-                                                                                <td align="center"><b><u>Customer Item List</u></b></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div style="overflow:auto;height:100%;">
-                                                                                        <table id="customerItemsTable" valign="top" style="width:100%;">
-                                                                                            <col width="20%">
-                                                                                            <col width="40%">
-                                                                                            <col width="10%">
-                                                                                            <col width="10%">
-                                                                                            <col width="10%">
-                                                                                            <col width="20%">
-                                                                                            <tbody>
-                                                                                                <%
-                                                                                                    ArrayList<Item> customerItems = lead.getCustomerItems();
-                                                                                                    for(Item item:customerItems){
-                                                                                                        String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='customerItemName' value='" + item.getName() + "'></td>";
-                                                                                                        tr += "<td>" + item.getRemark() + "<input type='hidden' name='customerItemRemark' value='" + item.getRemark() + "'></td>";
-                                                                                                        if(item.getCharges() > 0){
-                                                                                                            tr += "<td align='center'>" + item.getCharges() + "<input type='hidden' name='customerItemCharge' value='" + item.getCharges() + "'></td>";
-                                                                                                        }else{
-                                                                                                            tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='customerItemCharge' value=''></td>";
-                                                                                                        }
-                                                                                                        
-                                                                                                        tr += "<td align='center'>" + item.getQty() + "<input type='hidden' name='customerItemQty' value='" + item.getQty() + "'></td>";
-                                                                                                        tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='customerItemUnit' value='" + item.getUnits() + "'></td>";
-                                                                                                        if(item.getName().equals("Boxes")){
-                                                                                                            tr += "<td align='right'><input type='button' value='x' onclick='deleteBox(this)'/></td></tr>";
-                                                                                                        }else{
-                                                                                                            tr += "<td align='right'><input type='button' value='x' onclick='deleteItem(this)'/></td></tr>";
-                                                                                                        }
-                                                                                                        out.println(tr);
-                                                                                                    }
-                                                                                                %>
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <table border="1">
-                                                                            <tr style="background-color:CornflowerBlue" height="10%">
-                                                                                <td align="center"><b><u>Vimbox Item List</u></b></td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div style="overflow:auto;height:100%;">
-                                                                                        <table id="vimboxItemsTable" valign="top" style="width:100%;">
-                                                                                            <col width="20%">
-                                                                                            <col width="40%">
-                                                                                            <col width="10%">
-                                                                                            <col width="10%">
-                                                                                            <col width="10%">
-                                                                                            <col width="20%">
-                                                                                            <tbody>
-                                                                                            <%
-                                                                                                ArrayList<Item> vimboxItems = lead.getVimboxItems();
-                                                                                                for(Item item:vimboxItems){
-                                                                                                    String tr = "<tr><td>Boxes<input type='hidden' name='vimboxItemName' value='Boxes'></td>";
-                                                                                                    tr += "<td>&nbsp;<input type='hidden' name='vimboxItemRemark' value=''></td>";
-                                                                                                    tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='vimboxItemCharge' value=''></td>";
-                                                                                                    tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='vimboxItemQty' value='" + item.getUnits() + "'></td>";
-                                                                                                    tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='vimboxItemUnit' value='" + item.getUnits() + "'></td>";
-                                                                                                    tr += "<td align='right'><input type='button' value='x' onclick='deleteBox(this)'/></td></tr>";
-                                                                                                    out.println(tr);
-                                                                                                }
-                                                                                                
-                                                                                                ArrayList<Item> materials = lead.getMaterials();
-                                                                                                for(Item item:materials){
-                                                                                                    String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='vimboxMaterialName' value='" + item.getName() + "'></td>";
-                                                                                                    tr += "<td>&nbsp;</td>";
-                                                                                                    tr += "<td align='center'>" + item.getCharges() + "<input type='hidden' name='vimboxMaterialCharge' value='" + item.getCharges() + "'></td>";
-                                                                                                    tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='vimboxMaterialQty' value='" + item.getUnits() + "'></td>";
-                                                                                                    tr += "<td align='center'>&nbsp;</td>";
-                                                                                                    tr += "<td align='right'><input type='button' value='x' onclick='deleteMaterial(this)'/></td></tr>";
-                                                                                                    out.println(tr);
-                                                                                                }
-                                                                                            %>
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td> 
-                                        </tr>
-                                        <tr style="height:40%">
-                                            <td>
-                                                <table>
-                                                    <tr>
-                                                        <td style="width:50%">
-                                                            <table border="1">
-                                                                <tr style="height:10%;background-color:DarkCyan;">
-                                                                    <th>Services</th>
+                                                                <tr style="background-color:DarkOrange" height="10%">
+                                                                    <td align="center"><b><u>Customer Item List</u></b></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>
                                                                         <div style="overflow:auto;height:100%;">
-                                                                            <table class="servicesTable" id="servicesTable" valign="top" width="100%">
+                                                                            <table id="customerItemsTable" valign="top" style="width:100%;">
+                                                                                <col width="20%">
+                                                                                <col width="40%">
+                                                                                <col width="10%">
+                                                                                <col width="10%">
+                                                                                <col width="10%">
+                                                                                <col width="20%">
                                                                                 <tbody>
-                                                                                <%
-                                                                                    for(String[] service:services){
-                                                                                        String[] svc = service[0].split("_");
-                                                                                        String tr = "<tr id='" + service[0] + "'><td>";
-                                                                                        tr += "<table class='serviceTable'>";
-                                                                                        String secSvc = "";
-                                                                                        for(int i=1; i<svc.length; i++){
-                                                                                            secSvc += (svc[i]);
-                                                                                            if(i < svc.length-1){
-                                                                                                secSvc += " ";
+                                                                                    <%
+                                                                                        ArrayList<Item> customerItems = lead.getCustomerItems();
+                                                                                        for (Item item : customerItems) {
+                                                                                            String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='customerItemName' value='" + item.getName() + "'></td>";
+                                                                                            tr += "<td>" + item.getRemark() + "<input type='hidden' name='customerItemRemark' value='" + item.getRemark() + "'></td>";
+                                                                                            if (item.getCharges() > 0) {
+                                                                                                tr += "<td align='center'>" + item.getCharges() + "<input type='hidden' name='customerItemCharge' value='" + item.getCharges() + "'></td>";
+                                                                                            } else {
+                                                                                                tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='customerItemCharge' value=''></td>";
                                                                                             }
+
+                                                                                            tr += "<td align='center'>" + item.getQty() + "<input type='hidden' name='customerItemQty' value='" + item.getQty() + "'></td>";
+                                                                                            tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='customerItemUnit' value='" + item.getUnits() + "'></td>";
+                                                                                            if (item.getName().equals("Boxes")) {
+                                                                                                tr += "<td align='right'><input type='button' value='x' onclick='deleteBox(this)'/></td></tr>";
+                                                                                            } else {
+                                                                                                tr += "<td align='right'><input type='button' value='x' onclick='deleteItem(this)'/></td></tr>";
+                                                                                            }
+                                                                                            out.println(tr);
                                                                                         }
-                                                                                        
-                                                                                        tr += "<tr height='10%'><td>" + svc[0] + " - " + secSvc + "<input type='hidden' name='serviceName' value='" + service[0] + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='serviceCharge' value='" + service[1] + "'><input type='hidden' value='" + service[2] + "'></td></tr>";
-                                                                                        tr += "</table></td></tr>";
-                                                                                        out.println(tr);
-                                                                                    }
-                                                                                %>
+                                                                                    %>
                                                                                 </tbody>
                                                                             </table>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
-                                                                <%
-                                                                    HashMap<String,String> others = lead.getOtherCharges();
-                                                                %>
-                                                                <tr height="5%">
-                                                                    <td>
-                                                                        <table width="100%">
-                                                                            <tr>
-                                                                                <td align="left">Storey Charges :</td>
-                                                                                <td align="right">$ <input type="number" step="0.01" min="0" id="storeyCharge" name="storeyCharge" value="<%=others.get("storeyCharge")%>"></td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr height="5%">
-                                                                    <td>
-                                                                        <table width="100%">
-                                                                            <tr>
-                                                                                <td align="left">Pushing Charges :</td>
-                                                                                <td align="right">$ <input type="number" step="0.01" min="0" id="pushCharge" name="pushCharge" value="<%=others.get("pushCharge")%>"></td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr height="5%">
-                                                                    <td>
-                                                                        <table width="100%">
-                                                                            <tr>
-                                                                                <td align="left">Detour Charges :</td>
-                                                                                <td align="right">$ <input type="number" step="0.01" min="0" id="detourCharge" name="detourCharge" value="<%=others.get("detourCharge")%>"></td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr height="5%">
-                                                                    <td>
-                                                                        <table width="100%">
-                                                                            <tr>
-                                                                                <td align="left">Material Charges :</td>
-                                                                                <td align="right">$ <input type="number" step="0.01" min="0" id="materialCharge" name="materialCharge" value="<%=others.get("materialCharge")%>"></td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr height="5%">
-                                                                    <td>
-                                                                        <table width="100%">
-                                                                            <tr>
-                                                                                <td align="left">Additional Markup :</td>
-                                                                                <td align="right">$ <input type="number" step="0.01" min="0" id="markup" name="markup" value="<%=others.get("markup")%>"></td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr height="5%">
-                                                                    <td>
-                                                                        <table width="100%">
-                                                                            <tr>
-                                                                                <td align="left">Discount :</td>
-                                                                                <td align="right">$ <input type="number" step="0.01" min="0" id="discount" name="discount" value="<%=others.get("discount")%>"></td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
                                                             </table>
                                                         </td>
+                                                    </tr>
+                                                    <tr>
                                                         <td>
-                                                            <table>
-                                                                <tr style="height:50%">
-                                                                    <td>
-                                                                        <table border="1">
-                                                                            <tr style="height:10%;background-color:Plum;">
-                                                                                <th>Customer Comments</th>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div style="overflow:auto;height:100%;">
-                                                                                        <table id="commentsTable" valign="top">
-                                                                                            <tbody>
-                                                                                            <%
-                                                                                                ArrayList<String> comments = lead.getComments();
-                                                                                                for(String comment:comments){
-                                                                                                    out.println("<tr><td>" + comment + "<input type='hidden' name='comments' value='" + comment + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>");
-                                                                                                }
-                                                                                            %>    
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
+                                                            <table border="1">
+                                                                <tr style="background-color:CornflowerBlue" height="10%">
+                                                                    <td align="center"><b><u>Vimbox Item List</u></b></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>
-                                                                        <table border="1">
-                                                                            <tr style="height:10%;background-color:Plum;">
-                                                                                <th>Customer Remarks</th>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div style="overflow:auto;height:100%;">
-                                                                                        <table id="remarksTable" valign="top">
-                                                                                            <tbody>
-                                                                                            <%
-                                                                                                ArrayList<String> remarks = lead.getRemarks();
-                                                                                                for(String remark:remarks){
-                                                                                                    out.println("<tr><td>" + remark + "<input type='hidden' name='remarks' value='" + remark + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>");
-                                                                                                }
-                                                                                            %>  
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
+                                                                        <div style="overflow:auto;height:100%;">
+                                                                            <table id="vimboxItemsTable" valign="top" style="width:100%;">
+                                                                                <col width="20%">
+                                                                                <col width="40%">
+                                                                                <col width="10%">
+                                                                                <col width="10%">
+                                                                                <col width="10%">
+                                                                                <col width="20%">
+                                                                                <tbody>
+                                                                                    <%
+                                                                                        ArrayList<Item> vimboxItems = lead.getVimboxItems();
+                                                                                        for (Item item : vimboxItems) {
+                                                                                            String tr = "<tr><td>Boxes<input type='hidden' name='vimboxItemName' value='Boxes'></td>";
+                                                                                            tr += "<td>&nbsp;<input type='hidden' name='vimboxItemRemark' value=''></td>";
+                                                                                            tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='vimboxItemCharge' value=''></td>";
+                                                                                            tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='vimboxItemQty' value='" + item.getUnits() + "'></td>";
+                                                                                            tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='vimboxItemUnit' value='" + item.getUnits() + "'></td>";
+                                                                                            tr += "<td align='right'><input type='button' value='x' onclick='deleteBox(this)'/></td></tr>";
+                                                                                            out.println(tr);
+                                                                                        }
+
+                                                                                        ArrayList<Item> materials = lead.getMaterials();
+                                                                                        for (Item item : materials) {
+                                                                                            String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='vimboxMaterialName' value='" + item.getName() + "'></td>";
+                                                                                            tr += "<td>&nbsp;</td>";
+                                                                                            tr += "<td align='center'>" + item.getCharges() + "<input type='hidden' name='vimboxMaterialCharge' value='" + item.getCharges() + "'></td>";
+                                                                                            tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='vimboxMaterialQty' value='" + item.getUnits() + "'></td>";
+                                                                                            tr += "<td align='center'>&nbsp;</td>";
+                                                                                            tr += "<td align='right'><input type='button' value='x' onclick='deleteMaterial(this)'/></td></tr>";
+                                                                                            out.println(tr);
+                                                                                        }
+                                                                                    %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -912,12 +881,162 @@
                                                 </table>
                                             </td>
                                         </tr>
-                                        <tr style="height:10%">
-                                            <td>
+                                    </table>
+                                </td> 
+                            </tr>
+                            <tr style="height:40%">
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td style="width:50%">
                                                 <table border="1">
+                                                    <tr style="height:10%;background-color:DarkCyan;">
+                                                        <th>Services</th>
+                                                    </tr>
                                                     <tr>
-                                                        <td align="right" style="width:80%">Total :</td>
-                                                        <td align="center">$ <input type="number" step="0.01" min="0" name="totalPrice" id="totalPrice" value="0.00"></td>
+                                                        <td>
+                                                            <div style="overflow:auto;height:100%;">
+                                                                <table class="servicesTable" id="servicesTable" valign="top" width="100%">
+                                                                    <tbody>
+                                                                        <%
+                                                                            for (String[] service : services) {
+                                                                                String[] svc = service[0].split("_");
+                                                                                String tr = "<tr id='" + service[0] + "'><td>";
+                                                                                tr += "<table class='serviceTable'>";
+                                                                                String secSvc = "";
+                                                                                for (int i = 1; i < svc.length; i++) {
+                                                                                    secSvc += (svc[i]);
+                                                                                    if (i < svc.length - 1) {
+                                                                                        secSvc += " ";
+                                                                                    }
+                                                                                }
+
+                                                                                tr += "<tr height='10%'><td>" + svc[0] + " - " + secSvc + "<input type='hidden' name='serviceName' value='" + service[0] + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='serviceCharge' value='" + service[1] + "'><input type='hidden' value='" + service[2] + "'></td></tr>";
+                                                                                tr += "</table></td></tr>";
+                                                                                out.println(tr);
+                                                                            }
+                                                                        %>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <%
+                                                        HashMap<String, String> others = lead.getOtherCharges();
+                                                    %>
+                                                    <tr height="5%">
+                                                        <td>
+                                                            <table width="100%">
+                                                                <tr>
+                                                                    <td align="left">Storey Charges :</td>
+                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="storeyCharge" name="storeyCharge" value="<%=others.get("storeyCharge")%>"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr height="5%">
+                                                        <td>
+                                                            <table width="100%">
+                                                                <tr>
+                                                                    <td align="left">Pushing Charges :</td>
+                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="pushCharge" name="pushCharge" value="<%=others.get("pushCharge")%>"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr height="5%">
+                                                        <td>
+                                                            <table width="100%">
+                                                                <tr>
+                                                                    <td align="left">Detour Charges :</td>
+                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="detourCharge" name="detourCharge" value="<%=others.get("detourCharge")%>"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr height="5%">
+                                                        <td>
+                                                            <table width="100%">
+                                                                <tr>
+                                                                    <td align="left">Material Charges :</td>
+                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="materialCharge" name="materialCharge" value="<%=others.get("materialCharge")%>"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr height="5%">
+                                                        <td>
+                                                            <table width="100%">
+                                                                <tr>
+                                                                    <td align="left">Additional Markup :</td>
+                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="markup" name="markup" value="<%=others.get("markup")%>"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr height="5%">
+                                                        <td>
+                                                            <table width="100%">
+                                                                <tr>
+                                                                    <td align="left">Discount :</td>
+                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="discount" name="discount" value="<%=others.get("discount")%>"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table>
+                                                    <tr style="height:50%">
+                                                        <td>
+                                                            <table border="1">
+                                                                <tr style="height:10%;background-color:Plum;">
+                                                                    <th>Customer Comments</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="overflow:auto;height:100%;">
+                                                                            <table id="commentsTable" valign="top">
+                                                                                <tbody>
+                                                                                    <%
+                                                                                        ArrayList<String> comments = lead.getComments();
+                                                                                        for (String comment : comments) {
+                                                                                            out.println("<tr><td>" + comment + "<input type='hidden' name='comments' value='" + comment + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>");
+                                                                                        }
+                                                                                    %>    
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table border="1">
+                                                                <tr style="height:10%;background-color:Plum;">
+                                                                    <th>Customer Remarks</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="overflow:auto;height:100%;">
+                                                                            <table id="remarksTable" valign="top">
+                                                                                <tbody>
+                                                                                    <%
+                                                                                        ArrayList<String> remarks = lead.getRemarks();
+                                                                                        for (String remark : remarks) {
+                                                                                            out.println("<tr><td>" + remark + "<input type='hidden' name='remarks' value='" + remark + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>");
+                                                                                        }
+                                                                                    %>  
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
                                                     </tr>
                                                 </table>
                                             </td>
@@ -925,6 +1044,19 @@
                                     </table>
                                 </td>
                             </tr>
+                            <tr style="height:10%">
+                                <td>
+                                    <table border="1">
+                                        <tr>
+                                            <td align="right" style="width:80%">Total :</td>
+                                            <td align="center">$ <input type="number" step="0.01" min="0" name="totalPrice" id="totalPrice" value="0.00"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        </td>
+                        </tr>
                         </table>
                     </fieldset>
                 </div>
@@ -937,7 +1069,8 @@
                         <input type="submit" value="Save">
                         <input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">
                         <button onclick="return checkEmail();">Email Quotation</button>
-                        <button onclick="cancelLead(<%=lead.getId()%>);return false;">Reject</button>
+                        <button onclick="cancelLead(<%=lead.getId()%>);
+                                return false;">Reject</button>
                         <label><img id="loader" src="http://dev.cloudcell.co.uk/bin/loading.gif"/></label>
                     </td>
                 </tr>
@@ -984,811 +1117,130 @@
                             <td><input type="text" id="manpowerReason"></td>
                         </tr>
                     </table>
-                    <button align="center" onclick="submitManpower();return false;">Okay</button>
+                    <button align="center" onclick="submitManpower();
+                            return false;">Okay</button>
                 </div>
             </div>
         </div>
-        
-        <div id="resolveModal" class="modal">
+
+        <div id="cancelLeadModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
                 <div class="modal-body">
-                    <span class="close" onclick="closeModal('resolveModal')">×</span>
+                    <span class="close" onclick="closeModal('cancelLeadModal')">×</span>
                     <h3>Lead Cancellation</h3>
-                    <form method="post" action="CancelLeadController" id="cancelForm">
-                        <table>
-                            <tr>
-                                <td>Lead ID :</td>
-                                <td><label id="leadIdLbl"></label><input type="hidden" name="lId" id="lId" /></td>
-                            </tr>
-                            <tr>
-                                <td>Reason :</td>
-                                <td><textarea required name="reason" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea></td>
-                            </tr>  
-                        </table>
-                        <input type="submit" value="Reject Lead">
-                    </form>
+                    <table>
+                        <tr>
+                            <td>Lead ID :</td>
+                            <td><label id="leadIdLbl"></label><input type="hidden" name="lId" id="lId" /></td>
+                        </tr>
+                        <tr>
+                            <td>Reason :</td>
+                            <td><textarea id="reason" name="reason" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea></td>
+                        </tr>  
+                    </table>
+                    <button onclick="confirmCancel()">Reject Lead</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="lead_error_modal" class="modal">
+            <!-- Modal content -->
+            <div class="message-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('lead_error_modal')">×</span>
+                    <div id="lead_error_status"></div>
+                    <hr>
+                    <div id="lead_error_message"></div>
                 </div>
             </div>
         </div>
         <script>
-$('#leadForm').submit(function() {
-    $('#loader').show(); // show animation
-    return true; // allow regular form submission
-});
+            $('#edit_lead_form').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    var modal = document.getElementById("lead_error_modal");
+                    var status = document.getElementById("lead_error_status");
+                    var message = document.getElementById("lead_error_message");
+                    status.innerHTML = data.status;
+                    message.innerHTML = data.message;
+                    modal.style.display = "block";
 
-function showfield(name){
-  if(name=='Others'){
-      document.getElementById('referralOthers').innerHTML='Others: <input type="text" name="referralOthers" />';
-  } else {
-      document.getElementById('referralOthers').innerHTML='';
-  }
-}
-
-$('#cancelForm').submit(function() {
-    var answer = confirm("Reject lead?")
-    if (answer){
-       return true;
-    }
-    else{
-        return false;
-    }
-});
-
-
-jQuery(document).bind('keydown', 'ctrl+shift', function(e) {  
-    var tableClassName = $(document.activeElement.parentNode.parentNode.parentNode.parentNode).attr('class');
-    switch(tableClassName){
-        case "customerBoxTable":
-            addCustomerBox();
-            break;
-        case "customerItemTable":
-            addItem();
-            break;
-        case "customerSpecialItemTable":
-            addSpecialItem();
-            break;
-        case "vimboxBoxTable":
-            addVimboxBox();
-            break;
-        case "vimboxMaterialTable":
-            addVimboxMaterial();
-            break;
-        case "customerCommentTable":
-            addCustomerComment();
-            break;
-        case "customerRemarkTable":
-            addCustomerRemark();
-            break;
-        default:
-    }
-    return false;
-});
-
-$(document).bind('DOMNodeInserted', function(e) {
-    var element = e.target;
-    var parent = element.parentNode.parentNode;
-    if($(parent).is(".servicesTable")) {
-        // Initialize the starting amount using the formula given //
-        update_service(element);
-    }           
-});
-
-//-------------------------LeadType Functions---------------------------//
-function checkLeadInformation() {
-    var el = document.getElementById('leadInfo');
-    var tops = el.getElementsByTagName('input');
-    for (var i = 0, len = tops.length; i < len; i++) {
-        if (tops[i].type === 'checkbox') {
-            tops[i].onclick = showDiv;
-            if(tops[i].checked){
-                tops[i].onclick();
-            }
-        }
-    }
-}
-
-function showDiv(e) {
-    var divId = this.value;
-    var div = document.getElementById(divId);
-    if (this.checked) {
-        div.style.display = "block";
-        if (divId === "sales") {
-            $('#' + divId + "Table").scrollView();
-        } else {
-            $('#' + divId).scrollView();
-        }
-    } else {
-        div.style.display = "none";
-    }
-}
-
-$.fn.scrollView = function () {
-    return this.each(function () {
-        $('html, body').animate({
-            scrollTop: $(this).offset().top
-        }, 1000);
-    });
-}
-
-//--------------------------------End-----------------------------------//
-
-$(document).ready(function () {
-    $(window).keydown(function (event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            return false;
-        }
-    });
-});
-
-function checkEmail() {
-    var email = document.getElementById("email").value;
-    if (email.length === 0 || !email.trim()) {
-        alert("Please input an email address");
-        return false;
-    } else {
-        return true;
-    }
-}
-
-var domCounter = 2;
-function addDom(divName){
-    var newdiv = document.createElement('div');
-    var stringDiv = "";
-    stringDiv += "<div id='" + domCounter + "'><table class='dynamicDomTable'><tr><td><input type='date' name='dom'></td><td><input type='button' value='x' onClick='removeInput("+domCounter+");'></td></tr></table></div>";
-    newdiv.innerHTML = stringDiv;
-    document.getElementById(divName).appendChild(newdiv);
-    domCounter++;
-}
-
-var formula = {};
-var symbols = ["+", "-", "/", "x"];
-var additionalCharges = 0;
-var materialCharges = 0;
-var totalUnits = 0;
-var boxes = 0;
-var manpower = {};
-
-$("#servicesTable tbody").on("change keyup paste", "tr", function (event) {
-    update_total();
-});
-
-$("#markup").on('change keyup paste', function () {
-    update_total();
-});
-
-$("#materialCharge").on('change keyup paste', function () {
-    update_total();
-});
-
-$("#pushCharge").on('change keyup paste', function () {
-    update_total();
-});
-
-$("#storeyCharge").on('change keyup paste', function () {
-    update_total();
-});
-
-$("#detourCharge").on('change keyup paste', function () {
-    update_total();
-});
-
-$("#discount").on('change keyup paste', function () {
-    update_total();
-});
-
-jQuery('#itemName').on('input', function () {
-    var value = $('#itemName').val();
-    var item = $('#items [value="' + value + '"]').data('value');
-    if (typeof item !== "undefined") {
-        var itemArray = item.split("|");
-        $('#itemdimensions').val(itemArray[1]);
-        $('#itemUnit').val(itemArray[2]);
-        $('#itemQty').val("");
-    }
-});
-
-function update_services() {
-    $('#servicesTable > tbody  > tr').each(function () {
-        update_service(this);
-    });
-    //just update the total to sum    
-}
-
-function calculate(sum, symbol, variable) {
-    switch (symbol) {
-        case "x":
-            sum = sum * variable;
-            break;
-        case "/":
-            sum = Math.ceil(sum / variable);
-            break;
-        case "+":
-            sum += variable;
-            break;
-        case "-":
-            sum -= variable;
-            break;
-    }
-    return sum;
-}
-
-function update_service(element) {
-    var id = $(element).attr("id");
-    var fml = formula[id].split(" ");
-    var symbol;
-    var sum;
-    for (i = 0; i < fml.length; i++) {
-        var action = fml[i];
-        if (i === 0) {
-            if (isNaN(action)) {
-                switch (action) {
-                    case "U":
-                        sum = totalUnits;
-                        break;
-                    case "B":
-                        sum = boxes;
-                        break;
-                    case "AC":
-                        sum = additionalCharges;
-                        break;
-                    case "MP":
-                        sum = manpower[id];
-                        break;
-                }
-            } else {
-                sum = action;
-            }
-        } else {
-            if (symbols.indexOf(action) !== -1) {
-                symbol = action;
-            } else {
-                if (isNaN(action)) {
-                    switch (action) {
-                        case "U":
-                            sum = calculate(sum, symbol, totalUnits);
-                            break;
-                        case "B":
-                            sum = calculate(sum, symbol, boxes);
-                            break;
-                        case "AC":
-                            sum = calculate(sum, symbol, additionalCharges);
-                            break;
-                        case "MP":
-                            sum = calculate(sum, symbol, manpower[id]);
-                            break;
+                    if (data.status === "SUCCESS") {
+                        setTimeout(function () {
+                            window.location.href = "MyLeads.jsp";
+                        }, 500);
                     }
-                } else {
-                    sum = calculate(sum, symbol, action);
-                }
-            }
-        }
-    }
-
-    var input = $(element).find("input")[1];
-    $(input).val(Number(sum).toFixed(2));
-
-    for (i = 0; i < fml.length; i++) {
-        var action = fml[i];
-        switch (action) {
-            case "U":
-                var label = id + "unitsLbl";
-                $('#' + label).html(totalUnits);
-                break;
-            case "B":
-                var label = id + "boxesLbl";
-                $('#' + label).html(boxes);
-                break;
-            case "AC":
-                var label = id + "acLbl";
-                $('#' + label).html(additionalCharges);
-                break;
-            case "MP":
-                var label = id + "mpLbl";
-                $('#' + label).html(manpower[id]);
-                break;
-        }
-    }
-
-    update_total();
-}
-
-function update_total() {
-    var sum = 0;
-    $('#servicesTable > tbody  > tr').each(function () {
-        sum += Number(this.getElementsByTagName("input")[1].value);
-    });
-    sum += (Number($('#markup').val()) + Number($('#materialCharge').val()) + Number($('#pushCharge').val()) + Number($('#storeyCharge').val()) + Number($('#detourCharge').val()) - Number($('#discount').val()));
-    $('#totalPrice').val(Number(sum).toFixed(2));
-}
-
-function addUnits(unit) {
-    totalUnits = totalUnits + unit;
-    document.getElementById('totalUnits').innerHTML = "Total Units : " + totalUnits;
-}
-
-function subtractUnits(unit) {
-    totalUnits = totalUnits - unit;
-    document.getElementById('totalUnits').innerHTML = "Total Units : " + totalUnits;
-}
-
-//----------------------Customer Item Functions-------------------------//
-function addCustomerBox() {
-    var boxUnit = $('#customerBoxUnit').val();
-
-    var errorMsg = "";
-    var add = true;
-    if (!boxUnit) {
-        add = false;
-        errorMsg += "Please enter a quantity<br>";
-    }
-
-    if (add) {
-        var tr = "<tr><td>Boxes<input type='hidden' name='customerItemName' value='Boxes'></td>";
-        tr += "<td>&nbsp;<input type='hidden' name='customerItemRemark' value=''></td>";
-        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='customerItemCharge' value=''></td>";
-        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='customerItemQty' value='" + boxUnit + "'></td>";
-        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='customerItemUnit' value='" + boxUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteBox(this)'/></td></tr>";
-        $(tr).prependTo("#customerItemsTable > tbody");
-        addUnits(Number(boxUnit));
-        boxes += (Number(boxUnit));
-        $('#customerBoxUnit').val("");
-        update_services();
-    } else {
-        var modal = document.getElementById("salesModal");
-        var salesStatus = document.getElementById("salesStatus");
-        var salesMessage = document.getElementById("salesMessage");
-        salesStatus.innerHTML = "<b>ERROR</b>";
-        salesMessage.innerHTML = errorMsg;
-        modal.style.display = "block";
-    }
-}
-
-function addItem() {
-    var itemName = $('#itemName').val();
-    var itemUnit = $('#itemUnit').val();
-    var itemQty = $('#itemQty').val();
-    var itemRemark = $('#itemRemark').val();
-
-    var errorMsg = "";
-    var add = true;
-    if (!itemName) {
-        add = false;
-        errorMsg += "Please enter an item<br>";
-    }
-    if (!itemUnit) {
-        add = false;
-        errorMsg += "Please enter an unit<br>";
-    }
-    if (!itemQty) {
-        add = false;
-        errorMsg += "Please enter an quantity<br>";
-    }
-
-    if (add) {
-        itemUnit = itemUnit * itemQty;
-        var tr = "<tr><td>" + itemName + "<input type='hidden' name='customerItemName' value='" + itemName + "'></td>";
-        tr += "<td>" + itemRemark + "<input type='hidden' name='customerItemRemark' value='" + itemRemark + "'></td>";
-        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='customerItemCharge' value=''></td>";
-        tr += "<td align='center'>" + itemQty + "<input type='hidden' name='customerItemQty' value='" + itemQty + "'></td>";
-        tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='customerItemUnit' value='" + itemUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteItem(this)'/></td></tr>";
-        $(tr).prependTo("#customerItemsTable > tbody");
-        addUnits(Number(itemUnit));
-        $('#itemName').val("");
-        $('#itemUnit').val("");
-        $('#itemQty').val("");
-        $('#itemRemark').val("");
-        $('#itemName').focus();
-        update_services();
-    } else {
-        var modal = document.getElementById("salesModal");
-        var salesStatus = document.getElementById("salesStatus");
-        var salesMessage = document.getElementById("salesMessage");
-        salesStatus.innerHTML = "<b>ERROR</b>";
-        salesMessage.innerHTML = errorMsg;
-        modal.style.display = "block";
-    }
-}
-
-function addSpecialItem() {
-    var itemName = $('#specialItemName').val();
-    var itemCharges = $('#specialItemCharges').val();
-    var itemUnit = $('#specialItemUnit').val();
-    var itemQty = $('#specialItemQty').val();
-    var itemRemark = $('#specialItemRemark').val();
-
-    var add = true;
-    var errorMsg = "";
-
-    if (!itemName) {
-        add = false;
-        errorMsg += "Please enter a special item<br>";
-    }
-    if (!itemUnit) {
-        add = false;
-        errorMsg += "Please enter an unit<br>";
-    }
-    if (!itemQty) {
-        add = false;
-        errorMsg += "Please enter an quantity<br>";
-    }
-
-    if (add) {
-        itemUnit = itemUnit * itemQty;
-        itemName = "Special - " + itemName;
-        var tr = "<tr><td>" + itemName + "<input type='hidden' name='customerItemName' value='" + itemName + "'></td>";
-        tr += "<td>" + itemRemark + "<input type='hidden' name='customerItemRemark' value='" + itemRemark + "'></td>";
-        tr += "<td align='center'>" + itemCharges + "<input type='hidden' name='customerItemCharge' value='" + itemCharges + "'></td>";
-        tr += "<td align='center'>" + itemQty + "<input type='hidden' name='customerItemQty' value='" + itemQty + "'></td>";
-        tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='customerItemUnit' value='" + itemUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteItem(this)'/></td></tr>";
-        $(tr).prependTo("#customerItemsTable > tbody");
-        additionalCharges += (Number(itemCharges));
-        addUnits(Number(itemUnit));
-        $('#specialItemName').val("");
-        $('#specialItemCharges').val("");
-        $('#specialItemUnit').val("");
-        $('#specialItemQty').val("");
-        $('#specialItemRemark').val("");
-        $('#specialItemName').focus();
-        update_services();
-    } else {
-        var modal = document.getElementById("salesModal");
-        var salesStatus = document.getElementById("salesStatus");
-        var salesMessage = document.getElementById("salesMessage");
-        salesStatus.innerHTML = "<b>ERROR</b>";
-        salesMessage.innerHTML = errorMsg;
-        modal.style.display = "block";
-    }
-}
-
-function deleteItem(btn) {
-    var row = btn.parentNode.parentNode;
-    var nodes = row.childNodes;
-    var unit = nodes[4].innerHTML.substring(0, nodes[4].innerHTML.indexOf("<"));
-    subtractUnits(Number(unit));
-    var charge = nodes[2].innerHTML.substring(0, nodes[2].innerHTML.indexOf("<"));
-    if (!isNaN(charge)) {
-        additionalCharges -= Number(charge);
-    }
-    row.parentNode.removeChild(row);
-    update_services();
-}
-//--------------------------------End-----------------------------------//
-
-//-----------------------Vimbox Item Functions--------------------------//
-function addVimboxBox() {
-    var boxUnit = $('#vimboxBoxUnit').val();
-
-    var errorMsg = "";
-    var add = true;
-    if (!boxUnit) {
-        add = false;
-        errorMsg += "Please enter an unit<br>";
-    }
-
-    if (add) {
-        var tr = "<tr><td>Boxes<input type='hidden' name='vimboxItemName' value='Boxes'></td>";
-        tr += "<td>&nbsp;<input type='hidden' name='vimboxItemRemark' value=''></td>";
-        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='vimboxItemCharge' value=''></td>";
-        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='vimboxItemQty' value='" + boxUnit + "'></td>";
-        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='vimboxItemUnit' value='" + boxUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteBox(this)'/></td></tr>";
-        $(tr).prependTo("#vimboxItemsTable > tbody");
-        addUnits(Number(boxUnit));
-        boxes += (Number(boxUnit));
-        $('#vimboxBoxUnit').val("");
-        update_services();
-    } else {
-        var modal = document.getElementById("salesModal");
-        var salesStatus = document.getElementById("salesStatus");
-        var salesMessage = document.getElementById("salesMessage");
-        salesStatus.innerHTML = "<b>ERROR</b>";
-        salesMessage.innerHTML = errorMsg;
-        modal.style.display = "block";
-    }
-}
-
-function addVimboxMaterial() {
-    var itemName = $('#vimboxMaterial').val();
-    var itemUnit = $('#vimboxMaterialUnit').val();
-    var itemCharge = $('#vimboxMaterialCharge').val();
-
-    var errorMsg = "";
-    var add = true;
-    if (!itemName) {
-        add = false;
-        errorMsg += "Please enter an item<br>";
-    }
-    if (!itemUnit) {
-        add = false;
-        errorMsg += "Please enter an unit<br>";
-    }
-    if (!itemCharge) {
-        add = false;
-        errorMsg += "Please enter a charge<br>";
-    }
-
-    if (add) {
-        var tr = "<tr><td>" + itemName + "<input type='hidden' name='vimboxMaterialName' value='" + itemName + "'></td>";
-        tr += "<td>&nbsp;</td>";
-        tr += "<td align='center'>" + itemCharge + "<input type='hidden' name='vimboxMaterialCharge' value='" + itemCharge + "'></td>";
-        tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='vimboxMaterialQty' value='" + itemUnit + "'></td>";
-        tr += "<td align='center'>&nbsp;</td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteMaterial(this)'/></td></tr>";
-        $(tr).prependTo("#vimboxItemsTable > tbody");
-        materialCharges += (Number(itemCharge));
-        $('#vimboxMaterial').val("");
-        $('#vimboxMaterialUnit').val("");
-        $('#vimboxMaterialCharge').val("");
-        $('#materialCharge').val(materialCharges);
-        $('#vimboxMaterial').focus();
-        update_total();
-    } else {
-        var modal = document.getElementById("salesModal");
-        var salesStatus = document.getElementById("salesStatus");
-        var salesMessage = document.getElementById("salesMessage");
-        salesStatus.innerHTML = "<b>ERROR</b>";
-        salesMessage.innerHTML = errorMsg;
-        modal.style.display = "block";
-    }
-}
-
-function deleteMaterial(btn) {
-    var row = btn.parentNode.parentNode;
-    var nodes = row.childNodes;
-    var charge = nodes[2].innerHTML.substring(0, nodes[2].innerHTML.indexOf("<"));
-    if (!isNaN(charge)) {
-        materialCharges -= Number(charge);
-    }
-    row.parentNode.removeChild(row);
-    $('#materialCharge').val(materialCharges);
-}
-
-function deleteBox(btn) {
-    var row = btn.parentNode.parentNode;
-    var nodes = row.childNodes;
-    var unit = nodes[4].innerHTML.substring(0, nodes[4].innerHTML.indexOf("<"));
-    subtractUnits(Number(unit));
-    boxes -= Number(unit);
-    row.parentNode.removeChild(row);
-    update_services();
-}
-//--------------------------------End-----------------------------------//
-
-//-----------------------Customer C&R Functions-------------------------//
-function addCustomerComment() {
-    var comment = $('#customerComment').val();
-
-    if (comment) {
-        var tr = "<tr><td>" + comment + "<input type='hidden' name='comments' value='" + comment + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>";
-        $(tr).prependTo("#commentsTable > tbody");
-        $('#customerComment').val("");
-    } else {
-        var modal = document.getElementById("salesModal");
-        var salesStatus = document.getElementById("salesStatus");
-        var salesMessage = document.getElementById("salesMessage");
-        salesStatus.innerHTML = "<b>ERROR</b>";
-        salesMessage.innerHTML = "Please enter a comment";
-        modal.style.display = "block";
-    }
-}
-
-function addCustomerRemark() {
-    var remark = $('#customerRemark').val();
-
-    if (remark) {
-        var tr = "<tr><td>" + remark + "<input type='hidden' name='remarks' value='" + remark + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>";
-        $(tr).prependTo("#remarksTable > tbody");
-        $('#customerRemark').val("");
-    } else {
-        var modal = document.getElementById("salesModal");
-        var salesStatus = document.getElementById("salesStatus");
-        var salesMessage = document.getElementById("salesMessage");
-        salesStatus.innerHTML = "<b>ERROR</b>";
-        salesMessage.innerHTML = "Please enter a remark";
-        modal.style.display = "block";
-    }
-}
-
-function deleteRow(btn) {
-    var row = btn.parentNode.parentNode;
-    row.parentNode.removeChild(row);
-}
-//--------------------------------End-----------------------------------//
-
-//-------------------------Service Functions----------------------------//
-
-$('#serviceTable td').click(function () {
-    var cell = $(this);
-    var state = cell.data('state') || '';
-    var cellHtml = cell.html().trim();
-    if (cellHtml) {
-        var serviceCharge = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
-        var serviceArray = serviceCharge.split(",");
-        var svcSplit = serviceArray[0].split("|");
-        var pri = svcSplit[0];
-        var sec = svcSplit[1];
-        var id = (pri + "_" + sec).replace(" ", "_");
-        switch (state) {
-            case '':
-                if (pri === "Manpower") {
-                    $('#manpowerId').val(id);
-                    var modal = document.getElementById("manpowerModal");
+                },
+                error: function (data) {
+                    var modal = document.getElementById("lead_error_modal");
+                    var status = document.getElementById("lead_error_status");
+                    var message = document.getElementById("lead_error_message");
+                    status.innerHTML = "ERROR";
+                    message.innerHTML = data;
                     modal.style.display = "block";
                 }
-                formula[id] = serviceArray[1];
-                var tr = "<tr id='" + id + "'><td>";
-                tr += "<table class='serviceTable'>"
-                tr += "<tr height='10%'><td>" + pri + " - " + sec + "<input type='hidden' name='serviceName' value='" + id + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='serviceCharge'></td></tr>";
-                tr += "<tr>" + generateBreakdown(id) + "</tr></table></td></tr>";
-                $('#servicesTable').append(tr);
-                cell.addClass('selected');
-                cell.data('state', 'selected');
-                break;
-            case 'selected':
-                if (pri === "Manpower") {
-                    removeManpower(id);
+            });
+
+            jQuery(document).bind('keydown', 'ctrl+shift', function (e) {
+                var tableClassName = $(document.activeElement.parentNode.parentNode.parentNode.parentNode).attr('class');
+                switch (tableClassName) {
+                    case "customerBoxTable":
+                        addCustomerBox();
+                        break;
+                    case "customerItemTable":
+                        addItem();
+                        break;
+                    case "customerSpecialItemTable":
+                        addSpecialItem();
+                        break;
+                    case "vimboxBoxTable":
+                        addVimboxBox();
+                        break;
+                    case "vimboxMaterialTable":
+                        addVimboxMaterial();
+                        break;
+                    case "customerCommentTable":
+                        addCustomerComment();
+                        break;
+                    case "customerRemarkTable":
+                        addCustomerRemark();
+                        break;
+                    default:
                 }
-                cell.removeClass('selected');
-                cell.data('state', '');
-                delete formula[id];
-                $("#" + id).remove();
-                break;
-            default:
-                break;
-        }
-        update_services();
-    }
-});
+                return false;
+            });
 
-function generateBreakdown(id) {
-    var fml = formula[id].split(" ");
-    var breakdown = "<td colspan='2'><table width='100%' cellpadding=0 cellspacing=0 style='border-collapse: collapse;'><col width='50%'><col width='50%'>";
-    for (i = 0; i < fml.length; i++) {
-        var action = fml[i];
-        switch (action) {
-            case "U":
-                breakdown += "<tr><td align='left'>&nbsp;&nbsp;&nbsp;Total Units</td>";
-                breakdown += "<td align='right'><label id='" + id + "unitsLbl'>" + totalUnits + "</label></td></tr>";
-                break;
-            case "B":
-                breakdown += "<tr><td align='left'>&nbsp;&nbsp;&nbsp;Boxes</td>";
-                breakdown += "<td align='right'><label id='" + id + "boxesLbl'>" + boxes + "</label></td></tr>";
-                break;
-            case "MP":
-                var man = manpower[id];
-                if (man == null) {
-                    man = 0;
+            $(document).bind('DOMNodeInserted', function (e) {
+                var element = e.target;
+                var parent = element.parentNode.parentNode;
+                if ($(parent).is(".servicesTable")) {
+                    // Initialize the starting amount using the formula given //
+                    update_service(element);
                 }
-                breakdown += "<tr><td align='left'>&nbsp;&nbsp;&nbsp;Manpower</td>";
-                breakdown += "<td align='right'><label id='" + id + "mpLbl'>" + man + "</label></td></tr>";
-                break;
-            case "AC":
-                breakdown += "<tr><td align='left'>&nbsp;&nbsp;&nbsp;Additional Charges</td>";
-                breakdown += "<td align='right'><label id='" + id + "acLbl'>" + additionalCharges + "</label></td></tr>";
-                break;
-            default:
-                break;
-        }
-    }
-    breakdown += "</table></td>";
-    return breakdown;
-}
+            });
 
-function removeManpower(id) {
-    var mpLbl = id + "manpowerLabel";
-    var mprLbl = id + "manpowerReasonLabel";
-    
-    var mpIpt = id + "manpowerInput";
-    var rIpt = id + "reasonInput";
-    document.getElementById(mpIpt).value = "";
-    document.getElementById(rIpt).value = "";
-    
-    delete manpower[id];
-    document.getElementById(mpLbl).innerHTML = "";
-    document.getElementById(mprLbl).innerHTML = "";
-}
+            $(document).ready(function () {
+                $(window).keydown(function (event) {
+                    if (event.keyCode == 13) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+            });
 
-function submitManpower() {
-    var id = $('#manpowerId').val();
-    var addManpower = $('#additionalManpower').val();
-    var manReason = $('#manpowerReason').val();
-
-    manpower[id] = Number(addManpower);
-    var mpLbl = id + "manpowerLabel";
-    var mprLbl = id + "manpowerReasonLabel";
-    document.getElementById(mpLbl).innerHTML = addManpower;
-    document.getElementById(mprLbl).innerHTML = manReason;
-
-    var mpIpt = id + "manpowerInput";
-    var rIpt = id + "reasonInput";
-    document.getElementById(mpIpt).value = addManpower;
-    document.getElementById(rIpt).value = manReason;
-    
-    var modal = document.getElementById("manpowerModal");
-    modal.style.display = "none";
-    update_services();
-}
-
-function selectService() {
-    var modal = document.getElementById("serviceModal");
-    modal.style.display = "block";
-}
-//--------------------------------End-----------------------------------//
-
-function cancelLead(leadId){
-    var modal = document.getElementById("resolveModal");
-    $('#lId').val(leadId);
-    document.getElementById('leadIdLbl').innerHTML = leadId;
-    modal.style.display = "block";
-}
-
-function setup(){
-    $('#customerItemsTable > tbody  > tr').each(function () {
-        var inputs = this.getElementsByTagName("input");
-        var name = inputs[0].value;
-        if(name === "Boxes"){
-            boxes += Number(inputs[4].value);
-        }
-        var charges = inputs[2].value;
-        if(!isNaN(charges)){
-            additionalCharges += Number(charges);
-        }
-        totalUnits += Number(inputs[4].value); 
-    });
-    
-    $('#vimboxItemsTable > tbody  > tr').each(function () {
-        var inputs = this.getElementsByTagName("input");
-        var name = inputs[0].value;
-        if(name === "Boxes"){
-            boxes += Number(inputs[4].value);
-            totalUnits += Number(inputs[4].value);
-        }
-        var charges = inputs[2].value;
-        if(!isNaN(charges)){
-            materialCharges += Number(charges);
-        }
-    });
-    var svcs = [];
-    $('#servicesTable > tbody  > tr').each(function () {
-        var inputs = this.getElementsByTagName("input");
-        var id = $(this).attr('id');
-        formula[id] = inputs[2].value;
-        var table = this.getElementsByTagName("table");
-        $(table).append("<tr>" + generateBreakdown(id) + "</tr>");
-        svcs.push(id);
-    });
-    
-    $('#serviceTable > tbody  > tr > td').each(function (){
-        var cellHtml = this.innerHTML.trim();
-        var inputs = this.getElementsByTagName('input');
-        if (cellHtml) {
-            var serviceCharge = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
-            var serviceArray = serviceCharge.split(",");
-            var svcSplit = serviceArray[0].split("|");
-            var pri = svcSplit[0];
-            var sec = svcSplit[1];
-            var id = (pri + "_" + sec).replace(" ", "_");
-            if(svcs.indexOf(id) > -1){
-                $(this).addClass('selected');
-                $(this).data('state', 'selected');
+            function checkEmail() {
+                var email = document.getElementById("email").value;
+                if (email.length === 0 || !email.trim()) {
+                    alert("Please input an email address");
+                    return false;
+                } else {
+                    return true;
+                }
             }
+
             
-            if (inputs[1] != null){
-                if(!isNaN(inputs[1].value) && Number(inputs[1].value) > 0){
-                    manpower[inputs[0].value] = Number(inputs[1].value);
-                }
-            }
-        }
-    });
-    document.getElementById('totalUnits').innerHTML = "Total Units : " + totalUnits;
-    update_services();
-    checkLeadInformation();
-}
         </script>
+        <script src="JS/LeadFunctions.js"></script>
     </body>
 </html>

@@ -1,18 +1,22 @@
-package com.vimbox.sales;
+package com.vimbox.sitesurvey;
 
 import com.google.gson.JsonObject;
-import com.vimbox.database.LeadDAO;
+import com.vimbox.database.UserDAO;
+import com.vimbox.user.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
-@WebServlet(name = "CancelLeadController", urlPatterns = {"/CancelLeadController"})
-public class CancelLeadController extends HttpServlet {
+@WebServlet(name = "ValidateSiteSurveyorDetails", urlPatterns = {"/ValidateSiteSurveyorDetails"})
+public class ValidateSiteSurveyorDetails extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -27,21 +31,61 @@ public class CancelLeadController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
         
-        int leadId = Integer.parseInt(request.getParameter("lId"));
-        String reason = request.getParameter("reason");
         String errorMsg = "";
         
-        if(reason.isEmpty()){
-            errorMsg += "Please give a reason for cancellation<br>";
+        String date = request.getParameter("date");
+        String siteSurveyor = request.getParameter("siteSurveyor");
+        String addressFrom = request.getParameter("addressFrom");
+        String addressTo = request.getParameter("addressTo");
+        DateTime dt = null;
+        
+        if(addressFrom.isEmpty() && addressTo.isEmpty()){
+            errorMsg += "Please input at least one address<br>";
+        }
+        
+        if(!addressFrom.isEmpty()){
+            addressFrom = addressFrom.substring(0,addressFrom.length()-1);
+            String[] arrays = addressFrom.split("\\|", -1);
+            for(String array : arrays){
+                if(array.trim().isEmpty()){
+                    errorMsg += "Please ensure that the moving from addresses are correctly filled<br>";
+                    break;
+                }
+            }
+        }
+        
+        if(!addressTo.isEmpty()){
+            addressTo = addressTo.substring(0,addressTo.length()-1);
+            String[] arrays = addressTo.split("\\|");
+            for(String array : arrays){
+                if(array.trim().isEmpty()){
+                    errorMsg += "Please ensure that the moving to addresses are correctly filled<br>";
+                    break;
+                }
+            }
+        }
+        
+        if(date.isEmpty()){
+            errorMsg += "Please enter a survey date<br>";
+        }else{
+            try{
+                dt = dtf.parseDateTime(date);
+            }catch(Exception e){
+                errorMsg += "Please enter a valid survey date<br>";
+            }
+        }
+        
+        ArrayList<User> users = UserDAO.getSiteSurveyorsByName(siteSurveyor);
+        if(users.isEmpty()){
+            errorMsg += "No site surveyors found<br>";
         }
         
         if(errorMsg.isEmpty()){
-            LeadDAO.cancelLead(leadId,reason);
             jsonOutput.addProperty("status", "SUCCESS");
-            jsonOutput.addProperty("message", "Lead rejected!");
         }else{
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);

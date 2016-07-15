@@ -149,7 +149,7 @@ function confirmDelete(id, action) {
     var status = document.getElementById(action + "_error_status");
     var message = document.getElementById(action + "_error_message");
     status.innerHTML = "<b>Delete Confirmation</b>";
-    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"delete" + method + "('" + id + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal(" + action + "'_error_modal')\">No</button></td></tr></table>";
+    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"delete" + method + "('" + id + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal('" + action + "_error_modal')\">No</button></td></tr></table>";
     modal.style.display = "block";
 }
 
@@ -822,9 +822,9 @@ $(document).on('change', '#leaveEmployee', function () {
             });
 });
 
-function loadLeaveMC(nric) {
+function loadLeaveMCNric(nric) {
     var modal = document.getElementById('view_leavemc_modal');
-    $.get("LoadLeaveMC.jsp", {nric: nric}, function (data) {
+    $.get("LoadLeaveMCNric.jsp", {nric: nric}, function (data) {
         document.getElementById('leavemc_content').innerHTML = data;
     });
     modal.style.display = "block";

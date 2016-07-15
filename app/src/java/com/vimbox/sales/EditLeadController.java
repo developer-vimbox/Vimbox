@@ -1,11 +1,15 @@
 package com.vimbox.sales;
 
+import com.google.gson.JsonObject;
 import com.vimbox.database.CustomerHistoryDAO;
 import com.vimbox.database.LeadDAO;
+import com.vimbox.database.SiteSurveyDAO;
 import com.vimbox.user.User;
 import com.vimbox.util.Converter;
 import java.io.IOException;
-import javax.servlet.ServletContext;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +31,11 @@ public class EditLeadController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache");
+        JsonObject jsonOutput = new JsonObject();
+        PrintWriter jsonOut = response.getWriter();
+        
         // Retrieve user owner //
         User owner = (User) request.getSession().getAttribute("session");
         //---------------------//
@@ -101,6 +110,72 @@ public class EditLeadController extends HttpServlet {
             LeadDAO.createLeadEnquiry(leadId, enquiry);
         }
         
+        if(leadType.contains("Survey")){
+            String[] surveyDates = request.getParameterValues("siteSurvey_date");
+            String[] timeslots = request.getParameterValues("siteSurvey_timeslot");
+            String[] addresses = request.getParameterValues("siteSurvey_address");
+            String[] surveyors = request.getParameterValues("siteSurvey_surveyor");
+            String[] remarks = request.getParameterValues("siteSurvey_remarks");
+            
+            if(surveyDates != null){
+                HashMap<String, Integer> ts = new HashMap<String, Integer>();
+                String[] timings = new String[]{"0900 - 0930", "0930 - 1000", "1000 - 1030", "1030 - 1100", "1100 - 1130", "1130 - 1200", "1200 - 1230", "1230 - 1300", "1300 - 1330", "1330 - 1400", "1400 - 1430", "1430 - 1500", "1500 - 1530", "1530 - 1600", "1600 - 1630", "1630 - 1700", "1700 - 1730", "1730 - 1800"};
+                for(int i=0; i<timings.length; i++){
+                    ts.put(timings[i], i);
+                }
+                
+                SiteSurveyDAO.deleteSiteSurveysByLeadId(leadId);
+                for(String surveyDate : surveyDates){
+                    String surveyorId = "";
+                    String remark = "";
+                    ArrayList<String> times = new ArrayList<String>();
+                    ArrayList<String> adds = new ArrayList<String>();
+                    for(String timeslot : timeslots){
+                        if(timeslot.contains(surveyDate)){
+                            if(!adds.contains(timeslot.split("\\|")[1])){
+                                times.add(timeslot.split("\\|")[1]);
+                            }
+                        }
+                    }
+
+                    for(String addr : addresses){
+                        if(addr.contains(surveyDate)){
+                            if(!adds.contains(addr.split("\\|")[1])){
+                                adds.add(addr.split("\\|")[1]);
+                            }
+                        }
+                    }
+
+                    for(String sur : surveyors){
+                        if(sur.contains(surveyDate)){
+                            surveyorId = sur.split("\\|")[1];
+                        }
+                    }
+
+                    for(String rem : remarks){
+                        if(rem.contains(surveyDate)){
+                            remark = rem.split("\\|", -1)[1];
+                        }
+                    }
+                    
+                    String timeslot = "";
+                    if(!times.isEmpty()){
+                        timeslot = times.get(0);
+                        int count = ts.get(timeslot);
+                        for(int i=1; i<times.size(); i++){
+                            String tts = times.get(i);
+                            if(ts.get(tts) == count + 1){
+                                timeslot = timeslot.substring(0, timeslot.lastIndexOf(" ")) + " " + tts.substring(tts.lastIndexOf(" ") + 1);
+                            }else{
+                                timeslot += "<br>" + tts;
+                            }
+                            count = ts.get(tts);
+                        }
+                    }
+                    SiteSurveyDAO.createSiteSurveyAssignment(leadId, surveyorId, surveyDate, times, adds, timeslot, remark);
+                }
+            }
+        }
           
         // Increment by 4 per address //
         String[] addressFrom = request.getParameterValues("addressfrom");
@@ -266,7 +341,7 @@ public class EditLeadController extends HttpServlet {
 
             // Others //
             String[] others = {"storeyCharge","pushCharge","detourCharge","materialCharge","markup","discount"};
-            String[] otherCharges = new String[5];
+            String[] otherCharges = new String[6];
             otherCharges[0] = request.getParameter("storeyCharge");
             otherCharges[1] = request.getParameter("pushCharge"); 
             otherCharges[2] = request.getParameter("detourCharge");
@@ -291,10 +366,9 @@ public class EditLeadController extends HttpServlet {
             //--------------//
         }
         
-        ServletContext sc = request.getServletContext();
-        sc.setAttribute("action", "update");
-        response.sendRedirect("MyLeads.jsp");
-        return;
+        jsonOutput.addProperty("status", "SUCCESS");
+        jsonOutput.addProperty("message", "Lead updated!");
+        jsonOut.println(jsonOutput);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

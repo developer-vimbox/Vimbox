@@ -3,6 +3,7 @@ package com.vimbox.database;
 import com.vimbox.customer.Customer;
 import com.vimbox.sales.Item;
 import com.vimbox.sales.Lead;
+import com.vimbox.sitesurvey.SiteSurvey;
 import com.vimbox.user.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -288,7 +289,9 @@ public class LeadDAO {
                     String remark = rs1.getString("remark");
                     remarks.add(remark);
                 }
-                results.add(new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, dt, tom, dom, addressFrom, addressTo, customerItems, vimboxItems, materials, services, otherCharges, comments, remarks));
+                
+                ArrayList<SiteSurvey> siteSurveys = SiteSurveyDAO.getSiteSurveysByLeadId(leadId);
+                results.add(new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, dt, tom, dom, addressFrom, addressTo, customerItems, vimboxItems, materials, services, otherCharges, comments, remarks, siteSurveys));
             }
             
             if (rs1 != null) {
@@ -503,7 +506,9 @@ public class LeadDAO {
                     String remark = rs.getString("remark");
                     remarks.add(remark);
                 }
-                lead = new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, dt, tom, dom, addressFrom, addressTo, customerItems, vimboxItems, materials, services, otherCharges, comments, remarks);
+                
+                ArrayList<SiteSurvey> siteSurveys = SiteSurveyDAO.getSiteSurveysByLeadId(leadId);
+                lead = new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, dt, tom, dom, addressFrom, addressTo, customerItems, vimboxItems, materials, services, otherCharges, comments, remarks, siteSurveys);
             }
         } catch (SQLException se) {
             se.printStackTrace();

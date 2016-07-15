@@ -83,6 +83,12 @@
                             <li><a href="TicketForum.jsp">Ticket Forum</a></li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="javascript:;">Site Surveyor</a>
+                        <ul class="child-menu">
+                            <li><a href="MySites.jsp">My Sites </a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div><!--.menu-layer-->
             <!-- END OF MENU LAYER -->

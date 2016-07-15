@@ -16,12 +16,13 @@
         <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
     </head>
     <body>
-        <%@include file="MyLeadsAction.jsp"%>
-        <h1>My Leads</h1>
+        <h1>My Leads</h1><hr>
+        <button onclick="location.href = 'CreateLead.jsp';">Add New</button>
+        <br><br>
         <%            
             ArrayList<Lead> myLeads = LeadDAO.getLeadsByOwnerUser(user);
         %>
-        <table border="1">
+        <table border="1" width="100%">
             <tr>
                 <th>#</th>
                 <th>Cust Name</th>
@@ -37,13 +38,20 @@
                 for (Lead lead : myLeads) {
                     String url = "window.location.href='EditLead.jsp?lId=" + lead.getId() + "'";
                     out.println("<tr>");
-                    out.println("<td>" + lead.getId() + "</td>");
+                    out.println("<td align='center'>" + lead.getId() + "</td>");
                     Customer customer = lead.getCustomer();
-                    out.println("<td>" + customer.toString() + "</td>");
-                    out.println("<td>" + customer.getContact() + "</td>");
-                    out.println("<td>" + customer.getEmail() + "</td>");
-                    out.println("<td>" + lead.getStatus() + "</td>");
-                    out.println("<td>" + Converter.convertDate(lead.getDt()) + "</td>");
+                    if(customer != null){
+                        out.println("<td align='center'>" + customer.toString() + "</td>");
+                        out.println("<td align='center'>" + customer.getContact() + "</td>");
+                        out.println("<td align='center'>" + customer.getEmail() + "</td>");
+                    }else{
+                        out.println("<td align='center'></td>");
+                        out.println("<td align='center'></td>");
+                        out.println("<td align='center'></td>");
+                    }
+                    
+                    out.println("<td align='center'>" + lead.getStatus() + "</td>");
+                    out.println("<td align='center'>" + Converter.convertDate(lead.getDt()) + "</td>");
             %>
             <td>
                 <%

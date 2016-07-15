@@ -1,6 +1,7 @@
 package com.vimbox.sales;
 
 import com.vimbox.customer.Customer;
+import com.vimbox.sitesurvey.SiteSurvey;
 import com.vimbox.user.User;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class Lead {
     private String source;
     private String referral;
     private String enquiry;
+    private ArrayList<SiteSurvey> siteSurveys;
     private DateTime dt;
     
     private String tom;
@@ -33,7 +35,7 @@ public class Lead {
     private ArrayList<String> comments;
     private ArrayList<String> remarks;
 
-    public Lead(User owner, int id, String type, Customer customer, String status, String reason, String source, String referral, String enquiry, DateTime dt, String tom, String dom, ArrayList<String[]> addressFrom, ArrayList<String[]> addressTo, ArrayList<Item> customerItems, ArrayList<Item> vimboxItems, ArrayList<Item> materials, ArrayList<String[]> services, HashMap<String,String> otherCharges, ArrayList<String> comments, ArrayList<String> remarks) {
+    public Lead(User owner, int id, String type, Customer customer, String status, String reason, String source, String referral, String enquiry, DateTime dt, String tom, String dom, ArrayList<String[]> addressFrom, ArrayList<String[]> addressTo, ArrayList<Item> customerItems, ArrayList<Item> vimboxItems, ArrayList<Item> materials, ArrayList<String[]> services, HashMap<String,String> otherCharges, ArrayList<String> comments, ArrayList<String> remarks, ArrayList<SiteSurvey> siteSurveys) {
         this.owner = owner;
         this.id = id;
         this.type = type;
@@ -55,6 +57,7 @@ public class Lead {
         this.otherCharges = otherCharges;
         this.comments = comments;
         this.remarks = remarks;
+        this.siteSurveys = siteSurveys;
     }
 
     public User getOwner(){
@@ -139,5 +142,9 @@ public class Lead {
 
     public ArrayList<String> getRemarks() {
         return remarks;
+    }
+
+    public ArrayList<SiteSurvey> getSiteSurveys() {
+        return siteSurveys;
     }
 }
