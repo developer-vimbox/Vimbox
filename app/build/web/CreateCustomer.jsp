@@ -6,49 +6,53 @@
         <title>Create Customer</title>
     </head>
     <body>
-        <h2>Customer Information</h2><hr>
-        <table>
-            <tr>
-                <td align="right"><b>Salutation :</b></td>
-                <td>
-                    <select id="create_salutation" autofocus>
-                        <option value="Mr">Mr</option>
-                        <option value="Ms">Ms</option>
-                        <option value="Mrs">Mrs</option>
-                        <option value="Mdm">Mdm</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td align="right"><b>First Name :</b></td>
-                <td>
-                    <input type="text" id="create_first_name">
-                </td>
-            </tr>
-            <tr>
-                <td align="right"><b>Last Name :</b></td>
-                <td>
-                    <input type="text" id="create_last_name">
-                </td>
-            </tr>
-            <tr>
-                <td align="right"><b>Contact :</b></td>
-                <td>
-                    <input type="number" id="create_contact">
-                </td>
-            </tr>
-            <tr>
-                <td align="right"><b>Email :</b></td>
-                <td>
-                    <input type="text" id="create_email">
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <button onclick="createCustomer();return false;">Add</button>
-                </td>
-            </tr>
-        </table>
-    </body>
+    <center><h3 class="modal-title"><b>Customer Information</b></h3></center>
+    <hr>
+    <div class="form-horizontal" >
+        <div class="form-group">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Salutation : </label>
+                <div class="col-sm-6">
+					
+                        <select id="create_salutation" class="form-control">
+                            <option value="Mr">Mr</option>
+                            <option value="Ms">Ms</option>
+                            <option value="Mrs">Mrs</option>
+                            <option value="Mdm">Mdm</option>
+                        </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">First Name : </label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="create_first_name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Last Name : </label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="create_last_name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Contact : </label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="create_contact">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Email : </label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="create_email">
+                </div>
+            </div>
+            <div class="form-group text-center">
+            <button class="btn btn-default" onclick="createCustomer();
+                    return false;">Add</button>
+                </div>
+
+
+        </div>
+    </div>
+</body>
 </html>

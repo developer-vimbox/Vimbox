@@ -9,25 +9,31 @@
         <title>Customer Search</title>
     </head>
     <body>
-
-        <h2><font color="white">Search Results</font></h2>
-            <%
-                String name = request.getParameter("getName");
-                String module = request.getParameter("getAction");
-                ArrayList<Customer> results = null;
-                if (module.equals("crm")) {
-                    try {
-                        int num = Integer.parseInt(name);
-                        results = CustomerDAO.getCustomersByContact(num);
-                    } catch (NumberFormatException nfe) {
-                        results = CustomerDAO.getCustomersByString(name);
+        <div class="form-horizontal" >
+            <div class="form-group">
+                <center><h3 class="modal-title"><b>Search Results</b></h3></center>
+                <br>
+                <div class="col-sm-6">
+                <%
+                    String name = request.getParameter("getName");
+                    String module = request.getParameter("getAction");
+                    ArrayList<Customer> results = null;
+                    if (module.equals("crm")) {
+                        try {
+                            int num = Integer.parseInt(name);
+                            results = CustomerDAO.getCustomersByContact(num);
+                        } catch (NumberFormatException nfe) {
+                            results = CustomerDAO.getCustomersByString(name);
+                        }
+                    } else {
+                        results = CustomerDAO.getCustomersByName(name);
+                        out.println("<button class=\"btn btn-default\"onclick='addNewCustomer();return false;'>Add New</button>");
                     }
-                } else {
-                    results = CustomerDAO.getCustomersByName(name);
-                    out.println("<button onclick='addNewCustomer();return false;'>Add New</button>");
-                }
-            %>
-        <font color="white">
+                %>
+                </div>
+            </div>
+        </div>
+        <font>
         <hr>
         <%
             if (results.isEmpty()) {
@@ -41,7 +47,7 @@
         %>
         <br><br>
         <div id="resultsTable">
-            <table width="100%" font-color="white">
+            <table class="table table-hover">
                 <tr>
                     <th>Name</th>
                     <th>Contact</th>
@@ -70,7 +76,7 @@
                         <%
                             if (module.equals("ticket")) {
                         %>            
-                        <button onclick="selectCustomer('<%=custId%>', '<%=saluation%>', '<%=firstName%>', '<%=lastName%>', '<%=customerContact%>', '<%=customerEmail%>');
+                        <button class="btn btn-default" onclick="selectCustomer('<%=custId%>', '<%=saluation%>', '<%=firstName%>', '<%=lastName%>', '<%=customerContact%>', '<%=customerEmail%>');
                                 return false;">Select</button>
                         <%
                         } else {

@@ -5,9 +5,9 @@
 <%
     int ticketId = Integer.parseInt(request.getParameter("getTid"));
     ArrayList<TicketComment> comments = TicketCommentDAO.getTicketCommentsById(ticketId);
-    out.println("<h2>Comment History</h2><hr>");
+    out.println(" <center><h3 class=\"modal-title\"><b>Comment History</b></h3></center>");
     out.println("Ticket ID :" + ticketId + "<br><br>");
-    String table = "<table border='1' width='100%'><tr><th>Date & Time</th><th>Comment</th></tr>";
+    String table = "<table class=\"table table-hover\"><tr><th>Date & Time</th><th>Comment</th></tr>";
     for(TicketComment comment:comments){
         table+="<tr>";
         table+="<td align='center'>" + Converter.convertDate(comment.getDatetime()) + "</td>";

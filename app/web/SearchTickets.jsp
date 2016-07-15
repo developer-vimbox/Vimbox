@@ -16,7 +16,7 @@
     </head>
     <body>
         
-        <h2>Search Results</h2><hr>
+        <center><h3 class="modal-title"><b>Search Results</b></h3></center><hr>
         <%
             String keyword = request.getParameter("getKeyword");
             String status = request.getParameter("getStatus");
@@ -58,7 +58,7 @@
         %>
         <br><br>
         <div id="resultsTable">
-            <table border="1" width="100%">
+            <table class="table table-hover" width="100%">
                 <tr>
                     <th>Ticket ID</th>
                     <th>Cust Name</th>
@@ -95,8 +95,8 @@
                     <td><%=dateTime%></td>
                     <td><%=ticket_status%></td>
                     <td>
-                        <button onclick="viewTicket('<%=ticketId%>')">VT</button>
-                        <button onclick="viewComments('<%=ticketId%>')">VC</button>
+                        <button class="btn btn-default " onclick="viewTicket('<%=ticketId%>')">VT</button>
+                        <button class="btn btn-default " onclick="viewComments('<%=ticketId%>')">VC</button>
                     </td>
                 </tr>
         <%
