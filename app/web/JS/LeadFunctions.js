@@ -1249,7 +1249,7 @@ function createMarker(latlng, leadId, surveyor, address, timeslot, map, infowind
     var contentString = "<table><tr><td>Lead ID :</td><td>" + leadId + "</td></tr><tr><td>Surveyor :</td><td>" + surveyor + "</td></tr><tr><td>Address :</td><td>" + address + "</td></tr><tr><td>Time Slot :</td><td>" + timeslot + "</td></tr></table>";
     var marker = new google.maps.Marker({
         position: latlng,
-        map: map,
+        map: map
     });
 
     google.maps.event.addListener(marker, 'click', function () {

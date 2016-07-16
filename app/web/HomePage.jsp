@@ -1,5 +1,5 @@
-<!DOCTYPE html> 
 <%@include file="ValidateLogin.jsp"%>
+<!DOCTYPE html> 
 <html lang="en">
     <head>
 
@@ -963,10 +963,12 @@
                                 <div class="sidebar-submenu">
 
                                     <ul>
-                                        <li><a href="CreateEmployee.jsp" title="Create Employee"><span>Create Employee</span></a></li>
                                         <li> <a href="FullTimeEmployees.jsp" title="Full Time Employees"><span>Full Time Employees</span></a></li>
                                         <li> <a href="PartTimeEmployees.jsp" title="Part Time Employees"><span>Part Time Employees</span></a></li>
                                         <li> <a href="Payslips.jsp" title="Payslips"><span>Payslips</span></a></li>
+                                        <li> <a href="TakeAttendance.jsp" title="Take Attendance">Take Attendance</a></li>
+                                        <li> <a href="ViewAttendance.jsp" title="View Attendance">View Attendance</a></li>
+                                        <li> <a href="LeaveMCs.jsp" title="Leave / MC">Leave / MC</a></li>
                                     </ul>
 
                                 </div><!-- .sidebar-submenu -->
@@ -979,7 +981,7 @@
                                 <div class="sidebar-submenu">
 
                                     <ul>
-                                        <li><a href="CreateLead.jsp" title="Create Lead"><span>Create Lead</span></a></li>
+                                        <li> <a href="CreateLead.jsp" title="Create Lead"><span>Create Lead</span></a></li>
                                         <li> <a href="MyLeads.jsp" title="My Leads"><span>My Leads</span></a></li>
                                     </ul>
 
@@ -995,7 +997,7 @@
                                     <ul>
                                         <li><a href="CreateTicket.jsp" title="Create Ticket"><span>Create Ticket</span></a></li>
                                         <li> <a href="MyTickets.jsp" title="My Tickets"><span>My Tickets</span></a></li>
-                                        <li> <a href="TicketForum.jsp" title="TicketForum"><span>Ticket Forum</span></a></li>
+                                        <li> <a href="TicketForum.jsp" title="Ticket Forum"><span>Ticket Forum</span></a></li>
                                     </ul>
 
                                 </div><!-- .sidebar-submenu -->
