@@ -11,8 +11,9 @@
     <body>
         <div class="form-horizontal" >
             <div class="form-group">
+                <!--
                 <center><h3 class="modal-title"><b>Search Results</b></h3></center>
-                <br>
+                <br> -->
                 <div class="col-sm-6">
                 <%
                     String name = request.getParameter("getName");
@@ -34,7 +35,6 @@
             </div>
         </div>
         <font>
-        <hr>
         <%
             if (results.isEmpty()) {
                 out.println("No results found");

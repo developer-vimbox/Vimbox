@@ -3,7 +3,6 @@
 <%@page import="com.vimbox.database.TicketDAO"%>
 <%@page import="com.vimbox.ticket.Ticket"%>
 <%@page import="java.util.ArrayList"%>
-<%@include file="ValidateLogin.jsp"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -12,449 +11,317 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>My Tickets</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="assets/globals/plugins/modernizr/modernizr.min.js"></script>
         <script src="JS/ModalFunctions.js"></script>
         <script src="JS/TicketFunctions.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
-        <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
-        <link rel="stylesheet" href="assets/admin1/css/admin1.css">
-        <link rel="stylesheet" href="assets/globals/css/elements.css">
-        <link rel="stylesheet" href="assets/globals/css/plugins.css">
     </head>
-    <body onload='reload()'>
-        <div class="nav-bar-container">
-            <!-- BEGIN ICONS -->
-            <div class="nav-menu">
-                <div class="hamburger">
-                    <span class="patty"></span>
-                    <span class="patty"></span>
-                    <span class="patty"></span>
-                    <span class="patty"></span>
-                    <span class="patty"></span>
-                    <span class="patty"></span>
-                </div><!--.hamburger-->
-            </div><!--.nav-menu-->
+    <body>
+        <%@include file="header.jsp"%>
+        <%            ArrayList<Ticket> myTickets = TicketDAO.getTicketsByOwnerUser(user);
+            ArrayList<Ticket> assignedTickets = TicketDAO.getTicketsByAssignedUser(user);
 
-            <div class="nav-search">
-                <span class="search"></span>
-            </div><!--.nav-search-->
+        %>
+        <div id="page-content-wrapper">
+            <div id="page-content" style="min-height: 545px;">
 
-            <div class="nav-bar-border"></div><!--.nav-bar-border-->
+                <div class="container">
 
-            <!-- BEGIN OVERLAY HELPERS -->
-            <div class="overlay">
-                <div class="starting-point">
-                    <span></span>
-                </div><!--.starting-point-->
-                <div class="logo">VIMBOX</div><!--.logo-->
-            </div><!--.overlay-->
+                    <!-- Tocify -->
 
-            <div class="overlay-secondary"></div><!--.overlay-secondary-->
-            <!-- END OF OVERLAY HELPERS -->
+                    <!--<link rel="stylesheet" type="text/css" href="assets/widgets/tocify/tocify.css">-->
+                    <script type="text/javascript" src="assets/widgets/sticky/sticky.js"></script>
+                    <script type="text/javascript" src="assets/widgets/tocify/tocify.js"></script>
 
-        </div><!--.nav-bar-container-->
+                    <script type="text/javascript">
+                        $(function () {
+                            var toc = $("#tocify-menu").tocify({context: ".toc-tocify", showEffect: "fadeIn", extendPage: false, selectors: "h2, h3, h4"});
+                        });
+                        jQuery(document).ready(function ($) {
 
-        <div class="layer-container">
+                            /* Sticky bars */
 
-            <!-- BEGIN MENU LAYER -->
-            <div class="menu-layer">
-                <ul>
-                    <li>
-                        <a href="HomePage.jsp">HomePage</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">Human Resource</a>
-                        <ul class="child-menu">
-                            <li><a href="CreateEmployee.jsp">Create Employee</a></li>
-                            <li><a href="FullTimeEmployees.jsp">Full Time Employees</a></li>
-                            <li><a href="PartTimeEmployees.jsp">Part Time Employees</a></li>
-                            <li><a href="Payslips.jsp">Payslips</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">Sales</a>
-                        <ul class="child-menu">
-                            <li><a href="CreateLead.jsp">Create Lead</a></li>
-                            <li><a href="MyLeads.jsp">My Leads</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">Ticket</a>
-                        <ul class="child-menu">
-                            <li><a href="CreateTicket.jsp">Create Ticket</a></li>
-                            <li><a href="MyTickets.jsp">My Tickets</a></li>
-                            <li><a href="TicketForum.jsp">Ticket Forum</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div><!--.menu-layer-->
-            <!-- END OF MENU LAYER -->
+                            $(function () {
+                                "use strict";
 
-            <!-- BEGIN SEARCH LAYER -->
-            <div class="search-layer">
-                <div class="search">
-                    <div class="form-group">
-                        <input type="text" id="customer_search" class="form-control" placeholder="Search Customer">
-                        <button onclick='customerSearch("crm")' class="btn btn-default"><i class="ion-search"></i></button>
-                    </div>
-                </div><!--.search-->
+                                $('.sticky-nav').hcSticky({
+                                    top: 50,
+                                    innerTop: 50,
+                                    stickTo: 'document'
+                                });
 
-                <div class="results">
-                    <div class="row">
-                        <div id="customer_modal">
-                            <div id="customer_content"></div>
-                        </div>
-
-                        <div id="edit_customer_modal" class="modal">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <span class="close" onclick="closeModal('edit_customer_modal')">×</span>
-                                    <div id="edit_customer_content"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="customer_error_modal" class="modal">
-                            <div class="error-modal-content">
-                                <div class="modal-body">
-                                    <span class="close" onclick="closeModal('customer_error_modal')">×</span>
-                                    <div id="customer_error_status"></div>
-                                    <hr>
-                                    <div id="customer_error_message"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="ticketsHistoryModel" class="modal">
-                            <!-- Modal content -->
-                            <div class="search-modal-content">
-                                <div class="modal-body">
-                                    <span class="close" onclick="closeModal('ticketsHistoryModel')">×</span>
-                                    <div id="ticketsHistoryContent"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="leadsHistoryModel" class="modal">
-                            <!-- Modal content -->
-                            <div class="search-modal-content">
-                                <div class="modal-body">
-                                    <span class="close" onclick="closeModal('leadsHistoryModel')">×</span>
-                                    <div id="leadsHistoryContent"></div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div><!--.row-->
-                </div><!--.results-->
-            </div><!--.search-layer-->
-            <!-- END OF SEARCH LAYER -->
-        </div>
-
-        <div class="content">
-            <div class="page-header full-content">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h1>My Tickets <small></small></h1>
-                    </div><!--.col-->
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb">
-                            <a href="Logout.jsp">Logout</a>
-                        </ol>
-                    </div><!--.col-->
-                </div><!--.row-->
-            </div><!--.page-header-->
-
-            <!-- Start content -->
-            <%            ArrayList<Ticket> myTickets = TicketDAO.getTicketsByOwnerUser(user);
-                ArrayList<Ticket> assignedTickets = TicketDAO.getTicketsByAssignedUser(user);
-
-            %>
-            <div class="col-md-9">
-
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#myTickets" data-toggle="tab">My Tickets</a></li>
-                    <li><a href="#assignedTickets" data-toggle="tab">Assigned Tickets</a></li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="myTickets">
-                        <h1>My Tickets</h1>
-                        <table border="1">
-                            <tr>
-								<th>Ticket ID</th>
-								<th>Cust Name</th>
-								<th>Cust Contact</th>
-								<th>Cust Email</th>
-								<th>Subject</th>
-								<th>Date & Time</th>
-								<th>Edited on</th>
-								<th>Status</th>
-								<th>Action</th>
-                            </tr>
-                            <%            
-								for(Ticket myTicket:myTickets){
-									int ticketId = myTicket.getTicket_id();
-									Customer customer = myTicket.getCustomer();
-									String customerName = customer.toString();
-									String contact  = customer.getContact() + "";
-									if(contact.equals("0")){
-										contact = "N/A";
-									}
-									String email = customer.getEmail();
-									if(email.isEmpty()){
-										email = "N/A";
-									}
-									String subject = myTicket.getSubject();
-									String dateTime = Converter.convertDate(myTicket.getDatetime_of_creation());
-									String edited = Converter.convertDate(myTicket.getDatetime_of_edit());
-									String status = myTicket.getStatus();
-                            %>
-							
-                            <tr>
-								<td><%=ticketId%></td>
-								<td><%=customerName%></td>
-								<td><%=contact%></td>
-								<td><%=email%></td>
-								<td><%=subject%></td>
-								<td><%=dateTime%></td>
-								<td><%=edited%></td>
-								<td><%=status%></td>
-								<td>
-                                    <%
-                                        if (status.equals("Pending")) {
-                                    %>
-                                    <button onclick="editTicket(<%=ticketId%>)">Edit</button>
-                                    <div id="edit_ticket_modal" class="modal">
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <span class="close" onclick="closeModal('edit_ticket_modal')">×</span>
-                                                <div id="edit_ticket_content"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <%
-                                        }
-                                    %>
-                                </td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-
-                    </div><!--.tab-pane-->
-                    <div class="tab-pane" id="assignedTickets">
-
-                        <h1>Assigned Tickets</h1>
-                        <table border="1">
-                            <tr>
-                                <th>Ticket ID</th>
-                                <th>Cust Name</th>
-                                <th>Cust Contact</th>
-                                <th>Cust Email</th>
-                                <th>Subject</th>
-                                <th>Date & Time</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                                <th>View</th>
-                            </tr>
-                            <%
-                                for (Ticket ticket : assignedTickets) {
-                                    int ticketId = ticket.getTicket_id();
-                                    Customer customer = ticket.getCustomer();
-                                    String customerName = customer.toString();
-                                    String contact = customer.getContact() + "";
-                                    if (contact.equals("0")) {
-                                        contact = "N/A";
-                                    }
-                                    String email = customer.getEmail();
-                                    if (email.isEmpty()) {
-                                        email = "N/A";
-                                    }
-                                    String subject = ticket.getSubject();
-                                    String dateTime = Converter.convertDate(ticket.getDatetime_of_creation());
-                                    String status = ticket.getStatus();
-                            %>
-                            <tr>
-                                <td><%=ticketId%></td>
-                                <td><%=customerName%></td>
-                                <td><%=contact%></td>
-                                <td><%=email%></td>
-                                <td><%=subject%></td>
-                                <td><%=dateTime%></td>
-                                <td><%=status%></td>
-                                <td>
-                                    <button onclick="commentTicket('<%=ticketId%>')">C</button>
-                                    <!-- The Modal -->
-                                    <div id="commentModal<%=ticketId%>" class="modal">
-                                        <!-- Modal content -->
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <span class="close" onclick="closeModal('commentModal<%=ticketId%>')">×</span>
-                                                <h3>Add Comment</h3>
-                                                <table>
-                                                    <tr>
-                                                        <td>Ticket ID :</td>
-                                                        <td><%=ticketId%><input type="hidden" id="comment_ticket_id<%=ticketId%>" value="<%=ticketId%>" /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Comment :</td>
-                                                        <td><textarea id="ticket_comment<%=ticketId%>" cols="75" rows="6" autofocus></textarea></td>
-                                                    </tr>  
-                                                    <tr>
-                                                        <td></td>
-                                                        <td><button onclick="followupTicket(<%=ticketId%>)">Add Comment</button></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <button onclick="closeTicket('<%=ticketId%>')">R</button>
-                                    <div id="resolveModal<%=ticketId%>" class="modal">
-                                        <!-- Modal content -->
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <span class="close" onclick="closeModal('resolveModal<%=ticketId%>')">×</span>
-                                                <h3>Resolve Ticket</h3>
-                                                <table>
-                                                    <tr>
-                                                        <td>Ticket ID :</td>
-                                                        <td><%=ticketId%><input type="hidden" id="resolve_ticket_id<%=ticketId%>" value="<%=ticketId%>" /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Solution :</td>
-                                                        <td><textarea id="resolve_ticket_solution<%=ticketId%>" cols="75" rows="6" autofocus></textarea></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td><button onclick="resolveTicket(<%=ticketId%>)">Resolve Ticket</button></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <button onclick="viewTicket('<%=ticketId%>')">VT</button>
-                                    <!-- The Modal -->
-                                    <div id="viewTicketModal<%=ticketId%>" class="modal">
-                                        <!-- Modal content -->
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <span class="close" onclick="closeModal('viewTicketModal<%=ticketId%>')">×</span>
-                                                <h3>Ticket Details</h3>
-                                                <table>
-                                                    <tr>
-                                                        <td align="right">Ticket ID :</td>
-                                                        <td><%=ticketId%></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Date & Time :</td>
-                                                        <td><%=dateTime%></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Ticket Owner :</td>
-                                                        <td><%=ticket.getOwner_user().toString()%></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Assigned To :</td>
-                                                        <td>
-                                                            <%
-                                                                ArrayList<User> assigned = ticket.getAssigned_users();
-                                                                if (assigned.size() > 1) {
-                                                                    for (User assignee : assigned) {
-                                                                        out.println("<li>" + assignee.toString() + "</li>");
-                                                                    }
-                                                                } else if (assigned.size() == 1) {
-                                                                    out.println(assigned.get(0).toString());
-                                                                }
-                                                            %>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Subject :</td>
-                                                        <td><%=subject%></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Customer Details :</td>
-                                                        <td>
-                                                            <%=customerName%><br>
-                                                            <%=contact%><br>
-                                                            <%=email%>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Status :</td>
-                                                        <td><%=status%></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Description :</td>
-                                                        <td><%=ticket.getDescription()%></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Solution :</td>
-                                                        <td><%=ticket.getSolution()%></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <button onclick="viewComments('<%=ticketId%>')">VC</button>
-                                    <!-- The Modal -->
-                                    <div id="viewCommentsModal<%=ticketId%>" class="modal">
-                                        <!-- Modal content -->
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <span class="close" onclick="closeModal('viewCommentsModal<%=ticketId%>')">×</span>
-                                                <div id="commentsContent<%=ticketId%>"></div> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-
-                        <div id="ticket_error_modal" class="modal">
-                            <div class="error-modal-content">
-                                <div class="modal-body">
-                                    <span class="close" onclick="closeModal('ticket_error_modal')">×</span>
-                                    <div id="ticket_error_status"></div>
-                                    <hr>
-                                    <div id="ticket_error_message"></div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div><!--.tab-pane-->
-                </div><!--.tab-content-->
-
-            </div><!--.col-md-9-->
-
-            <!-- End content -->
-        </div><!--.content-->
-
-        <!-- PLEASURE -->
-        <script src="assets/globals/js/pleasure.js"></script>
-        <!-- ADMIN 1 -->
-        <script src="assets/admin1/js/layout.js"></script>
-        <script src="assets/globals/js/global-vendors.js"></script>
-
-        <!-- BEGIN INITIALIZATION-->
-        <script>
-                            $(document).ready(function () {
-                                Pleasure.init();
-                                Layout.init();
                             });
-        </script>
-        <!-- END INITIALIZATION-->
-    </body>
+
+                        });
+                    </script>
+
+                    <div id="page-title">
+                        <h2>My Tickets</h2> <br/>
+                        <div class="panel">
+                            <div class="panel-body">
+                                <div class="example-box-wrapper">
+                                    <ul class="nav-responsive nav nav-tabs">
+                                        <li class="active"><a href="#myTickets" data-toggle="tab">My Tickets</a></li>
+                                        <li><a href="#assignedTickets" data-toggle="tab">Assigned Tickets</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div id="myTickets" class="tab-pane active">
+                                            <table class="table table-hover">
+                                                <tr>
+                                                    <th>Ticket ID</th>
+                                                    <th>Cust Name</th>
+                                                    <th>Cust Contact</th>
+                                                    <th>Cust Email</th>
+                                                    <th>Subject</th>
+                                                    <th>Date & Time</th>
+                                                    <th>Edited on</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                <%                                for (Ticket myTicket : myTickets) {
+                                                        int ticketId = myTicket.getTicket_id();
+                                                        Customer customer = myTicket.getCustomer();
+                                                        String customerName = customer.toString();
+                                                        String contact = customer.getContact() + "";
+                                                        if (contact.equals("0")) {
+                                                            contact = "N/A";
+                                                        }
+                                                        String email = customer.getEmail();
+                                                        if (email.isEmpty()) {
+                                                            email = "N/A";
+                                                        }
+                                                        String subject = myTicket.getSubject();
+                                                        String dateTime = Converter.convertDate(myTicket.getDatetime_of_creation());
+                                                        String edited = Converter.convertDate(myTicket.getDatetime_of_edit());
+                                                        String status = myTicket.getStatus();
+                                                %>
+
+                                                <tr>
+                                                    <td><%=ticketId%></td>
+                                                    <td><%=customerName%></td>
+                                                    <td><%=contact%></td>
+                                                    <td><%=email%></td>
+                                                    <td><%=subject%></td>
+                                                    <td><%=dateTime%></td>
+                                                    <td><%=edited%></td>
+                                                    <td><%=status%></td>
+                                                    <td>
+                                                        <%
+                                                            if (status.equals("Pending")) {
+                                                        %>
+                                                        <button onclick="editTicket(<%=ticketId%>)">Edit</button>
+                                                        <div id="edit_ticket_modal" class="modal">
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">
+                                                                    <span class="close" onclick="closeModal('edit_ticket_modal')">×</span>
+                                                                    <div id="edit_ticket_content"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <%
+                                                            }
+                                                        %>
+                                                    </td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                %>
+                                            </table>
+                                        </div>
+                                        <div id="assignedTickets" class="tab-pane">
+                                            <table class="table table-hover">
+                                                <tr>
+                                                    <th>Ticket ID</th>
+                                                    <th>Cust Name</th>
+                                                    <th>Cust Contact</th>
+                                                    <th>Cust Email</th>
+                                                    <th>Subject</th>
+                                                    <th>Date & Time</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                    <th>View</th>
+                                                </tr>
+                                                <%
+                                                    for (Ticket ticket : assignedTickets) {
+                                                        int ticketId = ticket.getTicket_id();
+                                                        Customer customer = ticket.getCustomer();
+                                                        String customerName = customer.toString();
+                                                        String contact = customer.getContact() + "";
+                                                        if (contact.equals("0")) {
+                                                            contact = "N/A";
+                                                        }
+                                                        String email = customer.getEmail();
+                                                        if (email.isEmpty()) {
+                                                            email = "N/A";
+                                                        }
+                                                        String subject = ticket.getSubject();
+                                                        String dateTime = Converter.convertDate(ticket.getDatetime_of_creation());
+                                                        String status = ticket.getStatus();
+                                                %>
+                                                <tr>
+                                                    <td><%=ticketId%></td>
+                                                    <td><%=customerName%></td>
+                                                    <td><%=contact%></td>
+                                                    <td><%=email%></td>
+                                                    <td><%=subject%></td>
+                                                    <td><%=dateTime%></td>
+                                                    <td><%=status%></td>
+                                                    <td>
+                                                        <button onclick="commentTicket('<%=ticketId%>')">C</button>
+                                                        <!-- The Modal -->
+                                                        <div id="commentModal<%=ticketId%>" class="modal">
+                                                            <!-- Modal content -->
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">
+                                                                    <span class="close" onclick="closeModal('commentModal<%=ticketId%>')">×</span>
+                                                                    <h3>Add Comment</h3>
+                                                                    <table>
+                                                                        <tr>
+                                                                            <td>Ticket ID :</td>
+                                                                            <td><%=ticketId%><input type="hidden" id="comment_ticket_id<%=ticketId%>" value="<%=ticketId%>" /></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Comment :</td>
+                                                                            <td><textarea id="ticket_comment<%=ticketId%>" cols="75" rows="6" autofocus></textarea></td>
+                                                                        </tr>  
+                                                                        <tr>
+                                                                            <td></td>
+                                                                            <td><button onclick="followupTicket(<%=ticketId%>)">Add Comment</button></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <button onclick="closeTicket('<%=ticketId%>')">R</button>
+                                                        <div id="resolveModal<%=ticketId%>" class="modal">
+                                                            <!-- Modal content -->
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">
+                                                                    <span class="close" onclick="closeModal('resolveModal<%=ticketId%>')">×</span>
+                                                                    <h3>Resolve Ticket</h3>
+                                                                    <table>
+                                                                        <tr>
+                                                                            <td>Ticket ID :</td>
+                                                                            <td><%=ticketId%><input type="hidden" id="resolve_ticket_id<%=ticketId%>" value="<%=ticketId%>" /></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Solution :</td>
+                                                                            <td><textarea id="resolve_ticket_solution<%=ticketId%>" cols="75" rows="6" autofocus></textarea></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td></td>
+                                                                            <td><button onclick="resolveTicket(<%=ticketId%>)">Resolve Ticket</button></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <button onclick="viewTicket('<%=ticketId%>')">VT</button>
+                                                        <!-- The Modal -->
+                                                        <div id="viewTicketModal<%=ticketId%>" class="modal">
+                                                            <!-- Modal content -->
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">
+                                                                    <span class="close" onclick="closeModal('viewTicketModal<%=ticketId%>')">×</span>
+                                                                    <h3>Ticket Details</h3>
+                                                                    <table>
+                                                                        <tr>
+                                                                            <td align="right">Ticket ID :</td>
+                                                                            <td><%=ticketId%></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="right">Date & Time :</td>
+                                                                            <td><%=dateTime%></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="right">Ticket Owner :</td>
+                                                                            <td><%=ticket.getOwner_user().toString()%></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="right">Assigned To :</td>
+                                                                            <td>
+                                                                                <%
+                                                                                    ArrayList<User> assigned = ticket.getAssigned_users();
+                                                                                    if (assigned.size() > 1) {
+                                                                                        for (User assignee : assigned) {
+                                                                                            out.println("<li>" + assignee.toString() + "</li>");
+                                                                                        }
+                                                                                    } else if (assigned.size() == 1) {
+                                                                                        out.println(assigned.get(0).toString());
+                                                                                    }
+                                                                                %>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="right">Subject :</td>
+                                                                            <td><%=subject%></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="right">Customer Details :</td>
+                                                                            <td>
+                                                                                <%=customerName%><br>
+                                                                                <%=contact%><br>
+                                                                                <%=email%>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="right">Status :</td>
+                                                                            <td><%=status%></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="right">Description :</td>
+                                                                            <td><%=ticket.getDescription()%></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="right">Solution :</td>
+                                                                            <td><%=ticket.getSolution()%></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <button onclick="viewComments('<%=ticketId%>')">VC</button>
+                                                        <!-- The Modal -->
+                                                        <div id="viewCommentsModal<%=ticketId%>" class="modal">
+                                                            <!-- Modal content -->
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">
+                                                                    <span class="close" onclick="closeModal('viewCommentsModal<%=ticketId%>')">×</span>
+                                                                    <div id="commentsContent<%=ticketId%>"></div> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <%
+                                                    }
+                                                %>
+                                            </table>
+
+                                            <div id="ticket_error_modal" class="modal">
+                                                <div class="error-modal-content">
+                                                    <div class="modal-body">
+                                                        <span class="close" onclick="closeModal('ticket_error_modal')">×</span>
+                                                        <div id="ticket_error_status"></div>
+                                                        <hr>
+                                                        <div id="ticket_error_message"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 </html>
