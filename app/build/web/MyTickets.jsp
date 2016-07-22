@@ -22,6 +22,24 @@
             ArrayList<Ticket> assignedTickets = TicketDAO.getTicketsByAssignedUser(user);
 
         %>
+        <!-- The Modal for View Tickets-->
+        <div class="modal" id="viewTicketModal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('viewTicketModal')">×</span>
+                <div id="viewTicketModalContent">
+                </div>
+            </div>
+        </div>
+        <!-- The Modal for View Comment-->
+        <div id="viewCommentsModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('viewCommentsModal')">×</span>
+                    <div id="commentsContent"></div> 
+                </div>
+            </div>
+        </div>
         <div id="page-content-wrapper">
             <div id="page-content" style="min-height: 545px;">
 
@@ -221,81 +239,7 @@
 
                                                     <td>
                                                         <button onclick="viewTicket('<%=ticketId%>')">VT</button>
-                                                        <!-- The Modal -->
-                                                        <div id="viewTicketModal<%=ticketId%>" class="modal">
-                                                            <!-- Modal content -->
-                                                            <div class="modal-content">
-                                                                <div class="modal-body">
-                                                                    <span class="close" onclick="closeModal('viewTicketModal<%=ticketId%>')">×</span>
-                                                                    <h3>Ticket Details</h3>
-                                                                    <table>
-                                                                        <tr>
-                                                                            <td align="right">Ticket ID :</td>
-                                                                            <td><%=ticketId%></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="right">Date & Time :</td>
-                                                                            <td><%=dateTime%></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="right">Ticket Owner :</td>
-                                                                            <td><%=ticket.getOwner_user().toString()%></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="right">Assigned To :</td>
-                                                                            <td>
-                                                                                <%
-                                                                                    ArrayList<User> assigned = ticket.getAssigned_users();
-                                                                                    if (assigned.size() > 1) {
-                                                                                        for (User assignee : assigned) {
-                                                                                            out.println("<li>" + assignee.toString() + "</li>");
-                                                                                        }
-                                                                                    } else if (assigned.size() == 1) {
-                                                                                        out.println(assigned.get(0).toString());
-                                                                                    }
-                                                                                %>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="right">Subject :</td>
-                                                                            <td><%=subject%></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="right">Customer Details :</td>
-                                                                            <td>
-                                                                                <%=customerName%><br>
-                                                                                <%=contact%><br>
-                                                                                <%=email%>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="right">Status :</td>
-                                                                            <td><%=status%></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="right">Description :</td>
-                                                                            <td><%=ticket.getDescription()%></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="right">Solution :</td>
-                                                                            <td><%=ticket.getSolution()%></td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
                                                         <button onclick="viewComments('<%=ticketId%>')">VC</button>
-                                                        <!-- The Modal -->
-                                                        <div id="viewCommentsModal<%=ticketId%>" class="modal">
-                                                            <!-- Modal content -->
-                                                            <div class="modal-content">
-                                                                <div class="modal-body">
-                                                                    <span class="close" onclick="closeModal('viewCommentsModal<%=ticketId%>')">×</span>
-                                                                    <div id="commentsContent<%=ticketId%>"></div> 
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <%
