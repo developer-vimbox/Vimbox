@@ -10,23 +10,12 @@
         <script src="http://malsup.github.com/jquery.form.js"></script> 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-        <link rel="stylesheet" type="text/css" href="assets/bootstrap/css/bootstrap.css">
-        <!--Custom-->
-  
         <script src="JS/ModalFunctions.js"></script>
         <script src="JS/UserFunctions.js"></script>
         <link rel="stylesheet" type="text/css" href="assets/custom/css/admin1.css">
         <link rel="stylesheet" type="text/css" href="assets/custom/css/custom.css">
         <script src="assets/custom/js/modernizr.min.js"></script>
         <link rel="stylesheet" type="text/css" href="assets/custom/css/custommodalcss.css">
-      
-
-
-
-
-
-
         <script type="text/javascript">
             $(window).load(function () {
                 setTimeout(function () {
@@ -34,9 +23,6 @@
                 }, 300);
             });
         </script>
-
-
-
     </head>
     <body class="bg-login printable" data-gr-c-s-loaded="true">
         <div id="messageModal" class="modal">
@@ -67,26 +53,19 @@
             }
 
         </script>
-
-
         <script type="text/javascript" src="assets/widgets/wow/wow.js"></script>
         <script type="text/javascript">
-            /* WOW animations */
+                        /* WOW animations */
 
-            wow = new WOW({
-                animateClass: 'animated',
-                offset: 100
-            });
-            wow.init();
+                        wow = new WOW({
+                            animateClass: 'animated',
+                            offset: 100
+                        });
+                        wow.init();
         </script>
-
-
-
-
         <div class="login-screen">
             <div class="panel-login blur-content">
                 <div class="panel-heading"><b>VIMBOX</b></div><!--.panel-heading-->
-
                 <div id="pane-login" class="panel-body active">
                     <h2>Login to Vimbox</h2>
                     <form action="LoginController" method="POST" id="login_form">
@@ -135,15 +114,5 @@
     <!-- ADMIN 1 Layout Functions -->
     <script src="assets/custom/js/customlayout.js"></script>
 
-    <!-- BEGIN INITIALIZATION-->
-<!--    <script>
-                                $(document).ready(function () {
-                                    Pleasure.init();
-                                    Layout.init();
-                                    UserPages.login();
-                                });
-    </script>-->
-    <!-- END INITIALIZATION-->
-
-
-</body></html>
+</body>
+</html>

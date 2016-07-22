@@ -8,6 +8,16 @@ function customerSearch(module) {
     modal.style.display = "block";
 }
 
+function customerSearchHeader(module) {
+    var modal = document.getElementById("customer_modal_header");
+    var name = $('#customer_search_header').val();
+    var content = document.getElementById("customer_content_header");
+    $.get("SearchCustomersByName.jsp", {getName: name, getAction: module}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
+}
+
 function addNewCustomer() {
     var modal = document.getElementById("customer_modal");
     $("#customer_content").load("CreateCustomer.jsp");
@@ -57,6 +67,7 @@ function selectCustomer(customer_id, customer_salutation, customer_first_name, c
     $("#customer_last_name").html(customer_last_name);
     $("#customer_contact").html(customer_contact);
     $("#customer_email").html(customer_email);
+    $("#customer_name").html(customer_salutation + " " + customer_first_name + " " + customer_last_name)
     document.getElementById("customer_information_table").style.display = "block";
 }
 
