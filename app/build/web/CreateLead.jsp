@@ -15,6 +15,7 @@
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
         <script src="JS/jquery.hotkeys.js"></script>
         <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
         <script src="JS/AddressSearch.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
 
@@ -44,11 +45,58 @@
                 height:100%;
             }
 
-            img#loader {
-                display: none;
+            /* Style the list */
+            ul.tab {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
             }
 
-            
+            /* Float the list items side by side */
+            ul.tab li {float: left;}
+
+            /* Style the links inside the list items */
+            ul.tab li a {
+                display: inline-block;
+                color: black;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                transition: 0.3s;
+                font-size: 17px;
+            }
+
+            /* Change background color of links on hover */
+            ul.tab li a:hover {background-color: #ddd;}
+
+            /* Create an active/current tablink class */
+            ul.tab li a:focus, .active {background-color: #ccc;}
+
+            /* Style the tab content */
+            .tabcontent {
+                display: none;
+                padding: 6px 12px;
+                border: 1px solid #ccc;
+                border-top: none;
+            }
+
+            .tabcontent {
+                -webkit-animation: fadeEffect 1s;
+                animation: fadeEffect 1s; /* Fading effect takes 1 second */
+            }
+
+            @-webkit-keyframes fadeEffect {
+                from {opacity: 0;}
+                to {opacity: 1;}
+            }
+
+            @keyframes fadeEffect {
+                from {opacity: 0;}
+                to {opacity: 1;}
+            }
         </style>
     </head>
     <body onload="create_leadSetup()">
@@ -287,489 +335,9 @@
                     <br>
                     <fieldset>
                         <b><u>Sales Details</u></b><hr>
-                        <table class="salesInfoTable" id="salesTable">
-                            <tr>
-                                <td style="width:30%;">
-                                    <table border="1" class="salesTable">
-                                        <tr style="background-color:DarkOrange">
-                                            <td colspan="2" align="center"><b><u>Customer Item List</u></b></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">Box :</td>
-                                            <td>
-                                                <table class="customerBoxTable">
-                                                    <col width="80">
-                                                    <tr>
-                                                        <td align="right">Quantity :</td>
-                                                        <td>
-                                                            <input type="number" min="0" id="customerBoxUnit">
-                                                            <button onclick="addCustomerBox();
-                                                                    return false;">Add box</button>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">Item :</td>
-                                            <td>
-                                                <table class="customerItemTable">
-                                                    <col width="80">
-                                                    <tr>
-                                                        <td align="right">Name :</td>
-                                                        <td>
-                                                            <input type="text" size="40" id="itemName" list="items" placeholder="Enter item">
-
-                                                            <datalist id="items">
-                                                                <%
-                                                                    for (String[] item : existingItems) {
-                                                                        String value = item[0] + " " + item[1] + "|" + item[2] + "|" + item[3];
-                                                                        out.println("<option data-value='" + value + "' value='" + item[0] + " " + item[1] + "'>");
-                                                                    }
-                                                                %>
-                                                            </datalist>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" size="40" id="itemdimensions" placeholder="Dimensions" disabled>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Units :</td>
-                                                        <td>
-                                                            <input type="number" min="0" id="itemUnit">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Quantity :</td>
-                                                        <td>
-                                                            <input type="number" min="0" id="itemQty">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Remarks :</td>
-                                                        <td>
-                                                            <input type="text" size="40" id="itemRemark" placeholder="Enter item remarks">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>
-                                                            <button onclick="addItem();
-                                                                    return false;">Add item</button>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">Special Item :</td>
-                                            <td>
-                                                <table class="customerSpecialItemTable">
-                                                    <col width="80">
-                                                    <tr>
-                                                        <td align="right">Name :</td>
-                                                        <td>
-                                                            <input type="text" size="40" id="specialItemName" list="specialitems" placeholder="Enter item">
-
-                                                            <datalist id="specialitems">
-                                                                <%
-                                                                    for (String specialItem : existingSpecialItems) {
-                                                                        out.println("<option  value='" + specialItem + "'>");
-                                                                    }
-                                                                %>
-                                                            </datalist>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Units :</td>
-                                                        <td>
-                                                            <input type="number" min="0" id="specialItemUnit">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Quantity :</td>
-                                                        <td>
-                                                            <input type="number" min="0" id="specialItemQty">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Additional Charges :</td>
-                                                        <td>
-                                                            $ <input type="number" min="0" step="0.01" id="specialItemCharges">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Remarks :</td>
-                                                        <td>
-                                                            <input type="text" size="40" id="specialItemRemark" placeholder="Enter item remarks">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>
-                                                            <button onclick="addSpecialItem();
-                                                                    return false;">Add special</button>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr style="background-color:CornflowerBlue">
-                                            <td colspan="2" align="center"><b><u>Vimbox Item List</u></b></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">Box :</td>
-                                            <td>
-                                                <table class="vimboxBoxTable">
-                                                    <col width="80">
-                                                    <tr>
-                                                        <td align="right">Quantity :</td>
-                                                        <td>
-                                                            <input type="number" min="0" id="vimboxBoxUnit">
-                                                            <button onclick="addVimboxBox();
-                                                                    return false;">Add box</button>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">Material :</td>
-                                            <td>
-                                                <table class="vimboxMaterialTable">
-                                                    <col width="80">
-                                                    <tr>
-                                                        <td align="right">Item :</td>
-                                                        <td>
-                                                            <input type="text" id="vimboxMaterial">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Quantity :</td>
-                                                        <td>
-                                                            <input type="number" step="0.01" min="0" id="vimboxMaterialUnit">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="right">Charges :</td>
-                                                        <td>
-                                                            $ <input type="number" min="0" step="0.01" id="vimboxMaterialCharge">
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>
-                                                            <button onclick="addVimboxMaterial();
-                                                                    return false;">Add material</button>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr style="background-color:DarkCyan">
-                                            <td colspan="2" align="center"><b><u>Services</u></b></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">Svcs :</td>
-                                            <td align="center">
-                                                <button style="width:100%" onclick="selectService();
-                                                        return false;">Add service</button>
-                                                <!-- Service Modal -->
-                                                <div id="serviceModal" class="service">
-                                                    <!-- Modal content -->
-                                                    <div class="service-content">
-                                                        <div class="service-body">
-                                                            <span class="close" onclick="closeModal('serviceModal')">×</span>
-                                                            <div id="serviceContent">
-
-                                                                <table width="100%" border="1" style="table-layout: fixed;" id="serviceTable">
-                                                                    <%
-                                                                        for (int i = 0; i < serviceTable.length; i++) {
-                                                                            out.println("<tr>");
-                                                                            for (int j = 0; j < serviceTable[i].length; j++) {
-                                                                                if (i == 0) {
-                                                                                    // Table Header //
-                                                                                    out.println("<th>" + serviceTable[i][j] + "</th>");
-                                                                                } else {
-                                                                                    // Table Data //
-                                                                                    String[] serviceChargeArray = serviceTable[i][j].split(",");
-                                                                                    out.println("<td bgcolor='#6698FF' align='center'>" + serviceChargeArray[0] + "</br>");
-
-                                                                                    if (serviceTable[0][j].equals("Manpower")) {
-                                                                                        String id = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
-                                                                                        out.println("Manpower : <label id='" + id + "manpowerLabel'></label><input type='hidden' name='" + id + "manpowerInput' id='" + id + "manpowerInput'></br>");
-                                                                                        out.println("Reason : <label id='" + id + "manpowerReasonLabel'></label><input type='hidden' name='" + id + "reasonInput' id='" + id + "reasonInput'></br>");
-                                                                                    }
-                                                                                    try {
-                                                                                        out.println("<input type='hidden' name='svcTableCell' value='{" + serviceTable[0][j] + "|" + serviceChargeArray[0] + "," + serviceChargeArray[1] + "}'>");
-                                                                                    } catch (IndexOutOfBoundsException e) {
-                                                                                    }
-
-                                                                                    out.println("</td>");
-
-                                                                                }
-                                                                            }
-                                                                            out.println("</tr>");
-                                                                        }
-                                                                    %>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr> 
-                                        <tr style="background-color:Plum">
-                                            <td colspan="2" align="center"><b><u>Comments & Remarks</u></b></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">Cmt :</td>
-                                            <td>
-                                                <table class="customerCommentTable">
-                                                    <tr>
-                                                        <td>
-                                                            <input type="text" size="40" id="customerComment" placeholder="Enter customer comment">
-                                                        </td>
-                                                        <td>
-                                                            <button onclick="addCustomerComment();
-                                                                    return false;">Add Comment</button>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">Rmk :</td>
-                                            <td>
-                                                <table class="customerRemarkTable">
-                                                    <tr>
-                                                        <td>
-                                                            <input type="text" size="40" id="customerRemark" placeholder="Enter remark for customer">
-                                                        </td>
-                                                        <td>
-                                                            <button onclick="addCustomerRemark();
-                                                                    return false;">Add Remark</button>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td style="width:70%;">
-                                    <table class="vimboxSystemTable">
-                                        <tr style="height:50%">
-                                            <td>
-                                                <table border="1">
-                                                    <tr style="height:10%">
-                                                        <th style="width:20%">Item</th>
-                                                        <th style="width:40%">Remarks</th>
-                                                        <th style="width:10%">Additional Charges</th>
-                                                        <th style="width:10%">Quantity</th>
-                                                        <th style="width:10%">Units</th>
-                                                        <th style="width:20%"><div id="totalUnits"></div></th>
-                                        </tr> 
-                                        <tr>
-                                            <td colspan="6">
-                                                <table border="1">
-                                                    <tr height="50%">
-                                                        <td>
-                                                            <table border="1">
-                                                                <tr style="background-color:DarkOrange" height="10%">
-                                                                    <td align="center"><b><u>Customer Item List</u></b></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div style="overflow:auto;height:100%;">
-                                                                            <table id="customerItemsTable" valign="top" style="width:100%;">
-                                                                                <col width="20%">
-                                                                                <col width="40%">
-                                                                                <col width="10%">
-                                                                                <col width="10%">
-                                                                                <col width="10%">
-                                                                                <col width="20%">
-                                                                                <tbody>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <table border="1">
-                                                                <tr style="background-color:CornflowerBlue" height="10%">
-                                                                    <td align="center"><b><u>Vimbox Item List</u></b></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div style="overflow:auto;height:100%;">
-                                                                            <table id="vimboxItemsTable" valign="top" style="width:100%;">
-                                                                                <col width="20%">
-                                                                                <col width="40%">
-                                                                                <col width="10%">
-                                                                                <col width="10%">
-                                                                                <col width="10%">
-                                                                                <col width="20%">
-                                                                                <tbody>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td> 
-                            </tr>
-                            <tr style="height:40%">
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td style="width:50%">
-                                                <table border="1">
-                                                    <tr style="height:10%;background-color:DarkCyan;">
-                                                        <th>Services</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div style="overflow:auto;height:100%;">
-                                                                <table class="servicesTable" id="servicesTable" valign="top" width="100%">
-                                                                    <tbody></tbody>
-                                                                </table>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr height="5%">
-                                                        <td>
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td align="left">Storey Charges :</td>
-                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="storeyCharge" name="storeyCharge" value="0.00"></td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                    <tr height="5%">
-                                                        <td>
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td align="left">Pushing Charges :</td>
-                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="pushCharge" name="pushCharge" value="0.00"></td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                    <tr height="5%">
-                                                        <td>
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td align="left">Detour Charges :</td>
-                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="detourCharge" name="detourCharge" value="0.00"></td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                    <tr height="5%">
-                                                        <td>
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td align="left">Material Charges :</td>
-                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="materialCharge" name="materialCharge" value="0.00"></td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                    <tr height="5%">
-                                                        <td>
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td align="left">Additional Markup :</td>
-                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="markup" name="markup" value="0.00"></td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                    <tr height="5%">
-                                                        <td>
-                                                            <table width="100%">
-                                                                <tr>
-                                                                    <td align="left">Discount :</td>
-                                                                    <td align="right">$ <input type="number" step="0.01" min="0" id="discount" name="discount" value="0.00"></td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td>
-                                                <table>
-                                                    <tr style="height:50%">
-                                                        <td>
-                                                            <table border="1">
-                                                                <tr style="height:10%;background-color:Plum;">
-                                                                    <th>Customer Comments</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div style="overflow:auto;height:100%;">
-                                                                            <table id="commentsTable" valign="top">
-                                                                                <tbody></tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <table border="1">
-                                                                <tr style="height:10%;background-color:Plum;">
-                                                                    <th>Customer Remarks</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div style="overflow:auto;height:100%;">
-                                                                            <table id="remarksTable" valign="top">
-                                                                                <tbody>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr style="height:10%">
-                                <td>
-                                    <table border="1">
-                                        <tr>
-                                            <td align="right" style="width:80%">Total :</td>
-                                            <td align="center">$ <input type="number" step="0.01" min="0" name="totalPrice" id="totalPrice" value="0.00"></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                        </td>
-                        </tr>
-                        </table>
+                        <ul class="tab" id="sales_list">
+                        </ul>
+                        <div id="sales_container"></div>
                     </fieldset>
                 </div>
             </fieldset>
@@ -781,7 +349,6 @@
                         <input type="submit" value="Save">
                         <input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">
                         <button onclick="return checkEmail();">Email Quotation</button>
-                        <label><img id="loader" src="http://dev.cloudcell.co.uk/bin/loading.gif"/></label>
                     </td>
                 </tr>
             </table>
@@ -861,27 +428,35 @@
 
             jQuery(document).bind('keydown', 'ctrl+shift', function (e) {
                 var tableClassName = $(document.activeElement.parentNode.parentNode.parentNode.parentNode).attr('class');
+                
+                var activeElement = document.activeElement.parentNode;
+                var tagname = activeElement.tagName;
+                while(tagname !== 'DIV'){
+                    activeElement = activeElement.parentNode;
+                    tagname = activeElement.tagName;
+                }
+                
                 switch (tableClassName) {
                     case "customerBoxTable":
-                        addCustomerBox();
+                        addCustomerBox(activeElement.id);
                         break;
                     case "customerItemTable":
-                        addItem();
+                        addItem(activeElement.id);
                         break;
                     case "customerSpecialItemTable":
-                        addSpecialItem();
+                        addSpecialItem(activeElement.id);
                         break;
                     case "vimboxBoxTable":
-                        addVimboxBox();
+                        addVimboxBox(activeElement.id);
                         break;
                     case "vimboxMaterialTable":
-                        addVimboxMaterial();
+                        addVimboxMaterial(activeElement.id);
                         break;
                     case "customerCommentTable":
-                        addCustomerComment();
+                        addCustomerComment(activeElement.id);
                         break;
                     case "customerRemarkTable":
-                        addCustomerRemark();
+                        addCustomerRemark(activeElement.id);
                         break;
                     default:
                 }
@@ -893,7 +468,15 @@
                 var parent = element.parentNode.parentNode;
                 if ($(parent).is(".servicesTable")) {
                     // Initialize the starting amount using the formula given //
-                    update_service(element);
+                    var activeElement = parent.parentNode;
+                    var tagname = activeElement.tagName;
+                    var id = activeElement.id;
+                    while(tagname !== 'DIV' || id == null || id === ''){
+                        activeElement = activeElement.parentNode;
+                        tagname = activeElement.tagName;
+                        id = activeElement.id;
+                    }
+                    update_service(element, activeElement.id);
                 }
             });
 
@@ -916,6 +499,5 @@
                 }
             }
         </script>
-        <script src="JS/LeadFunctions.js"></script>
     </body>
 </html>

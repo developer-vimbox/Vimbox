@@ -1,13 +1,45 @@
 var toggleCounter = 0;
 
-var formula = {};
+var formula = [];
 var symbols = ["+", "-", "/", "x"];
-var additionalCharges = 0;
-var materialCharges = 0;
-var totalUnits = 0;
-var boxes = 0;
-var manpower = {};
+var additionalCharges = [];
+var materialCharges = [];
+var totalUnits = [];
+var boxes = [];
+var manpower = [];
 var domCounter = 2;
+
+function initSalesDiv(divId) {
+    boxes.push({id: divId, value: 0});
+    totalUnits.push({id: divId, value: 0});
+    additionalCharges.push({id: divId, value: 0});
+    manpower.push({id: divId, value: {}});
+    formula.push({id: divId, value: {}});
+    materialCharges.push({id: divId, value: 0});
+}
+
+function openSales(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+    $('#' + cityName).scrollView();
+}
+
 function addDom(divName) {
     var newdiv = document.createElement('div');
     var stringDiv = "";
@@ -109,69 +141,93 @@ $.fn.scrollView = function () {
 }
 //--------------------------------End-----------------------------------//             
 function edit_leadSetup() {
-    $('#customerItemsTable > tbody  > tr').each(function () {
-        var inputs = this.getElementsByTagName("input");
-        var name = inputs[0].value;
-        if (name === "Boxes") {
-            boxes += Number(inputs[4].value);
-        }
-        var charges = inputs[2].value;
-        if (!isNaN(charges)) {
-            additionalCharges += Number(charges);
-        }
-        totalUnits += Number(inputs[4].value);
-    });
-    $('#vimboxItemsTable > tbody  > tr').each(function () {
-        var inputs = this.getElementsByTagName("input");
-        var name = inputs[0].value;
-        if (name === "Boxes") {
-            boxes += Number(inputs[4].value);
-            totalUnits += Number(inputs[4].value);
-        }
-        var charges = inputs[2].value;
-        if (!isNaN(charges)) {
-            materialCharges += Number(charges);
-        }
-    });
-    var svcs = [];
-    $('#servicesTable > tbody  > tr').each(function () {
-        var inputs = this.getElementsByTagName("input");
-        var id = $(this).attr('id');
-        formula[id] = inputs[2].value;
-        var table = this.getElementsByTagName("table");
-        $(table).append("<tr>" + generateBreakdown(id) + "</tr>");
-        svcs.push(id);
-    });
-    $('#serviceTable > tbody  > tr > td').each(function () {
-        var cellHtml = this.innerHTML.trim();
-        var inputs = this.getElementsByTagName('input');
-        if (cellHtml) {
-            var serviceCharge = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
-            var serviceArray = serviceCharge.split(",");
-            var svcSplit = serviceArray[0].split("|");
-            var pri = svcSplit[0];
-            var sec = svcSplit[1];
-            var id = (pri + "_" + sec).replace(" ", "_");
-            if (svcs.indexOf(id) > -1) {
-                $(this).addClass('selected');
-                $(this).data('state', 'selected');
+    $('.tabcontent').each(function () {
+        var divId = this.id;
+        initSalesDiv(divId);
+        var totalUnit = totalUnits.find(function (obj) {
+            return obj.id === divId;
+        });
+        var box = boxes.find(function (obj) {
+            return obj.id === divId;
+        });
+        var addCharge = additionalCharges.find(function (obj) {
+            return obj.id === divId;
+        });
+        var mp = manpower.find(function (obj) {
+            return obj.id === divId;
+        });
+        var frml = formula.find(function (obj) {
+            return obj.id === divId;
+        });
+        var matCharge = materialCharges.find(function (obj) {
+            return obj.id === divId;
+        });
+        
+        
+        $("#" + divId + "_customerItemsTable > tbody  > tr").each(function () {
+            var inputs = this.getElementsByTagName("input");
+            var name = inputs[0].value;
+            if (name === "Boxes") {
+                box.value += Number(inputs[4].value);
             }
+            var charges = inputs[2].value;
+            if (!isNaN(charges)) {
+                addCharge.value += Number(charges);
+            }
+            totalUnit.value += Number(inputs[4].value);
+        });
+        
+        $("#" + divId + "_vimboxItemsTable > tbody  > tr").each(function () {
+            var inputs = this.getElementsByTagName("input");
+            var name = inputs[0].value;
+            if (name === "Boxes") {
+                box.value += Number(inputs[4].value);
+                totalUnit.value += Number(inputs[4].value);
+            }
+            var charges = inputs[2].value;
+            if (!isNaN(charges)) {
+                matCharge.value += Number(charges);
+            }
+        });
+        var svcs = [];
+        $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
+            var inputs = this.getElementsByTagName("input");
+            var id = $(this).attr('id');
+            (frml.value)[id] = inputs[2].value;
+            var table = this.getElementsByTagName("table");
+            $(table).append("<tr>" + generateBreakdown(id, divId) + "</tr>");
+            svcs.push(id);
+        });
+        $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
+            var cellHtml = this.innerHTML.trim();
+            var inputs = this.getElementsByTagName('input');
+            if (cellHtml) {
+                var serviceCharge = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
+                var serviceArray = serviceCharge.split(",");
+                var svcSplit = serviceArray[0].split("|");
+                var pri = svcSplit[0];
+                var sec = svcSplit[1];
+                var id = (pri + "_" + sec).replace(" ", "_");
+                if (svcs.indexOf(divId + "_" + id) > -1) {
+                    $(this).addClass('selected');
+                    $(this).data('state', 'selected');
+                }
 
-            if (inputs[1] != null) {
-                if (!isNaN(inputs[1].value) && Number(inputs[1].value) > 0) {
-                    manpower[inputs[0].value] = Number(inputs[1].value);
+                if (inputs[1] != null) {
+                    if (!isNaN(inputs[1].value) && Number(inputs[1].value) > 0) {
+                        (mp.value)[inputs[0].value] = Number(inputs[1].value);
+                    }
                 }
             }
-        }
+        });
+        document.getElementById(divId + "_totalUnits").innerHTML = "Total Units : " + totalUnit.value;
+        update_services(divId);
     });
-    document.getElementById('totalUnits').innerHTML = "Total Units : " + totalUnits;
-    update_services();
     checkLeadInformation();
 }
 
 function create_leadSetup() {
     checkLeadInformation();
-
 }
 
 function showfield(name) {
@@ -182,39 +238,66 @@ function showfield(name) {
     }
 }
 
-$("#servicesTable tbody").on("change keyup paste", "tr", function (event) {
-    update_total();
-});
-$(document).on('change keyup paste', '#markup', function () {
-    update_total();
-});
-$(document).on('change keyup paste', '#pushCharge', function () {
-    update_total();
-});
-$(document).on('change keyup paste', '#materialCharge', function () {
-    update_total();
-});
-$(document).on('change keyup paste', '#storeyCharge', function () {
-    update_total();
-});
-$(document).on('change keyup paste', '#detourCharge', function () {
-    update_total();
-});
-$(document).on('change keyup paste', '#discount', function () {
-    update_total();
+$(document).on('change keyup paste', '.servicesTable tbody tr', function (event) {
+    var id = this.id;
+    var divId = id.substring(0, id.indexOf("_"));
+    update_total(divId);
 });
 
-function update_services() {
-    $('#servicesTable > tbody  > tr').each(function () {
-        update_service(this);
-    });
-    //just update the total to sum    
+$(document).on('change keyup paste', '.markup', function () {
+    var id = this.id;
+    var divId = id.substring(0, id.indexOf("_"));
+    update_total(divId);
+});
+$(document).on('change keyup paste', '.pushCharge', function () {
+    var id = this.id;
+    var divId = id.substring(0, id.indexOf("_"));
+    update_total(divId);
+});
+$(document).on('change keyup paste', '.materialCharge', function () {
+    var id = this.id;
+    var divId = id.substring(0, id.indexOf("_"));
+    update_total(divId);
+});
+$(document).on('change keyup paste', '.storeyCharge', function () {
+    var id = this.id;
+    var divId = id.substring(0, id.indexOf("_"));
+    update_total(divId);
+});
+$(document).on('change keyup paste', '.detourCharge', function () {
+    var id = this.id;
+    var divId = id.substring(0, id.indexOf("_"));
+    update_total(divId);
+});
+$(document).on('change keyup paste', '.discount', function () {
+    var id = this.id;
+    var divId = id.substring(0, id.indexOf("_"));
+    update_total(divId);
+});
+
+$(document).on('input', '.itemName', function () {
+    var id = this.id;
+    var divId = id.substring(0, id.indexOf("_"));
+    var value = $("#" + divId + "_itemName").val();
+    var item = $("#" + divId + "_items [value='" + value + "']").data('value');
+    if (typeof item !== "undefined") {
+        var itemArray = item.split("|");
+        $("#" + divId + "_itemdimensions").val(itemArray[1]);
+        $("#" + divId + "_itemUnit").val(itemArray[2]);
+        $("#" + divId + "_itemQty").val("");
+    }
+});
+
+function update_services(divId) {
+    $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
+        update_service(this, divId);
+    });  
 }
 
 function calculate(sum, symbol, variable) {
     switch (symbol) {
         case "x":
-            sum = sum * variable;
+            sum *= variable;
             break;
         case "/":
             sum = Math.ceil(sum / variable);
@@ -228,9 +311,26 @@ function calculate(sum, symbol, variable) {
     }
     return sum;
 }
-function update_service(element) {
+
+function update_service(element, divId) {
+    var totalUnit = totalUnits.find(function (obj) {
+        return obj.id === divId;
+    });
+    var box = boxes.find(function (obj) {
+        return obj.id === divId;
+    });
+    var addCharge = additionalCharges.find(function (obj) {
+        return obj.id === divId;
+    });
+    var mp = manpower.find(function (obj) {
+        return obj.id === divId;
+    });
+    var frml = formula.find(function (obj) {
+        return obj.id === divId;
+    });
+
     var id = $(element).attr("id");
-    var fml = formula[id].split(" ");
+    var fml = (frml.value)[id].split(" ");
     var symbol;
     var sum;
     for (i = 0; i < fml.length; i++) {
@@ -239,16 +339,16 @@ function update_service(element) {
             if (isNaN(action)) {
                 switch (action) {
                     case "U":
-                        sum = totalUnits;
+                        sum = totalUnit.value;
                         break;
                     case "B":
-                        sum = boxes;
+                        sum = box.value;
                         break;
                     case "AC":
-                        sum = additionalCharges;
+                        sum = addCharge.value;
                         break;
                     case "MP":
-                        sum = manpower[id];
+                        sum = (mp.value)[id];
                         break;
                 }
             } else {
@@ -261,16 +361,16 @@ function update_service(element) {
                 if (isNaN(action)) {
                     switch (action) {
                         case "U":
-                            sum = calculate(sum, symbol, totalUnits);
+                            sum = calculate(sum, symbol, totalUnit.value);
                             break;
                         case "B":
-                            sum = calculate(sum, symbol, boxes);
+                            sum = calculate(sum, symbol, box.value);
                             break;
                         case "AC":
-                            sum = calculate(sum, symbol, additionalCharges);
+                            sum = calculate(sum, symbol, addCharge.value);
                             break;
                         case "MP":
-                            sum = calculate(sum, symbol, manpower[id]);
+                            sum = calculate(sum, symbol, (mp.value)[id]);
                             break;
                     }
                 } else {
@@ -286,48 +386,57 @@ function update_service(element) {
         var action = fml[i];
         switch (action) {
             case "U":
-                var label = id + "unitsLbl";
-                $('#' + label).html(totalUnits);
+                var label = divId + "_" + id + "unitsLbl";
+                $('#' + label).html(totalUnit.value);
                 break;
             case "B":
-                var label = id + "boxesLbl";
-                $('#' + label).html(boxes);
+                var label = divId + "_" + id + "boxesLbl";
+                $('#' + label).html(box.value);
                 break;
             case "AC":
-                var label = id + "acLbl";
-                $('#' + label).html(additionalCharges);
+                var label = divId + "_" + id + "acLbl";
+                $('#' + label).html(addCharge.value);
                 break;
             case "MP":
-                var label = id + "mpLbl";
-                $('#' + label).html(manpower[id]);
+                var label = divId + "_" + id + "mpLbl";
+                $('#' + label).html((mp.value)[id]);
                 break;
         }
     }
 
-    update_total();
+    update_total(divId);
 }
 
-function update_total() {
+function update_total(divId) {
     var sum = 0;
-    $('#servicesTable > tbody  > tr').each(function () {
+    $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
         sum += Number(this.getElementsByTagName("input")[1].value);
     });
-    sum += (Number($('#markup').val()) + Number($('#materialCharge').val()) + Number($('#pushCharge').val()) + Number($('#storeyCharge').val()) + Number($('#detourCharge').val()) - Number($('#discount').val()));
-    $('#totalPrice').val(Number(sum).toFixed(2));
+    sum += (Number($("#" + divId + "_markup").val()) + Number($("#" + divId + "_materialCharge").val()) + Number($("#" + divId + "_pushCharge").val()) + Number($("#" + divId + "_storeyCharge").val()) + Number($("#" + divId + "_detourCharge").val()) - Number($("#" + divId + "_discount").val()));
+    $("#" + divId + "_totalPrice").val(Number(sum).toFixed(2));
 }
 
-function addUnits(unit) {
-    totalUnits = totalUnits + unit;
-    document.getElementById('totalUnits').innerHTML = "Total Units : " + totalUnits;
+function addUnits(unit, divId) {
+    var tuObject = totalUnits.find(function (obj) {
+        return obj.id === divId;
+    });
+    tuObject.value += unit;
+    document.getElementById(divId + '_totalUnits').innerHTML = "Total Units : " + tuObject.value;
 }
 
-function subtractUnits(unit) {
-    totalUnits = totalUnits - unit;
-    document.getElementById('totalUnits').innerHTML = "Total Units : " + totalUnits;
+function subtractUnits(unit, divId) {
+    var tuObject = totalUnits.find(function (obj) {
+        return obj.id === divId;
+    });
+    tuObject.value -= unit;
+    document.getElementById(divId + '_totalUnits').innerHTML = "Total Units : " + tuObject.value;
 }
 //----------------------Customer Item Functions-------------------------//
-function addCustomerBox() {
-    var boxUnit = $('#customerBoxUnit').val();
+function addCustomerBox(divId) {
+    var boxUnit = $("#" + divId + "_customerBoxUnit").val();
+    var boxObject = boxes.find(function (obj) {
+        return obj.id === divId;
+    });
     var errorMsg = "";
     var add = true;
     if (!boxUnit) {
@@ -335,17 +444,17 @@ function addCustomerBox() {
         errorMsg += "Please enter a quantity<br>";
     }
     if (add) {
-        var tr = "<tr><td>Boxes<input type='hidden' name='customerItemName' value='Boxes'></td>";
-        tr += "<td>&nbsp;<input type='hidden' name='customerItemRemark' value=''></td>";
-        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='customerItemCharge' value=''></td>";
-        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='customerItemQty' value='" + boxUnit + "'></td>";
-        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='customerItemUnit' value='" + boxUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteBox(this)'/></td></tr>";
-        $(tr).prependTo("#customerItemsTable > tbody");
-        addUnits(Number(boxUnit));
-        boxes += (Number(boxUnit));
-        $('#customerBoxUnit').val("");
-        update_services();
+        var tr = "<tr><td>Boxes<input type='hidden' name='" + divId + "_customerItemName' value='Boxes'></td>";
+        tr += "<td>&nbsp;<input type='hidden' name='" + divId + "_customerItemRemark' value=''></td>";
+        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_customerItemCharge' value=''></td>";
+        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='" + divId + "_customerItemQty' value='" + boxUnit + "'></td>";
+        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='" + divId + "_customerItemUnit' value='" + boxUnit + "'></td>";
+        tr += "<td align='right'><input type='button' value='x' onclick=\"deleteBox(this,'" + divId + "')\"/></td></tr>";
+        $(tr).prependTo("#" + divId + "_customerItemsTable > tbody");
+        addUnits(Number(boxUnit), divId);
+        boxObject.value += (Number(boxUnit));
+        $("#" + divId + "_customerBoxUnit").val("");
+        update_services(divId);
     } else {
         var modal = document.getElementById("salesModal");
         var salesStatus = document.getElementById("salesStatus");
@@ -356,11 +465,11 @@ function addCustomerBox() {
     }
 }
 
-function addItem() {
-    var itemName = $('#itemName').val();
-    var itemUnit = $('#itemUnit').val();
-    var itemQty = $('#itemQty').val();
-    var itemRemark = $('#itemRemark').val();
+function addItem(divId) {
+    var itemName = $("#" + divId + "_itemName").val();
+    var itemUnit = $("#" + divId + "_itemUnit").val();
+    var itemQty = $("#" + divId + "_itemQty").val();
+    var itemRemark = $("#" + divId + "_itemRemark").val();
     var errorMsg = "";
     var add = true;
     if (!itemName) {
@@ -378,20 +487,20 @@ function addItem() {
 
     if (add) {
         itemUnit = itemUnit * itemQty;
-        var tr = "<tr><td>" + itemName + "<input type='hidden' name='customerItemName' value='" + itemName + "'></td>";
-        tr += "<td>" + itemRemark + "<input type='hidden' name='customerItemRemark' value='" + itemRemark + "'></td>";
-        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='customerItemCharge' value=''></td>";
-        tr += "<td align='center'>" + itemQty + "<input type='hidden' name='customerItemQty' value='" + itemQty + "'></td>";
-        tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='customerItemUnit' value='" + itemUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteItem(this)'/></td></tr>";
-        $(tr).prependTo("#customerItemsTable > tbody");
-        addUnits(Number(itemUnit));
-        $('#itemName').val("");
-        $('#itemUnit').val("");
-        $('#itemQty').val("");
-        $('#itemRemark').val("");
-        $('#itemName').focus();
-        update_services();
+        var tr = "<tr><td>" + itemName + "<input type='hidden' name='" + divId + "_customerItemName' value='" + itemName + "'></td>";
+        tr += "<td>" + itemRemark + "<input type='hidden' name='" + divId + "_customerItemRemark' value='" + itemRemark + "'></td>";
+        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_customerItemCharge' value=''></td>";
+        tr += "<td align='center'>" + itemQty + "<input type='hidden' name='" + divId + "_customerItemQty' value='" + itemQty + "'></td>";
+        tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='" + divId + "_customerItemUnit' value='" + itemUnit + "'></td>";
+        tr += "<td align='right'><input type='button' value='x' onclick=\"deleteItem(this,'" + divId + "')\"/></td></tr>";
+        $(tr).prependTo("#" + divId + "_customerItemsTable > tbody");
+        addUnits(Number(itemUnit), divId);
+        $("#" + divId + "_itemName").val("");
+        $("#" + divId + "_itemUnit").val("");
+        $("#" + divId + "_itemQty");
+        $("#" + divId + "_itemRemark").val("");
+        $("#" + divId + "_itemName").focus();
+        update_services(divId);
     } else {
         var modal = document.getElementById("salesModal");
         var salesStatus = document.getElementById("salesStatus");
@@ -401,12 +510,16 @@ function addItem() {
         modal.style.display = "block";
     }
 }
-function addSpecialItem() {
-    var itemName = $('#specialItemName').val();
-    var itemCharges = $('#specialItemCharges').val();
-    var itemUnit = $('#specialItemUnit').val();
-    var itemQty = $('#specialItemQty').val();
-    var itemRemark = $('#specialItemRemark').val();
+function addSpecialItem(divId) {
+    var itemName = $("#" + divId + "_specialItemName").val();
+    var itemCharges = $("#" + divId + "_specialItemCharges").val();
+    var itemUnit = $("#" + divId + "_specialItemUnit").val();
+    var itemQty = $("#" + divId + "_specialItemQty").val();
+    var itemRemark = $("#" + divId + "_specialItemRemark").val();
+
+    var addCharge = additionalCharges.find(function (obj) {
+        return obj.id === divId;
+    });
     var add = true;
     var errorMsg = "";
     if (!itemName) {
@@ -425,22 +538,22 @@ function addSpecialItem() {
     if (add) {
         itemUnit = itemUnit * itemQty;
         itemName = "Special - " + itemName;
-        var tr = "<tr><td>" + itemName + "<input type='hidden' name='customerItemName' value='" + itemName + "'></td>";
-        tr += "<td>" + itemRemark + "<input type='hidden' name='customerItemRemark' value='" + itemRemark + "'></td>";
-        tr += "<td align='center'>" + itemCharges + "<input type='hidden' name='customerItemCharge' value='" + itemCharges + "'></td>";
-        tr += "<td align='center'>" + itemQty + "<input type='hidden' name='customerItemQty' value='" + itemQty + "'></td>";
-        tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='customerItemUnit' value='" + itemUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteItem(this)'/></td></tr>";
-        $(tr).prependTo("#customerItemsTable > tbody");
-        additionalCharges += (Number(itemCharges));
-        addUnits(Number(itemUnit));
-        $('#specialItemName').val("");
-        $('#specialItemCharges').val("");
-        $('#specialItemUnit').val("");
-        $('#specialItemQty').val("");
-        $('#specialItemRemark').val("");
-        $('#specialItemName').focus();
-        update_services();
+        var tr = "<tr><td>" + itemName + "<input type='hidden' name='" + divId + "_customerItemName' value='" + itemName + "'></td>";
+        tr += "<td>" + itemRemark + "<input type='hidden' name='" + divId + "_customerItemRemark' value='" + itemRemark + "'></td>";
+        tr += "<td align='center'>" + itemCharges + "<input type='hidden' name='" + divId + "_customerItemCharge' value='" + itemCharges + "'></td>";
+        tr += "<td align='center'>" + itemQty + "<input type='hidden' name='" + divId + "_customerItemQty' value='" + itemQty + "'></td>";
+        tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='" + divId + "_customerItemUnit' value='" + itemUnit + "'></td>";
+        tr += "<td align='right'><input type='button' value='x' onclick=\"deleteItem(this,'" + divId + "')\"/></td></tr>";
+        $(tr).prependTo("#" + divId + "_customerItemsTable > tbody");
+        addCharge.value += (Number(itemCharges));
+        addUnits(Number(itemUnit), divId);
+        $("#" + divId + "_specialItemName").val("");
+        $("#" + divId + "_specialItemCharges").val("");
+        $("#" + divId + "_specialItemUnit").val("");
+        $("#" + divId + "_specialItemQty").val("");
+        $("#" + divId + "_specialItemRemark").val("");
+        $("#" + divId + "_specialItemName").focus();
+        update_services(divId);
     } else {
         var modal = document.getElementById("salesModal");
         var salesStatus = document.getElementById("salesStatus");
@@ -450,23 +563,29 @@ function addSpecialItem() {
         modal.style.display = "block";
     }
 }
-function deleteItem(btn) {
+function deleteItem(btn, divId) {
     var row = btn.parentNode.parentNode;
     var nodes = row.childNodes;
     var unit = nodes[4].innerHTML.substring(0, nodes[4].innerHTML.indexOf("<"));
-    subtractUnits(Number(unit));
+    subtractUnits(Number(unit), divId);
     var charge = nodes[2].innerHTML.substring(0, nodes[2].innerHTML.indexOf("<"));
     if (!isNaN(charge)) {
-        additionalCharges -= Number(charge);
+        var tuObject = additionalCharges.find(function (obj) {
+            return obj.id === divId;
+        });
+        tuObject.value -= Number(charge);
     }
     row.parentNode.removeChild(row);
-    update_services();
+    update_services(divId);
 }
 //--------------------------------End-----------------------------------//
 
 //-----------------------Vimbox Item Functions--------------------------//
-function addVimboxBox() {
-    var boxUnit = $('#vimboxBoxUnit').val();
+function addVimboxBox(divId) {
+    var boxUnit = $("#" + divId + "_vimboxBoxUnit").val();
+    var boxObject = boxes.find(function (obj) {
+        return obj.id === divId;
+    });
     var errorMsg = "";
     var add = true;
     if (!boxUnit) {
@@ -475,17 +594,17 @@ function addVimboxBox() {
     }
 
     if (add) {
-        var tr = "<tr><td>Boxes<input type='hidden' name='vimboxItemName' value='Boxes'></td>";
-        tr += "<td>&nbsp;<input type='hidden' name='vimboxItemRemark' value=''></td>";
-        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='vimboxItemCharge' value=''></td>";
-        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='vimboxItemQty' value='" + boxUnit + "'></td>";
-        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='vimboxItemUnit' value='" + boxUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteBox(this)'/></td></tr>";
-        $(tr).prependTo("#vimboxItemsTable > tbody");
-        addUnits(Number(boxUnit));
-        boxes += (Number(boxUnit));
-        $('#vimboxBoxUnit').val("");
-        update_services();
+        var tr = "<tr><td>Boxes<input type='hidden' name='" + divId + "_vimboxItemName' value='Boxes'></td>";
+        tr += "<td>&nbsp;<input type='hidden' name='" + divId + "_vimboxItemRemark' value=''></td>";
+        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_vimboxItemCharge' value=''></td>";
+        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='" + divId + "_vimboxItemQty' value='" + boxUnit + "'></td>";
+        tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='" + divId + "_vimboxItemUnit' value='" + boxUnit + "'></td>";
+        tr += "<td align='right'><input type='button' value='x' onclick=\"deleteBox(this, '" + divId + "')\"/></td></tr>";
+        $(tr).prependTo("#" + divId + "_vimboxItemsTable > tbody");
+        addUnits(Number(boxUnit), divId);
+        boxObject.value += (Number(boxUnit));
+        $("#" + divId + "_vimboxBoxUnit").val("");
+        update_services(divId);
     } else {
         var modal = document.getElementById("salesModal");
         var salesStatus = document.getElementById("salesStatus");
@@ -496,10 +615,13 @@ function addVimboxBox() {
     }
 }
 
-function addVimboxMaterial() {
-    var itemName = $('#vimboxMaterial').val();
-    var itemUnit = $('#vimboxMaterialUnit').val();
-    var itemCharge = $('#vimboxMaterialCharge').val();
+function addVimboxMaterial(divId) {
+    var itemName = $("#" + divId + "_vimboxMaterial").val();
+    var itemUnit = $("#" + divId + "_vimboxMaterialUnit").val();
+    var itemCharge = $("#" + divId + "_vimboxMaterialCharge").val();
+    var matObject = materialCharges.find(function (obj) {
+        return obj.id === divId;
+    });
     var errorMsg = "";
     var add = true;
     if (!itemName) {
@@ -516,20 +638,20 @@ function addVimboxMaterial() {
     }
 
     if (add) {
-        var tr = "<tr><td>" + itemName + "<input type='hidden' name='vimboxMaterialName' value='" + itemName + "'></td>";
+        var tr = "<tr><td>" + itemName + "<input type='hidden' name='" + divId + "_vimboxMaterialName' value='" + itemName + "'></td>";
         tr += "<td>&nbsp;</td>";
-        tr += "<td align='center'>" + itemCharge + "<input type='hidden' name='vimboxMaterialCharge' value='" + itemCharge + "'></td>";
-        tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='vimboxMaterialQty' value='" + itemUnit + "'></td>";
+        tr += "<td align='center'>" + itemCharge + "<input type='hidden' name='" + divId + "_vimboxMaterialCharge' value='" + itemCharge + "'></td>";
+        tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='" + divId + "_vimboxMaterialQty' value='" + itemUnit + "'></td>";
         tr += "<td align='center'>&nbsp;</td>";
         tr += "<td align='right'><input type='button' value='x' onclick='deleteMaterial(this)'/></td></tr>";
-        $(tr).prependTo("#vimboxItemsTable > tbody");
-        materialCharges += (Number(itemCharge));
-        $('#vimboxMaterial').val("");
-        $('#vimboxMaterialUnit').val("");
-        $('#vimboxMaterialCharge').val("");
-        $('#materialCharge').val(Number(materialCharges).toFixed(2));
-        $('#vimboxMaterial').focus();
-        update_total();
+        $(tr).prependTo("#" + divId + "_vimboxItemsTable > tbody");
+        matObject.value += (Number(itemCharge));
+        $("#" + divId + "_vimboxMaterial").val("");
+        $("#" + divId + "_vimboxMaterialUnit").val("");
+        $("#" + divId + "_vimboxMaterialCharge").val("");
+        $("#" + divId + "_materialCharge").val(Number(matObject.value).toFixed(2));
+        $("#" + divId + "_vimboxMaterial").focus();
+        update_total(divId);
     } else {
         var modal = document.getElementById("salesModal");
         var salesStatus = document.getElementById("salesStatus");
@@ -540,35 +662,41 @@ function addVimboxMaterial() {
     }
 }
 
-function deleteMaterial(btn) {
+function deleteMaterial(btn, divId) {
     var row = btn.parentNode.parentNode;
     var nodes = row.childNodes;
     var charge = nodes[2].innerHTML.substring(0, nodes[2].innerHTML.indexOf("<"));
+    var matObject = materialCharges.find(function (obj) {
+        return obj.id === divId;
+    });
     if (!isNaN(charge)) {
-        materialCharges -= Number(charge);
+        matObject.value -= Number(charge);
     }
     row.parentNode.removeChild(row);
-    $('#materialCharge').val(materialCharges);
+    $("#" + divId + "_materialCharge").val(matObject.value);
 }
 
-function deleteBox(btn) {
+function deleteBox(btn, divId) {
     var row = btn.parentNode.parentNode;
     var nodes = row.childNodes;
     var unit = nodes[4].innerHTML.substring(0, nodes[4].innerHTML.indexOf("<"));
-    subtractUnits(Number(unit));
-    boxes -= Number(unit);
+    subtractUnits(Number(unit), divId);
+    var tuObject = boxes.find(function (obj) {
+        return obj.id === divId;
+    });
+    tuObject.value -= Number(unit);
     row.parentNode.removeChild(row);
-    update_services();
+    update_services(divId);
 }
 //--------------------------------End-----------------------------------//
 
 //-----------------------Customer C&R Functions-------------------------//
-function addCustomerComment() {
-    var comment = $('#customerComment').val();
+function addCustomerComment(divId) {
+    var comment = $("#" + divId + "_customerComment").val();
     if (comment) {
-        var tr = "<tr><td>" + comment + "<input type='hidden' name='comments' value='" + comment + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>";
-        $(tr).prependTo("#commentsTable > tbody");
-        $('#customerComment').val("");
+        var tr = "<tr><td>" + comment + "<input type='hidden' name='" + divId + "_comments' value='" + comment + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>";
+        $(tr).prependTo("#" + divId + "_commentsTable > tbody");
+        $("#" + divId + "_customerComment").val("");
     } else {
         var modal = document.getElementById("salesModal");
         var salesStatus = document.getElementById("salesStatus");
@@ -579,12 +707,12 @@ function addCustomerComment() {
     }
 }
 
-function addCustomerRemark() {
-    var remark = $('#customerRemark').val();
+function addCustomerRemark(divId) {
+    var remark = $("#" + divId + "_customerRemark").val();
     if (remark) {
-        var tr = "<tr><td>" + remark + "<input type='hidden' name='remarks' value='" + remark + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>";
-        $(tr).prependTo("#remarksTable > tbody");
-        $('#customerRemark').val("");
+        var tr = "<tr><td>" + remark + "<input type='hidden' name='" + divId + "_remarks' value='" + remark + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>";
+        $(tr).prependTo("#" + divId + "_remarksTable > tbody");
+        $("#" + divId + "_customerRemark").val("");
     } else {
         var modal = document.getElementById("salesModal");
         var salesStatus = document.getElementById("salesStatus");
@@ -602,8 +730,12 @@ function deleteRow(btn) {
 //--------------------------------End-----------------------------------//
 
 //-------------------------Service Functions----------------------------// 
-$('#serviceTable td').click(function () {
-    var cell = $(this);
+function selectServiceSlot(e, divId) {
+    var frml = formula.find(function (obj) {
+        return obj.id === divId;
+    });
+    
+    var cell = $(e);
     var state = cell.data('state') || '';
     var cellHtml = cell.html().trim();
     if (cellHtml) {
@@ -616,59 +748,75 @@ $('#serviceTable td').click(function () {
         switch (state) {
             case '':
                 if (pri === "Manpower") {
-                    $('#manpowerId').val(id);
-                    var modal = document.getElementById("manpowerModal");
+                    $("#" + divId + "_manpowerId").val(id);
+                    var modal = document.getElementById(divId + "_manpowerModal");
                     modal.style.display = "block";
                 }
-                formula[id] = serviceArray[1];
-                var tr = "<tr id='" + id + "'><td>";
+                (frml.value)[divId + "_" + id] = serviceArray[1];
+                var tr = "<tr id='" + divId + "_" + id + "'><td>";
                 tr += "<table class='serviceTable'>"
-                tr += "<tr height='10%'><td>" + pri + " - " + sec + "<input type='hidden' name='serviceName' value='" + id + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='serviceCharge'></td></tr>";
-                tr += "<tr>" + generateBreakdown(id) + "</tr></table></td></tr>";
-                $('#servicesTable').append(tr);
+                tr += "<tr height='10%'><td>" + pri + " - " + sec + "<input type='hidden' name='" + divId + "_serviceName' value='" + id + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='" + divId + "_serviceCharge'></td></tr>";
+                tr += "<tr>" + generateBreakdown(divId + "_" + id, divId) + "</tr></table></td></tr>";
+                $("#" + divId + "_servicesTable").append(tr);
                 cell.addClass('selected');
                 cell.data('state', 'selected');
                 break;
             case 'selected':
                 if (pri === "Manpower") {
-                    removeManpower(id);
+                    removeManpower(divId + "_" + id, divId);
                 }
                 cell.removeClass('selected');
                 cell.data('state', '');
-                delete formula[id];
-                $("#" + id).remove();
+                delete (frml.value)[divId + "_" + id];
+                $("#" + divId + "_" + id).remove();
                 break;
             default:
                 break;
         }
     }
-});
+}
 
-function generateBreakdown(id) {
-    var fml = formula[id].split(" ");
+function generateBreakdown(id, divId) {
+    var totalUnit = totalUnits.find(function (obj) {
+        return obj.id === divId;
+    });
+    var box = boxes.find(function (obj) {
+        return obj.id === divId;
+    });
+    var addCharge = additionalCharges.find(function (obj) {
+        return obj.id === divId;
+    });
+    var mp = manpower.find(function (obj) {
+        return obj.id === divId;
+    });
+    var frml = formula.find(function (obj) {
+        return obj.id === divId;
+    });
+    
+    var fml = (frml.value)[id].split(" ");
     var breakdown = "<td colspan='2'><table width='100%' cellpadding=0 cellspacing=0 style='border-collapse: collapse;'><col width='50%'><col width='50%'>";
     for (i = 0; i < fml.length; i++) {
         var action = fml[i];
         switch (action) {
             case "U":
                 breakdown += "<tr><td align='left'>&nbsp;&nbsp;&nbsp;Total Units</td>";
-                breakdown += "<td align='right'><label id='" + id + "unitsLbl'>" + totalUnits + "</label></td></tr>";
+                breakdown += "<td align='right'><label id='" + divId + "_" + id + "unitsLbl'>" + totalUnit.value + "</label></td></tr>";
                 break;
             case "B":
                 breakdown += "<tr><td align='left'>&nbsp;&nbsp;&nbsp;Boxes</td>";
-                breakdown += "<td align='right'><label id='" + id + "boxesLbl'>" + boxes + "</label></td></tr>";
+                breakdown += "<td align='right'><label id='" + divId + "_" + id + "boxesLbl'>" + box.value + "</label></td></tr>";
                 break;
             case "MP":
-                var man = manpower[id];
+                var man = (mp.value)[id];
                 if (man == null) {
                     man = 0;
                 }
                 breakdown += "<tr><td align='left'>&nbsp;&nbsp;&nbsp;Manpower</td>";
-                breakdown += "<td align='right'><label id='" + id + "mpLbl'>" + man + "</label></td></tr>";
+                breakdown += "<td align='right'><label id='" + divId + "_" + id + "mpLbl'>" + man + "</label></td></tr>";
                 break;
             case "AC":
                 breakdown += "<tr><td align='left'>&nbsp;&nbsp;&nbsp;Additional Charges</td>";
-                breakdown += "<td align='right'><label id='" + id + "acLbl'>" + additionalCharges + "</label></td></tr>";
+                breakdown += "<td align='right'><label id='" + divId + "_" + id + "acLbl'>" + addCharge.value + "</label></td></tr>";
                 break;
             default:
                 break;
@@ -678,52 +826,51 @@ function generateBreakdown(id) {
     return breakdown;
 }
 
-function removeManpower(id) {
-    var mpLbl = id + "manpowerLabel";
-    var mprLbl = id + "manpowerReasonLabel";
-    var mpIpt = id + "manpowerInput";
-    var rIpt = id + "reasonInput";
+function removeManpower(id, divId) {
+    var mp = manpower.find(function (obj) {
+        return obj.id === divId;
+    });
+    
+    var mpLbl = divId + "_" + id + "manpowerLabel";
+    var mprLbl = divId + "_" + id + "manpowerReasonLabel";
+    var mpIpt = divId + "_" + id + "manpowerInput";
+    var rIpt = divId + "_" + id + "reasonInput";
     document.getElementById(mpIpt).value = "";
     document.getElementById(rIpt).value = "";
-    delete manpower[id];
+    delete (mp.value)[id];
     document.getElementById(mpLbl).innerHTML = "";
     document.getElementById(mprLbl).innerHTML = "";
 }
 
-function submitManpower() {
-    var id = $('#manpowerId').val();
-    var addManpower = $('#additionalManpower').val();
-    var manReason = $('#manpowerReason').val();
-    manpower[id] = Number(addManpower);
-    var mpLbl = id + "manpowerLabel";
-    var mprLbl = id + "manpowerReasonLabel";
+function submitManpower(divId) {
+    var mpObject = manpower.find(function (obj) {
+        return obj.id === divId;
+    });
+    var mp = mpObject.value;
+
+    var id = $("#" + divId + "_manpowerId").val();
+    var addManpower = $("#" + divId + "_additionalManpower").val();
+    var manReason = $("#" + divId + "_manpowerReason").val();
+    mp[id] = Number(addManpower);
+
+    var mpLbl = divId + "_" + id + "manpowerLabel";
+    var mprLbl = divId + "_" + id + "manpowerReasonLabel";
     document.getElementById(mpLbl).innerHTML = addManpower;
     document.getElementById(mprLbl).innerHTML = manReason;
-    var mpIpt = id + "manpowerInput";
-    var rIpt = id + "reasonInput";
+    var mpIpt = divId + "_" + id + "manpowerInput";
+    var rIpt = divId + "_" + id + "reasonInput";
     document.getElementById(mpIpt).value = addManpower;
     document.getElementById(rIpt).value = manReason;
-    var modal = document.getElementById("manpowerModal");
+    var modal = document.getElementById(divId + "_manpowerModal");
     modal.style.display = "none";
-    update_services();
+    update_services(divId);
 }
 
-function selectService() {
-    var modal = document.getElementById("serviceModal");
+function selectService(divId) {
+    var modal = document.getElementById(divId + "_serviceModal");
     modal.style.display = "block";
 }
 //--------------------------------End-----------------------------------//
-
-jQuery('#itemName').on('input', function () {
-    var value = $('#itemName').val();
-    var item = $('#items [value="' + value + '"]').data('value');
-    if (typeof item !== "undefined") {
-        var itemArray = item.split("|");
-        $('#itemdimensions').val(itemArray[1]);
-        $('#itemUnit').val(itemArray[2]);
-        $('#itemQty').val("");
-    }
-});
 
 function confirmCancel() {
     var modal = document.getElementById("lead_error_modal");
@@ -1147,37 +1294,37 @@ function initMap() {
         }
 
         if (surveyor_name !== name) {
-            var waypts = [];
-            for (n = 1; n < polyline.length - 1; n++) {
-                waypts.push({location: polyline[n],
-                    stopover: true});
-            }
-            var request = {
-                origin: polyline[0],
-                destination: polyline[polyline.length - 1],
-                waypoints: waypts,
-                travelMode: google.maps.TravelMode.DRIVING
-            };
             legendArray.push({name: surveyor_name, color: colors[colorCounter].strokeColor});
-            setDirection(colors[colorCounter], map, request, function (result) {
+            setDirection(colors[colorCounter], map, polyline, function (result) {
                 console.log(result);
             });
-
             surveyor_name = name;
             polyline = [];
             colorCounter += 1;
         }
 
         for (p = 0; p < address.length; p++) {
-            var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address[p] + "&key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE"
+            var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address[p].substring(address[p].lastIndexOf("S") + 1) + "&key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE"
             $.getJSON(url)
                     .done(function (data) {
                         if (data.status == google.maps.GeocoderStatus.OK) {
                             var latitude = data.results[0].geometry.location.lat;
                             var longitude = data.results[0].geometry.location.lng;
-                            var latlng = new google.maps.LatLng(latitude, longitude)
-                            polyline.push(latlng);
-                            createMarker(latlng, addressArray[3], addressArray[0], address[p], addressArray[2], map, infowindow);
+                            var latlng = new google.maps.LatLng(latitude, longitude);
+
+                            var exist = false;
+                            for (h = 0; h < polyline.length; h++) {
+                                var polyLatLng = polyline[h];
+                                if (polyLatLng.lat() === latitude && polyLatLng.lng() === longitude) {
+                                    exist = true;
+                                }
+                            }
+
+                            if (!exist) {
+                                polyline.push(latlng);
+                                createMarker(latlng, addressArray[3], addressArray[0], address[p], addressArray[2], map, infowindow);
+                            }
+
                         } else {
                             console.log(data.status);
                         }
@@ -1188,19 +1335,8 @@ function initMap() {
         }
 
         if (j === addresses.length - 1) {
-            var waypts = [];
-            for (n = 1; n < polyline.length - 1; n++) {
-                waypts.push({location: polyline[n],
-                    stopover: true});
-            }
-            var request = {
-                origin: polyline[0],
-                destination: polyline[polyline.length - 1],
-                waypoints: waypts,
-                travelMode: google.maps.TravelMode.DRIVING
-            };
             legendArray.push({name: surveyor_name, color: colors[colorCounter].strokeColor});
-            setDirection(colors[colorCounter], map, request, function (result) {
+            setDirection(colors[colorCounter], map, polyline, function (result) {
                 console.log(result);
             });
         }
@@ -1229,7 +1365,19 @@ function initMap() {
     });
 }
 
-function setDirection(polyLineOption, map, request, callback) {
+function setDirection(polyLineOption, map, polyline, callback) {
+    var waypts = [];
+    for (n = 1; n < polyline.length - 1; n++) {
+        waypts.push({location: polyline[n],
+            stopover: true});
+    }
+    var request = {
+        origin: polyline[0],
+        destination: polyline[polyline.length - 1],
+        waypoints: waypts,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+
     var directionsSvc = new google.maps.DirectionsService();
     directionsSvc.route(request, function (response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
@@ -1251,7 +1399,6 @@ function createMarker(latlng, leadId, surveyor, address, timeslot, map, infowind
         position: latlng,
         map: map
     });
-
     google.maps.event.addListener(marker, 'click', function () {
         infowindow.setContent(contentString);
         infowindow.open(map, marker);
@@ -1323,7 +1470,7 @@ function selectTimeSlot() {
                         var after = true;
                         var timetable = document.getElementById("timeslot_table");
                         loop1:
-                        for (var i = 0, timerow; timerow = timetable.rows[i]; i++) {
+                                for (var i = 0, timerow; timerow = timetable.rows[i]; i++) {
                             var tableCell = $(timerow).data('value');
                             var tableCellDetails = tableCell.substring(tableCell.indexOf("{") + 1, tableCell.lastIndexOf("}"));
                             var tableCellArray = tableCellDetails.split("|");

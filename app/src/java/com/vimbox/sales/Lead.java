@@ -25,17 +25,9 @@ public class Lead {
     private ArrayList<String[]> addressFrom;
     private ArrayList<String[]> addressTo;
     
-    private ArrayList<Item> customerItems;
-    private ArrayList<Item> vimboxItems;
-    private ArrayList<Item> materials;
-    
-    private ArrayList<String[]> services;
-    private HashMap<String,String> otherCharges;
-    
-    private ArrayList<String> comments;
-    private ArrayList<String> remarks;
+    private ArrayList<LeadDiv> leadDivs;
 
-    public Lead(User owner, int id, String type, Customer customer, String status, String reason, String source, String referral, String enquiry, DateTime dt, String tom, String dom, ArrayList<String[]> addressFrom, ArrayList<String[]> addressTo, ArrayList<Item> customerItems, ArrayList<Item> vimboxItems, ArrayList<Item> materials, ArrayList<String[]> services, HashMap<String,String> otherCharges, ArrayList<String> comments, ArrayList<String> remarks, ArrayList<SiteSurvey> siteSurveys) {
+    public Lead(User owner, int id, String type, Customer customer, String status, String reason, String source, String referral, String enquiry, ArrayList<SiteSurvey> siteSurveys, DateTime dt, String tom, String dom, ArrayList<String[]> addressFrom, ArrayList<String[]> addressTo, ArrayList<LeadDiv> leadDivs) {
         this.owner = owner;
         this.id = id;
         this.type = type;
@@ -45,19 +37,13 @@ public class Lead {
         this.source = source;
         this.referral = referral;
         this.enquiry = enquiry;
+        this.siteSurveys = siteSurveys;
         this.dt = dt;
         this.tom = tom;
         this.dom = dom;
         this.addressFrom = addressFrom;
         this.addressTo = addressTo;
-        this.customerItems = customerItems;
-        this.vimboxItems = vimboxItems;
-        this.materials = materials;
-        this.services = services;
-        this.otherCharges = otherCharges;
-        this.comments = comments;
-        this.remarks = remarks;
-        this.siteSurveys = siteSurveys;
+        this.leadDivs = leadDivs;
     }
 
     public User getOwner(){
@@ -111,40 +97,28 @@ public class Lead {
     public ArrayList<String[]> getAddressTo() {
         return addressTo;
     }
-
-    public ArrayList<Item> getCustomerItems() {
-        return customerItems;
-    }
-
-    public ArrayList<Item> getVimboxItems() {
-        return vimboxItems;
-    }
-
-    public ArrayList<Item> getMaterials() {
-        return materials;
-    }
-
-    public ArrayList<String[]> getServices() {
-        return services;
-    }
-
-    public HashMap<String,String> getOtherCharges() {
-        return otherCharges;
-    }
     
     public int getId() {
         return id;
     }
 
-    public ArrayList<String> getComments() {
-        return comments;
-    }
-
-    public ArrayList<String> getRemarks() {
-        return remarks;
-    }
-
     public ArrayList<SiteSurvey> getSiteSurveys() {
         return siteSurveys;
+    }
+
+    public ArrayList<LeadDiv> getSalesDivs() {
+        return leadDivs;
+    }
+    
+    public String getSalesDivIdByAddress(String address){
+        for(LeadDiv leadDiv : leadDivs){
+            String leadDivId = leadDiv.getSalesDiv();
+            System.out.println("leadDivId ---------- " + leadDivId);
+            System.out.println("address ------------ " + address);
+            if(leadDivId.contains(address)){
+                return leadDivId.substring(0, leadDivId.indexOf("|"));
+            }
+        }
+        return null;
     }
 }

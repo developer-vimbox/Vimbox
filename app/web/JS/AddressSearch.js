@@ -6,8 +6,13 @@ function searchAddressFrom() {
     var newdiv = document.createElement('div');
     var stringDiv = "";
     var address = "";
+    var addressLbl = "";
     var latlng = "";
-
+    
+    while(document.getElementById("sales" + counter) != null){
+        counter++;
+    }
+                        
     //query the API for latlng
     $.getJSON(googleAPI, {address: postalcode, sensor: "true"})
     .done(function (data) {
@@ -38,18 +43,21 @@ function searchAddressFrom() {
                             }
                             if (street && route && postal) {
                                 address = result.formatted_address;
+                                addressLbl = address.substring(0, address.lastIndexOf(",")) + " # -  S" + postalcode;
                                 break;
                             }
                         }
-                        stringDiv += "<div class='address-box' id='from" + counter + "'><span class='close' onClick=\"removeAddress('from" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
-                        stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>");
-                        stringDiv += " #<input type='text' name='addressfrom' size='2'>-<input type='text' name='addressfrom' size='3'>";
-                        stringDiv += " S<input type='text' name='addressfrom' size='5' value='" + postalcode + "'></td>";
+                        
+                        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
+                        stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressFromInput' name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>");
+                        stringDiv += " #<input type='text' class='addressFromInput' name='addressfrom' size='2'>-<input type='text' class='addressFromInput' name='addressfrom' size='3'>";
+                        stringDiv += " S<input type='text' class='addressFromInput' name='addressfrom' size='5' value='" + postalcode + "'></td>";
                         stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
                         stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
                         stringDiv += "</table></div>";
                         newdiv.innerHTML = stringDiv;
                         document.getElementById("from").appendChild(newdiv);
+                        addSalesDiv(counter, addressLbl);
                         counter++;
                         calculateDetourCharge();
                     })
@@ -59,15 +67,16 @@ function searchAddressFrom() {
                         document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
                         var modal = document.getElementById("saModal");
                         modal.style.display = "block";
-                        stringDiv += "<div class='address-box' id='from" + counter + "'><span class='close' onClick=\"removeAddress('from" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
-                        stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressfrom' size='30'>");
-                        stringDiv += " #<input type='text' name='addressfrom' size='2'>-<input type='text' name='addressfrom' size='3'>";
-                        stringDiv += " S<input type='text' name='addressfrom' size='5' value='" + postalcode + "'></td>";
+                        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
+                        stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressFromInput' name='addressfrom' size='30'>");
+                        stringDiv += " #<input type='text' class='addressFromInput' name='addressfrom' size='2'>-<input type='text' class='addressFromInput' name='addressfrom' size='3'>";
+                        stringDiv += " S<input type='text' class='addressFromInput' name='addressfrom' size='5' value='" + postalcode + "'></td>";
                         stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
                         stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
                         stringDiv += "</table></div>";
                         newdiv.innerHTML = stringDiv;
                         document.getElementById("from").appendChild(newdiv);
+                        addSalesDiv(counter, addressLbl);
                         counter++;
                         calculateDetourCharge();
                     });
@@ -77,15 +86,16 @@ function searchAddressFrom() {
             document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
             var modal = document.getElementById("saModal");
             modal.style.display = "block";
-            stringDiv += "<div class='address-box' id='from" + counter + "'><span class='close' onClick=\"removeAddress('from" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
-            stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressfrom' size='30'>");
-            stringDiv += " #<input type='text' name='addressfrom' size='2'>-<input type='text' name='addressfrom' size='3'>";
-            stringDiv += " S<input type='text' name='addressfrom' size='5' value='" + postalcode + "'></td>";
+            stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
+            stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressFromInput' name='addressfrom' size='30'>");
+            stringDiv += " #<input type='text' class='addressFromInput' name='addressfrom' size='2'>-<input type='text' class='addressFromInput' name='addressfrom' size='3'>";
+            stringDiv += " S<input type='text' class='addressFromInput' name='addressfrom' size='5' value='" + postalcode + "'></td>";
             stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
             stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
             stringDiv += "</table></div>";
             newdiv.innerHTML = stringDiv;
             document.getElementById("from").appendChild(newdiv);
+            addSalesDiv(counter, addressLbl);
             counter++;
             calculateDetourCharge();
         }
@@ -96,19 +106,21 @@ function searchAddressFrom() {
         document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
         var modal = document.getElementById("saModal");
         modal.style.display = "block";
-        stringDiv += "<div class='address-box' id='from" + counter + "'><span class='close' onClick=\"removeAddress('from" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
-        stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressfrom' size='30'>");
-        stringDiv += " #<input type='text' name='addressfrom' size='2'>-<input type='text' name='addressfrom' size='3'>";
-        stringDiv += " S<input type='text' name='addressfrom' size='5' value='" + postalcode + "'></td>";
+        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
+        stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressFromInput' name='addressfrom' size='30'>");
+        stringDiv += " #<input type='text' class='addressFromInput' name='addressfrom' size='2'>-<input type='text' class='addressFromInput' name='addressfrom' size='3'>";
+        stringDiv += " S<input type='text' class='addressFromInput' name='addressfrom' size='5' value='" + postalcode + "'></td>";
         stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
         stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
         stringDiv += "</table></div>";
         newdiv.innerHTML = stringDiv;
         document.getElementById("from").appendChild(newdiv);
+        addSalesDiv(counter, addressLbl);
         counter++;
         calculateDetourCharge();
     });
 }
+
 function searchAddressTo() {
     var googleAPI = "http://maps.googleapis.com/maps/api/geocode/json?";
     var postalcode = document.getElementById("postalto").value;
@@ -151,7 +163,7 @@ function searchAddressTo() {
                             }
                         }
 
-                        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
+                        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '');\">×</span><hr><table><col width='100'><tr><td align='right'>";
                         stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressto' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>");
                         stringDiv += " #<input type='text' name='addressto' size='2'>-<input type='text' name='addressto' size='3'>";
                         stringDiv += " S<input type='text' name='addressto' size='5' value='" + postalcode + "'></td>";
@@ -169,7 +181,7 @@ function searchAddressTo() {
                         document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
                         var modal = document.getElementById("saModal");
                         modal.style.display = "block";
-                        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
+                        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '');\">×</span><hr><table><col width='100'><tr><td align='right'>";
                         stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressto' size='30'>");
                         stringDiv += " #<input type='text' name='addressto' size='2'>-<input type='text' name='addressto' size='3'>";
                         stringDiv += " S<input type='text' name='addressto' size='5' value='" + postalcode + "'></td>";
@@ -187,7 +199,7 @@ function searchAddressTo() {
             document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
             var modal = document.getElementById("saModal");
             modal.style.display = "block";
-            stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
+            stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '');\">×</span><hr><table><col width='100'><tr><td align='right'>";
             stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressto' size='30'>");
             stringDiv += " #<input type='text' name='addressto' size='2'>-<input type='text' name='addressto' size='3'>";
             stringDiv += " S<input type='text' name='addressto' size='5' value='" + postalcode + "'></td>";
@@ -206,7 +218,7 @@ function searchAddressTo() {
         document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
         var modal = document.getElementById("saModal");
         modal.style.display = "block";
-        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
+        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '');\">×</span><hr><table><col width='100'><tr><td align='right'>";
         stringDiv += ("<b>Address :</b></td><td><input type='text' name='addressto' size='30'>");
         stringDiv += " #<input type='text' name='addressto' size='2'>-<input type='text' name='addressto' size='3'>";
         stringDiv += " S<input type='text' name='addressto' size='5' value='" + postalcode + "'></td>";
@@ -231,7 +243,7 @@ function calculateDetourCharge(){
     }
 }
 
-function removeAddress(id){
+function removeAddress(id, divId){
     var elem = document.getElementById(id); 
     elem.parentNode.removeChild(elem);
     moveDiv -= 1;
@@ -242,5 +254,54 @@ function removeAddress(id){
     }else{
         $('#detourCharge').val("0.00");
     }
+    
+    if(divId !== ''){
+        $("#sales" + divId).remove();
+        var elem = document.getElementById("li_" + divId);
+        elem.parentNode.removeChild(elem);
+    }
 }
 
+function addSalesDiv(counter, addressLbl){
+    var li = document.createElement("li");
+    li.id = "li_" + counter;
+    li.innerHTML = "<a href='#' class='tablinks' onclick=\"openSales(event, 'sales" + counter + "')\"><label id='sales" + counter + "_lbl'>" + addressLbl + "</label></a>";
+    document.getElementById("sales_list").appendChild(li);
+    var newdiv = document.createElement('div');
+    newdiv.id = "sales" + counter;
+    newdiv.className = "tabcontent";
+    $.get("LoadSales.jsp", {counter: "sales" + counter}, function (data) {
+        newdiv.innerHTML = data;
+        var input = newdiv.getElementsByClassName("divId")[0];
+        input.value = "sales" + counter + "|" + addressLbl;
+    });
+    
+    document.getElementById("sales_container").appendChild(newdiv);
+    initSalesDiv("sales" + counter);
+}
+
+$(document).on('change keyup paste', '.addressFromInput', function (event) {
+    var activeElement = this.parentNode;
+    var tagname = activeElement.tagName;
+    var id = activeElement.id;
+    while(tagname !== 'DIV' || id == null || !id.includes("from")){
+        activeElement = activeElement.parentNode;
+        tagname = activeElement.tagName;
+        id = activeElement.id;
+    }
+    
+    var divId;
+    var elms = activeElement.getElementsByTagName("input");
+    for (var i = 0; i < elms.length; i++) {
+        if (elms[i].id === 'tagId') {
+            divId = elms[i].value;
+            break;
+        }
+    }
+    
+    var lbl = document.getElementById(divId);
+    var addresses = activeElement.getElementsByClassName("addressFromInput");
+    var input = document.getElementById(divId.split("_")[0] + "_" + "divId");
+    input.value = divId.split("_")[0] + "|" + addresses[0].value + " #" + addresses[1].value + "-" + addresses[2].value + " S" + addresses[3].value;
+    lbl.innerHTML = addresses[0].value + " #" + addresses[1].value + "-" + addresses[2].value + " S" + addresses[3].value;
+});
