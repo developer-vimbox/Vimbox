@@ -6,6 +6,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <script src="JS/CustomerFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
         <script src="JS/TicketFunctions.js"></script>
         <script src="JS/ModalFunctions.js"></script>
     </head>

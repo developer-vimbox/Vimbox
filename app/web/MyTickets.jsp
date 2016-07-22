@@ -14,6 +14,7 @@
         <script src="JS/ModalFunctions.js"></script>
         <script src="JS/TicketFunctions.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
     </head>
     <body>
         <%@include file="header.jsp"%>

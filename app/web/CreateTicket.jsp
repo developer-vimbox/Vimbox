@@ -10,6 +10,7 @@
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
         <script src="JS/TicketFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
         <script src="JS/ModalFunctions.js"></script>
     </head>
     <body>
