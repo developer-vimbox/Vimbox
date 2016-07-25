@@ -10,7 +10,7 @@
     if (newtick != null) {
         out.println("<center><h3 class=\"modal-title\"><b>Ticket Details</b></h3></center><hr>");
         out.println("<table class=\"table table-hover\"><tr> <td align=\"right\">Ticket ID :</td><td>" + ticket_id + "</td></tr>");
-        out.println("<tr> <td align=\"right\">Date & Time :</td><td>" + newtick.getDatetime_of_creation().toString() + "</td></tr><tr><td align=\"right\">Ticket Owner :</td><td>" + newtick.getOwner_user().toString() + "</td></tr>");
+        out.println("<tr> <td align=\"right\">Date & Time :</td><td>" + Converter.convertDate(newtick.getDatetime_of_creation()) + "</td></tr><tr><td align=\"right\">Ticket Owner :</td><td>" + newtick.getOwner_user().toString() + "</td></tr>");
         ArrayList<User> assigned = newtick.getAssigned_users();
         out.println("<tr><td align=\"right\">Assigned To :</td><td>");
         if (assigned.size() > 1) {
