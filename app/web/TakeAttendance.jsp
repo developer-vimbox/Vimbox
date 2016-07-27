@@ -8,7 +8,6 @@
 <%@page import="java.util.Date"%>
 <%@page import="com.vimbox.util.Converter"%>
 <%@page import="org.joda.time.DateTime"%>
-<%@include file="ValidateLogin.jsp"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -18,9 +17,48 @@
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
         <script src="http://malsup.github.com/jquery.form.js"></script> 
-        <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
+        <script>
+            $('#attendance_form').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    var modal = document.getElementById("attendance_error_modal");
+                    var status = document.getElementById("attendance_error_status");
+                    var message = document.getElementById("attendance_error_message");
+                    status.innerHTML = data.status;
+                    message.innerHTML = data.message;
+                    modal.style.display = "block";
+
+                    if (data.status === "SUCCESS") {
+                        setTimeout(function () {
+                            location.reload()
+                        }, 500);
+                    }
+                },
+                error: function (data) {
+                    var modal = document.getElementById("attendance_error_modal");
+                    var status = document.getElementById("attendance_error_status");
+                    var message = document.getElementById("attendance_error_message");
+                    status.innerHTML = "ERROR";
+                    message.innerHTML = data;
+                    modal.style.display = "block";
+                }
+            });
+        </script>
+        <script src="JS/EmployeeFunctions.js"></script>
     </head>
     <body>
+        <%@include file="header.jsp"%>
+        <div id="attendance_error_modal" class="modal">
+            <!-- Modal content -->
+            <div class="message-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('leave_error_modal')">×</span>
+                    <div id="attendance_error_status"></div>
+                    <hr>
+                    <div id="attendance_error_message"></div>
+                </div>
+            </div>
+        </div>
         <%            
             DateTime dt = new DateTime();
             String dtString = Converter.convertDateHtml(dt);
@@ -28,7 +66,21 @@
             HashMap<String, LeaveMC> statuses = UserLeaveDAO.getLeaveMCRecordByDate(dt);
             Attendance attendance = UserAttendanceDAO.getAttendanceByDate(dt);
         %>
-        <h1>Attendance Taking for <%=dtString%></h1><hr><br>
+        <div id="page-content-wrapper">
+            <div id="page-content" style="min-height: 7630px;">
+
+                <div class="container">
+
+
+
+
+                    <div id="page-title">
+                        <h2>Attendance Taking for <%=dtString%></h2> <br>
+                    </div>
+
+
+                    <div class="panel">
+                        <div class="panel-body">
         <%
             HashMap<String, String> attendance_record = null;
             HashMap<String, Integer> late_record = null;
@@ -36,22 +88,15 @@
             if (attendance != null) {
                 attendance_record = attendance.getAttendance_record();
                 late_record = attendance.getLate_record();
-                out.println("Attendance for today has been taken. <button onclick=\"window.location.href='EditAttendance.jsp?date=" + dtString + "&action=1'\">Edit</button> <br><br>");
+                out.println("Attendance for today has been taken. <button class=\"btn btn-default\" onclick=\"window.location.href='EditAttendance.jsp?date=" + dtString + "&action=1'\">Edit</button> <br><br>");
             } else {
                 out.println("<form action='CreateAttendanceController' method='post' id='attendance_form'>");
             }
         %>
         <input type="hidden" name="attendance_date" value="<%=dtString%>">
-        <table width='100%' border='1'>
-            <col width='20%'>
-            <col width='20%'>
-            <col width='20%'>
-            <col width='20%'>
-            <col width='4%'>
-            <col width='4%'>
-            <col width='4%'>
-            <col width='8%'>
+        <table class="table table-hover">
 
+            <thead>
             <tr>
                 <th>NRIC</th>
                 <th>Employee</th>
@@ -61,6 +106,7 @@
                 <th>Absent</th>
                 <th colspan='2'>Late</th>
             </tr>
+            </thead>
 
             <%
                 for (User employee : users) {
@@ -74,8 +120,9 @@
                         employeeDuration = status.getTimeString();
                     }
             %>
+            <tbody>
             <tr>
-                <td align='center'><%=nric%><input type="hidden" name="attendance_nric" value="<%=nric%>"</td>
+                <td align='center'><%=nric%><input type="hidden" name="attendance_nric" value="<%=nric%>"></td>
                 <td align='center'><%=employee%></td>
                 <td align='center'><%=employeeStatus%></td>
                 <td align='center'><%=employeeDuration%></td>
@@ -132,55 +179,26 @@
                         }
                     %>
             </tr>
+            </tbody>
             <%
                 }
             %>
         </table>
-        <div id="attendance_error_modal" class="modal">
-            <!-- Modal content -->
-            <div class="message-modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('leave_error_modal')">×</span>
-                    <div id="attendance_error_status"></div>
-                    <hr>
-                    <div id="attendance_error_message"></div>
-                </div>
-            </div>
-        </div>
+        
+        
         <br>
         <%
             if (attendance == null) {
-                out.println("<input type='submit' value='Take Attendance'/>");
+                 out.println("<div class='bg-default text-center'>");
+                out.println("<button type=\"submit\" data-loading-text=\"Loading...\"  class=\"btn loading-button btn-primary\">" + "Take Attendance</button></div>");
                 out.println("</form>");
             }
         %>
-        <script>
-            $('#attendance_form').ajaxForm({
-                dataType: 'json',
-                success: function (data) {
-                    var modal = document.getElementById("attendance_error_modal");
-                    var status = document.getElementById("attendance_error_status");
-                    var message = document.getElementById("attendance_error_message");
-                    status.innerHTML = data.status;
-                    message.innerHTML = data.message;
-                    modal.style.display = "block";
-
-                    if (data.status === "SUCCESS") {
-                        setTimeout(function () {
-                            location.reload()
-                        }, 500);
-                    }
-                },
-                error: function (data) {
-                    var modal = document.getElementById("attendance_error_modal");
-                    var status = document.getElementById("attendance_error_status");
-                    var message = document.getElementById("attendance_error_message");
-                    status.innerHTML = "ERROR";
-                    message.innerHTML = data;
-                    modal.style.display = "block";
-                }
-            });
-        </script>
-        <script src="JS/EmployeeFunctions.js"></script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                       
     </body>
 </html>
