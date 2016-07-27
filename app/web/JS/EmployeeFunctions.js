@@ -865,6 +865,9 @@ function loadAttendances(keyword){
     });
 }
 
-function viewAttendance(){
+function viewAttendance(keyword){
+     $.get("LoadAttendancesViewModal.jsp", {keyword: keyword}, function (data) {
+        document.getElementById('attendance_modal_details').innerHTML = data;
+    });
     document.getElementById("view_attendance_modal").style.display = "block";
 }
