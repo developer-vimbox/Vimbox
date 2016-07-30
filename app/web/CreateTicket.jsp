@@ -149,10 +149,8 @@
                                                     </select>
                                                 </div>
                                             </div>
-
                                             <div id="additionalAssigned">
-                                                <br/>
-                                                <div class="input-group">
+                                                <div class="input-group" style="margin-top: 15px">
                                                     <span class="input-group-btn">
                                                         <input class="btn btn-round btn-warning" type='button' value='x' onClick='removeAdditional(this);'>
                                                     </span>

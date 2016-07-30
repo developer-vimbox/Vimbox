@@ -202,7 +202,7 @@
         </div>
     </div>
     <%            String name = user.getFirst_name() + " " + user.getLast_name();
-                  String designation = user.getDesignation();
+        String designation = user.getDesignation();
     %>
     <div id="page-wrapper">
         <div id="page-header" class="bg-gradient-9">
@@ -227,16 +227,13 @@
                         <i class="glyph-icon icon-angle-down"></i>
                     </a>
                     <div class="dropdown-menu float-left">
-                        <div class="box-sm">
-                            <div class="login-box clearfix">
-                                <div class="user-info">
-                                    <span>
-                                        <%=name%>
-                                    </span>
-                                    <a href="ChangePassword.jsp" title="Change Password">Change Password</a>
-                                </div>
-                            </div>
+                        <div class="box-sm">  
                             <div class="pad5A button-pane button-pane-alt text-center">
+                                <a href="ChangePassword.jsp" class="btn display-block font-normal btn-primary" style="margin-bottom: 5px">
+                                    <i class="glyph-icon icon-unlock-alt"></i>
+                                    Change Password
+                                </a>
+
                                 <a href="Logout.jsp" class="btn display-block font-normal btn-danger">
                                     <i class="glyph-icon icon-power-off"></i>
                                     Logout

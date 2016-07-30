@@ -73,14 +73,14 @@
                             <div class="form-group">
                                 <div class="inputer">
                                     <div class="input-wrapper">
-                                        <input type="text" class="form-control" name="username" placeholder="Enter your username" required>
+                                        <input type="text" class="form-control" style="padding-left: 4px" name="username" placeholder="Enter your username" required>
                                     </div>
                                 </div>
                             </div><!--.form-group-->
                             <div class="form-group">
                                 <div class="inputer">
                                     <div class="input-wrapper">
-                                        <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                                        <input type="password" name="password" style="padding-left: 4px" class="form-control" placeholder="Enter your password" required>
                                     </div>
                                 </div>
                             </div><!--.form-group-->
