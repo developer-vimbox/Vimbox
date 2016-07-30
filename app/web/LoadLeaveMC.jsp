@@ -28,7 +28,8 @@
         out.println("<br><br>");
     }
 %>
-<table border="1" width="100%">
+<table class="table table-hover">
+    <thead>
     <tr>
         <th>NRIC</th>
         <th>Employee</th>
@@ -39,6 +40,7 @@
         <th>Duration</th>
         <th>Action</th>
     </tr>
+    </thead>
 
     <%
         for (Map.Entry<String, ArrayList<LeaveMC>> entry : leaveMCs.entrySet()) {
@@ -53,6 +55,7 @@
             ArrayList<LeaveMC> userLeaveMCs = entry.getValue();
             for (LeaveMC leaveMC : userLeaveMCs) {
     %>
+    <tbody>
     <tr>
         <td align="center"><%=nric%></td>
         <td align="center"><%=employee%></td>
@@ -74,7 +77,7 @@
             <%                String path = leaveMC.getImgPath();
                 if (!path.isEmpty()) {
             %>
-            <button onclick="viewMC()">View</button>
+            <button class="btn btn-default" onclick="viewMC()">View</button>
             <div id="view_mc_modal" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content">
@@ -89,23 +92,13 @@
                 }
             %>
             
-             <button onclick="confirmDelete('<%=nric + "_" + Converter.convertDateHtml(leaveMC.getDate())%>', 'leave_mc')">Delete</button>
+             <button class="btn btn-default" onclick="confirmDelete('<%=nric + "_" + Converter.convertDateHtml(leaveMC.getDate())%>', 'leave_mc')">Delete</button>
         </td>
     </tr>
+    </tbody>
     <%
             }
         }
     %>
 </table>
 
-<div id="leave_mc_error_modal" class="modal">
-    <!-- Modal content -->
-    <div class="message-modal-content">
-        <div class="modal-body">
-            <span class="close" onclick="closeModal('leave_mc_error_modal')">×</span>
-            <div id="leave_mc_error_status"></div>
-            <hr>
-            <div id="leave_mc_error_message"></div>
-        </div>
-    </div>
-</div>

@@ -148,8 +148,11 @@ function confirmDelete(id, action) {
     var modal = document.getElementById(action + "_error_modal");
     var status = document.getElementById(action + "_error_status");
     var message = document.getElementById(action + "_error_message");
-    status.innerHTML = "<b>Delete Confirmation</b>";
-    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"delete" + method + "('" + id + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal('" + action + "_error_modal')\">No</button></td></tr></table>";
+    status.innerHTML = "<center><h3 class=\"modal-title\"><b>Delete Confirmation</b></h3></center>";
+    message.innerHTML = "<div class=\"form-horizontal\"> <div class=\"form-group\">Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</div> <div class=\"form-group row\"><center><button class=\"btn btn-default\" onclick=\"delete" + method + "('" + id + "')\">Yes</button>&nbsp;<button class=\"btn btn-default\" onclick=\"closeModal('" + action + "_error_modal')\">No</button></center></div>";
+          
+   
+//    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"delete" + method + "('" + id + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal('" + action + "_error_modal')\">No</button></td></tr></table>";
     modal.style.display = "block";
 }
 
