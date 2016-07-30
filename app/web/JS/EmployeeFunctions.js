@@ -131,8 +131,13 @@ function createEmployee() {
 }
 
 function viewEmployee(empId) {
-    var modal = document.getElementById("viewEmployeeModal" + empId);
-    modal.style.display = "block";
+     $.get("LoadViewEmployeeModal.jsp", {empId: empId}, function (data) {
+        document.getElementById('viewEmployeeModal-details').innerHTML = data;
+    });
+    document.getElementById("viewEmployeeModal").style.display = "block";
+
+//    var modal = document.getElementById("viewEmployeeModal" + empId);
+//    modal.style.display = "block";
 }
 
 function editEmployee(empId) {

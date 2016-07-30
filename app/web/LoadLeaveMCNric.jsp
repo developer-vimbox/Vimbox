@@ -2,7 +2,7 @@
 <%@page import="com.vimbox.hr.LeaveMC"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.vimbox.database.UserLeaveDAO"%>
-<h2>Leaves & MC History</h2>
+<center><h3 class="modal-title"><b>Leaves & MC History</b></h3></center>
 <hr><br>
 <%
     String nric = request.getParameter("nric");
@@ -11,14 +11,14 @@
         out.println("No results found");
     } else {
 %>
-<table border="1" width="100%">
+<table class="table table-hover">
     <col width="18%">
     <col width="18%">
     <col width="18%">
     <col width="18%">
     <col width="18%">
     <col width="10%">
-
+    <thead>
     <tr>
         <th>Date</th>
         <th>Time</th>
@@ -27,11 +27,13 @@
         <th>Duration</th>
         <th>Image Proof</th>
     </tr>
+    </thead>
 
     <%
         for (LeaveMC lmc : leaveMCs) {
 
     %>
+    <tbody>
     <tr>
         <td align="center"><%=Converter.convertDateHtml(lmc.getDate())%></td>
         <td align="center"><%=lmc.getTimeString()%></td>
@@ -51,7 +53,7 @@
             <%                String path = lmc.getImgPath();
                 if (!path.isEmpty()) {
             %>
-            <button onclick="viewMC()">View</button>
+            <button class="btn btn-default" onclick="viewMC()">View</button>
             <div id="view_mc_modal" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content">
@@ -68,6 +70,7 @@
 
         </td>
     </tr>
+    </tbody>
     <%        }
         }
     %>
