@@ -10,7 +10,7 @@
             
     if(!designations.isEmpty()){
 %>
-<select id="user_designation">
+<select id="user_designation" class="form-control">
 <%    
         for(String designation:designations){
             out.println("<option value='" + designation + "'>" + designation + "</option>");

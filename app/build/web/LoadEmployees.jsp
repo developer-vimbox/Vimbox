@@ -28,12 +28,6 @@
     }
 %>
 <table class="table table-hover">
-    <col width="18%">
-    <col width="18%">
-    <col width="18%">
-    <col width="18%">
-    <col width="18%">
-    <col width="10%">    
     <thead>
         <tr>
             <th>NRIC</th>
@@ -56,10 +50,9 @@
             <td align="center"><%=user.getDepartment()%></td>
             <td align="center"><%=user.getDesignation()%></td>
             <td>
-                <button class="btn btn-default" onclick="editEmployee('<%=user.getNric()%>')">Edit</button>
-                <button class="btn btn-default" onclick="viewEmployee('<%=user.getNric()%>')">View</button>
-                <button class="btn btn-default" onclick="loadLeaveMCNric('<%=user.getNric()%>')">L & MC</button>
-                
+                <button onclick="editEmployee('<%=user.getNric()%>')">Edit</button>
+                <button onclick="viewEmployee('<%=user.getNric()%>')">View</button>
+                <button onclick="loadLeaveMCNric('<%=user.getNric()%>')">L & MC</button>
             </td>
         </tr>
     </tbody>

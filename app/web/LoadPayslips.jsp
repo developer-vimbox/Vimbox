@@ -25,7 +25,7 @@
     }
 %>
 
-<table width="100%" border="1">
+<table class="table table-hover">
     <col width="20%">
     <col width="20%">
     <col width="20%">

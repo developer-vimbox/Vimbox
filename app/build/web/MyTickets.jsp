@@ -193,20 +193,29 @@
                                                                 <div class="modal-body">
                                                                     <span class="close" onclick="closeModal('commentModal<%=ticketId%>')">×</span>
                                                                     <h3>Add Comment</h3>
-                                                                    <table>
-                                                                        <tr>
-                                                                            <td>Ticket ID :</td>
-                                                                            <td><%=ticketId%><input type="hidden" id="comment_ticket_id<%=ticketId%>" value="<%=ticketId%>" /></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Comment :</td>
-                                                                            <td><textarea id="ticket_comment<%=ticketId%>" cols="75" rows="6" autofocus></textarea></td>
-                                                                        </tr>  
-                                                                        <tr>
-                                                                            <td></td>
-                                                                            <td><button onclick="followupTicket(<%=ticketId%>)">Add Comment</button></td>
-                                                                        </tr>
-                                                                    </table>
+                                                                    <hr>
+                                                                    <div class="form-horizontal">
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-3 control-label">Ticket ID: </label>
+                                                                            <div class="col-sm-6">
+                                                                                <label class="form-control"><%=ticketId%></label>
+                                                                                <input type="hidden" id="comment_ticket_id<%=ticketId%>" value="<%=ticketId%>" />
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-3 control-label">Comment: </label>
+                                                                            <div class="col-sm-6">
+                                                                                <textarea class="form-control" id="ticket_comment<%=ticketId%>" cols="75" rows="6" autofocus></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-3 control-label">  </label>
+                                                                            <div class="col-sm-6">
+                                                                                <button class="btn btn-primary" onclick="followupTicket(<%=ticketId%>)">Add Comment</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -218,20 +227,29 @@
                                                                 <div class="modal-body">
                                                                     <span class="close" onclick="closeModal('resolveModal<%=ticketId%>')">×</span>
                                                                     <h3>Resolve Ticket</h3>
-                                                                    <table>
-                                                                        <tr>
-                                                                            <td>Ticket ID :</td>
-                                                                            <td><%=ticketId%><input type="hidden" id="resolve_ticket_id<%=ticketId%>" value="<%=ticketId%>" /></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Solution :</td>
-                                                                            <td><textarea id="resolve_ticket_solution<%=ticketId%>" cols="75" rows="6" autofocus></textarea></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td></td>
-                                                                            <td><button onclick="resolveTicket(<%=ticketId%>)">Resolve Ticket</button></td>
-                                                                        </tr>
-                                                                    </table>
+                                                                    <hr>
+                                                                    <div class="form-horizontal">
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-3 control-label">Ticket ID: </label>
+                                                                            <div class="col-sm-6">
+                                                                                <label class="form-control"><%=ticketId%></label>
+                                                                                <input type="hidden" id="resolve_ticket_id<%=ticketId%>" value="<%=ticketId%>" />
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-3 control-label">Solution: </label>
+                                                                            <div class="col-sm-6">
+                                                                                <textarea class="form-control" id="resolve_ticket_solution<%=ticketId%>" cols="75" rows="6" autofocus></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="col-sm-3 control-label">  </label>
+                                                                            <div class="col-sm-6">
+                                                                                <button class="btn btn-primary" onclick="resolveTicket(<%=ticketId%>)">Resolve Ticket</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -109,32 +109,32 @@
                                         <input type="hidden" id="customer_id" name="customer_id">
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Customer's Name: </label>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-5">
                                                 <label class="form-control" id="customer_name"></label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Customer's Contact: </label>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-5">
                                                 <label class="form-control" id="customer_contact"></label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Customer's Email: </label>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-5">
                                                 <label class="form-control" id="customer_email"></label>    
                                             </div>
                                         </div>                             
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Status: </label>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-5">
                                             <input type="text" class="form-control" id="staus" disabled="" placeholder="Pending">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Assigned To: </label>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-5">
                                             <div id="dynamicInput">
                                                 <div class="input-group">
                                                     <span class="input-group-btn">
@@ -149,10 +149,8 @@
                                                     </select>
                                                 </div>
                                             </div>
-
                                             <div id="additionalAssigned">
-                                                <br/>
-                                                <div class="input-group">
+                                                <div class="input-group" style="margin-top: 15px">
                                                     <span class="input-group-btn">
                                                         <input class="btn btn-round btn-warning" type='button' value='x' onClick='removeAdditional(this);'>
                                                     </span>
@@ -169,19 +167,22 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Subject: </label>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-5">
                                             <input type="text" class="form-control" id="subject"  size="84" name="">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Description: </label>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-5">
                                             <textarea class="form-control" id="description" cols="75" rows="6"></textarea>
                                         </div>
                                     </div>
-                                    <div class="bg-default text-center">
-                                        <button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary" onclick="submitTicket()">Submit Ticket</button>
-                                    </div> 
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label"></label>
+                                        <div class="col-sm-5 text-center">
+                                            <button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary" onclick="submitTicket()">Submit Ticket</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

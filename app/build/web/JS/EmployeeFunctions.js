@@ -358,9 +358,9 @@ $(document).on('change', '#payslip_employee', function () {
                 $('#payslip_employerCpf').val((basic * 0.17).toFixed(2));
                 clearBdTables();
                 var tr = "<tr>";
-                tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Employee's CPF Deduction\" placeholder='description'></td>";
-                tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic * 0.2).toFixed(2) + "' placeholder='amount'></td>";
-                tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Employee's CPF Deduction\" placeholder='description'></td>";
+                tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic * 0.2).toFixed(2) + "' placeholder='amount'></div></td>";
+                tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                 tr += "</tr>";
                 $('#payslip_dbd > tbody:last-child').append(tr);
                 updatepayslip_dbd();
@@ -403,14 +403,44 @@ function calculateProrate(employee, startdate, enddate) {
                     document.getElementById('payslip_basic').innerHTML = (original_basic * prorate).toFixed(2);
                     var basic = Number(document.getElementById('payslip_basic').innerHTML);
                     
+					var table = document.getElementById("payslip_dbd");
+
+                    for (var i = 0, row; row = table.rows[i]; i++) {
+                        //iterate through rows
+                        //rows would be accessed using the "row" variable assigned in the for loop
+                        var found = false;
+                        for (var j = 0, col; col = row.cells[j]; j++) {
+                            //iterate through columns
+                            //columns would be accessed using the "col" variable assigned in the for loop
+                            var cellHtml = col.innerHTML;
+                            if (cellHtml.includes("Employee's CPF Deduction") || cellHtml.includes("Absent") || cellHtml.includes("Late") || cellHtml.includes("Unpaid")) {
+
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        if (found) {
+                            row.parentNode.removeChild(row);
+                            break;
+                        }
+                    }
+					
+					var tr = "<tr>";
+                    tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Employee's CPF Deduction\" placeholder='description'></td>";
+                    tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic * 0.2).toFixed(2) + "' placeholder='amount'></div></td>";
+                    tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
+                    tr += "</tr>";
+                    $(tr).prependTo("#payslip_dbd > tbody");
+					
                     var totalDays = Number(data.totalDays);
                     
                     var absent = Number(data.absent);
                     if(absent > 0){
                         var tr = "<tr>";
-                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Absent - " + absent + " day(s)\" placeholder='description'></td>";
-                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * absent * 1.5).toFixed(2) + "' placeholder='amount'></td>";
-                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Absent - " + absent + " day(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * absent * 1.5).toFixed(2) + "' placeholder='amount'></div></td>";
+                        tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
@@ -418,9 +448,9 @@ function calculateProrate(employee, startdate, enddate) {
                     var late = Number(data.late);
                     if(late > 0){
                         var tr = "<tr>";
-                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Late - " + (late/60) + " hours(s) " + (late%60) + " min(s)\" placeholder='description'></td>";
-                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9 * 60)) * late).toFixed(2) + "' placeholder='amount'></td>";
-                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Late - " + (late/60) + " hours(s) " + (late%60) + " min(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'><div class='input-group' style='margin-left= 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9 * 60)) * late).toFixed(2) + "' placeholder='amount'></div></td>";
+                        tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
@@ -428,9 +458,9 @@ function calculateProrate(employee, startdate, enddate) {
                     var mc = Number(data.mc);
                     if(mc > 0){
                         var tr = "<tr>";
-                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Unpaid MC - " + mc + " day(s)\" placeholder='description'></td>";
-                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * mc).toFixed(2) + "' placeholder='amount'></td>";
-                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Unpaid MC - " + mc + " day(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * mc).toFixed(2) + "' placeholder='amount'></div></td>";
+                        tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
@@ -438,9 +468,9 @@ function calculateProrate(employee, startdate, enddate) {
                     var timeoff = Number(data.timeoff);
                     if(timeoff > 0){
                         var tr = "<tr>";
-                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Unpaid Time Off - " + (timeoff / 9) + " hour(s)\" placeholder='description'></td>";
-                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * timeoff).toFixed(2) + "' placeholder='amount'></td>";
-                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Unpaid Time Off - " + (timeoff / 9) + " hour(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * timeoff).toFixed(2) + "' placeholder='amount'></div></td>";
+                        tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
@@ -453,42 +483,12 @@ function calculateProrate(employee, startdate, enddate) {
                         var leaveHours = leave%9;
                         if(leaveHours > 0) leaveString += leaveHours + " hour(s) ";
                         var tr = "<tr>";
-                        tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"" + leaveString + "\" placeholder='description'></td>";
-                        tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * leave).toFixed(2) + "' placeholder='amount'></td>";
-                        tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+                        tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"" + leaveString + "\" placeholder='description'></td>";
+                        tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * leave).toFixed(2) + "' placeholder='amount'></div></td>";
+                        tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
-                    
-                    var table = document.getElementById("payslip_dbd");
-
-                    for (var i = 0, row; row = table.rows[i]; i++) {
-                        //iterate through rows
-                        //rows would be accessed using the "row" variable assigned in the for loop
-                        var found = false;
-                        for (var j = 0, col; col = row.cells[j]; j++) {
-                            //iterate through columns
-                            //columns would be accessed using the "col" variable assigned in the for loop
-                            var cellHtml = col.innerHTML;
-                            if (cellHtml.includes("Employee's CPF Deduction")) {
-
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (found) {
-                            row.parentNode.removeChild(row);
-                            break;
-                        }
-                    }
-
-                    var tr = "<tr>";
-                    tr += "<td align='center'><input type='text' name='payslip_dbddescription' size='27' value=\"Employee's CPF Deduction\" placeholder='description'></td>";
-                    tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic * 0.2).toFixed(2) + "' placeholder='amount'></td>";
-                    tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
-                    tr += "</tr>";
-                    $(tr).prependTo("#payslip_dbd > tbody");
 
                     $('#payslip_employerCpf').val((basic * 0.17).toFixed(2));
                     updatepayslip_dbd();
@@ -540,9 +540,9 @@ $(document).on('change keyup paste', '#payslip_otRate', function () {
 
 function addPayslipBDEntry(tableName) {
     var tr = "<tr>";
-    tr += "<td align='center'><input type='text' name='" + tableName + "description' size='27' placeholder='description'></td>";
-    tr += "<td align='center'>$ <input type='number' step='0.01' min='0' name='" + tableName + "amount' size='3' placeholder='amount' onkeyup='update" + tableName + "()'></td>";
-    tr += "<td align='center'><input type='button' value='x' onclick='deleteEntry(this)'/>";
+    tr += "<td align='center'><input type='text' class='form-control' name='" + tableName + "description' size='27' placeholder='description'></td>";
+    tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='" + tableName + "amount' size='3' placeholder='amount' onkeyup='update" + tableName + "()'></div></td>";
+    tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
     tr += "</tr>";
     tableName = '#' + tableName + " > tbody:last-child";
     $(tableName).append(tr);

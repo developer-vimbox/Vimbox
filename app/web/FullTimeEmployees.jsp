@@ -64,10 +64,9 @@
                         <div class="panel-body">
                             <div class="form-horizontal">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Employee :</label>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                            <input class="form-control" type="text" id="employee_search" style="width: 400px;color:black;">
+                                            <input type="text" id="employee_search" placeholder="Enter employee name" class="form-control" style="width: 400px;color:black;">
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="loadEmployees($('#employee_search').val(), 'full-time')">Search</button>
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="location.href = 'CreateEmployee.jsp';">Add New</button>

@@ -13,21 +13,26 @@
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Payslip payslip = PayslipDAO.getPayslip(array[0], sdf.parse(array[1]));
 %>
-<h1>Edit Payslip</h1>
+<legend>Edit Payslip</legend>
 <hr>
 <fieldset>
-    <legend>Payslip Information</legend>
+    <h3 class="title-hero">
+        Payslip Information
+    </h3> <hr>
     <input type="hidden" id="payslip_id" value="<%=payslip.getPayslip_id()%>">
-    <table>
-        <tr>
-            <td align="right">Start Date :</td>
-            <td>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Start Date: </label>
+            <div class="col-sm-5">
                 <input type="hidden" id="original_startDate" value="<%=Converter.convertDateHtml(payslip.getStartDate())%>">
-                
-                <input type="date" id="payslip_startDate" value="<%=Converter.convertDateHtml(payslip.getStartDate())%>"> &nbsp; End date :&nbsp;<input type="date" id="payslip_endDate" value="<%=Converter.convertDateHtml(payslip.getEndDate())%>">
-                &nbsp; <button onclick="resetDates()">Reset Dates</button>
-            </td>
-        </tr>
+
+                <input type="date" id="payslip_startDate" class="form-control" value="<%=Converter.convertDateHtml(payslip.getStartDate())%>"> &nbsp; End date :&nbsp;<input type="date" id="payslip_endDate" value="<%=Converter.convertDateHtml(payslip.getEndDate())%>">
+                &nbsp; <button class="btn btn-default" onclick="resetDates()">Reset Dates</button>
+            </div>
+        </div>
+    </div>
+
+    <table>
         <tr>
             <td align="right">Payment Date :</td>
             <td>
@@ -105,7 +110,7 @@
                                         if (!allowanceBD.isEmpty()) {
                                             for (Map.Entry<String, Double> entry : allowanceBD.entrySet()) {
                                                 String key = entry.getKey();
-                                                if(!key.isEmpty()){
+                                                if (!key.isEmpty()) {
                                     %>
                                     <tr>
                                         <td align='center'><input type='text' name='payslip_abddescription' size='27' value="<%=key%>" placeholder='description'></td>
@@ -145,7 +150,7 @@
                                         if (!deductionBD.isEmpty()) {
                                             for (Map.Entry<String, Double> entry : deductionBD.entrySet()) {
                                                 String key = entry.getKey();
-                                                if(!key.isEmpty()){
+                                                if (!key.isEmpty()) {
                                     %>
                                     <tr>
                                         <td align='center'><input type='text' name='payslip_dbddescription' size='27' value="<%=key%>" placeholder='description'></td>
@@ -214,7 +219,7 @@
                                         if (!additionalBD.isEmpty()) {
                                             for (Map.Entry<String, Double> entry : additionalBD.entrySet()) {
                                                 String key = entry.getKey();
-                                                if(!key.isEmpty()){
+                                                if (!key.isEmpty()) {
                                     %>
                                     <tr>
                                         <td align='center'><input type='text' name='payslip_apbddescription' size='27' value="<%=key%>" placeholder='description'></td>

@@ -1,7 +1,6 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.vimbox.user.User"%>
 <%@page import="com.vimbox.database.UserDAO"%>
-<%@include file="ValidateLogin.jsp"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -11,14 +10,37 @@
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script src="JS/EmployeeFunctions.js"></script>
         <script src="JS/ModalFunctions.js"></script>
-        <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
     </head>
     <body onload="parttime_setup()">
-        <h1>Part Time Employees</h1><hr><br>
-        <input type="text" id="employee_search">
-            <button onclick="loadEmployees($('#employee_search').val(),'part-time')">Search</button>
-            <button onclick="location.href='CreateEmployee.jsp';">Add New</button>
-        <br><br>
-        <div id="employees_table"></div>
+        <%@include file="header.jsp"%>
+        <div id="page-content-wrapper">
+            <div id="page-content" style="min-height: 7630px;">
+                <div class="container">
+                    <div id="page-title">
+                        <h2>Part Time Employees</h2>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                            <input type="text" id="employee_search" placeholder="Enter employee name" class="form-control" style="width: 400px;color:black;">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="loadEmployees($('#employee_search').val(), 'part-time')">Search</button>
+                                                <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="location.href = 'CreateEmployee.jsp';">Add New</button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <br><br>
+                                <div id="employees_table"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
     </body>
 </html>
