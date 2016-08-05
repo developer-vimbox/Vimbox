@@ -10,8 +10,10 @@
     String keyword = request.getParameter("keyword");
 
     HashMap<String, ArrayList<LeaveMC>> leaveMCs = UserLeaveDAO.getLeaveMCRecordsByKeyword(keyword);
-    ArrayList<User> users = UserDAO.getFullTimeUsersByKeyword(keyword);
+    ArrayList<User> employees = UserDAO.getFullTimeUsers();
+    
     if (leaveMCs.isEmpty()) {
+        ArrayList<User> users = UserDAO.getFullTimeUsersByKeyword(keyword);
         for (User employee : users) {
             String nric = employee.getNric();
             ArrayList<LeaveMC> userLeaveMCs = UserLeaveDAO.getLeaveMCRecordByNric(nric);
@@ -46,7 +48,7 @@
         for (Map.Entry<String, ArrayList<LeaveMC>> entry : leaveMCs.entrySet()) {
             String nric = entry.getKey();
             User employee = null;
-            for (User emp : users) {
+            for (User emp : employees) {
                 if (emp.getNric().equals(nric)) {
                     employee = emp;
                     break;

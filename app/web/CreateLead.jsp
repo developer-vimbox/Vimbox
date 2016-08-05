@@ -347,8 +347,8 @@
                     <td></td>
                     <td>
                         <input type="submit" value="Save">
-                        <input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">
-                        <button onclick="return checkEmail();">Email Quotation</button>
+                        <!--<input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">-->
+                        <!--<button onclick="return checkEmail();">Email Quotation</button>-->
                     </td>
                 </tr>
             </table>
@@ -375,27 +375,6 @@
                     <div id="salesStatus"></div>
                     <hr>
                     <div id="salesMessage"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="manpowerModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <input type="hidden" id="manpowerId">
-                    <table>
-                        <tr>
-                            <td align="right">Additional Manpower :</td>
-                            <td><input type="number" id="additionalManpower"></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Reason :</td>
-                            <td><input type="text" id="manpowerReason"></td>
-                        </tr>
-                    </table>
-                    <button align="center" onclick="submitManpower();
-                            return false;">Okay</button>
                 </div>
             </div>
         </div>

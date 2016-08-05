@@ -249,7 +249,11 @@
                                                     } else {
                                                         // Table Data //
                                                         String[] serviceChargeArray = serviceTable[i][j].split(",");
-                                                        out.println("<td bgcolor='#6698FF' align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\">" + serviceChargeArray[0] + "</br>");
+                                                        out.println("<td bgcolor='#6698FF' align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\"");
+                                                        if (serviceTable[0][j].equals("Manpower")) {
+                                                            out.println("id='" + divId + (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_") + "_service'");
+                                                        }
+                                                        out.println(">" + serviceChargeArray[0] + "</br>");
 
                                                         if (serviceTable[0][j].equals("Manpower")) {
                                                             String id = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
@@ -526,19 +530,27 @@
     <!-- Modal content -->
     <div class="modal-content">
         <div class="modal-body">
+            <h3>Manpower Request</h3><hr>
             <input type="hidden" id="<%=divId%>_manpowerId">
-            <table>
+            <table width="100%">
                 <tr>
                     <td align="right">Additional Manpower :</td>
                     <td><input type="number" id="<%=divId%>_additionalManpower"></td>
                 </tr>
                 <tr>
                     <td align="right">Reason :</td>
-                    <td><input type="text" id="<%=divId%>_manpowerReason"></td>
+                    <td><input type="text" id="<%=divId%>_manpowerReason" style="width:90%"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <button align="center" onclick="closeManpowerModal('<%=divId%>'); return false;" style="width:100%;">CANCEL</button>
+                    </td>
+                    <td>
+                        <button align="center" onclick="submitManpower('<%=divId%>');
+                    return false;" style="width:100%;">REQUEST</button>
+                    </td>
                 </tr>
             </table>
-            <button align="center" onclick="submitManpower('<%=divId%>');
-                    return false;">Okay</button>
         </div>
     </div>
 </div>

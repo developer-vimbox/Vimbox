@@ -6,9 +6,7 @@ import java.util.HashMap;
 
 public class LeadDiv {
     private String salesDiv;
-    private ArrayList<Item> customerItems;
-    private ArrayList<Item> vimboxItems;
-    private ArrayList<Item> materials;
+    private ArrayList<LeadArea> leadAreas;
     
     private ArrayList<String[]> services;
     private HashMap<String,String> otherCharges;
@@ -16,11 +14,9 @@ public class LeadDiv {
     private ArrayList<String> comments;
     private ArrayList<String> remarks;
 
-    public LeadDiv(String salesDiv, ArrayList<Item> customerItems, ArrayList<Item> vimboxItems, ArrayList<Item> materials, ArrayList<String[]> services, HashMap<String, String> otherCharges, ArrayList<String> comments, ArrayList<String> remarks) {
+    public LeadDiv(String salesDiv, ArrayList<LeadArea> leadAreas, ArrayList<String[]> services, HashMap<String, String> otherCharges, ArrayList<String> comments, ArrayList<String> remarks) {
         this.salesDiv = salesDiv;
-        this.customerItems = customerItems;
-        this.vimboxItems = vimboxItems;
-        this.materials = materials;
+        this.leadAreas = leadAreas;
         this.services = services;
         this.otherCharges = otherCharges;
         this.comments = comments;
@@ -31,16 +27,8 @@ public class LeadDiv {
         return salesDiv;
     }
 
-    public ArrayList<Item> getCustomerItems() {
-        return customerItems;
-    }
-
-    public ArrayList<Item> getVimboxItems() {
-        return vimboxItems;
-    }
-
-    public ArrayList<Item> getMaterials() {
-        return materials;
+    public ArrayList<LeadArea> getLeadAreas() {
+        return leadAreas;
     }
 
     public ArrayList<String[]> getServices() {
@@ -58,4 +46,28 @@ public class LeadDiv {
     public ArrayList<String> getRemarks() {
         return remarks;
     }   
+    
+    public ArrayList<Item> getCustomerItems(){
+        ArrayList<Item> items = new ArrayList<Item>();
+        for(LeadArea leadArea: leadAreas){
+            items.addAll(leadArea.getCustomerItems());
+        }
+        return items;
+    }
+    
+    public ArrayList<Item> getVimboxItems(){
+        ArrayList<Item> items = new ArrayList<Item>();
+        for(LeadArea leadArea: leadAreas){
+            items.addAll(leadArea.getVimboxItems());
+        }
+        return items;
+    }
+    
+    public ArrayList<Item> getMaterials(){
+        ArrayList<Item> items = new ArrayList<Item>();
+        for(LeadArea leadArea: leadAreas){
+            items.addAll(leadArea.getMaterials());
+        }
+        return items;
+    }
 }

@@ -130,15 +130,15 @@
                     if (attendance_record != null) {
                         String employeeAttendance = attendance_record.get(nric);
                 %>
-                    <td align='center'><%if (employeeAttendance.equals("Present")) 
+                    <td align='center'><%if (employeeAttendance != null && employeeAttendance.equals("Present")) 
                             out.println("x");%></td>
-                    <td align='center'><%if (employeeAttendance.equals("Absent")) 
+                    <td align='center'><%if (employeeAttendance != null && employeeAttendance.equals("Absent")) 
                             out.println("x");%></td>
-                    <td align='center'><%if (employeeAttendance.equals("Late")) 
+                    <td align='center'><%if (employeeAttendance != null && employeeAttendance.equals("Late")) 
                             out.println("x");%></td>
                     <td align='center'>
                         <%
-                            if (employeeAttendance.equals("Late")){
+                            if (employeeAttendance != null && employeeAttendance.equals("Late")){
                                 double totalMinutes = late_record.get(nric);
                                 int hour = (int) (totalMinutes / 60);
                                 int min = (int) (totalMinutes % 60);

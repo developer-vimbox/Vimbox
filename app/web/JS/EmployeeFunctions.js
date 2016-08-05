@@ -413,8 +413,9 @@ function calculateProrate(employee, startdate, enddate) {
                             //iterate through columns
                             //columns would be accessed using the "col" variable assigned in the for loop
                             var cellHtml = col.innerHTML;
+                            console.log(cellHtml);
                             if (cellHtml.includes("Employee's CPF Deduction") || cellHtml.includes("Absent") || cellHtml.includes("Late") || cellHtml.includes("Unpaid")) {
-
+                                
                                 found = true;
                                 break;
                             }
@@ -422,11 +423,11 @@ function calculateProrate(employee, startdate, enddate) {
 
                         if (found) {
                             row.parentNode.removeChild(row);
-                            break;
+                            i--;
                         }
                     }
 					
-					var tr = "<tr>";
+                    var tr = "<tr>";
                     tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Employee's CPF Deduction\" placeholder='description'></td>";
                     tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic * 0.2).toFixed(2) + "' placeholder='amount'></div></td>";
                     tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";

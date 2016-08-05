@@ -506,6 +506,7 @@
                                 String sId = "";
                                 String sName = "";
                                 String sRem = "";
+                                String sStatus = "";
                                 ArrayList<String> timeslots = new ArrayList<String>();
                                 ArrayList<String> addresses = new ArrayList<String>();
                                 for (int i = 0; i < surveys.size(); i++) {
@@ -516,10 +517,14 @@
                                         sId = survey.getSiteSurveyor().getNric();
                                         sName = survey.getSiteSurveyor().toString();
                                         sRem = survey.getRemarks();
+                                        sStatus = survey.getStatus();
                                     }
 
                                     if (!s.equals(ss)) {
-                                        out.println("<div id='" + ss + "'><span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
+                                        out.println("<div id='" + ss + "'>");
+                                        if(sStatus.equals("Pending")){
+                                            out.println("<span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
+                                        }
                                         out.println("<hr><table><col width='100'>");
                                         out.println("<tr><td align='right'><b>Date :</b></td><td><input type='hidden' name='siteSurvey_date' value='" + ss + "'>" + ss + "</td></tr>");
                                         out.println("<tr><td align='right'><b>Timeslot :</b></td><td><table>");
@@ -534,12 +539,14 @@
                                         out.println("</table></td></tr>");
                                         out.println("<tr><td align='right'><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName + "</td></tr>");
                                         out.println("<tr><td align='right'><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem + "</td></tr>");
+                                        out.println("<tr><td align='right'><b>Status :</b></td><td>" + sStatus + "</td></tr>");
                                         out.println("</table></div>");
 
                                         ss = s;
                                         sId = survey.getSiteSurveyor().getNric();
                                         sName = survey.getSiteSurveyor().toString();
                                         sRem = survey.getRemarks();
+                                        sStatus = survey.getStatus();
                                         timeslots = new ArrayList<String>();
                                         addresses = new ArrayList<String>();
                                     }
@@ -551,7 +558,13 @@
                                         addresses.add(survey.getAddress());
                                     }
                                     if (i == surveys.size() - 1) {
-                                        out.println("<div id='" + ss + "'><span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
+                                        out.println("<div id='" + ss + "'>");
+                                        if(sStatus.equals("Pending")){
+                                            out.println("<span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
+                                            out.println("<input type='hidden' name='surveyStatus' value='yes'>");
+                                        }else{
+                                            out.println("<input type='hidden' name='surveyStatus' value='no'>");
+                                        }
                                         out.println("<hr><table><col width='100'>");
                                         out.println("<tr><td align='right'><b>Date :</b></td><td><input type='hidden' name='siteSurvey_date' value='" + ss + "'>" + ss + "</td></tr>");
                                         out.println("<tr><td align='right'><b>Timeslot :</b></td><td><table>");
@@ -566,6 +579,7 @@
                                         out.println("</table></td></tr>");
                                         out.println("<tr><td align='right'><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName + "</td></tr>");
                                         out.println("<tr><td align='right'><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem + "</td></tr>");
+                                        out.println("<tr><td align='right'><b>Status :</b></td><td>" + survey.getStatus() + "</td></tr>");
                                         out.println("</table></div>");
                                     }
                                 }
@@ -804,21 +818,25 @@
                                                                                     } else {
                                                                                         // Table Data //
                                                                                         String[] serviceChargeArray = serviceTable[i][j].split(",");
-                                                                                        out.println("<td bgcolor='#6698FF' align='center' onclick=\"selectServiceSlot(this, '" + leadDivId + "')\">" + serviceChargeArray[0] + "</br>");
-                                                                                        String sid = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
-                                                                                        out.println("<input type='hidden' value='" + sid + "'>");
+                                                                                        out.println("<td bgcolor='#6698FF' align='center' onclick=\"selectServiceSlot(this, '" + leadDivId + "')\"");
                                                                                         if (serviceTable[0][j].equals("Manpower")) {
+                                                                                            out.println("id='" + leadDivId + (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_") + "_service'");
+                                                                                        }
+                                                                                        out.println(">" + serviceChargeArray[0] + "</br>");
+
+                                                                                        if (serviceTable[0][j].equals("Manpower")) {
+                                                                                            String id = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
                                                                                             String mp = "";
                                                                                             String mr = "";
                                                                                             for (String[] svc : services) {
-                                                                                                if (svc[0].replaceAll(" ", "_").equals(sid)) {
+                                                                                                if (svc[0].replaceAll(" ", "_").equals(id)) {
                                                                                                     mp = svc[3];
                                                                                                     mr = svc[4];
                                                                                                     break;
                                                                                                 }
                                                                                             }
-                                                                                            out.println("Manpower : <label id='" + leadDivId + "_" + sid + "manpowerLabel'>" + mp + "</label><input type='hidden' name='" + leadDivId + "_" + sid + "manpowerInput' id='" + sid + "manpowerInput' value='" + mp + "'></br>");
-                                                                                            out.println("Reason : <label id='" + leadDivId + "_" + sid + "manpowerReasonLabel'>" + mr + "</label><input type='hidden' name='" + leadDivId + "_" + sid + "reasonInput' id='" + sid + "reasonInput' value='" + mr + "'></br>");
+                                                                                            out.println("Manpower : <label id='" + leadDivId + "_" + id + "manpowerLabel'>" + mp + "</label><input type='hidden' name='" + leadDivId + "_" + id + "manpowerInput' id='" + leadDivId + "_" + id + "manpowerInput' value='" + mp + "'></br>");
+                                                                                            out.println("Reason : <label id='" + leadDivId + "_" + id + "manpowerReasonLabel'>" + mr + "</label><input type='hidden' name='" + leadDivId + "_" + id + "reasonInput' id='" + leadDivId + "_" + id + "reasonInput' value='" + mr + "'></br>");
                                                                                         }
                                                                                         try {
                                                                                             out.println("<input type='hidden' name='svcTableCell' value='{" + serviceTable[0][j] + "|" + serviceChargeArray[0] + "," + serviceChargeArray[1] + "}'>");
@@ -1164,24 +1182,32 @@
                                 </td>
                                 </tr>
                                 </table>
-
+                                
                                 <div id="<%=leadDivId%>_manpowerModal" class="modal">
                                     <!-- Modal content -->
                                     <div class="modal-content">
                                         <div class="modal-body">
+                                            <h3>Manpower Request</h3><hr>
                                             <input type="hidden" id="<%=leadDivId%>_manpowerId">
-                                            <table>
+                                            <table width="100%">
                                                 <tr>
                                                     <td align="right">Additional Manpower :</td>
                                                     <td><input type="number" id="<%=leadDivId%>_additionalManpower"></td>
                                                 </tr>
                                                 <tr>
                                                     <td align="right">Reason :</td>
-                                                    <td><input type="text" id="<%=leadDivId%>_manpowerReason"></td>
+                                                    <td><input type="text" id="<%=leadDivId%>_manpowerReason" style="width:90%"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <button align="center" onclick="closeManpowerModal('<%=leadDivId%>'); return false;" style="width:100%;">CANCEL</button>
+                                                    </td>
+                                                    <td>
+                                                        <button align="center" onclick="submitManpower('<%=leadDivId%>');
+                                                    return false;" style="width:100%;">REQUEST</button>
+                                                    </td>
                                                 </tr>
                                             </table>
-                                            <button align="center" onclick="submitManpower('<%=leadDivId%>');
-                                                    return false;">Okay</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1199,10 +1225,10 @@
                     <td></td>
                     <td>
                         <input type="submit" value="Save">
-                        <input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">
-                        <button onclick="return checkEmail();">Email Quotation</button>
-                        <button onclick="cancelLead(<%=lead.getId()%>);
-                                return false;">Reject</button>
+                        <!--<input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">-->
+                        <!--<button onclick="return checkEmail();">Email Quotation</button>-->
+                        <!--<button onclick="cancelLead(lead.getId());
+                                return false;">Reject</button>-->
                     </td>
                 </tr>
             </table>
@@ -1229,27 +1255,6 @@
                     <div id="salesStatus"></div>
                     <hr>
                     <div id="salesMessage"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="manpowerModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <input type="hidden" id="manpowerId">
-                    <table>
-                        <tr>
-                            <td align="right">Additional Manpower :</td>
-                            <td><input type="number" id="additionalManpower"></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Reason :</td>
-                            <td><input type="text" id="manpowerReason"></td>
-                        </tr>
-                    </table>
-                    <button align="center" onclick="submitManpower();
-                            return false;">Okay</button>
                 </div>
             </div>
         </div>

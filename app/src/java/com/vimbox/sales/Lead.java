@@ -4,7 +4,6 @@ import com.vimbox.customer.Customer;
 import com.vimbox.sitesurvey.SiteSurvey;
 import com.vimbox.user.User;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.joda.time.DateTime;
 
 public class Lead {
@@ -113,12 +112,33 @@ public class Lead {
     public String getSalesDivIdByAddress(String address){
         for(LeadDiv leadDiv : leadDivs){
             String leadDivId = leadDiv.getSalesDiv();
-            System.out.println("leadDivId ---------- " + leadDivId);
-            System.out.println("address ------------ " + address);
             if(leadDivId.contains(address)){
                 return leadDivId.substring(0, leadDivId.indexOf("|"));
             }
         }
         return null;
+    }
+    
+    public LeadDiv getSalesDivByAddress(String address){
+        for(LeadDiv leadDiv : leadDivs){
+            String leadDivId = leadDiv.getSalesDiv();
+            if(leadDivId.contains(address)){
+                return leadDiv;
+            }
+        }
+        return null;
+    }
+    
+    public String[] getStoreysPushingDFrom(String address){
+        String[] storeysPushingD = null;
+        for(String [] addFrom : addressFrom){
+            String[] addrArray = addFrom[0].split("_");
+            String addrString = addrArray[0] + " #" + addrArray[1] + "-" + addrArray[2] + " S" + addrArray[3];
+            if(addrString.equals(address)){
+                storeysPushingD = new String[]{addFrom[1], addFrom[2]};
+                break;
+            }
+        }
+        return storeysPushingD;
     }
 }

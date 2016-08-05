@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -105,12 +106,113 @@ public class EditLeadController extends HttpServlet {
             }
             //------------------------------//
         
+        TreeSet<String> addressFromSet = new TreeSet<String>();
+        TreeSet<String> addressToSet = new TreeSet<String>();
+        String[] salesDivs = request.getParameterValues("divId");
+        // Increment by 4 per address //
+        String[] addressFrom = request.getParameterValues("addressfrom");
+        ArrayList<String> salesDivFrom = new ArrayList<String>();
+        ArrayList<String> addFrom = new ArrayList<String>();
+        if (addressFrom != null) {
+            for (int i = 0; i < addressFrom.length; i += 4) {
+                String address = addressFrom[i];
+                String level = addressFrom[i + 1];
+                String unit = addressFrom[i + 2];
+                String postal = addressFrom[i + 3];
+                String add = address + "_" + level + "_" + unit + "_" + postal;
+                addressFromSet.add(address + " #" + level + "-" + unit + " S" + postal);
+                for(String salesDiv: salesDivs){
+                    if(salesDiv.contains(address + " #" + level + "-" + unit + " S" + postal)){
+                        salesDivFrom.add(salesDiv);
+                        break;
+                    }
+                }
+                addFrom.add(add);
+            }
+        }
+        //----------------------------//
+        String[] storeysFrom = request.getParameterValues("storeysfrom");
+        ArrayList<String> storeFrom = new ArrayList<String>();
+        if (storeysFrom != null) {
+            for (int i = 0; i < storeysFrom.length; i++) {
+                String store = storeysFrom[i];
+                if (store.isEmpty()) {
+                    store = " ";
+                }
+                storeFrom.add(store);
+            }
+        }
+        String[] distanceFrom = request.getParameterValues("distancefrom");
+        ArrayList<String> distFrom = new ArrayList<String>();
+        if (distanceFrom != null) {
+            for (int i = 0; i < distanceFrom.length; i++) {
+                String dist = distanceFrom[i];
+                if (dist.isEmpty()) {
+                    dist = " ";
+                }
+                distFrom.add(dist);
+            }
+        }
+        // Enter into leadmovefrom database //
+        LeadDAO.createLeadMove(leadId, salesDivFrom, "from", addFrom, storeFrom, distFrom);
+            //----------------------------------//
+
+        // Increment by 4 per address //
+        ArrayList<String> salesDivTo = new ArrayList<String>();
+        String[] addressTo = request.getParameterValues("addressto");
+        ArrayList<String> addTo = new ArrayList<String>();
+        if (addressTo != null) {
+            for (int i = 0; i < addressTo.length; i += 4) {
+                String address = addressTo[i];
+                String level = addressTo[i + 1];
+                String unit = addressTo[i + 2];
+                String postal = addressTo[i + 3];
+                String add = address + "_" + level + "_" + unit + "_" + postal;
+                addressToSet.add(address + " #" + level + "-" + unit + " S" + postal);
+                for(String salesDiv: salesDivs){
+                    if(salesDiv.contains(address + " #" + level + "-" + unit + " S" + postal)){
+                        salesDivTo.add(salesDiv);
+                        break;
+                    }
+                }
+                addTo.add(add);
+            }
+        }
+        //----------------------------//
+        String[] storeysTo = request.getParameterValues("storeysto");
+        ArrayList<String> storeTo = new ArrayList<String>();
+        if (storeysTo != null) {
+            for (int i = 0; i < storeysTo.length; i++) {
+                String store = storeysTo[i];
+                if (store.isEmpty()) {
+                    store = " ";
+                }
+                storeTo.add(store);
+            }
+        }
+        String[] distanceTo = request.getParameterValues("distanceto");
+        ArrayList<String> distTo = new ArrayList<String>();
+        if (distanceTo != null) {
+            for (int i = 0; i < distanceTo.length; i++) {
+                String dist = distanceTo[i];
+                if (dist.isEmpty()) {
+                    dist = " ";
+                }
+                distTo.add(dist);
+            }
+        }
+        // Enter into leadmoveto database //
+        LeadDAO.createLeadMove(leadId, salesDivTo, "to", addTo, storeTo, distTo);
+            //----------------------------------//
+        //----------------//
+        
         if(leadType.contains("Enquiry")){
             String enquiry = request.getParameter("enquiry");
             LeadDAO.createLeadEnquiry(leadId, enquiry);
         }
         
         if(leadType.contains("Survey")){
+            String[] surveyStatuses = request.getParameterValues("surveyStatus");
             String[] surveyDates = request.getParameterValues("siteSurvey_date");
             String[] timeslots = request.getParameterValues("siteSurvey_timeslot");
             String[] addresses = request.getParameterValues("siteSurvey_address");
@@ -125,249 +227,161 @@ public class EditLeadController extends HttpServlet {
                 }
                 
                 SiteSurveyDAO.deleteSiteSurveysByLeadId(leadId);
-                for(String surveyDate : surveyDates){
-                    String surveyorId = "";
-                    String remark = "";
-                    ArrayList<String> times = new ArrayList<String>();
-                    ArrayList<String> adds = new ArrayList<String>();
-                    for(String timeslot : timeslots){
-                        if(timeslot.contains(surveyDate)){
-                            if(!adds.contains(timeslot.split("\\|")[1])){
-                                times.add(timeslot.split("\\|")[1]);
+                for(int j=0; j<surveyDates.length; j++){
+                    String surveyDate = surveyDates[j];
+                    String surveyStatus = surveyStatuses[j];
+                    if(surveyStatus.equals("yes")){
+                        String surveyorId = "";
+                        String remark = "";
+                        ArrayList<String> times = new ArrayList<String>();
+                        ArrayList<String> adds = new ArrayList<String>();
+                        ArrayList<String> addsTags = new ArrayList<String>();
+                        for(String timeslot : timeslots){
+                            if(timeslot.contains(surveyDate)){
+                                if(!adds.contains(timeslot.split("\\|")[1])){
+                                    times.add(timeslot.split("\\|")[1]);
+                                }
                             }
                         }
-                    }
 
-                    for(String addr : addresses){
-                        if(addr.contains(surveyDate)){
-                            if(!adds.contains(addr.split("\\|")[1])){
-                                adds.add(addr.split("\\|")[1]);
+                        for(String addr : addresses){
+                            if(addr.contains(surveyDate)){
+                                if(!adds.contains(addr.split("\\|")[1])){
+                                    adds.add(addr.split("\\|")[1]);
+                                }
                             }
                         }
-                    }
 
-                    for(String sur : surveyors){
-                        if(sur.contains(surveyDate)){
-                            surveyorId = sur.split("\\|")[1];
-                        }
-                    }
-
-                    for(String rem : remarks){
-                        if(rem.contains(surveyDate)){
-                            remark = rem.split("\\|", -1)[1];
-                        }
-                    }
-                    
-                    String timeslot = "";
-                    if(!times.isEmpty()){
-                        timeslot = times.get(0);
-                        int count = ts.get(timeslot);
-                        for(int i=1; i<times.size(); i++){
-                            String tts = times.get(i);
-                            if(ts.get(tts) == count + 1){
-                                timeslot = timeslot.substring(0, timeslot.lastIndexOf(" ")) + " " + tts.substring(tts.lastIndexOf(" ") + 1);
+                        for(String add : adds){
+                            if(addressFromSet.contains(add)){
+                                addsTags.add("from");
                             }else{
-                                timeslot += "<br>" + tts;
+                                addsTags.add("to");
                             }
-                            count = ts.get(tts);
                         }
+
+                        for(String sur : surveyors){
+                            if(sur.contains(surveyDate)){
+                                surveyorId = sur.split("\\|")[1];
+                            }
+                        }
+
+                        for(String rem : remarks){
+                            if(rem.contains(surveyDate)){
+                                remark = rem.split("\\|", -1)[1];
+                            }
+                        }
+
+                        String timeslot = "";
+                        if(!times.isEmpty()){
+                            timeslot = times.get(0);
+                            int count = ts.get(timeslot);
+                            for(int i=1; i<times.size(); i++){
+                                String tts = times.get(i);
+                                if(ts.get(tts) == count + 1){
+                                    timeslot = timeslot.substring(0, timeslot.lastIndexOf(" ")) + " " + tts.substring(tts.lastIndexOf(" ") + 1);
+                                }else{
+                                    timeslot += "<br>" + tts;
+                                }
+                                count = ts.get(tts);
+                            }
+                        }
+                        SiteSurveyDAO.createSiteSurveyAssignment(leadId, surveyorId, surveyDate, times, adds, addsTags, timeslot, remark, "Pending");
+                
                     }
-                    SiteSurveyDAO.createSiteSurveyAssignment(leadId, surveyorId, surveyDate, times, adds, timeslot, remark);
                 }
             }
         }
-          
-        // Increment by 4 per address //
-        String[] addressFrom = request.getParameterValues("addressfrom");
-        String addFrom = "";
-        if(addressFrom != null){
-            for(int i=0; i<addressFrom.length; i+=4){
-                String address = addressFrom[i];
-                String level = addressFrom[i+1];
-                String unit = addressFrom[i+2];
-                String postal = addressFrom[i+3];
-                String add = address + "_" + level + "_" + unit + "_" + postal;
-                addFrom += add;
-                if(i < addressFrom.length-5){
-                    addFrom += "|";
-                }
+        
+        LeadDAO.createLeadSalesDiv(leadId, salesDivs);
+        for(String salesDiv: salesDivs){
+            String divId = salesDiv.split("\\|")[0];
+            // Customer items //
+            String[] custItemNames = request.getParameterValues(divId + "_customerItemName");
+            String[] custItemRemarks = request.getParameterValues(divId + "_customerItemRemark");
+            String[] custItemCharges = request.getParameterValues(divId + "_customerItemCharge");
+            String[] custItemQtys = request.getParameterValues(divId + "_customerItemQty");
+            String[] custItemUnits = request.getParameterValues(divId + "_customerItemUnit");
+            if (custItemNames != null) {
+                // Enter into leadcustitem database //
+                LeadDAO.createLeadCustItem(leadId, salesDiv, custItemNames, custItemRemarks, custItemCharges, custItemQtys, custItemUnits);
+                //----------------------------------//
             }
-        }
-        //----------------------------//
-        String[] storeysFrom = request.getParameterValues("storeysfrom");
-        String storeFrom = "";
-        if(storeysFrom != null){
-            for(int i=0; i<storeysFrom.length; i++){
-                String store = storeysFrom[i];
-                if(store.isEmpty()){
-                    store = " ";
-                }
-                storeFrom += store;
-                if(i < storeysFrom.length-1){
-                    storeFrom += "|";
-                }
-            }
-        }
-        String[] distanceFrom = request.getParameterValues("distancefrom");
-        String distFrom = "";
-        if(distanceFrom != null){
-            for(int i=0; i<distanceFrom.length; i++){
-                String dist = distanceFrom[i];
-                if(dist.isEmpty()){
-                    dist = " ";
-                }
-                distFrom += dist;
-                if(i < distanceFrom.length-1){
-                    distFrom += "|";
-                }
-            }
-        }
-            // Enter into leadmovefrom database //
-            LeadDAO.createLeadMoveFrom(leadId, addFrom, storeFrom, distFrom);
-            //----------------------------------//
+            //----------------//
 
-        // Increment by 4 per address //
-        String[] addressTo = request.getParameterValues("addressto");
-        String addTo = "";
-        if(addressTo != null){
-            for(int i=0; i<addressTo.length; i+=4){
-                String address = addressTo[i];
-                String level = addressTo[i+1];
-                String unit = addressTo[i+2];
-                String postal = addressTo[i+3];
-                String add = address + "_" + level + "_" + unit + "_" + postal;
-                addTo += add;
-                if(i < addressTo.length-5){
-                    addTo += "|";
-                }
+            // Vimbox items //
+            String[] vimboxItemNames = request.getParameterValues(divId + "_vimboxItemName");
+            String[] vimboxItemRemarks = request.getParameterValues(divId + "_vimboxItemRemark");
+            String[] vimboxItemCharges = request.getParameterValues(divId + "_vimboxItemCharge");
+            String[] vimboxItemQtys = request.getParameterValues(divId + "_vimboxItemQty");
+            String[] vimboxItemUnits = request.getParameterValues(divId + "_vimboxItemUnit");
+            if (vimboxItemNames != null) {
+                // Enter into leadvimboxitem database //
+                LeadDAO.createLeadVimboxItem(leadId, salesDiv, vimboxItemNames, vimboxItemRemarks, vimboxItemCharges, vimboxItemQtys, vimboxItemUnits);
+                //----------------------------------//
             }
-        }
-        //----------------------------//
-        String[] storeysTo = request.getParameterValues("storeysto");
-        String storeTo = "";
-        if(storeysTo != null){
-            for(int i=0; i<storeysTo.length; i++){
-                String store = storeysTo[i];
-                if(store.isEmpty()){
-                    store = " ";
-                }
-                storeTo += store;
-                if(i < storeysTo.length-1){
-                    storeTo += "|";
-                }
-            }
-        }
-        String[] distanceTo = request.getParameterValues("distanceto");
-        String distTo = "";
-        if(distanceTo != null){
-            for(int i=0; i<distanceTo.length; i++){
-                String dist = distanceTo[i];
-                if(dist.isEmpty()){
-                    dist = " ";
-                }
-                distTo += dist;
-                if(i < distanceTo.length-1){
-                    distTo += "|";
-                }
-            }
-        }
-            // Enter into leadmoveto database //
-            LeadDAO.createLeadMoveTo(leadId, addTo, storeTo, distTo);
-            //----------------------------------//
-        //----------------//
+            //---------------//
 
-        if (leadType.contains("Sales")) {
-            String[] salesDivs = request.getParameterValues("divId");
-            LeadDAO.createLeadSalesDiv(leadId, salesDivs);
-            for(String salesDiv: salesDivs){
-                String divId = salesDiv.split("\\|")[0];
-                // Customer items //
-                String[] custItemNames = request.getParameterValues(divId + "_customerItemName");
-                String[] custItemRemarks = request.getParameterValues(divId + "_customerItemRemark");
-                String[] custItemCharges = request.getParameterValues(divId + "_customerItemCharge");
-                String[] custItemQtys = request.getParameterValues(divId + "_customerItemQty");
-                String[] custItemUnits = request.getParameterValues(divId + "_customerItemUnit");
-                if (custItemNames != null) {
-                    // Enter into leadcustitem database //
-                    LeadDAO.createLeadCustItem(leadId, salesDiv, custItemNames, custItemRemarks, custItemCharges, custItemQtys, custItemUnits);
-                    //----------------------------------//
-                }
-                //----------------//
-                
-                // Vimbox items //
-                String[] vimboxItemNames = request.getParameterValues(divId + "_vimboxItemName");
-                String[] vimboxItemRemarks = request.getParameterValues(divId + "_vimboxItemRemark");
-                String[] vimboxItemCharges = request.getParameterValues(divId + "_vimboxItemCharge");
-                String[] vimboxItemQtys = request.getParameterValues(divId + "_vimboxItemQty");
-                String[] vimboxItemUnits = request.getParameterValues(divId + "_vimboxItemUnit");
-                if (vimboxItemNames != null) {
-                    // Enter into leadvimboxitem database //
-                    LeadDAO.createLeadVimboxItem(leadId, salesDiv, vimboxItemNames, vimboxItemRemarks, vimboxItemCharges, vimboxItemQtys, vimboxItemUnits);
-                    //----------------------------------//
-                }
-                //---------------//
-                
-                // Materials //
-                String[] vimboxMaterialNames = request.getParameterValues(divId + "_vimboxMaterialName");
-                String[] vimboxMaterialCharges = request.getParameterValues(divId + "_vimboxMaterialCharge");
-                String[] vimboxMaterialQtys = request.getParameterValues(divId + "_vimboxMaterialQty");
-                if (vimboxMaterialNames != null) {
-                    // Enter into leadvimboxitem database //
-                    LeadDAO.createLeadMaterial(leadId, salesDiv, vimboxMaterialNames, vimboxMaterialCharges, vimboxMaterialQtys);
-                    //----------------------------------//
-                }
-                //-----------//
-                
-                // Services //
-                String[] serviceNames = request.getParameterValues(divId + "_serviceName");
-                String[] serviceCharges = request.getParameterValues(divId + "_serviceCharge");
-                if (serviceNames != null) {
-                    String leadServiceInsertString = "";
-                    // Enter into leadvimboxitem database //
-                    for (int i = 0; i < serviceNames.length; i++) {
-                        String serviceName = serviceNames[i];
-                        String serviceCharge = serviceCharges[i];
-                        String serviceManpower = "";
-                        String serviceRemark = "";
-                        if (serviceName.contains("Manpower")) {
-                            serviceManpower = request.getParameter(divId + "_" + serviceName + "manpowerInput");
-                            serviceRemark = request.getParameter(divId + "_" + serviceName + "reasonInput");
-                        }
-                        leadServiceInsertString += ("('" + leadId + "','" + salesDiv + "','" + serviceName + "','" + serviceCharge + "','" + serviceManpower + "','" + serviceRemark + "')");
-                        if (i < serviceNames.length - 1) {
-                            leadServiceInsertString += ",";
-                        }
+            // Materials //
+            String[] vimboxMaterialNames = request.getParameterValues(divId + "_vimboxMaterialName");
+            String[] vimboxMaterialCharges = request.getParameterValues(divId + "_vimboxMaterialCharge");
+            String[] vimboxMaterialQtys = request.getParameterValues(divId + "_vimboxMaterialQty");
+            if (vimboxMaterialNames != null) {
+                // Enter into leadvimboxitem database //
+                LeadDAO.createLeadMaterial(leadId, salesDiv, vimboxMaterialNames, vimboxMaterialCharges, vimboxMaterialQtys);
+                //----------------------------------//
+            }
+            //-----------//
+
+            // Services //
+            String[] serviceNames = request.getParameterValues(divId + "_serviceName");
+            String[] serviceCharges = request.getParameterValues(divId + "_serviceCharge");
+            if (serviceNames != null) {
+                String leadServiceInsertString = "";
+                // Enter into leadvimboxitem database //
+                for (int i = 0; i < serviceNames.length; i++) {
+                    String serviceName = serviceNames[i];
+                    String serviceCharge = serviceCharges[i];
+                    String serviceManpower = "";
+                    String serviceRemark = "";
+                    if (serviceName.contains("Manpower")) {
+                        serviceManpower = request.getParameter(divId + "_" + serviceName + "manpowerInput");
+                        serviceRemark = request.getParameter(divId + "_" + serviceName + "reasonInput");
                     }
-                    LeadDAO.createLeadService(leadServiceInsertString);
-                    //----------------------------------//
+                    leadServiceInsertString += ("('" + leadId + "','" + salesDiv + "','" + serviceName + "','" + serviceCharge + "','" + serviceManpower + "','" + serviceRemark + "')");
+                    if (i < serviceNames.length - 1) {
+                        leadServiceInsertString += ",";
+                    }
                 }
-                //----------//
-                
-                // Others //
-                String[] others = {"storeyCharge", "pushCharge", "detourCharge", "materialCharge", "markup", "discount"};
-                String[] otherCharges = new String[6];
-                otherCharges[0] = request.getParameter(divId + "_storeyCharge");
-                otherCharges[1] = request.getParameter(divId + "_pushCharge");
-                otherCharges[2] = request.getParameter(divId + "_detourCharge");
-                otherCharges[3] = request.getParameter(divId + "_materialCharge");
-                otherCharges[4] = request.getParameter(divId + "_markup");
-                otherCharges[5] = request.getParameter(divId + "_discount");
-                // Enter into leadother database //
-                LeadDAO.createLeadOther(leadId, salesDiv, others, otherCharges);
-                    //----------------------------------//
-                //--------//
-
-                // Customer c&r //
-                String[] comments = request.getParameterValues(divId + "_comments");
-                if (comments != null) {
-                    LeadDAO.createLeadComments(leadId, salesDiv, comments);
-                }
-                String[] remarks = request.getParameterValues(divId + "_remarks");
-                if (remarks != null) {
-                    LeadDAO.createLeadRemarks(leadId, salesDiv, remarks);
-                }
-                //--------------//
+                LeadDAO.createLeadService(leadServiceInsertString);
+                //----------------------------------//
             }
+            //----------//
+
+            // Others //
+            String[] others = {"storeyCharge", "pushCharge", "detourCharge", "materialCharge", "markup", "discount"};
+            String[] otherCharges = new String[6];
+            otherCharges[0] = request.getParameter(divId + "_storeyCharge");
+            otherCharges[1] = request.getParameter(divId + "_pushCharge");
+            otherCharges[2] = request.getParameter(divId + "_detourCharge");
+            otherCharges[3] = request.getParameter(divId + "_materialCharge");
+            otherCharges[4] = request.getParameter(divId + "_markup");
+            otherCharges[5] = request.getParameter(divId + "_discount");
+            // Enter into leadother database //
+            LeadDAO.createLeadOther(leadId, salesDiv, others, otherCharges);
+                //----------------------------------//
+            //--------//
+
+            // Customer c&r //
+            String[] comments = request.getParameterValues(divId + "_comments");
+            if (comments != null) {
+                LeadDAO.createLeadComments(leadId, salesDiv, comments);
+            }
+            String[] remarks = request.getParameterValues(divId + "_remarks");
+            if (remarks != null) {
+                LeadDAO.createLeadRemarks(leadId, salesDiv, remarks);
+            }
+            //--------------//
         }
         
         jsonOutput.addProperty("status", "SUCCESS");

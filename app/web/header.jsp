@@ -498,6 +498,18 @@
 
                         </div><!-- .sidebar-submenu -->
                     </li>
+                    <li>
+                        <a href="#" title="Site Surveys">
+                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <span>Site Surveys</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
+                            </ul>
+
+                        </div><!-- .sidebar-submenu -->
+                    </li>
                 </ul><!-- #sidebar-menu -->
             </div>
         </div>

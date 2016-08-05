@@ -12,9 +12,14 @@
     </head>
     <body onload="survey_setup('<%=user.getNric()%>')">
         <h1>My Sites</h1><hr><br>
-        <input type="text" id="survey_search">
-        <button onclick="loadSurveys($('#survey_search').val(), '<%=user.getNric()%>')">Search</button>
+        <input type="text" id="nc_survey_search">
+        <button onclick="loadSurveys($('#nc_survey_search').val(), '<%=user.getNric()%>', '')">Search Pending/Ongoing</button>
         <br><br>
-        <div id="surveys_table"></div>
+        <div id="nc_surveys_table"></div>
+        <br><br>
+        <input type="text" id="c_survey_search">
+        <button onclick="loadSurveys($('#c_survey_search').val(), '<%=user.getNric()%>', 'Completed')">Search Completed</button>
+        <br><br>
+        <div id="c_surveys_table"></div>
     </body>
 </html>

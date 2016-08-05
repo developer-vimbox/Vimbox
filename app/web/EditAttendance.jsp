@@ -73,7 +73,7 @@
                         String date = request.getParameter("date");
                         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
                         Attendance attendance = null;
-                        ArrayList<User> users = new ArrayList<User>();
+                        ArrayList<User> users = UserDAO.getFullTimeUsers();
                         HashMap<String, LeaveMC> statuses = null;
                         HashMap<String, String> attendance_record = null;
                         HashMap<String, Integer> late_record = null;
@@ -90,10 +90,6 @@
                             statuses = UserLeaveDAO.getLeaveMCRecordByDate(dtf.parseDateTime(date));
                             attendance_record = attendance.getAttendance_record();
                             late_record = attendance.getLate_record();
-                            ArrayList<String> userStrings = attendance.getUsers();
-                            for (String userString : userStrings) {
-                                users.add(UserDAO.getUserByNRIC(userString));
-                            }
                         }
                     %>
 
@@ -142,24 +138,22 @@
                                                 if (!employeeDuration.matches("0900 - 1800|0830 - 1730")) {
                                                     String employeeAttendance = attendance_record.get(nric);
                                             %>
-                                            <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Present" <%if (employeeAttendance.equals("Present")) {
+                                            <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Present" <%if (employeeAttendance != null && employeeAttendance.equals("Present")) {
                                                     out.println("checked");
                                                 }%>></td>
-                                            <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Absent" <%if (employeeAttendance.equals("Absent")) {
+                                            <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Absent" <%if (employeeAttendance != null && employeeAttendance.equals("Absent")) {
                                                     out.println("checked");
                                                 }%>></td>
-                                            <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Late" <%if (employeeAttendance.equals("Late")) {
+                                            <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Late" <%if (employeeAttendance != null && employeeAttendance.equals("Late")) {
                                                     out.println("checked");
                                                 }%>></td>
                                             <td align='center'>
-                                                    <select name="late_<%=nric%>_h" id="late_<%=nric%>_h">
-                                                    <%
-                                                    if (!employeeAttendance.equals("Late")) {
-                                                        out.println("disabled");%>
+                                                    <select name="late_<%=nric%>_h" id="late_<%=nric%>_h" <%if (employeeAttendance != null && !employeeAttendance.equals("Late"))out.println("disabled");%>>
+                                                    
                                                     <%
                                                         int hour = 1;
                                                         int min = 0;
-                                                        if (employeeAttendance.equals("Late")) {
+                                                        if (employeeAttendance != null && employeeAttendance.equals("Late")) {
                                                             double totalMinutes = late_record.get(nric);
                                                             hour = (int) (totalMinutes / 60);
                                                             min = (int) (totalMinutes % 60);
@@ -174,10 +168,8 @@
                                                         }
                                                     %>
                                                 </select> H 
-                                                        <select name="late_<%=nric%>_m" id="late_<%=nric%>_m"> 
-                                                   <%
-                                                            if (!employeeAttendance.equals("Late")) {
-                                                        out.println("disabled");%>
+                                                        <select name="late_<%=nric%>_m" id="late_<%=nric%>_m" <%if(employeeAttendance != null && !employeeAttendance.equals("Late"))out.println("disabled");%>> 
+                                                   
                                                     <%
                                                         for (int i = 0; i <= 59; i++) {
                                                             if (min == i) {
@@ -198,12 +190,11 @@
                                             <td></td>
                                             <%
                                                 }
-                                                    }
                                             %>
                                         </tr>
                                     </tbody>
                                     <%
-                                        }}
+                                        }
                                     %>
                                 </table>
                                 <br>

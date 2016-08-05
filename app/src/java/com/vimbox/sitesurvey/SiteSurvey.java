@@ -9,19 +9,23 @@ public class SiteSurvey {
     private int lead;
     private User siteSurveyor;
     private String address;
+    private String addressTag;
     private DateTime start;
     private DateTime end;
     private String remarks;
     private String timeslot;
+    private String status;
 
-    public SiteSurvey(int lead, User siteSurveyor, String address, DateTime start, DateTime end, String timeslot, String remarks) {
+    public SiteSurvey(int lead, User siteSurveyor, String address, String addressTag, DateTime start, DateTime end, String timeslot, String remarks, String status) {
         this.lead = lead;
         this.siteSurveyor = siteSurveyor;
         this.address = address;
+        this.addressTag = addressTag;
         this.start = start;
         this.end = end;
         this.timeslot = timeslot;
         this.remarks = remarks;
+        this.status = status;
     }
     
     public String getRemarks(){
@@ -38,6 +42,10 @@ public class SiteSurvey {
 
     public String getAddress() {
         return address;
+    }
+    
+    public String getAddressTag(){
+        return addressTag;
     }
 
     public DateTime getStart() {
@@ -122,4 +130,9 @@ public class SiteSurvey {
     public String getTimeSlots(){
         return timeslot;
     }
+    
+    public String getStatus(){
+        return status;
+    }
+    
 }

@@ -189,6 +189,21 @@ function edit_leadSetup() {
                 matCharge.value += Number(charges);
             }
         });
+        
+        $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
+            var cellHtml = this.innerHTML.trim();
+            var manpowerPresent = cellHtml.match(/manpower/i);
+            if (manpowerPresent) {
+                var serviceCharge = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
+                var serviceArray = serviceCharge.split(",");
+                var svcSplit = serviceArray[0].split("|");
+                var pri = svcSplit[0];
+                var sec = svcSplit[1];
+                var id = (pri + "_" + sec).replace(" ", "_");
+                (mp.value)[id] = Number(document.getElementById(divId + '_' + id + "manpowerInput").value);
+            }
+        });
+        
         var svcs = [];
         $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
             var inputs = this.getElementsByTagName("input");
@@ -198,6 +213,7 @@ function edit_leadSetup() {
             $(table).append("<tr>" + generateBreakdown(id, divId) + "</tr>");
             svcs.push(id);
         });
+        
         $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
             var cellHtml = this.innerHTML.trim();
             var inputs = this.getElementsByTagName('input');
@@ -211,12 +227,6 @@ function edit_leadSetup() {
                 if (svcs.indexOf(divId + "_" + id) > -1) {
                     $(this).addClass('selected');
                     $(this).data('state', 'selected');
-                }
-
-                if (inputs[1] != null) {
-                    if (!isNaN(inputs[1].value) && Number(inputs[1].value) > 0) {
-                        (mp.value)[inputs[0].value] = Number(inputs[1].value);
-                    }
                 }
             }
         });
@@ -289,9 +299,14 @@ $(document).on('input', '.itemName', function () {
 });
 
 function update_services(divId) {
+    var entered = false;
     $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
         update_service(this, divId);
+        entered = true;
     });  
+    if(entered === false){
+        update_total(divId);
+    }
 }
 
 function calculate(sum, symbol, variable) {
@@ -328,7 +343,7 @@ function update_service(element, divId) {
     var frml = formula.find(function (obj) {
         return obj.id === divId;
     });
-
+    
     var id = $(element).attr("id");
     var fml = (frml.value)[id].split(" ");
     var symbol;
@@ -348,7 +363,8 @@ function update_service(element, divId) {
                         sum = addCharge.value;
                         break;
                     case "MP":
-                        sum = (mp.value)[id];
+                        sum = (mp.value)[id.substring(id.indexOf("_") + 1)];
+                        
                         break;
                 }
             } else {
@@ -370,7 +386,7 @@ function update_service(element, divId) {
                             sum = calculate(sum, symbol, addCharge.value);
                             break;
                         case "MP":
-                            sum = calculate(sum, symbol, (mp.value)[id]);
+                            sum = calculate(sum, symbol, (mp.value)[id.substring(id.indexOf("_") + 1)]);
                             break;
                     }
                 } else {
@@ -399,7 +415,7 @@ function update_service(element, divId) {
                 break;
             case "MP":
                 var label = divId + "_" + id + "mpLbl";
-                $('#' + label).html((mp.value)[id]);
+                $('#' + label).html((mp.value)[id.substring(id.indexOf("_") + 1)]);
                 break;
         }
     }
@@ -773,6 +789,7 @@ function selectServiceSlot(e, divId) {
             default:
                 break;
         }
+        update_services(divId);
     }
 }
 
@@ -831,10 +848,10 @@ function removeManpower(id, divId) {
         return obj.id === divId;
     });
     
-    var mpLbl = divId + "_" + id + "manpowerLabel";
-    var mprLbl = divId + "_" + id + "manpowerReasonLabel";
-    var mpIpt = divId + "_" + id + "manpowerInput";
-    var rIpt = divId + "_" + id + "reasonInput";
+    var mpLbl = id + "manpowerLabel";
+    var mprLbl = id + "manpowerReasonLabel";
+    var mpIpt = id + "manpowerInput";
+    var rIpt = id + "reasonInput";
     document.getElementById(mpIpt).value = "";
     document.getElementById(rIpt).value = "";
     delete (mp.value)[id];
@@ -851,17 +868,45 @@ function submitManpower(divId) {
     var id = $("#" + divId + "_manpowerId").val();
     var addManpower = $("#" + divId + "_additionalManpower").val();
     var manReason = $("#" + divId + "_manpowerReason").val();
-    mp[id] = Number(addManpower);
+    
+    if(!addManpower || !manReason){
+        var modal = document.getElementById("salesModal");
+        var status = document.getElementById("salesStatus");
+        var message = document.getElementById("salesMessage");
+        status.innerHTML= "ERROR";
+        message.innerHTML = "Please enter both the required manpower and reason";
+        modal.style.display = "block";
+    }else{
+        mp[id] = Number(addManpower);
+        var mpLbl = divId + "_" + id + "manpowerLabel";
+        var mprLbl = divId + "_" + id + "manpowerReasonLabel";
+        document.getElementById(mpLbl).innerHTML = addManpower;
+        document.getElementById(mprLbl).innerHTML = manReason;
+        var mpIpt = divId + "_" + id + "manpowerInput";
+        var rIpt = divId + "_" + id + "reasonInput";
+        document.getElementById(mpIpt).value = addManpower;
+        document.getElementById(rIpt).value = manReason;
+        var modal = document.getElementById(divId + "_manpowerModal");
+        $("#" + divId + "_additionalManpower").val('');
+        $("#" + divId + "_manpowerReason").val('');
+        modal.style.display = "none";
+        update_services(divId);
+    }
+}
 
-    var mpLbl = divId + "_" + id + "manpowerLabel";
-    var mprLbl = divId + "_" + id + "manpowerReasonLabel";
-    document.getElementById(mpLbl).innerHTML = addManpower;
-    document.getElementById(mprLbl).innerHTML = manReason;
-    var mpIpt = divId + "_" + id + "manpowerInput";
-    var rIpt = divId + "_" + id + "reasonInput";
-    document.getElementById(mpIpt).value = addManpower;
-    document.getElementById(rIpt).value = manReason;
+function closeManpowerModal(divId){
+    var frml = formula.find(function (obj) {
+        return obj.id === divId;
+    });
     var modal = document.getElementById(divId + "_manpowerModal");
+    var id = $("#" + divId + "_manpowerId").val();
+    var cellId = divId + $("#" + divId + "_manpowerId").val() + "_service";
+    var cell = document.getElementById(cellId);
+    removeManpower(divId + "_" + id, divId);
+    $(cell).removeClass('selected');
+    $(cell).data('state', '');
+    delete (frml.value)[divId + "_" + id];
+    $("#" + divId + "_" + id).remove();
     modal.style.display = "none";
     update_services(divId);
 }
@@ -915,71 +960,83 @@ function cancelLead(leadId) {
 }
 
 function viewSchedule() {
-
     var errorModal = document.getElementById("salesModal");
     var errorStatus = document.getElementById("salesStatus");
     var errorMessage = document.getElementById("salesMessage");
     var date = $('#sitesurvey_date').val();
-    var siteSurveyor = $('#employee_search').val();
-    var fromArray = document.getElementsByName("addressfrom");
-    var addressFrom = "";
-    for (i = 0; i < fromArray.length; i++) {
-        addressFrom += fromArray[i].value + "|";
+    var elem = document.getElementById(date);
+    var pending = true;
+    if (elem != null) {
+        var input = elem.getElementsByTagName('input')[0];
+        if(input.value === 'no'){
+            pending = false;
+            errorStatus.innerHTML = "ERROR";
+            errorMessage.innerHTML = "A site survey is ongoing/completed on this date";
+            errorModal.style.display = "block";
+        }
     }
-    var toArray = document.getElementsByName("addressto");
-    var addressTo = "";
-    for (i = 0; i < toArray.length; i++) {
-        addressTo += toArray[i].value + "|";
-    }
+    if(pending){
+        var siteSurveyor = $('#employee_search').val();
+        var fromArray = document.getElementsByName("addressfrom");
+        var addressFrom = "";
+        for (i = 0; i < fromArray.length; i++) {
+            addressFrom += fromArray[i].value + "|";
+        }
+        var toArray = document.getElementsByName("addressto");
+        var addressTo = "";
+        for (i = 0; i < toArray.length; i++) {
+            addressTo += toArray[i].value + "|";
+        }
 
-    $.getJSON("ValidateSiteSurveyorDetails", {date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo})
-            .done(function (data) {
-                if (data.status === "SUCCESS") {
-                    var div = document.getElementById(date);
-                    var nric = "";
-                    var timeslots = "";
-                    var addresses = "";
-                    if (div != null) {
-                        nric = ($("#" + date + " input[name=siteSurvey_surveyor]").val().split("|"))[1];
-                        var timeArray = $("#" + date + " input[name=siteSurvey_timeslot]");
-                        for (var i = 0; i < timeArray.length; i++) {
-                            if (timeArray[i].value.includes(date)) {
-                                timeslots += (timeArray[i].value.split("|"))[1] + "|";
+        $.getJSON("ValidateSiteSurveyorDetails", {date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo})
+                .done(function (data) {
+                    if (data.status === "SUCCESS") {
+                        var div = document.getElementById(date);
+                        var nric = "";
+                        var timeslots = "";
+                        var addresses = "";
+                        if (div != null) {
+                            nric = ($("#" + date + " input[name=siteSurvey_surveyor]").val().split("|"))[1];
+                            var timeArray = $("#" + date + " input[name=siteSurvey_timeslot]");
+                            for (var i = 0; i < timeArray.length; i++) {
+                                if (timeArray[i].value.includes(date)) {
+                                    timeslots += (timeArray[i].value.split("|"))[1] + "|";
+                                }
+                            }
+
+                            var addressArray = $("#" + date + " input[name=siteSurvey_address]");
+                            for (var i = 0; i < addressArray.length; i++) {
+                                if (addressArray[i].value.includes(date)) {
+                                    addresses += (addressArray[i].value.split("|"))[1] + "|";
+                                }
+                            }
+
+                            var remarksArray = $("#" + date + " input[name=siteSurvey_remarks]");
+                            var remarks = "";
+                            for (var i = 0; i < remarksArray.length; i++) {
+                                if (remarksArray[i].value.includes(date)) {
+                                    remarks = (remarksArray[i].value.split("|"))[1];
+                                    break;
+                                }
                             }
                         }
-
-                        var addressArray = $("#" + date + " input[name=siteSurvey_address]");
-                        for (var i = 0; i < addressArray.length; i++) {
-                            if (addressArray[i].value.includes(date)) {
-                                addresses += (addressArray[i].value.split("|"))[1] + "|";
-                            }
-                        }
-
-                        var remarksArray = $("#" + date + " input[name=siteSurvey_remarks]");
-                        var remarks = "";
-                        for (var i = 0; i < remarksArray.length; i++) {
-                            if (remarksArray[i].value.includes(date)) {
-                                remarks = (remarksArray[i].value.split("|"))[1];
-                                break;
-                            }
-                        }
+                        toggleCounter = 0;
+                        $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: $('#leadId').val(), date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
+                            document.getElementById("schedule_content").innerHTML = results;
+                            document.getElementById("schedule_modal").style.display = "block";
+                        });
+                    } else {
+                        errorStatus.innerHTML = data.status;
+                        errorMessage.innerHTML = data.message;
+                        errorModal.style.display = "block";
                     }
-                    toggleCounter = 0;
-                    $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: $('#leadId').val(), date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
-                        document.getElementById("schedule_content").innerHTML = results;
-                        document.getElementById("schedule_modal").style.display = "block";
-                    });
-                } else {
-                    errorStatus.innerHTML = data.status;
-                    errorMessage.innerHTML = data.message;
+                })
+                .fail(function (error) {
+                    errorStatus.innerHTML = "ERROR";
+                    errorMessage.innerHTML = error;
                     errorModal.style.display = "block";
-                }
-            })
-            .fail(function (error) {
-                errorStatus.innerHTML = "ERROR";
-                errorMessage.innerHTML = error;
-                errorModal.style.display = "block";
-            });
+                });
+    }
 }
 
 function selectSlot(e) {
@@ -1167,7 +1224,7 @@ function assignSiteSurveyor() {
         var newdiv = document.createElement('div');
         var stringDiv = "";
         stringDiv += "<div id='" + date + "'>";
-        stringDiv += "<span class='close' onClick=\"removeSiteSurvey('" + date + "');\">×</span>";
+        stringDiv += "<span class='close' onClick=\"removeSiteSurvey('" + date + "')\">x</span>";
         stringDiv += "<hr><table><col width='100'>";
         stringDiv += "<tr><td align='right'><b>Date :</b></td><td><input type='hidden' name='siteSurvey_date' value='" + date + "'>" + date + "</td></tr>";
         stringDiv += "<tr><td align='right'><b>Timeslot :</b></td><td><table>";
@@ -1182,6 +1239,7 @@ function assignSiteSurveyor() {
         stringDiv += "</table></td></tr>";
         stringDiv += "<tr><td align='right'><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + date + "|" + surveyorId + "'>" + surveyorName + "</td></tr>";
         stringDiv += "<tr><td align='right'><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + date + "|" + remarks + "'>" + remarks + "</td></tr>";
+        stringDiv += "<tr><td align='right'><b>Status :</b></td><td>Pending</td></tr>";
         stringDiv += "</table></div>";
         newdiv.innerHTML = stringDiv;
         document.getElementById("survey").appendChild(newdiv);
