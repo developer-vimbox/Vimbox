@@ -34,7 +34,7 @@ function submitTicket() {
                 errorModal.style.display = "block";
                 if (status === "SUCCESS") {
                     setTimeout(function () {
-                        location.reload()
+                        window.location = "MyTickets.jsp"
                     }, 500);
                 }
             })

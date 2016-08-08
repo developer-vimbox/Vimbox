@@ -281,96 +281,98 @@ public class CreateLeadController extends HttpServlet {
             }
         }
 
+        if(salesDivs != null){
+            LeadDAO.createLeadSalesDiv(leadId, salesDivs);
         
-        LeadDAO.createLeadSalesDiv(leadId, salesDivs);
-        for(String salesDiv: salesDivs){
-            String divId = salesDiv.split("\\|")[0];
-            // Customer items //
-            String[] custItemNames = request.getParameterValues(divId + "_customerItemName");
-            String[] custItemRemarks = request.getParameterValues(divId + "_customerItemRemark");
-            String[] custItemCharges = request.getParameterValues(divId + "_customerItemCharge");
-            String[] custItemQtys = request.getParameterValues(divId + "_customerItemQty");
-            String[] custItemUnits = request.getParameterValues(divId + "_customerItemUnit");
-            if (custItemNames != null) {
-                // Enter into leadcustitem database //
-                LeadDAO.createLeadCustItem(leadId, salesDiv, custItemNames, custItemRemarks, custItemCharges, custItemQtys, custItemUnits);
-                //----------------------------------//
-            }
-            //----------------//
-
-            // Vimbox items //
-            String[] vimboxItemNames = request.getParameterValues(divId + "_vimboxItemName");
-            String[] vimboxItemRemarks = request.getParameterValues(divId + "_vimboxItemRemark");
-            String[] vimboxItemCharges = request.getParameterValues(divId + "_vimboxItemCharge");
-            String[] vimboxItemQtys = request.getParameterValues(divId + "_vimboxItemQty");
-            String[] vimboxItemUnits = request.getParameterValues(divId + "_vimboxItemUnit");
-            if (vimboxItemNames != null) {
-                // Enter into leadvimboxitem database //
-                LeadDAO.createLeadVimboxItem(leadId, salesDiv, vimboxItemNames, vimboxItemRemarks, vimboxItemCharges, vimboxItemQtys, vimboxItemUnits);
-                //----------------------------------//
-            }
-            //---------------//
-
-            // Materials //
-            String[] vimboxMaterialNames = request.getParameterValues(divId + "_vimboxMaterialName");
-            String[] vimboxMaterialCharges = request.getParameterValues(divId + "_vimboxMaterialCharge");
-            String[] vimboxMaterialQtys = request.getParameterValues(divId + "_vimboxMaterialQty");
-            if (vimboxMaterialNames != null) {
-                // Enter into leadvimboxitem database //
-                LeadDAO.createLeadMaterial(leadId, salesDiv, vimboxMaterialNames, vimboxMaterialCharges, vimboxMaterialQtys);
-                //----------------------------------//
-            }
-            //-----------//
-
-            // Services //
-            String[] serviceNames = request.getParameterValues(divId + "_serviceName");
-            String[] serviceCharges = request.getParameterValues(divId + "_serviceCharge");
-            if (serviceNames != null) {
-                String leadServiceInsertString = "";
-                // Enter into leadvimboxitem database //
-                for (int i = 0; i < serviceNames.length; i++) {
-                    String serviceName = serviceNames[i];
-                    String serviceCharge = serviceCharges[i];
-                    String serviceManpower = "";
-                    String serviceRemark = "";
-                    if (serviceName.contains("Manpower")) {
-                        serviceManpower = request.getParameter(divId + "_" + serviceName + "manpowerInput");
-                        serviceRemark = request.getParameter(divId + "_" + serviceName + "reasonInput");
-                    }
-                    leadServiceInsertString += ("('" + leadId + "','" + salesDiv + "','" + serviceName + "','" + serviceCharge + "','" + serviceManpower + "','" + serviceRemark + "')");
-                    if (i < serviceNames.length - 1) {
-                        leadServiceInsertString += ",";
-                    }
+            for(String salesDiv: salesDivs){
+                String divId = salesDiv.split("\\|")[0];
+                // Customer items //
+                String[] custItemNames = request.getParameterValues(divId + "_customerItemName");
+                String[] custItemRemarks = request.getParameterValues(divId + "_customerItemRemark");
+                String[] custItemCharges = request.getParameterValues(divId + "_customerItemCharge");
+                String[] custItemQtys = request.getParameterValues(divId + "_customerItemQty");
+                String[] custItemUnits = request.getParameterValues(divId + "_customerItemUnit");
+                if (custItemNames != null) {
+                    // Enter into leadcustitem database //
+                    LeadDAO.createLeadCustItem(leadId, salesDiv, custItemNames, custItemRemarks, custItemCharges, custItemQtys, custItemUnits);
+                    //----------------------------------//
                 }
-                LeadDAO.createLeadService(leadServiceInsertString);
-                //----------------------------------//
-            }
-            //----------//
+                //----------------//
 
-            // Others //
-            String[] others = {"storeyCharge", "pushCharge", "detourCharge", "materialCharge", "markup", "discount"};
-            String[] otherCharges = new String[6];
-            otherCharges[0] = request.getParameter(divId + "_storeyCharge");
-            otherCharges[1] = request.getParameter(divId + "_pushCharge");
-            otherCharges[2] = request.getParameter(divId + "_detourCharge");
-            otherCharges[3] = request.getParameter(divId + "_materialCharge");
-            otherCharges[4] = request.getParameter(divId + "_markup");
-            otherCharges[5] = request.getParameter(divId + "_discount");
-            // Enter into leadother database //
-            LeadDAO.createLeadOther(leadId, salesDiv, others, otherCharges);
-                //----------------------------------//
-            //--------//
+                // Vimbox items //
+                String[] vimboxItemNames = request.getParameterValues(divId + "_vimboxItemName");
+                String[] vimboxItemRemarks = request.getParameterValues(divId + "_vimboxItemRemark");
+                String[] vimboxItemCharges = request.getParameterValues(divId + "_vimboxItemCharge");
+                String[] vimboxItemQtys = request.getParameterValues(divId + "_vimboxItemQty");
+                String[] vimboxItemUnits = request.getParameterValues(divId + "_vimboxItemUnit");
+                if (vimboxItemNames != null) {
+                    // Enter into leadvimboxitem database //
+                    LeadDAO.createLeadVimboxItem(leadId, salesDiv, vimboxItemNames, vimboxItemRemarks, vimboxItemCharges, vimboxItemQtys, vimboxItemUnits);
+                    //----------------------------------//
+                }
+                //---------------//
 
-            // Customer c&r //
-            String[] comments = request.getParameterValues(divId + "_comments");
-            if (comments != null) {
-                LeadDAO.createLeadComments(leadId, salesDiv, comments);
+                // Materials //
+                String[] vimboxMaterialNames = request.getParameterValues(divId + "_vimboxMaterialName");
+                String[] vimboxMaterialCharges = request.getParameterValues(divId + "_vimboxMaterialCharge");
+                String[] vimboxMaterialQtys = request.getParameterValues(divId + "_vimboxMaterialQty");
+                if (vimboxMaterialNames != null) {
+                    // Enter into leadvimboxitem database //
+                    LeadDAO.createLeadMaterial(leadId, salesDiv, vimboxMaterialNames, vimboxMaterialCharges, vimboxMaterialQtys);
+                    //----------------------------------//
+                }
+                //-----------//
+
+                // Services //
+                String[] serviceNames = request.getParameterValues(divId + "_serviceName");
+                String[] serviceCharges = request.getParameterValues(divId + "_serviceCharge");
+                if (serviceNames != null) {
+                    String leadServiceInsertString = "";
+                    // Enter into leadvimboxitem database //
+                    for (int i = 0; i < serviceNames.length; i++) {
+                        String serviceName = serviceNames[i];
+                        String serviceCharge = serviceCharges[i];
+                        String serviceManpower = "";
+                        String serviceRemark = "";
+                        if (serviceName.contains("Manpower")) {
+                            serviceManpower = request.getParameter(divId + "_" + serviceName + "manpowerInput");
+                            serviceRemark = request.getParameter(divId + "_" + serviceName + "reasonInput");
+                        }
+                        leadServiceInsertString += ("('" + leadId + "','" + salesDiv + "','" + serviceName + "','" + serviceCharge + "','" + serviceManpower + "','" + serviceRemark + "')");
+                        if (i < serviceNames.length - 1) {
+                            leadServiceInsertString += ",";
+                        }
+                    }
+                    LeadDAO.createLeadService(leadServiceInsertString);
+                    //----------------------------------//
+                }
+                //----------//
+
+                // Others //
+                String[] others = {"storeyCharge", "pushCharge", "detourCharge", "materialCharge", "markup", "discount"};
+                String[] otherCharges = new String[6];
+                otherCharges[0] = request.getParameter(divId + "_storeyCharge");
+                otherCharges[1] = request.getParameter(divId + "_pushCharge");
+                otherCharges[2] = request.getParameter(divId + "_detourCharge");
+                otherCharges[3] = request.getParameter(divId + "_materialCharge");
+                otherCharges[4] = request.getParameter(divId + "_markup");
+                otherCharges[5] = request.getParameter(divId + "_discount");
+                // Enter into leadother database //
+                LeadDAO.createLeadOther(leadId, salesDiv, others, otherCharges);
+                    //----------------------------------//
+                //--------//
+
+                // Customer c&r //
+                String[] comments = request.getParameterValues(divId + "_comments");
+                if (comments != null) {
+                    LeadDAO.createLeadComments(leadId, salesDiv, comments);
+                }
+                String[] remarks = request.getParameterValues(divId + "_remarks");
+                if (remarks != null) {
+                    LeadDAO.createLeadRemarks(leadId, salesDiv, remarks);
+                }
+                //--------------//
             }
-            String[] remarks = request.getParameterValues(divId + "_remarks");
-            if (remarks != null) {
-                LeadDAO.createLeadRemarks(leadId, salesDiv, remarks);
-            }
-            //--------------//
         }
 
         jsonOutput.addProperty("status", "SUCCESS");

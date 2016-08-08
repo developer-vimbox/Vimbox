@@ -25,6 +25,7 @@
         <table border="1" width="100%">
             <tr>
                 <th>#</th>
+                <th>Type</th>
                 <th>Cust Name</th>
                 <th>Cust Contact</th>
                 <th>Cust Email</th>
@@ -39,6 +40,14 @@
                     String url = "window.location.href='EditLead.jsp?lId=" + lead.getId() + "'";
                     out.println("<tr>");
                     out.println("<td align='center'>" + lead.getId() + "</td>");
+                    String types = lead.getType();
+                    String[] typesArr = types.split("\\|");
+                    out.println("<td align='center'><ul>");
+                    for(String type : typesArr){
+                        out.println("<li>" + type + "</li>");
+                    }
+                    out.println("</ul></td>");
+                    
                     Customer customer = lead.getCustomer();
                     if(customer != null){
                         out.println("<td align='center'>" + customer.toString() + "</td>");

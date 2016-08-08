@@ -135,33 +135,29 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Assigned To: </label>
                                         <div class="col-sm-5">
-                                            <div id="dynamicInput">
-                                                <div class="input-group">
-                                                    <span class="input-group-btn">
-                                                        <input class="btn btn-round btn-primary" type="button" value="+" onClick="addInput('dynamicInput');">
-                                                    </span>
-                                                    <select name="assigned" class="form-control">
-                                                        <%
-                                                            for (User assignee : users) {
-                                                                out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
-                                                            }
-                                                        %>
-                                                    </select>
-                                                </div>
+                                            <div id="dynamicInput" class="input-group">
+                                                <span class="input-group-btn">
+                                                    <input class="btn btn-round btn-primary" type="button" value="+" onClick="addInput('dynamicInput');">
+                                                </span>
+                                                <select name="assigned" class="form-control">
+                                                    <%
+                                                        for (User assignee : users) {
+                                                            out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
+                                                        }
+                                                    %>
+                                                </select>
                                             </div>
-                                            <div id="additionalAssigned">
-                                                <div class="input-group" style="margin-top: 15px">
-                                                    <span class="input-group-btn">
-                                                        <input class="btn btn-round btn-warning" type='button' value='x' onClick='removeAdditional(this);'>
-                                                    </span>
-                                                    <select name="assigned" class="form-control">
-                                                        <%
-                                                            for (User assignee : users) {
-                                                                out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
-                                                            }
-                                                        %>
-                                                    </select>
-                                                </div>
+                                            <div id="additionalAssigned" class="input-group" style="margin-top: 15px">
+                                                <span class="input-group-btn">
+                                                    <input class="btn btn-round btn-warning" type='button' value='x' onClick='removeAdditional(this);'>
+                                                </span>
+                                                <select name="assigned" class="form-control">
+                                                    <%
+                                                        for (User assignee : users) {
+                                                            out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
+                                                        }
+                                                    %>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

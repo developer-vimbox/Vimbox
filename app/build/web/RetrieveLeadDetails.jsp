@@ -1,3 +1,4 @@
+<%@page import="com.vimbox.sales.LeadDiv"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.HashMap"%>
@@ -220,7 +221,18 @@
                                                     <th>Units</th>
                                                 </tr> 
                                                 <%
-                                                    ArrayList<Item> custItems = lead.getCustomerItems();
+                                                    ArrayList<LeadDiv> leadDivs = lead.getSalesDivs();
+                                                    ArrayList<Item> custItems = new ArrayList<Item>();
+                                                    ArrayList<Item> vimboxItems = new ArrayList<Item>();
+                                                    ArrayList<Item> materials = new ArrayList<Item>();
+                                                    
+                                                    
+                                                    for(LeadDiv leadDiv: leadDivs){
+                                                        custItems.addAll(leadDiv.getCustomerItems());
+                                                        vimboxItems.addAll(leadDiv.getVimboxItems());
+                                                        materials.addAll(leadDiv.getMaterials());
+                                                    }
+                                                    
                                                     for(Item item:custItems){
                                                         out.println("<tr>");
                                                         out.println("<td>" + item.getName() + "</td>");
@@ -255,7 +267,6 @@
                                                     <th>Units</th>
                                                 </tr> 
                                                 <%
-                                                    ArrayList<Item> vimboxItems = lead.getVimboxItems();
                                                     for(Item item:vimboxItems){
                                                         out.println("<tr>");
                                                         out.println("<td>" + item.getName() + "</td>");
@@ -266,7 +277,6 @@
                                                         out.println("</tr>");
                                                     }
                                                     
-                                                    ArrayList<Item> materials = lead.getMaterials();
                                                     for(Item item:materials){
                                                         out.println("<tr>");
                                                         out.println("<td>" + item.getName() + "</td>");
