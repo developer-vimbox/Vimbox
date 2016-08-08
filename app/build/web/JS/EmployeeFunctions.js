@@ -385,11 +385,13 @@ $(document).on('change keyup paste', '#payslip_startDate', function () {
 
         var month = startDate.getMonth(); //months from 1-12
         var year = startDate.getFullYear();
-        $('#payslip_paymentDate').val(new Date(year, month + 1, 0).toDateInputValue());
-        if (!$('#payslip_endDate').val()) {
-            $('#payslip_endDate').val(new Date(year, month + 1, 0).toDateInputValue());
+        if(Number(year) > 1000){
+            $('#payslip_paymentDate').val(new Date(year, month + 1, 0).toDateInputValue());
+            if (!$('#payslip_endDate').val()) {
+                $('#payslip_endDate').val(new Date(year, month + 1, 0).toDateInputValue());
+            }
+            calculateProrate(employee, $('#payslip_startDate').val(), $('#payslip_endDate').val());
         }
-        calculateProrate(employee, $('#payslip_startDate').val(), $('#payslip_endDate').val());
     }
 });
 
@@ -519,7 +521,7 @@ $(document).on('change keyup paste', '#payslip_endDate', function () {
         $('#payslip_startDate').val('');
         modal.style.display = "block";
     } else {
-        if ($('#payslip_startDate').val()) {
+        if ($('#payslip_endDate').val()) {
             calculateProrate(employee, $('#payslip_startDate').val(), $('#payslip_endDate').val());
         }
     }

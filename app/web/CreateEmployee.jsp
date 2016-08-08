@@ -59,7 +59,7 @@
                                                     <option value="G">G</option>
                                                 </select>
                                             </div>
-                                            <input type="text" class="form-control" id="user_nric">
+                                            <input type="number" class="form-control" id="user_nric">
                                             <div class="input-group-btn">
                                                 <select id="user_nric_last_alphabet" class="form-control" style="width: 57px;">
                                                     <%                                char[] alphabets = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};

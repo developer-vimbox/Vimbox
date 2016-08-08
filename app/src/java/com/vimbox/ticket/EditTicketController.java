@@ -44,7 +44,6 @@ public class EditTicketController extends HttpServlet {
         
         String assigned_users = Converter.convertDuplicates(request.getParameter("assigned_users"));
         
-        
         String description = request.getParameter("description");
         if(description.isEmpty()){
             errorMsg+="Please enter a ticket description<br>";
