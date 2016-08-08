@@ -20,44 +20,97 @@
 <input type="hidden" id="employeeType" value="<%=user.getType()%>">
 <div class="form-horizontal">
     <div class="form-group">
-        <div class="col-sm-5 control-label">
+        <div class="col-sm-4 control-label">
             <h4>Employee Information </h4>
         </div>
+        <div class="col-sm-6 control-label">
+            <h4>Emergency Contact </h4>
+        </div>
     </div>
+    <%
+        Emergency emergency = user.getEmergency();
+        String eContact = emergency.getContact() + "";
+        if (eContact.equals("0")) {
+            eContact = "";
+        }
+
+        String eOffice = emergency.getOffice() + "";
+        if (eOffice.equals("0")) {
+            eOffice = "";
+        }
+    %>
     <div class="form-group">
-        <label class="col-sm-3 control-label">First Name: </label>
-        <div class="col-sm-6">
+        <label class="col-sm-1 control-label">First Name: </label>
+        <div class="col-sm-4">
             <input class="form-control" type="text" id="user_first_name" value="<%=user.getFirst_name()%>">
         </div>
+        <label class="col-sm-2 control-label">Contact Person Name: </label>
+        <div class="col-sm-4">
+            <input class="form-control" type="text" id="emergency_name" value="<%=emergency.getName()%>">
+        </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">Last Name: </label>
-        <div class="col-sm-6">
+        <label class="col-sm-1 control-label">Last Name: </label>
+        <div class="col-sm-4">
             <input class="form-control" type="text" id="user_last_name" value="<%=user.getLast_name()%>">
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">NRIC: </label>
-        <div class="col-sm-6">
-            <%=nric%><input class="form-control" type="hidden" id="user_nric" value="<%=nric%>">
+        <label class="col-sm-2 control-label">Relationship:</label>
+        <div class="col-sm-4">
+            <input class="form-control" type="text" id="emergency_relationship" value="<%=emergency.getRelationship()%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">Date Joined: </label>
-        <div class="col-sm-6">
-            <input class="form-control" type="hidden" id="user_dj" value="<%=Converter.convertDateHtml(user.getDate_joined())%>"><%=Converter.convertDateHtml(user.getDate_joined())%>
+        <label class="col-sm-1 control-label">NRIC: </label>
+        <div class="col-sm-4">
+            <input class="form-control" type="text" id="user_nric" value="<%=nric%>" disabled>
+        </div>
+        <label class="col-sm-2 control-label">Contact Number:</label>
+        <div class="col-sm-4">
+            <input class="form-control" type="number" min="0" id="emergency_contact" value="<%=eContact%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">Mailing Address: </label>
-        <div class="col-sm-6">
+        <label class="col-sm-1 control-label">Date Joined: </label>
+        <div class="col-sm-4">
+            <input class="form-control" type="text" id="user_dj" value="<%=Converter.convertDateHtml(user.getDate_joined())%>" disabled>
+        </div>
+        <label class="col-sm-2 control-label">Office Number: </label>
+        <div class="col-sm-4">
+            <input class="form-control" type="number" min="0" id="emergency_office" value="<%=eOffice%>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label">Mailing Address: </label>
+        <div class="col-sm-4">
             <input class="form-control" type="text" id="user_madd" value="<%=user.getMailing_address()%>">
         </div>
+        <div class="col-sm-5 control-label">
+            <h4>Payment Information </h4>
+        </div>
     </div>
+    <%
+        Bank bank = user.getBank();
+    %>
     <div class="form-group">
-        <label class="col-sm-3 control-label">Registered Address: </label>
-        <div class="col-sm-6">
+        <label class="col-sm-1 control-label">Registered Address: </label>
+        <div class="col-sm-4">
             <input class="form-control" type="text" id="user_radd" value="<%=user.getRegistered_address()%>">
+        </div>
+        <label class="col-sm-2 control-label">Method of Payment: </label>
+        <div class="col-sm-4">
+            <select class="form-control" id="user_payment">
+                <%
+                    String payment = bank.getPayment_mode();
+                    ArrayList<String> paymentModes = UserPopulationDAO.getUserPaymentModes();
+                    for (String paymentMode : paymentModes) {
+                        if (payment.equals(paymentMode)) {
+                            out.println("<option value='" + paymentMode + "' selected>" + paymentMode + "</option>");
+                        } else {
+                            out.println("<option value='" + paymentMode + "'>" + paymentMode + "</option>");
+                        }
+                    }
+                %>
+            </select>
         </div>
     </div>
     <%
@@ -76,31 +129,43 @@
         }
     %>
     <div class="form-group">
-        <label class="col-sm-3 control-label">Phone Number :</label>
-        <div class="col-sm-6">
+        <label class="col-sm-1 control-label">Phone:</label>
+        <div class="col-sm-4">
             <input class="form-control" type="number" min="0" id="user_phone" value="<%=phone%>">
         </div>
+        <label class="col-sm-2 control-label">Bank Name: </label>
+        <div class="col-sm-4">
+            <input class="form-control" type="text" id="user_bank_name" value="<%=bank.getBank_name()%>">
+        </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">Fax Number :</label>
-        <div class="col-sm-6">
+        <label class="col-sm-1 control-label">Fax:</label>
+        <div class="col-sm-4">
             <input class="form-control" type="number" min="0" id="user_fax" value="<%=fax%>">
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Home Number :</label>
-        <div class="col-sm-6">
-            <input class="form-control" type="number" min="0" id="user_home" value="<%=home%>">
+        <label class="col-sm-2 control-label">Account Name: </label>
+        <div class="col-sm-4">
+            <input class="form-control"  type="text" id="user_account_name" value="<%=bank.getAccount_name()%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">Department :</label>
+        <label class="col-sm-1 control-label">Home:</label>
+        <div class="col-sm-4">
+            <input class="form-control" type="number" min="0" id="user_home" value="<%=home%>">
+        </div>
+        <label class="col-sm-2 control-label">Bank Account Number: </label>
+        <div class="col-sm-4">
+            <input class="form-control" type="text" id="user_account_no" value="<%=bank.getAccount_no()%>">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label">Department:</label>
         <%
             String userDepartment = user.getDepartment();
             String userDesignation = user.getDesignation();
         %>
 
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div id="full_time_department" <%if (user.getType().equals("Full")) {
                     out.println("style=\"display:block\"");
                 } else {
@@ -143,8 +208,8 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-3 control-label">Designation: </label>
-        <div class="col-sm-6">
+        <label class="col-sm-1 control-label">Designation: </label>
+        <div class="col-sm-4">
             <div id="user_designation_div">
                 <%
                     ArrayList<String> designations = new ArrayList<String>();
@@ -176,100 +241,16 @@
         }
     %>
     <div class="form-group">
-        <label class="col-sm-3 control-label">Basic Salary: </label>
-        <div class="col-sm-6">
+        <label class="col-sm-1 control-label">Basic Salary: </label>
+        <div class="col-sm-4">
             <div class="input-group">
                 <span class="input-group-addon">$</span>
                 <input class="form-control" type="number" min="0" id="user_salary" value="<%=salary%>" placeholder="Salary">
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-5 control-label">
-            <h4>Emergency Contact </h4>
-        </div>
-    </div>
-    <%
-        Emergency emergency = user.getEmergency();
-        String eContact = emergency.getContact() + "";
-        if (eContact.equals("0")) {
-            eContact = "";
-        }
-
-        String eOffice = emergency.getOffice() + "";
-        if (eOffice.equals("0")) {
-            eOffice = "";
-        }
-    %>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Contact Person Name: </label>
-        <div class="col-sm-6">
-            <input class="form-control" type="text" id="emergency_name" value="<%=emergency.getName()%>">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Relationship :</label>
-        <div class="col-sm-6">
-            <input class="form-control" type="text" id="emergency_relationship" value="<%=emergency.getRelationship()%>">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Contact Number:</label>
-        <div class="col-sm-6">
-            <input class="form-control" type="number" min="0" id="emergency_contact" value="<%=eContact%>">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Office Number: </label>
-        <div class="col-sm-6">
-            <input class="form-control" type="number" min="0" id="emergency_office" value="<%=eOffice%>">
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-5 control-label">
-            <h4>Payment Information </h4>
-        </div>
-    </div><%
-        Bank bank = user.getBank();
-    %>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Method of Payment: </label>
-        <div class="col-sm-6">
-            <select class="form-control" id="user_payment">
-                <%
-                    String payment = bank.getPayment_mode();
-                    ArrayList<String> paymentModes = UserPopulationDAO.getUserPaymentModes();
-                    for (String paymentMode : paymentModes) {
-                        if (payment.equals(paymentMode)) {
-                            out.println("<option value='" + paymentMode + "' selected>" + paymentMode + "</option>");
-                        } else {
-                            out.println("<option value='" + paymentMode + "'>" + paymentMode + "</option>");
-                        }
-                    }
-                %>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Bank Name: </label>
-        <div class="col-sm-6">
-            <input class="form-control" type="text" id="user_bank_name" value="<%=bank.getBank_name()%>">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Account Name: </label>
-        <div class="col-sm-6">
-            <input class="form-control"  type="text" id="user_account_name" value="<%=bank.getAccount_name()%>">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Bank Account Number: </label>
-        <div class="col-sm-6">
-            <input class="form-control" type="text" id="user_account_no" value="<%=bank.getAccount_no()%>">
-        </div>
-    </div>
+    </div>    
     <div class="form-group text-center">
-        <button class="btn btn-default" onclick="updateEmployee()">Edit Employee</button>
+        <button class="btn btn-primary" onclick="updateEmployee()">Edit Employee</button>
     </div>
 
 </div>

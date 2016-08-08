@@ -1,5 +1,6 @@
 <%@page import="com.vimbox.user.User"%>
 <%@include file="ValidateLogin.jsp"%>
+<script src="JS/CustomerFunctions.js"></script>
 
 <style>
     /* Loading Spinner */

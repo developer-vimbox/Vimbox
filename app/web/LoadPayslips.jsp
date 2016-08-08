@@ -50,18 +50,9 @@
     %>
     <td>
         <button onclick="editPayslip('<%=employee.getNric() + ":" + Converter.convertDateDatabase(payslip.getStartDate())%>')">Edit</button>
-        <div id="edit_payslip_modal" class="form-modal">
-            <!-- Modal content -->
-            <div class="payslip-modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('edit_payslip_modal')">×</span>
-                    <div id="edit_payslip_content"></div>
-                </div>
-            </div>
-        </div>
 
         <button onclick="viewPayslip('<%=employee.getNric() + Converter.convertYearMonthPayslip(payslip.getStartDate())%>')">View</button>
-        <div id="viewPayslipModal<%=employee.getNric() + Converter.convertYearMonthPayslip(payslip.getStartDate())%>" class="payslip-modal">
+        <div id="viewPayslipModal<%=employee.getNric() + Converter.convertYearMonthPayslip(payslip.getStartDate())%>" class="modal">
             <!-- Modal content -->
             <div class="payslip-modal-content">
                 <div class="modal-body">
