@@ -220,29 +220,7 @@
                                                     <th>Qty</th>
                                                     <th>Units</th>
                                                 </tr> 
-                                                <%
-                                                    ArrayList<LeadDiv> leadDivs = lead.getSalesDivs();
-                                                    ArrayList<Item> custItems = new ArrayList<Item>();
-                                                    ArrayList<Item> vimboxItems = new ArrayList<Item>();
-                                                    ArrayList<Item> materials = new ArrayList<Item>();
-                                                    
-                                                    
-                                                    for(LeadDiv leadDiv: leadDivs){
-                                                        custItems.addAll(leadDiv.getCustomerItems());
-                                                        vimboxItems.addAll(leadDiv.getVimboxItems());
-                                                        materials.addAll(leadDiv.getMaterials());
-                                                    }
-                                                    
-                                                    for(Item item:custItems){
-                                                        out.println("<tr>");
-                                                        out.println("<td>" + item.getName() + "</td>");
-                                                        out.println("<td>" + item.getRemark()+ "</td>");
-                                                        out.println("<td align='center'>" + item.getCharges()+ "</td>");
-                                                        out.println("<td align='center'>" + item.getQty()+ "</td>");
-                                                        out.println("<td align='center'>" + item.getUnits() + "</td>");
-                                                        out.println("</tr>");
-                                                    }
-                                                %>
+                                               
                                             </table>
                                         </div>
                                     </td>
@@ -266,27 +244,7 @@
                                                     <th>Qty</th>
                                                     <th>Units</th>
                                                 </tr> 
-                                                <%
-                                                    for(Item item:vimboxItems){
-                                                        out.println("<tr>");
-                                                        out.println("<td>" + item.getName() + "</td>");
-                                                        out.println("<td>" + item.getRemark()+ "</td>");
-                                                        out.println("<td align='center'>" + item.getCharges()+ "</td>");
-                                                        out.println("<td align='center'>" + item.getQty()+ "</td>");
-                                                        out.println("<td align='center'>" + item.getUnits() + "</td>");
-                                                        out.println("</tr>");
-                                                    }
-                                                    
-                                                    for(Item item:materials){
-                                                        out.println("<tr>");
-                                                        out.println("<td>" + item.getName() + "</td>");
-                                                        out.println("<td>" + item.getRemark()+ "</td>");
-                                                        out.println("<td align='center'>" + item.getCharges()+ "</td>");
-                                                        out.println("<td align='center'>" + item.getQty()+ "</td>");
-                                                        out.println("<td align='center'>" + item.getUnits() + "</td>");
-                                                        out.println("</tr>");
-                                                    }
-                                                %>
+                                                
                                             </table>
                                         </div>
                                     </td>
@@ -301,14 +259,7 @@
                                 <tr style="height:15%">
                                     <td>
                                         <div style="overflow:auto;height:100%;">
-                                            <%
-                                                ArrayList<String> comments = lead.getComments();
-                                                for(String comment:comments){
-                                                    out.println("<li>");
-                                                    out.println(comment);
-                                                    out.println("</li>");
-                                                }
-                                            %>
+                                            
                                         </div>
                                     </td>
                                 </tr>
@@ -318,14 +269,7 @@
                                 <tr style="height:15%">
                                     <td>
                                         <div style="overflow:auto;height:100%;">
-                                            <%
-                                                ArrayList<String> remarks = lead.getRemarks();
-                                                for(String remark:remarks){
-                                                    out.println("<li>");
-                                                    out.println(remark);
-                                                    out.println("</li>");
-                                                }
-                                            %>
+                                            
                                         </div>
                                     </td>
                                 </tr>
@@ -337,22 +281,12 @@
                                         <div style="overflow:auto;height:100%;">
                                             <table width="100%">
                                                 <col width="50">
-                                                <%
-                                                    double sum = 0;
-                                                    ArrayList<String[]> services = lead.getServices();
-                                                    for(String[] service:services){
-                                                        out.println("<tr><td>" + service[0] + "</td>");
-                                                        out.println("<td align='right'>$" + service[1] + "</td></tr>");
-                                                        sum += Double.parseDouble(service[1]);
-                                                    }
-                                                %>
+                                                
                                             </table>
                                         </div>
                                     </td>
                                 </tr>
-                                <%
-                                    HashMap<String,String> others = lead.getOtherCharges();
-                                %>
+                                
                                 <tr style='height:5%'>
                                     <td>
                                         <table width='100%'>
@@ -360,10 +294,7 @@
                                             <tr>
                                                 <td>Storey Charges</td>
                                                 <td align='right'>$ 
-                                                    <%
-                                                        out.println(others.get("storeyCharge"));
-                                                        sum += Double.parseDouble(others.get("storeyCharge"));
-                                                    %>
+                                                    
                                                 </td>
                                             </tr>
                                         </table>
@@ -376,10 +307,7 @@
                                             <tr>
                                                 <td>Pushing Charges</td>
                                                 <td align='right'>$
-                                                    <%
-                                                        out.println(others.get("pushCharge"));
-                                                        sum += Double.parseDouble(others.get("pushCharge"));
-                                                    %>
+                                                    
                                                 </td>
                                             </tr>
                                         </table>
@@ -392,10 +320,7 @@
                                             <tr>
                                                 <td>Detour Charges</td>
                                                 <td align='right'>$ 
-                                                    <%
-                                                        out.println(others.get("detourCharge"));
-                                                        sum += Double.parseDouble(others.get("detourCharge"));
-                                                    %>
+                                                    
                                                 </td>
                                             </tr>
                                         </table>
@@ -408,10 +333,7 @@
                                             <tr>
                                                 <td>Material Charges</td>
                                                 <td align='right'>$ 
-                                                    <%
-                                                        out.println(others.get("materialCharge"));
-                                                        sum += Double.parseDouble(others.get("materialCharge"));
-                                                    %>
+                                                    
                                                 </td>
                                             </tr>
                                         </table>
@@ -424,10 +346,7 @@
                                             <tr>
                                                 <td>Markup</td>
                                                 <td align='right'>$ 
-                                                    <%
-                                                        out.println(others.get("markup"));
-                                                        sum += Double.parseDouble(others.get("markup"));
-                                                    %>
+                                                    
                                                 </td>
                                             </tr>
                                         </table>
@@ -438,7 +357,7 @@
                     </tr>
                     <tr>
                         <td align="right" colspan="2">
-                            Total : <b>S$ <%=sum%></b>
+                            Total : <b>S$ </b>
                         </td>
                     </tr>
                 </table>    

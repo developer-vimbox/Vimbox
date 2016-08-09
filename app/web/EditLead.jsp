@@ -469,7 +469,7 @@
                     </fieldset>
                 </div>
 
-                <div id="SiteSurvey" style="display:none">
+                <div id="Sales" style="display:none">
                     <br>
                     <fieldset>
                         <b><u>Site Survey Details</u></b><br><br>
@@ -586,9 +586,6 @@
                             %>
                         </div>
                     </fieldset>
-                </div>
-
-                <div id="Sales" style="display:none">
                     <br>
                     <fieldset>
                         <b><u>Sales Details</u></b><hr>

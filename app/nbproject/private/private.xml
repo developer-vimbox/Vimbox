@@ -4,12 +4,25 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sitesurvey/SaveSiteSurveyController.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/SiteSurveyFunctions.js</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/database/TicketDAO.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/ticket/CreateTicketController.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/MyLeads.jsp</file>
             <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/database/LeadDAO.java</file>
             <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/EditLead.jsp</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/CreateLead.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/CreateEmployee.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/LeadsHistory.jsp</file>
             <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/StartSurvey.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sales/EditLeadController.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sales/CreateLeadController.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/CreateTicket.jsp</file>
             <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/AddressSearch.js</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/RetrieveLeadDetails.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/ticket/EditTicketController.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/SiteSurveyFunctions.js</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/CreateLead.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/TicketFunctions.js</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/EmployeeFunctions.js</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/EditTicket.jsp</file>
         </group>
     </open-files>
 </project-private>
