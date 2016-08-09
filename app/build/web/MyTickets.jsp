@@ -129,7 +129,7 @@
                                                         %>
                                                         <button onclick="editTicket(<%=ticketId%>)">Edit</button>
                                                         <div id="edit_ticket_modal" class="modal">
-                                                            <div class="modal-content">
+                                                            <div class="modal-content" style="width:600px;">
                                                                 <div class="modal-body">
                                                                     <span class="close" onclick="closeModal('edit_ticket_modal')">×</span>
                                                                     <div id="edit_ticket_content"></div>

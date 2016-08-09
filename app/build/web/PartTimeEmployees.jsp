@@ -14,7 +14,7 @@
     <body onload="parttime_setup()">
         <%@include file="header.jsp"%>
         <div id="page-content-wrapper">
-            <div id="page-content" style="min-height: 7630px;">
+            <div id="page-content">
                 <div class="container">
                     <div id="page-title">
                         <h2>Part Time Employees</h2>

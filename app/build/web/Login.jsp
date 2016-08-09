@@ -25,17 +25,7 @@
         </script>
     </head>
     <body class="bg-login printable" data-gr-c-s-loaded="true">
-        <div id="messageModal" class="modal">
-            <!-- Modal content -->
-            <div class="message-modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('messageModal')">×</span>
-                    <div id="message-status"></div>
-                    <hr>
-                    <div id="message-content"></div>
-                </div>
-            </div>
-        </div>
+
         <div id="loading" style="display: none;">
             <div class="spinner">
                 <div class="bounce1"></div>
@@ -55,15 +45,15 @@
         </script>
         <script type="text/javascript" src="assets/widgets/wow/wow.js"></script>
         <script type="text/javascript">
-                        /* WOW animations */
+            /* WOW animations */
 
-                        wow = new WOW({
-                            animateClass: 'animated',
-                            offset: 100
-                        });
-                        wow.init();
+            wow = new WOW({
+                animateClass: 'animated',
+                offset: 100
+            });
+            wow.init();
         </script>
-        <div class="login-screen">
+        <div class="login-screen" style="height: 360px;">
             <div class="panel-login blur-content">
                 <div class="panel-heading"><b>VIMBOX</b></div><!--.panel-heading-->
                 <div id="pane-login" class="panel-body active">
@@ -85,10 +75,20 @@
                                 </div>
                             </div><!--.form-group-->
                         </div>
-                        <div class="form-buttons clearfix">
-                            <label class="pull-left"><input type="checkbox" name="remember" value="1"> Remember me</label>
-                            <input type="submit" class="btn btn-success pull-right" value="Login">
+                        <div class="form-buttons clearfix" style="margin-left: -30; margin-right: -30;">
+                            <input type="submit" class="btn btn-success btn-block" value="Login">
                         </div><!--.form-buttons-->
+                        <div id="messageModal" class="modal">
+                            <!-- Modal content -->
+                            <div class="message-modal-content">
+                                <div class="modal-body">
+                                    <span class="close" onclick="closeModal('messageModal')">×</span>
+                                    <div id="message-status"></div>
+                                    <hr>
+                                    <div id="message-content"></div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div><!--#login.panel-body-->
 

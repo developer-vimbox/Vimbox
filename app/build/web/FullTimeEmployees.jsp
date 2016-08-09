@@ -15,19 +15,18 @@
     <body onload="fulltime_setup()">
         <%@include file="header.jsp"%>
         <div id="employee_error_modal" class="modal">
-    <!-- Modal content -->
-    <div class="message-modal-content">
-        <div class="modal-body">
-            <span class="close" onclick="closeModal('employee_error_modal')">×</span>
-            <div id="employee_error_status"></div>
-            <hr>
-            <div id="employee_error_message"></div>
-        </div>
-    </div>
-</div>
-        <div id="edit_employee_modal" class="modal"  style="display:none;">
             <!-- Modal content -->
-            <div class="employee-form-modal-content">
+            <div class="message-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('employee_error_modal')">×</span>
+                    <div id="employee_error_status"></div>
+                    <hr>
+                    <div id="employee_error_message"></div>
+                </div>
+            </div>
+        </div>
+        <div id="edit_employee_modal" class="modal"  style="display:none;">
+            <div class="employee-form-modal-content" style="width: 1200px;">
                 <div class="modal-body">
                     <div id="employee_content"></div>
                 </div>
@@ -41,7 +40,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="view_leavemc_modal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
@@ -53,9 +52,7 @@
         </div>
 
         <div id="page-content-wrapper">
-
-            <div id="page-content" style="min-height: 7630px;">
-
+            <div id="page-content">
                 <div class="container">
                     <div id="page-title">
                         <h2>Full Time Employees</h2>
@@ -73,7 +70,6 @@
                                             </span>
                                         </div>
                                     </div>
-
                                 </div>
                                 <br><br>
                                 <div id="employees_table"></div>

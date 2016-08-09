@@ -10,8 +10,17 @@
     </head>
     <body onload="payslipsSetup()">
         <%@include file="header.jsp"%>
+        <div id="edit_payslip_modal" class="modal">
+            <!-- Modal content -->
+            <div class="payslip-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('edit_payslip_modal')">×</span>
+                    <div id="edit_payslip_content"></div>
+                </div>
+            </div>
+        </div>
         <div id="page-content-wrapper">
-            <div id="page-content" style="min-height: 7630px;">
+            <div id="page-content">
                 <div class="container">
                     <div id="page-title">
                         <h2>Payslips</h2>
@@ -29,6 +38,18 @@
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="location.href = 'CreatePayslip.jsp';">Create New</button>
                                             </span>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <br>
+                                <div id="payslips_table"></div>
+                            </div>
+                            <div id="edit_payslip_modal" class="form-modal">
+                                <!-- Modal content -->
+                                <div class="payslip-modal-content">
+                                    <div class="modal-body">
+                                        <span class="close" onclick="closeModal('edit_payslip_modal')">×</span>
+                                        <div id="edit_payslip_content"></div>
                                     </div>
                                 </div>
                             </div>
@@ -55,8 +76,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <br>
-                            <div id="payslips_table"></div>
                             <div id="payslip_error_modal" class="modal">
                                 <!-- Modal content -->
                                 <div class="message-modal-content">

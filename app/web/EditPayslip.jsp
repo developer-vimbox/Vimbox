@@ -126,6 +126,7 @@
                                                 </td>
                                                 <td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>
                                             </tr>
+     
                                             <%
                                                         }
                                                     }

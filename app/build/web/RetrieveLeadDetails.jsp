@@ -197,6 +197,13 @@
         <td colspan="2">
             <fieldset>
                 <legend>Sales Info</legend>
+                <!-- Site Survey -->
+                <table>
+                    
+                    
+                </table>
+                <br>
+                <!-- Sales -->
                 <table width="100%">
                     <tr height="95%">
                         <td style="width:60%">

@@ -67,7 +67,7 @@
             Attendance attendance = UserAttendanceDAO.getAttendanceByDate(dt);
         %>
         <div id="page-content-wrapper">
-            <div id="page-content" style="min-height: 7630px;">
+            <div id="page-content">
 
                 <div class="container">
 

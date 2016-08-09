@@ -22,7 +22,7 @@
             </div>
         </div>
         <div id="page-content-wrapper">
-            <div id="page-content" style="min-height: 7630px;">
+            <div id="page-content">
                 <div class="container">
                     <div id="page-title">
                         <h2>Attendances</h2> <br>
