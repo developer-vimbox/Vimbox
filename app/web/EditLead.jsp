@@ -971,7 +971,7 @@
                                                                                             <%
                                                                                                 ArrayList<Item> vimboxItems = leadDiv.getVimboxItems();
                                                                                                 for (Item item : vimboxItems) {
-                                                                                                    String tr = "<tr><td>Boxes<input type='hidden' name='" + leadDivId + "_vimboxItemName' value='Boxes'></td>";
+                                                                                                    String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='" + leadDivId + "_vimboxItemName' value='" + item.getName() + "'></td>";
                                                                                                     tr += "<td>&nbsp;<input type='hidden' name='" + leadDivId + "_vimboxItemRemark' value=''></td>";
                                                                                                     tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + leadDivId + "_vimboxItemCharge' value=''></td>";
                                                                                                     tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='" + leadDivId + "_vimboxItemQty' value='" + item.getUnits() + "'></td>";
