@@ -229,7 +229,11 @@ public class EditLeadController extends HttpServlet {
                 SiteSurveyDAO.deleteSiteSurveysByLeadId(leadId);
                 for(int j=0; j<surveyDates.length; j++){
                     String surveyDate = surveyDates[j];
-                    String surveyStatus = surveyStatuses[j];
+                    String surveyStatus = "yes";
+                    if(surveyStatuses != null){
+                        surveyStatus = surveyStatuses[j];
+                    }
+                    
                     if(surveyStatus.equals("yes")){
                         String surveyorId = "";
                         String remark = "";
