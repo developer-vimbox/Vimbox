@@ -72,7 +72,7 @@
   <div class="col" style="display: table-cell;width: 50%;float: right;">Status : <%=lead.getStatus()%></div>
 </div>
 <hr>
-<table width='100%'>
+<table class="table table-hover" width='100%'>
     <col width="50%">
     <col width="50%">
     <tr>
@@ -107,7 +107,7 @@
             <fieldset>
                 <legend>Lead Info</legend>
                 <table width='100%' style="min-height:120px">
-                    <col width="20%">
+                    <col width="30%">
                     <tr>
                         <td align="right"><b>Lead ID :</b></td>
                         <td><%=lead.getId()%></td>

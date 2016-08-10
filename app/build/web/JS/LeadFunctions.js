@@ -43,7 +43,7 @@ function openSales(evt, cityName) {
 function addDom(divName) {
     var newdiv = document.createElement('div');
     var stringDiv = "";
-    stringDiv += "<div id='" + domCounter + "'><table class='dynamicDomTable'><tr><td><input type='date' name='dom'></td><td><input type='button' value='x' onClick='removeInput(" + domCounter + ");'></td></tr></table></div>";
+    stringDiv += "<div id='" + domCounter + "'><span class=\"input-group-btn\"><input class='form-control' type='date' name='dom'><input  class='btn btn-round btn-warning' type='button' value='x' onClick='removeInput(" + domCounter + ");'></span></div>";
     newdiv.innerHTML = stringDiv;
     document.getElementById(divName).appendChild(newdiv);
     domCounter++;
@@ -247,7 +247,7 @@ function create_leadSetup() {
 
 function showfield(name) {
     if (name == 'Others') {
-        document.getElementById('referralOthers').innerHTML = 'Others: <input type="text" name="referralOthers" />';
+        document.getElementById('referralOthers').innerHTML = '<label class="col-sm-6 control-label">Others: </label>  <div class="col-sm-4"><input class="form-control" type="text" name="referralOthers" style="width: 200px;" /></div>';
     } else {
         document.getElementById('referralOthers').innerHTML = '';
     }
