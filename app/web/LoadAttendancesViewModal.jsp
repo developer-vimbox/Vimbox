@@ -32,7 +32,7 @@
                         if (d < 10) {
                             day = 0 + day;
                         }
-                        out.println("<th>" + day + "<br><button class=\"btn btn-default\"  onclick=\"window.location.href='EditAttendance.jsp?date=" + Converter.convertDateHtml(attendance.getDate()) + "&action=2'\">Edit</button></th>");
+                        out.println("<th style='text-align: left'><button class=\"btn btn-default\" onclick=\"window.location.href='EditAttendance.jsp?date=" + Converter.convertDateHtml(attendance.getDate()) + "&action=2'\">" + day + "</button></th>");
                     }
                 %>
         </tr>
@@ -43,15 +43,15 @@
     %>
     <tbody>
         <tr>
-            <td align="center"><%=nric%></td>
-            <td align="center"><%=employee%></td>
+            <td><%=nric%></td>
+            <td><%=employee%></td>
             <%
                 for (Attendance attendance : attendances) {
                     String employeeAttendance = attendance.getUserAttendance(nric);
                     if (employeeAttendance == null) {
                         employeeAttendance = "NA";
                     }
-                    out.println("<td align='center'>" + employeeAttendance.substring(0, 2) + "</td>");
+                    out.println("<td>" + employeeAttendance.substring(0, 2) + "</td>");
                 }
             %>
         </tr>

@@ -22,24 +22,7 @@
             ArrayList<Ticket> assignedTickets = TicketDAO.getTicketsByAssignedUser(user);
 
         %>
-        <!-- The Modal for View Tickets-->
-        <div class="modal" id="viewTicketModal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('viewTicketModal')">×</span>
-                <div id="viewTicketModalContent">
-                </div>
-            </div>
-        </div>
-        <!-- The Modal for View Comment-->
-        <div id="viewCommentsModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('viewCommentsModal')">×</span>
-                    <div id="commentsContent"></div> 
-                </div>
-            </div>
-        </div>
+
         <div id="page-content-wrapper">
             <div id="page-content" style="min-height: 545px;">
 
@@ -127,12 +110,18 @@
                                                         <%
                                                             if (status.equals("Pending")) {
                                                         %>
-                                                        <button onclick="editTicket(<%=ticketId%>)">Edit</button>
-                                                        <div id="edit_ticket_modal" class="modal">
-                                                            <div class="modal-content" style="width:600px;">
-                                                                <div class="modal-body">
-                                                                    <span class="close" onclick="closeModal('edit_ticket_modal')">×</span>
-                                                                    <div id="edit_ticket_content"></div>
+                                                        <button onclick="editTicket(<%=ticketId%>)" data-toggle="modal" data-target="#edit_ticket_modal">Edit</button>
+                                                        <div class="modal" id="edit_ticket_modal" tabindex="-2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" style="width: 600px;">
+                                                                <div class="modal-content" style="width: 600px;">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <h3>Edit Ticket</h3>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="edit_ticket_content"></div>
+
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -185,34 +174,35 @@
                                                     <td><%=dateTime%></td>
                                                     <td><%=status%></td>
                                                     <td>
-                                                        <button onclick="commentTicket('<%=ticketId%>')">C</button>
-                                                        <!-- The Modal -->
-                                                        <div id="commentModal<%=ticketId%>" class="modal">
-                                                            <!-- Modal content -->
-                                                            <div class="modal-content">
-                                                                <div class="modal-body">
-                                                                    <span class="close" onclick="closeModal('commentModal<%=ticketId%>')">×</span>
-                                                                    <h3>Add Comment</h3>
-                                                                    <hr>
-                                                                    <div class="form-horizontal">
-                                                                        <div class="form-group">
-                                                                            <label class="col-sm-3 control-label">Ticket ID: </label>
-                                                                            <div class="col-sm-6">
-                                                                                <label class="form-control"><%=ticketId%></label>
-                                                                                <input type="hidden" id="comment_ticket_id<%=ticketId%>" value="<%=ticketId%>" />
+                                                        <button data-toggle="modal" data-target="#addCommentModal">C</button>
+                                                        <div class="modal" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                            <div class="modal-dialog" style="width: 500px;">
+                                                                <div class="modal-content" style="width: 500px;">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <h3>Add Comment</h3>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="form-horizontal">
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-3 control-label">Ticket ID: </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <label class="form-control"><%=ticketId%></label>
+                                                                                    <input type="hidden" id="comment_ticket_id<%=ticketId%>" value="<%=ticketId%>" />
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
 
-                                                                        <div class="form-group">
-                                                                            <label class="col-sm-3 control-label">Comment: </label>
-                                                                            <div class="col-sm-6">
-                                                                                <textarea class="form-control" id="ticket_comment<%=ticketId%>" cols="75" rows="6" autofocus></textarea>
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-3 control-label">Comment: </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <textarea class="form-control" id="ticket_comment<%=ticketId%>" cols="75" rows="6" autofocus></textarea>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label class="col-sm-3 control-label">  </label>
-                                                                            <div class="col-sm-6">
-                                                                                <button class="btn btn-primary" onclick="followupTicket(<%=ticketId%>)">Add Comment</button>
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-3 control-label">  </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <button class="btn btn-primary" onclick="followupTicket(<%=ticketId%>)" class="close" data-dismiss="modal">Add Comment</button>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -220,33 +210,35 @@
                                                             </div>
                                                         </div>
 
-                                                        <button onclick="closeTicket('<%=ticketId%>')">R</button>
-                                                        <div id="resolveModal<%=ticketId%>" class="modal">
-                                                            <!-- Modal content -->
-                                                            <div class="modal-content">
-                                                                <div class="modal-body">
-                                                                    <span class="close" onclick="closeModal('resolveModal<%=ticketId%>')">×</span>
-                                                                    <h3>Resolve Ticket</h3>
-                                                                    <hr>
-                                                                    <div class="form-horizontal">
-                                                                        <div class="form-group">
-                                                                            <label class="col-sm-3 control-label">Ticket ID: </label>
-                                                                            <div class="col-sm-6">
-                                                                                <label class="form-control"><%=ticketId%></label>
-                                                                                <input type="hidden" id="resolve_ticket_id<%=ticketId%>" value="<%=ticketId%>" />
+                                                        <button data-toggle="modal" data-target="#resolveTicketModal">R</button>
+                                                        <div class="modal" id="resolveTicketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                            <div class="modal-dialog" style="width: 500px;">
+                                                                <div class="modal-content" style="width: 500px;">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <h3>Resolve Ticket</h3>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="form-horizontal">
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-3 control-label">Ticket ID: </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <label class="form-control"><%=ticketId%></label>
+                                                                                    <input type="hidden" id="resolve_ticket_id<%=ticketId%>" value="<%=ticketId%>" />
 
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label class="col-sm-3 control-label">Solution: </label>
-                                                                            <div class="col-sm-6">
-                                                                                <textarea class="form-control" id="resolve_ticket_solution<%=ticketId%>" cols="75" rows="6" autofocus></textarea>
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-3 control-label">Solution: </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <textarea class="form-control" id="resolve_ticket_solution<%=ticketId%>" cols="75" rows="6" autofocus></textarea>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label class="col-sm-3 control-label">  </label>
-                                                                            <div class="col-sm-6">
-                                                                                <button class="btn btn-primary" onclick="resolveTicket(<%=ticketId%>)">Resolve Ticket</button>
+                                                                            <div class="form-group">
+                                                                                <label class="col-sm-3 control-label">  </label>
+                                                                                <div class="col-sm-6">
+                                                                                    <button class="btn btn-primary" onclick="resolveTicket(<%=ticketId%>)" class="close" data-dismiss="modal">Resolve Ticket</button>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -256,8 +248,34 @@
                                                     </td>
 
                                                     <td>
-                                                        <button onclick="viewTicket('<%=ticketId%>')">VT</button>
-                                                        <button onclick="viewComments('<%=ticketId%>')">VC</button>
+                                                        <button onclick="viewEachTicket('<%=ticketId%>')" data-toggle="modal" data-target="#viewEachTicketModal">VT</button>
+                                                        <div class="modal" id="viewEachTicketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                            <div class="modal-dialog" style="width: 500px;">
+                                                                <div class="modal-content" style="width: 500px;">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <h3>Ticket Details</h3>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="viewEachTicketModalContent"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button onclick="viewEachComment('<%=ticketId%>')" data-toggle="modal" data-target="#viewEachCommentModal">VC</button>
+                                                        <div class="modal" id="viewEachCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                            <div class="modal-dialog" style="width: 500px;">
+                                                                <div class="modal-content" style="width: 500px;">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <h3>Comment Details</h3>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="viewEachCommentModalContent"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <%

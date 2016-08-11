@@ -1,11 +1,9 @@
 function customerSearch(module) {
-    var modal = document.getElementById("customer_modal");
     var name = $('#customer_search').val();
     var content = document.getElementById("customer_content");
     $.get("SearchCustomersByName.jsp", {getName: name, getAction: module}, function (data) {
         content.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 function customerSearchHeader(module) {

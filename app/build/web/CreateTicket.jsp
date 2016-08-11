@@ -17,15 +17,7 @@
         <%@include file="header.jsp"%>
         <%            ArrayList<User> users = UserDAO.getFullTimeUsers();
         %>
-        <!-- Customer Modal -->
-        <div id="customer_modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('customer_modal')">×</span>
-                    <div id="customer_content"></div>
-                </div>
-            </div>
-        </div>
+
         <!-- Customer Error Modal -->
         <div id="customer_error_modal" class="modal">
             <div class="error-modal-content">
@@ -93,7 +85,20 @@
                                             <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                                 <input type="text" id="customer_search" placeholder="Enter customer name" class="form-control" style="width: 400px;color:black;">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="customerSearch('ticket')">Search</button>
+                                                    <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="customerSearch('ticket')" data-toggle="modal" data-target="#customer_modal">Search</button>
+                                                    <div class="modal" id="customer_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                        <div class="modal-dialog" style="width: 500px;">
+                                                            <div class="modal-content" style="width: 500px;">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                    <h3>Ticket Details</h3>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div id="customer_content"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <button class="btn btn-default  bootstrap-touchspin-up" type="button"  onclick="addNewCustomer()">Add New</button>
                                                 </span>
                                             </div>
@@ -135,29 +140,33 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Assigned To: </label>
                                         <div class="col-sm-5">
-                                            <div id="dynamicInput" class="input-group">
-                                                <span class="input-group-btn">
-                                                    <input class="btn btn-round btn-primary" type="button" value="+" onClick="addInput('dynamicInput');">
-                                                </span>
-                                                <select name="assigned" class="form-control">
-                                                    <%
-                                                        for (User assignee : users) {
-                                                            out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
-                                                        }
-                                                    %>
-                                                </select>
+                                            <div id="dynamicInput">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <input class="btn btn-round btn-primary" type="button" value="+" onClick="addInput('dynamicInput');">
+                                                    </span>
+                                                    <select name="assigned" class="form-control">
+                                                        <%
+                                                            for (User assignee : users) {
+                                                                out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
+                                                            }
+                                                        %>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div id="additionalAssigned" class="input-group" style="margin-top: 15px">
-                                                <span class="input-group-btn">
-                                                    <input class="btn btn-round btn-warning" type='button' value='x' onClick='removeAdditional(this);'>
-                                                </span>
-                                                <select name="assigned" class="form-control">
-                                                    <%
-                                                        for (User assignee : users) {
-                                                            out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
-                                                        }
-                                                    %>
-                                                </select>
+                                            <div id="additionalAssigned" style="margin-top: 15px">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <input class="btn btn-round btn-warning" type='button' value='x' onClick='removeAdditional(this);'>
+                                                    </span>
+                                                    <select name="assigned" class="form-control">
+                                                        <%
+                                                            for (User assignee : users) {
+                                                                out.println("<option value='" + assignee.getNric() + "'>" + assignee + "</option>");
+                                                            }
+                                                        %>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

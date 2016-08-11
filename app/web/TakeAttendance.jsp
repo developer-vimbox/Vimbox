@@ -102,9 +102,10 @@
                 <th>Employee</th>
                 <th>Status</th>
                 <th>Duration</th>
-                <th>Present</th>
-                <th>Absent</th>
-                <th colspan='2'>Late</th>
+                <th style="text-align: center">Present</th>
+                <th style="text-align: center">Absent</th>
+                <th style="text-align: right">Late</th>
+                <th></th>
             </tr>
             </thead>
 
@@ -122,21 +123,21 @@
             %>
             <tbody>
             <tr>
-                <td align='center'><%=nric%><input type="hidden" name="attendance_nric" value="<%=nric%>"></td>
-                <td align='center'><%=employee%></td>
-                <td align='center'><%=employeeStatus%></td>
-                <td align='center'><%=employeeDuration%></td>
+                <td><%=nric%><input type="hidden" name="attendance_nric" value="<%=nric%>"></td>
+                <td><%=employee%></td>
+                <td><%=employeeStatus%></td>
+                <td><%=employeeDuration%></td>
                 <%
                     if (attendance_record != null) {
                         String employeeAttendance = attendance_record.get(nric);
                 %>
-                    <td align='center'><%if (employeeAttendance != null && employeeAttendance.equals("Present")) 
+                    <td style="text-align: center"><%if (employeeAttendance != null && employeeAttendance.equals("Present")) 
                             out.println("x");%></td>
-                    <td align='center'><%if (employeeAttendance != null && employeeAttendance.equals("Absent")) 
+                    <td style="text-align: center"><%if (employeeAttendance != null && employeeAttendance.equals("Absent")) 
                             out.println("x");%></td>
-                    <td align='center'><%if (employeeAttendance != null && employeeAttendance.equals("Late")) 
+                    <td style="text-align: right"><%if (employeeAttendance != null && employeeAttendance.equals("Late")) 
                             out.println("x");%></td>
-                    <td align='center'>
+                    <td>
                         <%
                             if (employeeAttendance != null && employeeAttendance.equals("Late")){
                                 double totalMinutes = late_record.get(nric);
@@ -149,10 +150,10 @@
                     <%
                     } else if (!employeeDuration.matches("0900 - 1800|0830 - 1730")) {
                     %>
-                <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Present" checked></td>
-                <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Absent"></td>
-                <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Late"></td>
-                <td align='center'>
+                <td style="text-align: center"><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Present" checked></td>
+                <td style="text-align: center"><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Absent"></td>
+                <td style="text-align: right"><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Late"></td>
+                <td>
                     <select name="late_<%=nric%>_h" id="late_<%=nric%>_h" disabled>
                         <%
                             for (int i = 1; i <= 9; i++) {
