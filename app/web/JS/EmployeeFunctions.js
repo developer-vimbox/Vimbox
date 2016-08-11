@@ -6,13 +6,13 @@ Date.prototype.toDateInputValue = (function () {
     return local.toJSON().slice(0, 10);
 });
 
-function loadLeaveMCs(keyword){
+function loadLeaveMCs(keyword) {
     $.get("LoadLeaveMC.jsp", {keyword: keyword}, function (data) {
         document.getElementById('leave_mc_table').innerHTML = data;
     });
 }
 
-function leaveMc_setup(){
+function leaveMc_setup() {
     loadLeaveMCs("");
 }
 
@@ -131,21 +131,15 @@ function createEmployee() {
 }
 
 function viewEmployee(empId) {
-     $.get("LoadViewEmployeeModal.jsp", {empId: empId}, function (data) {
+    $.get("LoadViewEmployeeModal.jsp", {empId: empId}, function (data) {
         document.getElementById('viewEmployeeModal-details').innerHTML = data;
     });
-    document.getElementById("viewEmployeeModal").style.display = "block";
-
-//    var modal = document.getElementById("viewEmployeeModal" + empId);
-//    modal.style.display = "block";
 }
 
 function editEmployee(empId) {
-    var modal = document.getElementById("edit_employee_modal");
     $.get("EditEmployee.jsp", {empId: empId}, function (data) {
         document.getElementById('employee_content').innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 function confirmDelete(id, action) {
@@ -154,9 +148,9 @@ function confirmDelete(id, action) {
     var status = document.getElementById(action + "_error_status");
     var message = document.getElementById(action + "_error_message");
     status.innerHTML = "<center><h3 class=\"modal-title\"><b>Delete Confirmation</b></h3></center>";
-    message.innerHTML = "<div class=\"form-horizontal\"> <div class=\"form-group\">Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</div> <div class=\"form-group row\"><center><button class=\"btn btn-default\" onclick=\"delete" + method + "('" + id + "')\">Yes</button>&nbsp;<button class=\"btn btn-default\" onclick=\"closeModal('" + action + "_error_modal')\">No</button></center></div>";
-          
-   
+    message.innerHTML = "<div class=\"form-horizontal\"> <div class=\"form-group\">Delete this " + action.replace("_", " ") + " record? Changes cannot be reverted.</div> <div class=\"form-group row\"><center><button class=\"btn btn-default\" onclick=\"delete" + method + "('" + id + "')\">Yes</button>&nbsp;<button class=\"btn btn-default\" onclick=\"closeModal('" + action + "_error_modal')\">No</button></center></div>";
+
+
 //    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"delete" + method + "('" + id + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal('" + action + "_error_modal')\">No</button></td></tr></table>";
     modal.style.display = "block";
 }
@@ -289,9 +283,6 @@ function updateEmployee() {
 
 }
 
-function fcPayslips() {
-    document.getElementById("fastCreateModal").style.display = "block";
-}
 
 function fgPayslips() {
     var modal = document.getElementById("payslip_error_modal");
@@ -335,11 +326,9 @@ function viewPayslip(empId) {
 }
 
 function editPayslip(empId) {
-    var modal = document.getElementById("edit_payslip_modal");
     $.get("EditPayslip.jsp", {empId: empId}, function (data) {
         document.getElementById('edit_payslip_content').innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 $(document).on('change', '#payslip_employee', function () {
@@ -385,7 +374,7 @@ $(document).on('change keyup paste', '#payslip_startDate', function () {
 
         var month = startDate.getMonth(); //months from 1-12
         var year = startDate.getFullYear();
-        if(Number(year) > 1000){
+        if (Number(year) > 1000) {
             $('#payslip_paymentDate').val(new Date(year, month + 1, 0).toDateInputValue());
             if (!$('#payslip_endDate').val()) {
                 $('#payslip_endDate').val(new Date(year, month + 1, 0).toDateInputValue());
@@ -404,8 +393,8 @@ function calculateProrate(employee, startdate, enddate) {
                     var original_basic = Number($('#original_basic').val());
                     document.getElementById('payslip_basic').innerHTML = (original_basic * prorate).toFixed(2);
                     var basic = Number(document.getElementById('payslip_basic').innerHTML);
-                    
-					var table = document.getElementById("payslip_dbd");
+
+                    var table = document.getElementById("payslip_dbd");
 
                     for (var i = 0, row; row = table.rows[i]; i++) {
                         //iterate through rows
@@ -417,7 +406,7 @@ function calculateProrate(employee, startdate, enddate) {
                             var cellHtml = col.innerHTML;
                             console.log(cellHtml);
                             if (cellHtml.includes("Employee's CPF Deduction") || cellHtml.includes("Absent") || cellHtml.includes("Late") || cellHtml.includes("Unpaid")) {
-                                
+
                                 found = true;
                                 break;
                             }
@@ -428,18 +417,18 @@ function calculateProrate(employee, startdate, enddate) {
                             i--;
                         }
                     }
-					
+
                     var tr = "<tr>";
                     tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Employee's CPF Deduction\" placeholder='description'></td>";
                     tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic * 0.2).toFixed(2) + "' placeholder='amount'></div></td>";
                     tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                     tr += "</tr>";
                     $(tr).prependTo("#payslip_dbd > tbody");
-					
+
                     var totalDays = Number(data.totalDays);
-                    
+
                     var absent = Number(data.absent);
-                    if(absent > 0){
+                    if (absent > 0) {
                         var tr = "<tr>";
                         tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Absent - " + absent + " day(s)\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * absent * 1.5).toFixed(2) + "' placeholder='amount'></div></td>";
@@ -447,19 +436,19 @@ function calculateProrate(employee, startdate, enddate) {
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
-                    
+
                     var late = Number(data.late);
-                    if(late > 0){
+                    if (late > 0) {
                         var tr = "<tr>";
-                        tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Late - " + (late/60) + " hours(s) " + (late%60) + " min(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Late - " + (late / 60) + " hours(s) " + (late % 60) + " min(s)\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left= 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9 * 60)) * late).toFixed(2) + "' placeholder='amount'></div></td>";
                         tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
-                    
+
                     var mc = Number(data.mc);
-                    if(mc > 0){
+                    if (mc > 0) {
                         var tr = "<tr>";
                         tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Unpaid MC - " + mc + " day(s)\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * mc).toFixed(2) + "' placeholder='amount'></div></td>";
@@ -467,9 +456,9 @@ function calculateProrate(employee, startdate, enddate) {
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
-                    
+
                     var timeoff = Number(data.timeoff);
-                    if(timeoff > 0){
+                    if (timeoff > 0) {
                         var tr = "<tr>";
                         tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Unpaid Time Off - " + (timeoff / 9) + " hour(s)\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * timeoff).toFixed(2) + "' placeholder='amount'></div></td>";
@@ -477,14 +466,16 @@ function calculateProrate(employee, startdate, enddate) {
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
-                    
+
                     var leave = Number(data.leave);
-                    if(leave > 0){
+                    if (leave > 0) {
                         var leaveString = "Unpaid Leave - ";
-                        var leaveDays = leave/9;
-                        if(leaveDays > 0) leaveString += leaveDays + " day(s) ";
-                        var leaveHours = leave%9;
-                        if(leaveHours > 0) leaveString += leaveHours + " hour(s) ";
+                        var leaveDays = leave / 9;
+                        if (leaveDays > 0)
+                            leaveString += leaveDays + " day(s) ";
+                        var leaveHours = leave % 9;
+                        if (leaveHours > 0)
+                            leaveString += leaveHours + " hour(s) ";
                         var tr = "<tr>";
                         tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"" + leaveString + "\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * leave).toFixed(2) + "' placeholder='amount'></div></td>";
@@ -817,12 +808,12 @@ $(document).on('change', '#leaveEmployee', function () {
                     document.getElementById('leave_employee_mc').innerHTML = "";
                 }
                 var workingDays = data.workingDays;
-                if(workingDays === '5'){
+                if (workingDays === '5') {
                     $('#start_hour').val("09");
                     $('#start_minute').val("00");
                     $('#end_hour').val("09");
                     $('#end_minute').val("00");
-                }else if(workingDays === '6'){
+                } else if (workingDays === '6') {
                     $('#start_hour').val("08");
                     $('#start_minute').val("30");
                     $('#end_hour').val("08");
@@ -834,33 +825,31 @@ $(document).on('change', '#leaveEmployee', function () {
 });
 
 function loadLeaveMCNric(nric) {
-    var modal = document.getElementById('view_leavemc_modal');
     $.get("LoadLeaveMCNric.jsp", {nric: nric}, function (data) {
         document.getElementById('leavemc_content').innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
-function viewMC(){
+function viewMC() {
     document.getElementById('view_mc_modal').style.display = "block";
 }
 
 $(document).on('change', '#start_date', function () {
     var eDate = $('#end_date').val();
-    if(eDate === ''){
+    if (eDate === '') {
         $('#end_date').val($('#start_date').val());
     }
 });
 
-$(document).on('change', '.attendance_radio', function(){
-    
+$(document).on('change', '.attendance_radio', function () {
+
     var value = $(this).val();
     var name = $(this).attr('name');
     var nric = (name.split("_"))[1];
-    if(value === 'Late'){
+    if (value === 'Late') {
         document.getElementById("late_" + nric + "_h").disabled = false;
         document.getElementById("late_" + nric + "_m").disabled = false;
-    }else{
+    } else {
         document.getElementById("late_" + nric + "_h").disabled = true;
         document.getElementById("late_" + nric + "_m").disabled = true;
     }
@@ -870,14 +859,14 @@ function attendance_setup() {
     loadAttendances("");
 }
 
-function loadAttendances(keyword){
+function loadAttendances(keyword) {
     $.get("LoadAttendancesYM.jsp", {keyword: keyword}, function (data) {
         document.getElementById('attendance_table').innerHTML = data;
     });
 }
 
-function viewAttendance(keyword){
-     $.get("LoadAttendancesViewModal.jsp", {keyword: keyword}, function (data) {
+function viewAttendance(keyword) {
+    $.get("LoadAttendancesViewModal.jsp", {keyword: keyword}, function (data) {
         document.getElementById('attendance_modal_details').innerHTML = data;
     });
     document.getElementById("view_attendance_modal").style.display = "block";

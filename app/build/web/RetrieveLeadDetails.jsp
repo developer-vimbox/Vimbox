@@ -67,12 +67,8 @@
         to {opacity: 1;}
     } 
 </style>
-<div class="row" style="display:table;width:100%;">
-  <div class="col" style="display: table-cell;width: 50%;"><h2>Lead Details</h2></div>
-  <div class="col" style="display: table-cell;width: 50%;float: right;">Status : <%=lead.getStatus()%></div>
-</div>
-<hr>
-<table class="table table-hover" width='100%'>
+<b>Status: <%=lead.getStatus()%></b> <br>
+<table width='100%'>
     <col width="50%">
     <col width="50%">
     <tr>
@@ -107,7 +103,7 @@
             <fieldset>
                 <legend>Lead Info</legend>
                 <table width='100%' style="min-height:120px">
-                    <col width="30%">
+                    <col width="20%">
                     <tr>
                         <td align="right"><b>Lead ID :</b></td>
                         <td><%=lead.getId()%></td>

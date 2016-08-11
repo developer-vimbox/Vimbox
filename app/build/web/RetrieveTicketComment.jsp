@@ -5,7 +5,6 @@
 <%
     int ticketId = Integer.parseInt(request.getParameter("getTid"));
     ArrayList<TicketComment> comments = TicketCommentDAO.getTicketCommentsById(ticketId);
-    out.println(" <center><h3 class=\"modal-title\"><b>Comment History</b></h3></center>");
     out.println("Ticket ID :" + ticketId + "<br><br>");
     String table = "<table class=\"table table-hover\"><tr><th>Date & Time</th><th>Comment</th></tr>";
     for(TicketComment comment:comments){

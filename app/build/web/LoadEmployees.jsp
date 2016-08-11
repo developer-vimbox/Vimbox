@@ -50,9 +50,9 @@
             <td align="center"><%=user.getDepartment()%></td>
             <td align="center"><%=user.getDesignation()%></td>
             <td>
-                <button onclick="editEmployee('<%=user.getNric()%>')">Edit</button>
-                <button onclick="viewEmployee('<%=user.getNric()%>')">View</button>
-                <button onclick="loadLeaveMCNric('<%=user.getNric()%>')">L & MC</button>
+                <button onclick="editEmployee('<%=user.getNric()%>')" data-toggle="modal" data-target="#edit_employee_modal">Edit</button>
+                <button onclick="viewEmployee('<%=user.getNric()%>')" data-toggle="modal" data-target="#viewEmployeeModal">View</button>
+                <button onclick="loadLeaveMCNric('<%=user.getNric()%>')" data-toggle="modal" data-target="#view_leavemc_modal">L & MC</button>
             </td>
         </tr>
     </tbody>

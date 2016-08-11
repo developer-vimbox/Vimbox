@@ -43,7 +43,7 @@ function openSales(evt, cityName) {
 function addDom(divName) {
     var newdiv = document.createElement('div');
     var stringDiv = "";
-    stringDiv += "<div id='" + domCounter + "'><span class=\"input-group-btn\"><input class='form-control' type='date' name='dom'><input  class='btn btn-round btn-warning' type='button' value='x' onClick='removeInput(" + domCounter + ");'></span></div>";
+    stringDiv += "<div id='" + domCounter + "'><table class='dynamicDomTable'><tr><td><input type='date' name='dom'></td><td><input type='button' value='x' onClick='removeInput(" + domCounter + ");'></td></tr></table></div>";
     newdiv.innerHTML = stringDiv;
     document.getElementById(divName).appendChild(newdiv);
     domCounter++;
@@ -85,30 +85,24 @@ function followupLead(lead_id) {
 }
 
 function viewLead(leadId) {
-    var modal = document.getElementById("viewLeadModal");
     var content = document.getElementById("leadContent");
     $.get("RetrieveLeadDetails.jsp", {getLid: leadId}, function (data) {
         content.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 function viewFollowups(leadId) {
-    var modal = document.getElementById("viewCommentsModal");
-    var div1 = document.getElementById("commentsContent");
+    var div1 = document.getElementById("followUpContent");
     $.get("RetrieveLeadFollowup.jsp", {getLid: leadId}, function (data) {
         div1.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 function viewLeadsHistory(custId) {
-    var modal = document.getElementById("leadsHistoryModel");
     var leadsHistoryContent = document.getElementById("leadsHistoryContent");
     $.get("LeadsHistory.jsp", {getId: custId}, function (data) {
         leadsHistoryContent.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 //------------------------- LeadType Functions---------------------------//
@@ -247,7 +241,7 @@ function create_leadSetup() {
 
 function showfield(name) {
     if (name == 'Others') {
-        document.getElementById('referralOthers').innerHTML = '<label class="col-sm-6 control-label">Others: </label>  <div class="col-sm-4"><input class="form-control" type="text" name="referralOthers" style="width: 200px;" /></div>';
+        document.getElementById('referralOthers').innerHTML = 'Others: <input type="text" name="referralOthers" />';
     } else {
         document.getElementById('referralOthers').innerHTML = '';
     }

@@ -25,28 +25,45 @@
                 </div>
             </div>
         </div>
-        <div id="edit_employee_modal" class="modal"  style="display:none;">
-            <div class="employee-form-modal-content" style="width: 1200px;">
-                <div class="modal-body">
-                    <div id="employee_content"></div>
-                </div>
-            </div>
-        </div>
-        <div id="viewEmployeeModal" class="modal" style="display:none;">
-            <!-- Modal content -->
-            <div class="viewEmployeeModal">
-                <div class="modal-body">
-                    <div id="viewEmployeeModal-details"></div>
-                </div>
-            </div>
-        </div>
 
-        <div id="view_leavemc_modal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('view_leavemc_modal')">×</span>
-                    <div id="leavemc_content"></div>
+        <div class="modal fade bs-example-modal-lg" id="edit_employee_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 1200px;">
+                <div class="modal-content" style="width: 1200px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Edit Employee</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div id="employee_content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal fade bs-example-modal-lg" id="viewEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 800px;">
+                <div class="modal-content" style="width: 800px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>View Employee</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div id="viewEmployeeModal-details"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal fade bs-example-modal-lg" id="view_leavemc_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 800px;">
+                <div class="modal-content" style="width: 800px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Leave & MC History</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div id="leavemc_content"></div>
+                    </div>
                 </div>
             </div>
         </div>

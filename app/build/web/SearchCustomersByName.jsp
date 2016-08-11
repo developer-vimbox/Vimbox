@@ -81,9 +81,9 @@
                         <%
                         } else {
                         %>
-                        <button onclick="editCustomer(<%=custId%>)" class="btn btn-grey">Edit</button>
-                        <button onclick="viewLeadsHistory('<%=custId%>')" class="btn btn-grey">VS</button>
-                        <button onclick="viewTicketsHistory('<%=custId%>')" class="btn btn-grey">VT</button>
+                        <button onclick="editCustomer(<%=custId%>)" class="btn btn-grey" data-toggle="modal" data-target="#edit_customer_modal">Edit</button>
+                        <button onclick="viewLeadsHistory('<%=custId%>')" class="btn btn-grey" data-toggle="modal" data-target="#leadsHistoryModel">VS</button>
+                        <button onclick="viewTicketsHistory('<%=custId%>')" class="btn btn-grey" data-toggle="modal" data-target="#ticketsHistoryModel">VT</button>
                         <%
                             }
                         %>

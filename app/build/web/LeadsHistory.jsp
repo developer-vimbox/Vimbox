@@ -12,32 +12,31 @@
         <title>Leads History</title>
     </head>
     <body>
-        <h2>Leads History</h2><hr>
-        <%            
+        <%
             String custId = request.getParameter("getId");
             ArrayList<Integer> ids = CustomerHistoryDAO.getCustomerLeadIds(Integer.parseInt(custId));
-            if(ids.isEmpty()){
+            if (ids.isEmpty()) {
         %>
-            No results found
+        No results found
         <%
-            }else{
-                if(ids.size()==1){
-                    out.println(ids.size() + " record found");
-                }else{
-                    out.println(ids.size() + " records found");
-                }
-                ArrayList<Lead> leads = new ArrayList<Lead>();
-                for(int id:ids){
-                    leads.add(LeadDAO.getLeadById(id));
-                }
+        } else {
+            if (ids.size() == 1) {
+                out.println(ids.size() + " record found");
+            } else {
+                out.println(ids.size() + " records found");
+            }
+            ArrayList<Lead> leads = new ArrayList<Lead>();
+            for (int id : ids) {
+                leads.add(LeadDAO.getLeadById(id));
+            }
         %>
         <br><br>
-        <table border="1" width="100%">
+        <table class="table table-hover">
             <tr>
                 <th>#</th>
-                <th>Cust Name</th>
-                <th>Cust Contact</th>
-                <th>Cust Email</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Email</th>
                 <th>Status</th>
                 <th>Date</th>
                 <th>View</th>
@@ -55,29 +54,8 @@
                     out.println("<td>" + Converter.convertDate(lead.getDt()) + "</td>");
             %>
             <td>
-                <button onclick="viewLead('<%=lead.getId()%>')">VS</button>
-                <!-- The Modal -->
-                <div id="viewLeadModal<%=lead.getId()%>" class="lead-modal">
-                    <!-- Modal content -->
-                    <div class="lead-modal-content">
-                        <div class="modal-body">
-                            <span class="close" onclick="closeModal('viewLeadModal<%=lead.getId()%>')">×</span>
-                            <div id="leadContent<%=lead.getId()%>"></div>
-                        </div>
-                    </div>
-                </div>
-                                
-                <button onclick="viewFollowups('<%=lead.getId()%>')">VF</button>
-                <!-- The Modal -->
-                <div id="viewCommentsModal<%=lead.getId()%>" class="modal">
-                    <!-- Modal content -->
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <span class="close" onclick="closeModal('viewCommentsModal<%=lead.getId()%>')">×</span>
-                            <div id="commentsContent<%=lead.getId()%>"></div> 
-                        </div>
-                    </div>
-                </div>
+                <button onclick="viewLead('<%=lead.getId()%>')" data-toggle="modal" data-target="#viewLeadModal">VS</button>
+                <button onclick="viewFollowups('<%=lead.getId()%>')" data-toggle="modal" data-target="#viewFollowUpModal">VF</button>
             </td>
             <%
                 }
@@ -86,7 +64,7 @@
         <%
             }
         %>
-        
+
         <div id="lead_error_modal" class="modal">
             <div class="error-modal-content">
                 <div class="modal-body">

@@ -11,8 +11,6 @@
     User user = UserDAO.getUserByNRIC(nric);
 %>
 
-<span class="close" onclick="closeModal('edit_employee_modal')">×</span>
-<center><h3 class="modal-title"><b>Edit Employee</b></h3></center><hr>
 <input type="hidden" id="user_leave" value="<%=user.getLeave()%>">
 <input type="hidden" id="user_used_leave" value="<%=user.getUsed_leave()%>">
 <input type="hidden" id="user_mc" value="<%=user.getMc()%>">

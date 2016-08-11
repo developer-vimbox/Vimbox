@@ -14,10 +14,6 @@
 
 %>
 <!DOCTYPE html>
-<!-- Modal content -->
-<div class="modal-content" style="width: 800px;">
-    <span class="close" onclick="closeModal('viewEmployeeModal')">×</span>
-    <center><h3 class="modal-title"><b>View Employee</b></h3></center><hr>
     <div class="form-horizontal">
         <div class="form-group">
             <div class="col-sm-5 control-label">
@@ -182,4 +178,3 @@
             </div>
         </div>
     </div>
-</div>

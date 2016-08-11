@@ -13,7 +13,6 @@
         <title>Tickets History</title>
     </head>
     <body>
-        <h2>Tickets History</h2><hr>
         <%
             String custId = request.getParameter("getId");
             ArrayList<Integer> ids = CustomerHistoryDAO.getCustomerTicketIds(Integer.parseInt(custId));
@@ -33,12 +32,12 @@
             }
         %>
         <br><br>
-        <table border="1" width="100%">
+        <table class="table table-hover">
             <tr>
                 <th>Ticket ID</th>
-                <th>Cust Name</th>
-                <th>Cust Contact</th>
-                <th>Cust Email</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Email</th>
                 <th>Subject</th>
                 <th>Date & Time</th>
                 <th>Status</th>
@@ -70,82 +69,9 @@
                 <td><%=dateTime%></td>
                 <td><%=status%></td>
                 <td>
-                    <button onclick="viewTicket('<%=ticketId%>')">VT</button>
-                    <!-- The Modal -->
-                    <div id="viewTicketModal<%=ticketId%>" class="modal">
-                        <!-- Modal content -->
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <span class="close" onclick="closeModal('viewTicketModal<%=ticketId%>')">×</span>
-                                <h3>Ticket Details</h3>
-                                <table>
-                                    <tr>
-                                        <td align="right">Ticket ID :</td>
-                                        <td><%=ticketId%></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Date & Time :</td>
-                                        <td><%=dateTime%></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Ticket Owner :</td>
-                                        <td><%=ticket.getOwner_user().toString()%></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Assigned To :</td>
-                                        <td>
-                                            <%
-                                                ArrayList<User> assigned = ticket.getAssigned_users();
-                                                if (assigned.size() > 1) {
-                                                    for (User assignee : assigned) {
-                                                        out.println("<li>" + assignee.toString() + "</li>");
-                                                    }
-                                                } else if (assigned.size() == 1) {
-                                                    out.println(assigned.get(0).toString());
-                                                }
-                                            %>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Subject :</td>
-                                        <td><%=subject%></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Customer Details :</td>
-                                        <td>
-                                            <%=customerName%><br>
-                                            <%=contact%><br>
-                                            <%=email%>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Status :</td>
-                                        <td><%=status%></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Description :</td>
-                                        <td><%=ticket.getDescription()%></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right">Solution :</td>
-                                        <td><%=ticket.getSolution()%></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button onclick="viewComments('<%=ticketId%>')">VC</button>
-                    <!-- The Modal -->
-                    <div id="viewCommentsModal<%=ticketId%>" class="modal">
-                        <!-- Modal content -->
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <span class="close" onclick="closeModal('viewCommentsModal<%=ticketId%>')">×</span>
-                                <div id="commentsContent<%=ticketId%>"></div> 
-                            </div>
-                        </div>
-                    </div>
+                    <button onclick="viewTicket('<%=ticketId%>')" data-toggle="modal" data-target="#viewTicketModal">VT</button>
+                        
+                    <button onclick="viewComments('<%=ticketId%>')" data-toggle="modal" data-target="#viewCommentsModal">VC</button>
                 </td>
             </tr>
             <%

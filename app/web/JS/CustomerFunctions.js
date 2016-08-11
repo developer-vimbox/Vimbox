@@ -72,12 +72,10 @@ function selectCustomer(customer_id, customer_salutation, customer_first_name, c
 }
 
 function editCustomer(customer_id){
-    var modal = document.getElementById("edit_customer_modal");
     var content = document.getElementById("edit_customer_content");
     $.get("EditCustomer.jsp", {getId: customer_id}, function (data) {
         content.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 function updateCustomer(){

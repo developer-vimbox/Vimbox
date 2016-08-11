@@ -91,13 +91,10 @@ function updateTicket() {
 }
 
 function viewTicket(ticket_id) {
-    //var modal = document.getElementById("viewTicketModal" + ticket_id);
-    var modal = document.getElementById("viewTicketModal");
     var content = document.getElementById("viewTicketModalContent");
     $.get("RetrieveTicket.jsp", {getTid: ticket_id}, function (data) {
         content.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 function closeTicket(ticket_id) {
@@ -164,14 +161,10 @@ function followupTicket(ticket_id) {
 }
 
 function viewComments(ticketId) {
-//    var modal = document.getElementById("viewCommentsModal" + ticketId);
-//    var content = document.getElementById("commentsContent" + ticketId);
-    var modal = document.getElementById("viewCommentsModal");
     var content = document.getElementById("commentsContent");
     $.get("RetrieveTicketComment.jsp", {getTid: ticketId}, function (data) {
         content.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 function searchPending() {
@@ -195,11 +188,9 @@ function searchResolved() {
 }
 
 function viewTicketsHistory(custId) {
-    var modal = document.getElementById("ticketsHistoryModel");
     var ticketsHistoryContent = document.getElementById("ticketsHistoryContent");
     $.get("TicketsHistory.jsp", {getId: custId}, function (data) {
         ticketsHistoryContent.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 

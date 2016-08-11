@@ -48,12 +48,12 @@ function searchAddressFrom() {
                             }
                         }
                         
-                        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table style='margin-left:20%;'><col width='100'><tr><td>";
+                        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
                         stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressInput' name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>");
                         stringDiv += " #<input type='text' class='addressInput' name='addressfrom' size='2'>-<input type='text' class='addressInput' name='addressfrom' size='3'>";
                         stringDiv += " S<input type='text' class='addressInput' name='addressfrom' size='5' value='" + postalcode + "'></td>";
-                        stringDiv += "<tr><td ><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
-                        stringDiv += "<tr><td ><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
+                        stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
+                        stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
                         stringDiv += "</table></div>";
                         newdiv.innerHTML = stringDiv;
                         document.getElementById("from").appendChild(newdiv);
@@ -67,12 +67,12 @@ function searchAddressFrom() {
                         document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
                         var modal = document.getElementById("saModal");
                         modal.style.display = "block";
-                        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table style='margin-left:20%;'><col width='100'><tr><td >";
+                        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
                         stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressInput' name='addressfrom' size='30'>");
                         stringDiv += " #<input type='text' class='addressInput' name='addressfrom' size='2'>-<input type='text' class='addressInput' name='addressfrom' size='3'>";
                         stringDiv += " S<input type='text' class='addressInput' name='addressfrom' size='5' value='" + postalcode + "'></td>";
-                        stringDiv += "<tr><td ><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
-                        stringDiv += "<tr><td ><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
+                        stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
+                        stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
                         stringDiv += "</table></div>";
                         newdiv.innerHTML = stringDiv;
                         document.getElementById("from").appendChild(newdiv);
@@ -86,12 +86,12 @@ function searchAddressFrom() {
             document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
             var modal = document.getElementById("saModal");
             modal.style.display = "block";
-            stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table style='margin-left:20%;'><col width='100'><tr><td >";
+            stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
             stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressInput' name='addressfrom' size='30'>");
             stringDiv += " #<input type='text' class='addressInput' name='addressfrom' size='2'>-<input type='text' class='addressInput' name='addressfrom' size='3'>";
             stringDiv += " S<input type='text' class='addressInput' name='addressfrom' size='5' value='" + postalcode + "'></td>";
-            stringDiv += "<tr><td ><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
-            stringDiv += "<tr><td ><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
+            stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
+            stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
             stringDiv += "</table></div>";
             newdiv.innerHTML = stringDiv;
             document.getElementById("from").appendChild(newdiv);
@@ -106,12 +106,12 @@ function searchAddressFrom() {
         document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
         var modal = document.getElementById("saModal");
         modal.style.display = "block";
-        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table style='margin-left:20%;'><col width='100'><tr><td >";
+        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
         stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressInput' name='addressfrom' size='30'>");
         stringDiv += " #<input type='text' class='addressInput' name='addressfrom' size='2'>-<input type='text' class='addressInput' name='addressfrom' size='3'>";
         stringDiv += " S<input type='text' class='addressInput' name='addressfrom' size='5' value='" + postalcode + "'></td>";
-        stringDiv += "<tr><td ><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
-        stringDiv += "<tr><td ><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
+        stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysfrom' size='5'></td></tr>";
+        stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distancefrom' size='5'> M</td></tr>";
         stringDiv += "</table></div>";
         newdiv.innerHTML = stringDiv;
         document.getElementById("from").appendChild(newdiv);
@@ -169,12 +169,12 @@ function searchAddressTo() {
                             }
                         }
 
-                        stringDiv += "<div class='address-box' id='to" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr><table style='margin-left:20%;'><col width='100'><tr><td>";
+                        stringDiv += "<div class='address-box' id='to" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
                         stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressInput' name='addressto' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>");
                         stringDiv += " #<input type='text' class='addressInput' name='addressto' size='2'>-<input type='text' class='addressInput' name='addressto' size='3'>";
                         stringDiv += " S<input type='text' class='addressInput' name='addressto' size='5' value='" + postalcode + "'></td>";
-                        stringDiv += "<tr><td ><b>Storeys :</b></td><td><input type='text' name='storeysto' size='5'></td></tr>";
-                        stringDiv += "<tr><td><b>Pushing Distance :</b></td><td><input type='text' name='distanceto' size='5'> M</td></tr>";
+                        stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysto' size='5'></td></tr>";
+                        stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distanceto' size='5'> M</td></tr>";
                         stringDiv += "</table></div>";
                         newdiv.innerHTML = stringDiv;
                         document.getElementById("to").appendChild(newdiv);
@@ -188,12 +188,12 @@ function searchAddressTo() {
                         document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
                         var modal = document.getElementById("saModal");
                         modal.style.display = "block";
-                        stringDiv += "<div class='address-box' id='to" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr><table style='margin-left:20%;'><col width='100'><tr><td>";
+                        stringDiv += "<div class='address-box' id='to" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
                         stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressInput' name='addressto' size='30'>");
                         stringDiv += " #<input type='text' class='addressInput' name='addressto' size='2'>-<input type='text' class='addressInput' name='addressto' size='3'>";
                         stringDiv += " S<input type='text' class='addressInput' name='addressto' size='5' value='" + postalcode + "'></td>";
-                        stringDiv += "<tr><td ><b>Storeys :</b></td><td><input type='text' name='storeysto' size='5'></td></tr>";
-                        stringDiv += "<tr><td ><b>Pushing Distance :</b></td><td><input type='text' name='distanceto' size='5'> M</td></tr>";
+                        stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysto' size='5'></td></tr>";
+                        stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distanceto' size='5'> M</td></tr>";
                         stringDiv += "</table></div>";
                         newdiv.innerHTML = stringDiv;
                         document.getElementById("to").appendChild(newdiv);
@@ -206,12 +206,12 @@ function searchAddressTo() {
             document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
             var modal = document.getElementById("saModal");
             modal.style.display = "block";
-            stringDiv += "<div class='address-box' id='to" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr><table style='margin-left:20%;'><col width='100'><tr><td>";
+            stringDiv += "<div class='address-box' id='to" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
             stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressInput' name='addressto' size='30'>");
             stringDiv += " #<input type='text' class='addressInput' name='addressto' size='2'>-<input type='text' class='addressInput' name='addressto' size='3'>";
             stringDiv += " S<input type='text' class='addressInput' name='addressto' size='5' value='" + postalcode + "'></td>";
-            stringDiv += "<tr><td ><b>Storeys :</b></td><td><input type='text' name='storeysto' size='5'></td></tr>";
-            stringDiv += "<tr><td><b>Pushing Distance :</b></td><td><input type='text' name='distanceto' size='5'> M</td></tr>";
+            stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysto' size='5'></td></tr>";
+            stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distanceto' size='5'> M</td></tr>";
             stringDiv += "</table></div>";
             newdiv.innerHTML = stringDiv;
             document.getElementById("to").appendChild(newdiv);
@@ -225,12 +225,12 @@ function searchAddressTo() {
         document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
         var modal = document.getElementById("saModal");
         modal.style.display = "block";
-        stringDiv += "<div class='address-box' id='to" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr><table style='margin-left:20%;'><col width='100'><tr><td >";
+        stringDiv += "<div class='address-box' id='to" + counter + "'><input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr><table><col width='100'><tr><td align='right'>";
         stringDiv += ("<b>Address :</b></td><td><input type='text' class='addressInput' name='addressto' size='30'>");
         stringDiv += " #<input type='text' class='addressInput' name='addressto' size='2'>-<input type='text' class='addressInput' name='addressto' size='3'>";
         stringDiv += " S<input type='text' class='addressInput' name='addressto' size='5' value='" + postalcode + "'></td>";
-        stringDiv += "<tr><td ><b>Storeys :</b></td><td><input type='text' name='storeysto' size='5'></td></tr>";
-        stringDiv += "<tr><td><b>Pushing Distance :</b></td><td><input type='text' name='distanceto' size='5'> M</td></tr>";
+        stringDiv += "<tr><td align='right'><b>Storeys :</b></td><td><input type='text' name='storeysto' size='5'></td></tr>";
+        stringDiv += "<tr><td align='right'><b>Pushing Distance :</b></td><td><input type='text' name='distanceto' size='5'> M</td></tr>";
         stringDiv += "</table></div>";
         newdiv.innerHTML = stringDiv;
         document.getElementById("to").appendChild(newdiv);

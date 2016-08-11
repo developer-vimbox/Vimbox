@@ -13,7 +13,6 @@
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Payslip payslip = PayslipDAO.getPayslip(array[0], sdf.parse(array[1]));
 %>
-<legend>Edit Payslip</legend>
 <h3 class="title-hero">
     Payslip Information
 </h3> <hr>

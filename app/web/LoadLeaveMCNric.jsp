@@ -2,8 +2,6 @@
 <%@page import="com.vimbox.hr.LeaveMC"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.vimbox.database.UserLeaveDAO"%>
-<center><h3 class="modal-title"><b>Leaves & MC History</b></h3></center>
-<hr><br>
 <%
     String nric = request.getParameter("nric");
     ArrayList<LeaveMC> leaveMCs = UserLeaveDAO.getLeaveMCRecordByNric(nric);
