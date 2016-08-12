@@ -30,7 +30,6 @@ public class RetrieveEmployeeLeaveMCController extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
         PrintWriter out = response.getWriter();
-        DecimalFormat df = new DecimalFormat("0.0");
 
         String nric = request.getParameter("nric");
         String leave = "";
@@ -39,7 +38,7 @@ public class RetrieveEmployeeLeaveMCController extends HttpServlet {
 
         User user = UserDAO.getUserByNRIC(nric);
         if (user != null) {
-            leave = df.format((user.getLeave() - user.getUsed_leave()) / 9);
+            leave = (int)((user.getLeave() - user.getUsed_leave()) / 8) + " days " + (int)((user.getLeave() - user.getUsed_leave()) % 8) + " hours";
             mc = (user.getMc() - user.getUsed_mc()) + "";
             workingDays = UserPopulationDAO.getUserWorkingDays(user.getDepartment(), user.getDesignation()) + "";
         }

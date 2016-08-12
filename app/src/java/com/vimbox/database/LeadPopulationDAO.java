@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class LeadPopulationDAO {
 
     private static final String GET_MOVE_TYPES = "SELECT * FROM system_move_types";
-    private static final String GET_LEAD_TYPES = "SELECT * FROM system_lead_types";
+    private static final String GET_ENQUIRIES = "SELECT * FROM system_enquiries";
     private static final String GET_SOURCES = "SELECT * FROM system_sources";
     private static final String GET_REFERRALS = "SELECT * FROM system_referrals";
     private static final String GET_EXISTING_ITEMS = "SELECT * FROM system_items";
@@ -22,18 +22,18 @@ public class LeadPopulationDAO {
     private static final String GET_SECONDARY_SERVICE_FORMULA = "SELECT formula FROM system_services WHERE primary_service=? AND secondary_service=?";
     private static final String GET_SECONDARY_SERVICE_DESCRIPTION = "SELECT system_services FROM services WHERE primary_service=? AND secondary_service=?";
 
-    public static ArrayList<String> getLeadTypes() {
+    public static ArrayList<String> getEnquiries() {
         ArrayList<String> results = new ArrayList<String>();
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_LEAD_TYPES);
+            ps = con.prepareStatement(GET_ENQUIRIES);
             rs = ps.executeQuery();
             while (rs.next()) {
-                String type = rs.getString("type");
-                results.add(type);
+                String enquiry = rs.getString("enquiry");
+                results.add(enquiry);
             }
         } catch (SQLException se) {
             se.printStackTrace();

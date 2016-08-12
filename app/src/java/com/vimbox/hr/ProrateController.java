@@ -52,7 +52,7 @@ public class ProrateController extends HttpServlet {
         DateTime ed = dtf.parseDateTime(enddate);
 
         if (sd.getMonthOfYear() != ed.getMonthOfYear()) {
-            errorMsg += "Start and end dates must be in the same month<br>";
+            errorMsg += "Start and end dates must be in the same month<br>Reset dates to continue<br>";
         } else if (sd.isAfter(ed)) {
             errorMsg += "Start date must be before end date<br>";
         }

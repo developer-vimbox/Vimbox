@@ -49,8 +49,13 @@ public class CreateEmployeeController extends HttpServlet {
         }
         
         String user_nric = request.getParameter("user_nric");
-        if(user_nric.length() != 9){
-            errorMsg+="Please enter a valid NRIC<br>";
+        if(user_nric.isEmpty()){
+            errorMsg+="Please enter employee's NRIC<br>";
+        }else{
+            boolean exist = UserDAO.checkNric(user_nric);
+            if(exist){
+                errorMsg+="An employee has been created under the same NRIC<br>";
+            }
         }
         
         String user_dj = request.getParameter("user_dj");
@@ -168,6 +173,11 @@ public class CreateEmployeeController extends HttpServlet {
         }
         if(user_username != null && !user_username.contains("@")){
             errorMsg+="Please enter a valid email address<br>";
+        }else{
+            boolean exist = UserDAO.checkUsername(user_username);
+            if(exist){
+                errorMsg+="An account has been created under the same username<br>";
+            }
         }
         if(user_password != null && user_password.isEmpty()){
             errorMsg+="Please enter a password<br>";

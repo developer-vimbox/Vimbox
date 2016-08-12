@@ -24,7 +24,7 @@
     String dateTime = Converter.convertDate(ticket.getDatetime_of_creation());
     String status = ticket.getStatus();
 %>
-<table>
+<table class="table">
     <tr>
         <td align="right">Ticket ID: </td>
         <td><%=ticketId%></td>

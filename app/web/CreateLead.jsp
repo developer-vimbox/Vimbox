@@ -96,7 +96,7 @@
             }
         </style>
     </head>
-    <body onload="create_leadSetup()">
+    <body>
         <%@include file="header.jsp"%>
          <!-- The Modal -->
         <div id="saModal" class="modal">
@@ -152,8 +152,6 @@
                     </div>
                     <div class="panel">
                         <div class="panel-body">
-
-
                             <form class='form-horizontal' method="POST" action="CreateLeadController" autocomplete="on" id="create_lead_form">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Lead ID: </label>
@@ -200,25 +198,6 @@
                                     </div>
 
                                     <hr>
-                                     <div class="form-group ">
-                                            <label class="col-sm-3 control-label">Referred by: </label>
-                                            <div class="col-sm-4">
-                                                <div class="form-group row">
-                                                    <div class="col-sm-6">
-                                                        <select class="form-control" name="referral" id="referral" onchange="showfield(this.options[this.selectedIndex].value)">
-                                                           <%                                for (String referral : referrals) {
-                                                            out.println("<option value='" + referral + "'>" + referral + "</option>");
-                                                        }
-                                                    %>
-                                                    <option value="Others">Others</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                         <div id="referralOthers" style="display:inline-block"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     <div id="customer_information_table" style="display:none">
                                         <input type="hidden" id="customer_id" name="customer_id">
                                         <div class="form-group">
@@ -319,83 +298,97 @@
                                 <br>
                                 <fieldset>
                                     <legend>Lead Information</legend>
-                                     <div class="form-group">
-                                            <label class="col-sm-3 control-label">Lead Type: </label>
-                                            <div class="col-sm-6">
-                                                 <div id="leadInfo">
-                                                       <%
-                                                        for (String type : types) {
-                                                            out.println("<input class='checkbox-inline' type='checkbox' name='leadType' value='" + type + "'>" + type);
-                                                        }
-                                                    %>
-                                                    </div>
-
+                                    <br>
+                                    <fieldset>
+                                        <b><u>Site Survey Details</u></b><br><br>
+                                        <div class="form-group">
+                                        <label class="col-sm-3 control-label">Survey Date: </label>
+                                        <div class="col-sm-4">
+                                             <input class='form-control' type="date" id="sitesurvey_date">
+                                        </div>
+                                              </div>
+                                        <div class="form-group">
+                                        <label class="col-sm-3 control-label">Surveyor: </label>
+                                        <div class="col-sm-4">
+                                            <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
+                                                <span class="input-group-btn"> 
+                                                    <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
+                                                </span>
                                             </div>
                                         </div>
-
-                                    <div id="Enquiry" style="display:none">
-                                        <br>
-                                        <fieldset>
-                                            <b><u>Enquiry Details</u></b><br><br>
-                                            <table>
-                                                <col width="100">
-                                                <tr>
-                                                    <td align="right"><b>Remarks :</b></td>
-                                                    <td>
-                                                        <textarea class='form-control' name="enquiry" cols="75" rows="6" autocomplete="off"></textarea>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </fieldset>
                                     </div>
-
-                                    <div id="Sales" style="display:none">
-                                        <br>
-                                        <fieldset>
-                                            <b><u>Site Survey Details</u></b><br><br>
-                                            <div class="form-group">
-                                            <label class="col-sm-3 control-label">Survey Date: </label>
-                                            <div class="col-sm-4">
-                                                 <input class='form-control' type="date" id="sitesurvey_date">
-                                            </div>
-                                                  </div>
-                                            <div class="form-group">
-                                            <label class="col-sm-3 control-label">Surveyor: </label>
-                                            <div class="col-sm-4">
-                                                <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                                    <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
-                                                    <span class="input-group-btn"> 
-                                                        <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
-                                                    </span>
+                                        <div id="schedule_modal" class="modal">
+                                            <div class="survey-modal-content">
+                                                <div class="modal-body">
+                                                    <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                                                    <div id="schedule_content"></div>
                                                 </div>
                                             </div>
                                         </div>
-                                            <div id="schedule_modal" class="modal">
-                                                <div class="survey-modal-content">
-                                                    <div class="modal-body">
-                                                        <span class="close" onclick="closeModal('schedule_modal')">×</span>
-                                                        <div id="schedule_content"></div>
-                                                    </div>
+                                        <div id="survey"></div>
+                                    </fieldset>
+                                    <br>
+                                    <fieldset>
+                                        <b><u>Sales Details</u></b><hr>
+                                        <ul class="tab" id="sales_list">
+                                        </ul>
+                                        <div id="sales_container"></div>
+                                    </fieldset>
+                                </fieldset>    
+                                <br>
+                                <fieldset>
+                                    <legend>Enquiry Information</legend>
+                                    <div class="form-group ">
+                                        <label class="col-sm-3 control-label">Enquiry: </label>
+                                        <div class="col-sm-4">
+                                            <div class="form-group row">
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="enquiry" id="enquiry" onchange="showfield(this.options[this.selectedIndex].value, this)">
+                                                        <option value="SELECT">--Select--</option>
+                                                       <%                                for (String enquiry : enquiries) {
+                                                        out.println("<option value='" + enquiry + "'>" + enquiry + "</option>");
+                                                    }
+                                                %>
+                                                <option value="Others">Others</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                     <div id="enquiryOthers" style="display:inline-block"></div>
                                                 </div>
                                             </div>
-                                            <div id="survey"></div>
-                                        </fieldset>
-                                        <br>
-                                        <fieldset>
-                                            <b><u>Sales Details</u></b><hr>
-                                            <ul class="tab" id="sales_list">
-                                            </ul>
-                                            <div id="sales_container"></div>
-                                        </fieldset>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="form-group ">
+                                        <label class="col-sm-3 control-label">Referred by: </label>
+                                        <div class="col-sm-4">
+                                            <div class="form-group row">
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="referral" id="referral" onchange="showfield(this.options[this.selectedIndex].value, this)">
+                                                       <%                                for (String referral : referrals) {
+                                                        out.println("<option value='" + referral + "'>" + referral + "</option>");
+                                                    }
+                                                %>
+                                                <option value="Others">Others</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                     <div id="referralOthers" style="display:inline-block"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </fieldset>
+                                
                                 <br>
                                 <table>
                                     <tr>
                                         <td></td>
                                         <td>
-                                              <div class="bg-default text-center">
-<button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary">Save</button></div>
+                                            <div class="bg-default text-center">
+                                                <button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary">Save</button>
+                                            </div>
                                             <!--<input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">-->
                                             <!--<button onclick="return checkEmail();">Email Quotation</button>-->
                                         </td>
@@ -407,8 +400,7 @@
                 </div>
             </div>
         </div>
-
-       
+        
         <script>
             $('#create_lead_form').ajaxForm({
                 dataType: 'json',
@@ -434,8 +426,7 @@
                     message.innerHTML = data;
                     modal.style.display = "block";
                 }
-            });
-
+            }); 
             jQuery(document).bind('keydown', 'ctrl+shift', function (e) {
                 var tableClassName = $(document.activeElement.parentNode.parentNode.parentNode.parentNode).attr('class');
 

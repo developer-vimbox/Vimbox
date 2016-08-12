@@ -231,7 +231,7 @@
                     <td align="right">Svcs :</td>
                     <td align="center">
                         <button style="width:100%" onclick="selectService('<%=divId%>');
-                                return false;">Add service</button>
+                                return false;">Services</button>
                         <!-- Service Modal -->
                         <div id="<%=divId%>_serviceModal" class="service">
                             <!-- Modal content -->
@@ -490,7 +490,7 @@
                                 <td>
                                     <table border="1">
                                         <tr style="height:10%;background-color:Plum;">
-                                            <th>Customer Remarks</th>
+                                            <th>Staff Remarks</th>
                                         </tr>
                                         <tr>
                                             <td>

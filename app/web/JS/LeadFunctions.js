@@ -235,15 +235,20 @@ function edit_leadSetup() {
     checkLeadInformation();
 }
 
-function create_leadSetup() {
-    checkLeadInformation();
-}
-
-function showfield(name) {
+function showfield(name, e) {
+    var id = e.id;
     if (name == 'Others') {
-        document.getElementById('referralOthers').innerHTML = 'Others: <input type="text" name="referralOthers" />';
+        if(id === 'enquiry'){
+            document.getElementById('enquiryOthers').innerHTML = 'Others: <input type="text" name="enquiryOthers" />';
+        }else{
+            document.getElementById('referralOthers').innerHTML = 'Others: <input type="text" name="referralOthers" />';
+        }
     } else {
-        document.getElementById('referralOthers').innerHTML = '';
+        if(id === 'enquiry'){
+            document.getElementById('enquiryOthers').innerHTML = '';
+        }else{
+            document.getElementById('referralOthers').innerHTML = '';
+        }
     }
 }
 
@@ -1595,3 +1600,5 @@ function selectSurveyor() {
         }
     }
 }
+
+   

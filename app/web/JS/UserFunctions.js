@@ -19,7 +19,7 @@ $('#login_form').ajaxForm({
         var msgStatus = document.getElementById("message-status");
         var msgContent = document.getElementById("message-content");
         msgStatus.innerHTML = "ERROR";
-        msgContent.innerHTML = error;
+        msgContent.innerHTML = data;
         modal.style.display = "block";
     }
 });

@@ -38,24 +38,6 @@
                 </div>
             </div>
         </div>
-        <!-- The Modal for View Tickets-->
-        <div class="modal" id="viewTicketModal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('viewTicketModal')">×</span>
-                <div id="viewTicketModalContent">
-                </div>
-            </div>
-        </div>
-        <!-- The Modal for View Comment-->
-        <div id="viewCommentsModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('viewCommentsModal')">×</span>
-                    <div id="commentsContent"></div> 
-                </div>
-            </div>
-        </div>
         <div id="page-content-wrapper">
             <div id="page-content">
                 <div class="container">
@@ -148,8 +130,34 @@
                                                     <td><%=dateTime%></td>
                                                     <td><%=status%></td>
                                                     <td>
-                                                        <button class="btn btn-default" onclick="viewTicket('<%=ticketId%>')">VT</button>
-                                                        <button class="btn btn-default"  onclick="viewComments('<%=ticketId%>')">VC</button>
+                                                        <button class="btn btn-default" onclick="viewEachTicket('<%=ticketId%>')" data-toggle="modal" data-target="#viewEachTicketModal">VT</button>
+                                                        <div class="modal" id="viewEachTicketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                            <div class="modal-dialog" style="width: 500px;">
+                                                                <div class="modal-content" style="width: 500px;">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <h3>Ticket Details</h3>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="viewEachTicketModalContent"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn btn-default"  onclick="viewEachComment('<%=ticketId%>')" data-toggle="modal" data-target="#viewEachCommentModal">VC</button>
+                                                        <div class="modal" id="viewEachCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                            <div class="modal-dialog" style="width: 500px;">
+                                                                <div class="modal-content" style="width: 500px;">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <h3>Comment Details</h3>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="viewEachCommentModalContent"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <%
@@ -207,7 +215,20 @@
                                                     <td><%=dateTime%></td>
                                                     <td><%=status%></td>
                                                     <td>
-                                                        <button class="btn btn-default " value="<%=ticketId%>" onclick="viewTicket('<%=ticketId%>')">VT</button>
+                                                        <button class="btn btn-default " value="<%=ticketId%>" onclick="viewEachTicket('<%=ticketId%>')" data-toggle="modal" data-target="#viewTicketModall">VT</button>
+                                                        <div class="modal" id="viewTicketModall" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                            <div class="modal-dialog" style="width: 500px;">
+                                                                <div class="modal-content" style="width: 500px;">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <h3>Ticket Details</h3>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="viewEachTicketModalContent"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <button class="btn btn-default " value="<%=ticketId%>" onclick="viewComments('<%=ticketId%>')">VC</button>
                                                     </td>
                                                 </tr>

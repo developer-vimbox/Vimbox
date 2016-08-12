@@ -46,6 +46,46 @@ public class UserDAO {
     private static final String UPDATE_USER_LEAVE = "UPDATE users_leave SET used_leave=? WHERE nric=?";
     private static final String UPDATE_USER_MC = "UPDATE users_leave SET used_mc=? WHERE nric=?";
 
+    public static boolean checkNric(String nric){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_USER_BY_NRIC);
+            ps.setString(1, nric);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return false;
+    }
+    
+    public static boolean checkUsername(String username){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_USER_ACCOUNT_BY_USERNAME);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return false;
+    }
+    
     public static void deleteUser(String nric) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -621,9 +661,9 @@ public class UserDAO {
             ps.setString(1, nric);
             ps.setDate(2, new java.sql.Date(dj.getTime()));
             int days = Converter.getTotalDaysBetweenTwoDates(dj, new Date());
-            int leave = ((days / 365) + 7) * 9;
-            if (leave > (14*9)) {
-                leave = (14*9);
+            int leave = ((days / 365) + 7) * 8;
+            if (leave > (14*8)) {
+                leave = (14*8);
             }
             ps.setDouble(3, leave);
             ps.setInt(4, 14);
