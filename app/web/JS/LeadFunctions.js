@@ -43,7 +43,10 @@ function openSales(evt, cityName) {
 function addDom(divName) {
     var newdiv = document.createElement('div');
     var stringDiv = "";
-    stringDiv += "<div id='" + domCounter + "'><table class='dynamicDomTable'><tr><td><input type='date' name='dom'></td><td><input type='button' value='x' onClick='removeInput(" + domCounter + ");'></td></tr></table></div>";
+    stringDiv += '<div class="input-group">';
+    stringDiv += "<span class='input-group-btn'><input class='btn btn-round btn-warning' type='button' value='x' onClick='removeDom("+domCounter+");'></span>";
+    stringDiv += "<div id='" + domCounter + "'><input class='form-control' type='date' name='dom'/></div>";
+    stringDiv += "</div>";
     newdiv.innerHTML = stringDiv;
     document.getElementById(divName).appendChild(newdiv);
     domCounter++;
@@ -85,24 +88,30 @@ function followupLead(lead_id) {
 }
 
 function viewLead(leadId) {
+    var modal = document.getElementById("viewLeadModal");
     var content = document.getElementById("leadContent");
     $.get("RetrieveLeadDetails.jsp", {getLid: leadId}, function (data) {
         content.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
 function viewFollowups(leadId) {
-    var div1 = document.getElementById("followUpContent");
+    var modal = document.getElementById("viewCommentsModal");
+    var div1 = document.getElementById("commentsContent");
     $.get("RetrieveLeadFollowup.jsp", {getLid: leadId}, function (data) {
         div1.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
 function viewLeadsHistory(custId) {
+    var modal = document.getElementById("leadsHistoryModel");
     var leadsHistoryContent = document.getElementById("leadsHistoryContent");
     $.get("LeadsHistory.jsp", {getId: custId}, function (data) {
         leadsHistoryContent.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
 //------------------------- LeadType Functions---------------------------//
@@ -235,20 +244,15 @@ function edit_leadSetup() {
     checkLeadInformation();
 }
 
-function showfield(name, e) {
-    var id = e.id;
+function create_leadSetup() {
+    checkLeadInformation();
+}
+
+function showfield(name) {
     if (name == 'Others') {
-        if(id === 'enquiry'){
-            document.getElementById('enquiryOthers').innerHTML = 'Others: <input type="text" name="enquiryOthers" />';
-        }else{
-            document.getElementById('referralOthers').innerHTML = 'Others: <input type="text" name="referralOthers" />';
-        }
+        document.getElementById('referralOthers').innerHTML = '<label class="col-sm-6 control-label">Others: </label>  <div class="col-sm-4"><input class="form-control" type="text" name="referralOthers" style="width: 200px;" /></div>';
     } else {
-        if(id === 'enquiry'){
-            document.getElementById('enquiryOthers').innerHTML = '';
-        }else{
-            document.getElementById('referralOthers').innerHTML = '';
-        }
+        document.getElementById('referralOthers').innerHTML = '';
     }
 }
 
@@ -469,7 +473,7 @@ function addCustomerBox(divId) {
         tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_customerItemCharge' value=''></td>";
         tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='" + divId + "_customerItemQty' value='" + boxUnit + "'></td>";
         tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='" + divId + "_customerItemUnit' value='" + boxUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick=\"deleteBox(this,'" + divId + "')\"/></td></tr>";
+        tr += "<td align='right'><input class='btn btn-default' type='button' value='x' onclick=\"deleteBox(this,'" + divId + "')\"/></td></tr>";
         $(tr).prependTo("#" + divId + "_customerItemsTable > tbody");
         addUnits(Number(boxUnit), divId);
         boxObject.value += (Number(boxUnit));
@@ -512,7 +516,7 @@ function addItem(divId) {
         tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_customerItemCharge' value=''></td>";
         tr += "<td align='center'>" + itemQty + "<input type='hidden' name='" + divId + "_customerItemQty' value='" + itemQty + "'></td>";
         tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='" + divId + "_customerItemUnit' value='" + itemUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick=\"deleteItem(this,'" + divId + "')\"/></td></tr>";
+        tr += "<td align='right'><input class='form-control' type='button' value='x' onclick=\"deleteItem(this,'" + divId + "')\"/></td></tr>";
         $(tr).prependTo("#" + divId + "_customerItemsTable > tbody");
         addUnits(Number(itemUnit), divId);
         $("#" + divId + "_itemName").val("");
@@ -563,7 +567,7 @@ function addSpecialItem(divId) {
         tr += "<td align='center'>" + itemCharges + "<input type='hidden' name='" + divId + "_customerItemCharge' value='" + itemCharges + "'></td>";
         tr += "<td align='center'>" + itemQty + "<input type='hidden' name='" + divId + "_customerItemQty' value='" + itemQty + "'></td>";
         tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='" + divId + "_customerItemUnit' value='" + itemUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick=\"deleteItem(this,'" + divId + "')\"/></td></tr>";
+        tr += "<td align='right'><input class='form-control' type='button' value='x' onclick=\"deleteItem(this,'" + divId + "')\"/></td></tr>";
         $(tr).prependTo("#" + divId + "_customerItemsTable > tbody");
         addCharge.value += (Number(itemCharges));
         addUnits(Number(itemUnit), divId);
@@ -619,7 +623,7 @@ function addVimboxBox(divId) {
         tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_vimboxItemCharge' value=''></td>";
         tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='" + divId + "_vimboxItemQty' value='" + boxUnit + "'></td>";
         tr += "<td align='center'>" + boxUnit + "<input type='hidden' name='" + divId + "_vimboxItemUnit' value='" + boxUnit + "'></td>";
-        tr += "<td align='right'><input type='button' value='x' onclick=\"deleteBox(this, '" + divId + "')\"/></td></tr>";
+        tr += "<td align='right'><input class='form-control' type='button' value='x' onclick=\"deleteBox(this, '" + divId + "')\"/></td></tr>";
         $(tr).prependTo("#" + divId + "_vimboxItemsTable > tbody");
         addUnits(Number(boxUnit), divId);
         boxObject.value += (Number(boxUnit));
@@ -663,7 +667,7 @@ function addVimboxMaterial(divId) {
         tr += "<td align='center'>" + itemCharge + "<input type='hidden' name='" + divId + "_vimboxMaterialCharge' value='" + itemCharge + "'></td>";
         tr += "<td align='center'>" + itemUnit + "<input type='hidden' name='" + divId + "_vimboxMaterialQty' value='" + itemUnit + "'></td>";
         tr += "<td align='center'>&nbsp;</td>";
-        tr += "<td align='right'><input type='button' value='x' onclick='deleteMaterial(this)'/></td></tr>";
+        tr += "<td align='right'><input class='form-control' type='button' value='x' onclick='deleteMaterial(this)'/></td></tr>";
         $(tr).prependTo("#" + divId + "_vimboxItemsTable > tbody");
         matObject.value += (Number(itemCharge));
         $("#" + divId + "_vimboxMaterial").val("");
@@ -774,8 +778,9 @@ function selectServiceSlot(e, divId) {
                 }
                 (frml.value)[divId + "_" + id] = serviceArray[1];
                 var tr = "<tr id='" + divId + "_" + id + "'><td>";
-                tr += "<table class='serviceTable'>"
-                tr += "<tr height='10%'><td>" + pri + " - " + sec + "<input type='hidden' name='" + divId + "_serviceName' value='" + id + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='" + divId + "_serviceCharge'></td></tr>";
+                tr += "<table class='table serviceTable'>"
+                tr += "<tr height='10%'><td>" + pri + " - " + sec + "<input type='hidden' name='" + divId + "_serviceName' value='" + id + "'></td><td align='right'>\n\
+<div class='input-group'><span class='input-group-addon'>$</span><input class='form-control' type='number' step='0.01' min='0' name='" + divId + "_serviceCharge'></div></td></tr>";
                 tr += "<tr>" + generateBreakdown(divId + "_" + id, divId) + "</tr></table></td></tr>";
                 $("#" + divId + "_servicesTable").append(tr);
                 cell.addClass('selected');
@@ -1600,5 +1605,3 @@ function selectSurveyor() {
         }
     }
 }
-
-   
