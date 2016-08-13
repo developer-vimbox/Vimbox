@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="form-group text-center">
-                    <button class="btn btn-default" onclick="createCustomer();
+                    <button class="btn btn-primary" onclick="createCustomer();
                             return false;">Add</button>
                 </div>
             </div>

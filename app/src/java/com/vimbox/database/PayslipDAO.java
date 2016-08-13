@@ -31,6 +31,7 @@ public class PayslipDAO {
     private static final String GET_PAYSLIP_ABD = "SELECT * FROM payslips_abd WHERE payslip_id=?";
     private static final String GET_PAYSLIP_DBD = "SELECT * FROM payslips_dbd WHERE payslip_id=?";
     private static final String GET_PAYSLIP_APBD = "SELECT * FROM payslips_apbd WHERE payslip_id=?";
+    private static final String GET_PAYSLIP_BY_ID = "SELECT * FROM payslips WHERE payslip_id=?";
     private static final String GET_PAYSLIP = "SELECT * FROM payslips WHERE nric=? AND start_date=?";
     private static final String DELETE_PAYSLIP = "DELETE FROM payslips WHERE payslip_id=?";
     private static final String DELETE_PAYSLIP_ABD = "DELETE FROM payslips_abd WHERE payslip_id=?";
@@ -510,6 +511,68 @@ public class PayslipDAO {
                 java.sql.Date sd = rs.getDate("start_date");
 
                 int payslip_id = rs.getInt("payslip_id");
+                String paymentMode = rs.getString("payment_mode");
+                DateTime startDate = new DateTime(sd);
+                DateTime endDate = new DateTime(rs.getDate("end_date"));
+                DateTime paymentDate = new DateTime(rs.getDate("payment_date"));
+                double basic = rs.getDouble("basic");
+                double allowance = rs.getDouble("allowance");
+                double deduction = rs.getDouble("deduction");
+                double overtimeHr = rs.getDouble("overtime_hr");
+                double overtime = rs.getDouble("overtime");
+                double additional = rs.getDouble("additional");
+                double employerCpf = rs.getDouble("employer_cpf");
+
+                HashMap<String, Double> allowanceBreakdown = new HashMap<String, Double>();
+                ps = con.prepareStatement(GET_PAYSLIP_ABD);
+                ps.setInt(1, payslip_id);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    allowanceBreakdown.put(rs.getString("description"), rs.getDouble("breakdown"));
+                }
+
+                HashMap<String, Double> deductionBreakdown = new HashMap<String, Double>();
+                ps = con.prepareStatement(GET_PAYSLIP_DBD);
+                ps.setInt(1, payslip_id);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    deductionBreakdown.put(rs.getString("description"), rs.getDouble("breakdown"));
+                }
+
+                HashMap<String, Double> addPaymentBreakdown = new HashMap<String, Double>();
+                ps = con.prepareStatement(GET_PAYSLIP_APBD);
+                ps.setInt(1, payslip_id);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    addPaymentBreakdown.put(rs.getString("description"), rs.getDouble("breakdown"));
+                }
+                payslip = new Payslip(payslip_id, user, paymentMode, startDate, endDate, paymentDate, basic, allowance, deduction, overtimeHr, overtime, additional, employerCpf, allowanceBreakdown, deductionBreakdown, addPaymentBreakdown);
+
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return payslip;
+    }
+    
+    public static Payslip getPayslipById(int payslip_id) {
+        Payslip payslip = null;
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_PAYSLIP_BY_ID);
+            ps.setInt(1, payslip_id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                String nric = rs.getString("nric");
+                User user = UserDAO.getUserByNRIC(nric);
+                java.sql.Date sd = rs.getDate("start_date");
+
                 String paymentMode = rs.getString("payment_mode");
                 DateTime startDate = new DateTime(sd);
                 DateTime endDate = new DateTime(rs.getDate("end_date"));

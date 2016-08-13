@@ -173,6 +173,7 @@
                                                     <center><h2>Add New Customer</h2></center>
                                                 </div>
                                                 <div class="modal-body">
+                                                    <br>
                                                     <div id="add_customer_content"></div>
                                                 </div>
                                             </div>

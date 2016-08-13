@@ -1,7 +1,6 @@
 <%@page import="com.vimbox.util.Converter"%>
 <%@page import="java.util.Random"%>
 <%@page import="org.joda.time.DateTime"%>
-<%@include file="ValidateLogin.jsp"%>
 <%@include file="PopulateLeadFields.jsp"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,8 +17,6 @@
         <script src="JS/LeadFunctions.js"></script>
         <script src="JS/AddressSearch.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
-
-        <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
         <style>
 
             table.salesTable td {
@@ -100,257 +97,7 @@
         </style>
     </head>
     <body onload="create_leadSetup()">
-        <%            int leadId = new Random().nextInt(900000000) + 100000000;
-        %>
-        <h1>Create New Lead</h1>
-
-        <form method="POST" action="CreateLeadController" autocomplete="on" id="create_lead_form">
-            <table style="width:250px;">
-                <tr>
-                    <td align="right"><b>Lead ID :</b></td>
-                    <td><%=leadId%><input type="hidden" id="leadId" name="leadId" value="<%=leadId%>"></td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Status :</b></td>
-                    <td>Pending <input type="hidden" name="status" value="Pending"></td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Source :</b></td>
-                    <td>
-                        <%
-                            for (int i = 0; i < sources.size(); i++) {
-                                String source = sources.get(i);
-                                if (i == 0) {
-                                    out.println("<input type='radio' name='source' value='" + source + "' checked>" + source);
-                                } else {
-                                    out.println("<input type='radio' name='source' value='" + source + "'>" + source);
-                                }
-                            }
-
-                        %>
-                    </td>
-                </tr>
-            </table>
-            <fieldset>
-                <legend>Customer Information</legend>
-                <input type="text" id="customer_search" placeholder="Enter customer name">
-                <button onclick='customerSearch("ticket");
-                        return false;'>Search</button>
-                <button onclick="addNewCustomer();
-                        return false;">Add New</button>
-
-                <div id="customer_modal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <span class="close" onclick="closeModal('customer_modal')">×</span>
-                            <div id="customer_content"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="customer_error_modal" class="modal">
-                    <div class="error-modal-content">
-                        <div class="modal-body">
-                            <span class="close" onclick="closeModal('customer_error_modal')">×</span>
-                            <div id="customer_error_status"></div>
-                            <hr>
-                            <div id="customer_error_message"></div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <table>
-                    <col width="100">
-                    <tr>
-                        <td align="right"><b>Referred by :</b></td>
-                        <td>
-                            <select name="referral" id="referral" onchange="showfield(this.options[this.selectedIndex].value)">
-                                <%                                for (String referral : referrals) {
-                                        out.println("<option value='" + referral + "'>" + referral + "</option>");
-                                    }
-                                %>
-                                <option value="Others">Others</option>
-                            </select>
-                            <div id="referralOthers" style="display:inline-block"></div>
-                        </td>
-                    </tr>
-                </table>
-                <div id="customer_information_table" style="display:none">
-                    <input type="hidden" id="customer_id" name="customer_id">
-                    <table>
-                        <col width="100">
-                        <tr>
-                            <td align="right"><b>Salutation :</b></td>
-                            <td>
-                                <label id="customer_salutation"></label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right"><b>First Name :</b></td>
-                            <td>
-                                <label id="customer_first_name"></label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right"><b>Last Name :</b></td>
-                            <td>
-                                <label id="customer_last_name"></label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right"><b>Contact :</b></td>
-                            <td>
-                                <label id="customer_contact"></label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right"><b>Email :</b></td>
-                            <td>
-                                <label id="customer_email"></label>
-                            </td>
-                        </tr>
-                    </table>
-                </div>        
-            </fieldset>
-            <br>
-            <fieldset>
-                <legend>Moving Information</legend>
-                <table>
-                    <col width="100">
-                    <tr>
-                        <td align="right"><b>Move Type :</b></td>
-                        <td>
-                            <%
-                                for (String type : moveTypes) {
-                                    out.println("<input type='checkbox' name='tom' value='" + type + "'>" + type);
-                                }
-                            %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>DOM :</b></td>
-                        <td>
-                            <div id="dynamicDom">
-                                <div id="1">
-                                    <table class="dynamicDomTable">
-                                        <tr>
-                                            <td><input type="date" name="dom"></td>
-                                            <td><input type="button" value="+" onClick="addDom('dynamicDom');"></td>
-                                        </tr>    
-                                    </table>
-                                </div>
-                            </div>
-
-                        </td>
-                    </tr>
-                </table>
-                <br>
-                <fieldset>
-                    <b><u>Moving From</u></b><br><br>
-                    <b>S </b><input type="text" id="postalfrom" placeholder="Enter Postal Code">
-                    <button onclick="searchAddressFrom();
-                            return false;">Search address from</button>
-                    <div id="from">
-                    </div>
-                </fieldset>
-                <br>
-                <fieldset>
-                    <b><u>Moving To</u></b><br><br>
-                    <b>S </b><input type="text" id="postalto" placeholder="Enter Postal Code">
-                    <button onclick="searchAddressTo();
-                            return false;">Search address to</button>
-                    <div id="to">
-                    </div>
-                </fieldset>
-            </fieldset>
-            <br>
-            <fieldset>
-                <legend>Lead Information</legend>
-                <table>
-                    <col width="100">
-                    <tr>
-                        <td align="right"><b>Lead Type :</b></td>
-                        <td>
-                            <div id="leadInfo">
-                                <%
-                                    for (String type : types) {
-                                        out.println("<input type='checkbox' name='leadType' value='" + type + "'>" + type);
-                                    }
-                                %>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-
-                <div id="Enquiry" style="display:none">
-                    <br>
-                    <fieldset>
-                        <b><u>Enquiry Details</u></b><br><br>
-                        <table>
-                            <col width="100">
-                            <tr>
-                                <td align="right"><b>Remarks :</b></td>
-                                <td>
-                                    <textarea name="enquiry" cols="75" rows="6" autocomplete="off"></textarea>
-                                </td>
-                            </tr>
-                        </table>
-                    </fieldset>
-                </div>
-
-                <div id="Sales" style="display:none">
-                    <br>
-                    <fieldset>
-                        <b><u>Site Survey Details</u></b><br><br>
-                        <table>
-                            <col width="100">
-                            <tr>
-                                <td align="right"><b>Survey Date :</b></td>
-                                <td>
-                                    <input type="date" id="sitesurvey_date">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right"><b>Surveyor :</b></td>
-                                <td>
-                                    <input type="text" id="employee_search" placeholder="Enter site surveyor name">
-                                    <button onclick="viewSchedule();
-                                            return false;">View Schedule</button>
-                                </td>
-                            </tr>
-                        </table>
-                        <div id="schedule_modal" class="modal">
-                            <div class="survey-modal-content">
-                                <div class="modal-body">
-                                    <span class="close" onclick="closeModal('schedule_modal')">×</span>
-                                    <div id="schedule_content"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="survey"></div>
-                    </fieldset>
-                    <br>
-                    <fieldset>
-                        <b><u>Sales Details</u></b><hr>
-                        <ul class="tab" id="sales_list">
-                        </ul>
-                        <div id="sales_container"></div>
-                    </fieldset>
-                </div>
-            </fieldset>
-            <br>
-            <table>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type="submit" value="Save">
-                        <!--<input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">-->
-                        <!--<button onclick="return checkEmail();">Email Quotation</button>-->
-                    </td>
-                </tr>
-            </table>
-        </form>
-
+        <%@include file="header.jsp"%>
         <!-- The Modal -->
         <div id="saModal" class="modal">
             <!-- Modal content -->
@@ -375,6 +122,371 @@
                 </div>
             </div>
         </div>
+        <div id="customer_modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('customer_modal')">×</span>
+                    <center><h2>Select Customer</h2></center>
+                </div>
+                <div class="modal-body">
+                    <br>
+                    <div id="customer_content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="add_customer_modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('add_customer_modal')">×</span>
+                    <center><h2>Add New Customer</h2></center>
+                </div>
+                <div class="modal-body">
+                    <br>
+                    <div id="add_customer_content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="customer_error_modal" class="modal">
+            <div class="error-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('customer_error_modal')">×</span>
+                    <div id="customer_error_status"></div>
+                    <hr>
+                    <div id="customer_error_message"></div>
+                </div>
+            </div>
+        </div>
+        <%            int leadId = new Random().nextInt(900000000) + 100000000;
+        %>
+        <div id="page-content-wrapper">
+
+            <div id="page-content" style="min-height: 7630px;">
+                <div class="container">
+                    <div id="page-title">
+                        <h2>Create New Leads</h2> <br>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-body">
+
+
+                            <form class='form-horizontal' method="POST" action="CreateLeadController" autocomplete="on" id="create_lead_form">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Lead ID: </label>
+                                    <div class="col-sm-4">
+                                        <%=leadId%><input type="hidden" id="leadId" name="leadId" value="<%=leadId%>">
+                                        <br><br>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Status: </label>
+                                    <div class="col-sm-4">
+                                        Pending<input type="hidden" name="status" value="Pending">
+                                        <br><br>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Source: </label>
+                                    <div class="col-sm-4">
+                                        <%
+                                            for (int i = 0; i < sources.size(); i++) {
+                                                String source = sources.get(i);
+                                                if (i == 0) {
+                                                    out.println("<input class='radio-inline' type='radio' name='source' value='" + source + "' checked>" + source);
+                                                } else {
+                                                    out.println("<input class='radio-inline' type='radio' name='source' value='" + source + "'>" + source);
+                                                }
+                                            }
+
+                                        %>
+                                    </div>
+                                </div>  
+                                <fieldset>
+                                    <legend>Customer Information</legend>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label"> </label>
+                                        <div class="col-sm-4">
+                                            <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                <input type="text" id="customer_search" placeholder="Enter customer name" class="form-control" style="width: 400px;color:black;">
+                                                <span class="input-group-btn"> 
+                                                    <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="customerSearch('ticket')" >Search</button>
+                                                    <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="addNewCustomer()">Add New</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+                                    <div id="customer_information_table" style="display:none">
+                                        <input type="hidden" id="customer_id" name="customer_id">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Salutation: </label>
+                                            <div class="col-sm-4">
+                                                <label id="customer_salutation"></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">First Name: </label>
+                                            <div class="col-sm-4">
+                                                <label id="customer_first_name"></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Last Name: </label>
+                                            <div class="col-sm-4">
+                                                <label id="customer_last_name"></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Contact: </label>
+                                            <div class="col-sm-4">
+                                                <label id="customer_contact"></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Email: </label>
+                                            <div class="col-sm-4">
+                                                <label id="customer_email"></label>
+                                            </div>
+                                        </div>
+                                    </div>        
+                                </fieldset>
+                                <br>
+                                <fieldset>
+                                    <legend>Moving Information</legend>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Move Type: </label>
+                                        <div class="col-sm-6">
+                                            <%                                                for (String type : moveTypes) {
+                                                    out.println("<input class='checkbox-inline' type='checkbox' name='tom' value='" + type + "'>" + type);
+                                                }
+                                            %>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Date Of Move: </label>
+                                        <div class="col-sm-5">
+                                            <div id="dynamicDom">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <input class="btn btn-round btn-primary" type="button" value="+" onClick="addDom('dynamicDom');">
+                                                    </span>
+                                                    <div id="1">
+                                                        <input class='form-control' type='date' name='dom'/>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <fieldset>
+                                        <b><u>Moving From</u></b><br><br>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">S </label>
+                                            <div class="col-sm-4">
+                                                <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                    <input type="text" id="postalfrom" placeholder="Enter Postal Code" class="form-control" style="width: 400px;color:black;">
+                                                    <span class="input-group-btn"> 
+                                                        <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="searchAddressFrom()">Search address from</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="from">
+                                        </div>
+                                    </fieldset>
+                                    <br>
+                                    <fieldset>
+                                        <b><u>Moving To</u></b><br><br>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">S </label>
+                                            <div class="col-sm-4">
+                                                <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                    <input type="text" id="postalto" placeholder="Enter Postal Code" class="form-control" style="width: 400px;color:black;">
+                                                    <span class="input-group-btn"> 
+                                                        <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="searchAddressTo()">Search address to</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="to">
+                                        </div>
+                                    </fieldset>
+                                </fieldset>
+                                <br>
+                                <fieldset>
+                                    <legend>Lead Information</legend>
+                                    <br>
+                                    <fieldset>
+                                        <b><u>Site Survey Details</u></b><br><br>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Survey Date: </label>
+                                            <div class="col-sm-4">
+                                                <input class="form-control" type="date" id="sitesurvey_date">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Surveyor: </label>
+                                            <div class="col-sm-4">
+                                                <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                    <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
+                                                    <span class="input-group-btn"> 
+                                                        <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="schedule_modal" class="modal">
+                                            <div class="survey-modal-content">
+                                                <div class="modal-body">
+                                                    <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                                                    <div id="schedule_content"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="survey"></div>
+                                    </fieldset>
+                                    <br>
+                                    <fieldset>
+                                        <b><u>Sales Details</u></b><hr>
+                                        <ul class="nav-responsive nav nav-tabs" id="sales_list">
+                                        </ul>
+                                        <div id="sales_container"></div>
+                                    </fieldset>
+                                </fieldset>
+                                <br>
+                                <fieldset>
+                                    <legend>Enquiry Information</legend>
+                                    <div class="form-group ">
+                                        <label class="col-sm-3 control-label">Enquiry: </label>
+                                        <div class="col-sm-4">
+                                            <div class="form-group row">
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="enquiry" id="enquiry" onchange="showfield(this.options[this.selectedIndex].value, this)">
+                                                        <option value="SELECT">--Select--</option>
+
+                                                        <option value="Others">Others</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div id="enquiryOthers" style="display:inline-block"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="form-group ">
+                                        <label class="col-sm-3 control-label">Referred by: </label>
+                                        <div class="col-sm-4">
+                                            <div class="form-group row">
+                                                <div class="col-sm-6">
+                                                    <select class="form-control" name="referral" id="referral" onchange="showfield(this.options[this.selectedIndex].value)">
+                                                        <option value="Friend">Friend</option>
+                                                        <option value="Magazine">Magazine</option>
+                                                        <option value="Website">Website</option>
+
+                                                        <option value="Others">Others</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div id="referralOthers" style="display:inline-block"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <!--                                <fieldset>
+                                                                    <legend>Lead Information</legend>
+                                                                    <div class="form-group">
+                                                                        <label class="col-sm-3 control-label">Lead Type: </label>
+                                                                        <div class="col-sm-6">
+                                                                            <div id="leadInfo">
+                                <%
+                                    //for (String type : types) {
+                                    //  out.println("<input class='checkbox-inline' type='checkbox' name='leadType' value='" + type + "'>" + type);
+                                    // }
+                                %>
+                                                            </div>
+                                
+                                                        </div>
+                                                    </div>
+                                
+                                                    <div id="Enquiry" style="display:none">
+                                                        <br>
+                                                        <fieldset>
+                                                            <b><u>Enquiry Details</u></b><br><br>
+                                                            <table>
+                                                                <col width="100">
+                                                                <tr>
+                                                                    <td align="right"><b>Remarks :</b></td>
+                                                                    <td>
+                                                                        <textarea class='form-control' name="enquiry" cols="75" rows="6" autocomplete="off"></textarea>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </fieldset>
+                                                    </div>
+                                
+                                                    <div id="Sales" style="display:none">
+                                                        <br>
+                                                        <fieldset>
+                                                            <b><u>Site Survey Details</u></b><br><br>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">Survey Date: </label>
+                                                                <div class="col-sm-4">
+                                                                    <input class='form-control' type="date" id="sitesurvey_date">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-3 control-label">Surveyor: </label>
+                                                                <div class="col-sm-4">
+                                                                    <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                                        <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
+                                                                        <span class="input-group-btn"> 
+                                                                            <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="schedule_modal" class="modal">
+                                                                <div class="survey-modal-content">
+                                                                    <div class="modal-body">
+                                                                        <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                                                                        <div id="schedule_content"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="survey"></div>
+                                                        </fieldset>
+                                                        <br>
+                                                        <fieldset>
+                                                            <b><u>Sales Details</u></b><hr>
+                                                            <ul class="tab" id="sales_list">
+                                                            </ul>
+                                                            <div id="sales_container"></div>
+                                                        </fieldset>
+                                                    </div>
+                                                </fieldset>-->
+                                <br>
+                                <table>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <div class="bg-default text-center">
+                                                <button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary">Save</button></div>
+                                            <!--<input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">-->
+                                            <!--<button onclick="return checkEmail();">Email Quotation</button>-->
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <script>
             $('#create_lead_form').ajaxForm({
                 dataType: 'json',
@@ -404,14 +516,14 @@
 
             jQuery(document).bind('keydown', 'ctrl+shift', function (e) {
                 var tableClassName = $(document.activeElement.parentNode.parentNode.parentNode.parentNode).attr('class');
-                
+
                 var activeElement = document.activeElement.parentNode;
                 var tagname = activeElement.tagName;
-                while(tagname !== 'DIV'){
+                while (tagname !== 'DIV') {
                     activeElement = activeElement.parentNode;
                     tagname = activeElement.tagName;
                 }
-                
+
                 switch (tableClassName) {
                     case "customerBoxTable":
                         addCustomerBox(activeElement.id);
@@ -447,7 +559,7 @@
                     var activeElement = parent.parentNode;
                     var tagname = activeElement.tagName;
                     var id = activeElement.id;
-                    while(tagname !== 'DIV' || id == null || id === ''){
+                    while (tagname !== 'DIV' || id == null || id === '') {
                         activeElement = activeElement.parentNode;
                         tagname = activeElement.tagName;
                         id = activeElement.id;

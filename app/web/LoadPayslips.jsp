@@ -29,8 +29,8 @@
     <col width="20%">
     <col width="20%">
     <col width="20%">
-    <col width="20%">
-    <col width="20%">
+    <col width="15%">
+    <col width="25%">
     <tr>
         <th>Payslip ID</th>
         <th>NRIC</th>
@@ -51,8 +51,19 @@
     <td>
         <button class="btn btn-default" onclick="editPayslip('<%=employee.getNric() + ":" + Converter.convertDateDatabase(payslip.getStartDate())%>')">Edit</button>
         <button class="btn btn-default" onclick="viewPayslip('<%=employee.getNric() + ":" + Converter.convertDateDatabase(payslip.getStartDate())%>')">View</button>
+        <form method="post" class="btn" style="
+    padding-left: 0px;
+    padding-right: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+">
+            <input type="hidden" name="payslip_id" value="<%=payslip.getPayslip_id()%>">
+            <input class="btn btn-default" type="submit" value="PDF" formaction="payslip_pdf.pdf" formtarget="_blank">
+        </form>
         <button class="btn btn-default" onclick="confirmDelete('<%=payslip.getPayslip_id()%>', 'payslip')">Delete</button>
-    </td>
+        </td>
     <%
             out.println("</tr>");
         }
