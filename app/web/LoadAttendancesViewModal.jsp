@@ -12,14 +12,12 @@
 
 %>
 
+
 <table class="table table-hover">
     <%        for (String yearMonth : yearMonths) {
             ArrayList<Attendance> attendances = UserAttendanceDAO.getAttendancesByYearMonth(yearMonth);
     %>
-
-
-    <h2>Attendance for <%=yearMonth%></h2><hr>
-
+    <p style="font-size: 14px;">Attendance for <b><%=yearMonth%></b></p> <br>
     <thead>
         <tr>
             <th>NRIC</th>
@@ -32,7 +30,7 @@
                         if (d < 10) {
                             day = 0 + day;
                         }
-                        out.println("<th style='text-align: left'><button class=\"btn btn-default\" onclick=\"window.location.href='EditAttendance.jsp?date=" + Converter.convertDateHtml(attendance.getDate()) + "&action=2'\">" + day + "</button></th>");
+                        out.println("<th style='text-align: center'><button class=\"btn btn-default\"  onclick=\"window.location.href='EditAttendance.jsp?date=" + Converter.convertDateHtml(attendance.getDate()) + "&action=2'\">" + day + "</button></th>");
                     }
                 %>
         </tr>
@@ -43,15 +41,15 @@
     %>
     <tbody>
         <tr>
-            <td><%=nric%></td>
-            <td><%=employee%></td>
+            <td align="center"><%=nric%></td>
+            <td align="center"><%=employee%></td>
             <%
                 for (Attendance attendance : attendances) {
                     String employeeAttendance = attendance.getUserAttendance(nric);
                     if (employeeAttendance == null) {
                         employeeAttendance = "NA";
                     }
-                    out.println("<td>" + employeeAttendance.substring(0, 2) + "</td>");
+                    out.println("<td style='text-align: center'>" + employeeAttendance.substring(0, 2) + "</td>");
                 }
             %>
         </tr>

@@ -27,8 +27,8 @@
     <col width="50%">
     <thead>
         <tr>
-            <th>Month</th>
-            <th>Action</th>
+            <th style="text-align: center">Month</th>
+            <th style="text-align: center">Action</th>
         </tr>
     </thead>
 
@@ -38,8 +38,8 @@
     %>
     <tbody>
         <tr>
-            <td align="center"><%=yearMonth%></td>
-            <td align="center">
+            <td style="text-align: center"><%=yearMonth%></td>
+            <td style="text-align: center">
                 <button class="btn btn-default"  onclick="viewAttendance('<%=yearMonth%>')">View</button>
             </td>
         </tr>

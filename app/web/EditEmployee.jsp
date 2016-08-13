@@ -18,11 +18,11 @@
 <input type="hidden" id="employeeType" value="<%=user.getType()%>">
 <div class="form-horizontal">
     <div class="form-group">
-        <div class="col-sm-4 control-label">
-            <h4>Employee Information </h4>
+        <div class="col-sm-6">
+            <h3 class="mrg10A">Employee Information </h3>
         </div>
-        <div class="col-sm-6 control-label">
-            <h4>Emergency Contact </h4>
+        <div class="col-sm-5">
+            <h3 class="mrg10A">Emergency Contact </h3>
         </div>
     </div>
     <%
@@ -38,64 +38,64 @@
         }
     %>
     <div class="form-group">
-        <label class="col-sm-1 control-label">First Name: </label>
+        <label class="col-sm-2 control-label">First Name: </label>
         <div class="col-sm-4">
             <input class="form-control" type="text" id="user_first_name" value="<%=user.getFirst_name()%>">
         </div>
         <label class="col-sm-2 control-label">Contact Person Name: </label>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <input class="form-control" type="text" id="emergency_name" value="<%=emergency.getName()%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-1 control-label">Last Name: </label>
+        <label class="col-sm-2 control-label">Last Name: </label>
         <div class="col-sm-4">
             <input class="form-control" type="text" id="user_last_name" value="<%=user.getLast_name()%>">
         </div>
         <label class="col-sm-2 control-label">Relationship:</label>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <input class="form-control" type="text" id="emergency_relationship" value="<%=emergency.getRelationship()%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-1 control-label">NRIC: </label>
+        <label class="col-sm-2 control-label">NRIC: </label>
         <div class="col-sm-4">
             <input class="form-control" type="text" id="user_nric" value="<%=nric%>" disabled>
         </div>
         <label class="col-sm-2 control-label">Contact Number:</label>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <input class="form-control" type="number" min="0" id="emergency_contact" value="<%=eContact%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-1 control-label">Date Joined: </label>
+        <label class="col-sm-2 control-label">Date Joined: </label>
         <div class="col-sm-4">
             <input class="form-control" type="text" id="user_dj" value="<%=Converter.convertDateHtml(user.getDate_joined())%>" disabled>
         </div>
         <label class="col-sm-2 control-label">Office Number: </label>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <input class="form-control" type="number" min="0" id="emergency_office" value="<%=eOffice%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-1 control-label">Mailing Address: </label>
+        <label class="col-sm-2 control-label">Mailing Address: </label>
         <div class="col-sm-4">
             <input class="form-control" type="text" id="user_madd" value="<%=user.getMailing_address()%>">
         </div>
-        <div class="col-sm-5 control-label">
-            <h4>Payment Information </h4>
+        <div class="col-sm-3">
+            <h3 class="mrg10A">Payment Information </h3>
         </div>
     </div>
     <%
         Bank bank = user.getBank();
     %>
     <div class="form-group">
-        <label class="col-sm-1 control-label">Registered Address: </label>
+        <label class="col-sm-2 control-label">Registered Address: </label>
         <div class="col-sm-4">
             <input class="form-control" type="text" id="user_radd" value="<%=user.getRegistered_address()%>">
         </div>
         <label class="col-sm-2 control-label">Method of Payment: </label>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <select class="form-control" id="user_payment">
                 <%
                     String payment = bank.getPayment_mode();
@@ -127,37 +127,37 @@
         }
     %>
     <div class="form-group">
-        <label class="col-sm-1 control-label">Phone:</label>
+        <label class="col-sm-2 control-label">Phone:</label>
         <div class="col-sm-4">
             <input class="form-control" type="number" min="0" id="user_phone" value="<%=phone%>">
         </div>
         <label class="col-sm-2 control-label">Bank Name: </label>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <input class="form-control" type="text" id="user_bank_name" value="<%=bank.getBank_name()%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-1 control-label">Fax:</label>
+        <label class="col-sm-2 control-label">Fax:</label>
         <div class="col-sm-4">
             <input class="form-control" type="number" min="0" id="user_fax" value="<%=fax%>">
         </div>
         <label class="col-sm-2 control-label">Account Name: </label>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <input class="form-control"  type="text" id="user_account_name" value="<%=bank.getAccount_name()%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-1 control-label">Home:</label>
+        <label class="col-sm-2 control-label">Home:</label>
         <div class="col-sm-4">
             <input class="form-control" type="number" min="0" id="user_home" value="<%=home%>">
         </div>
         <label class="col-sm-2 control-label">Bank Account Number: </label>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <input class="form-control" type="text" id="user_account_no" value="<%=bank.getAccount_no()%>">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-1 control-label">Department:</label>
+        <label class="col-sm-2 control-label">Department:</label>
         <%
             String userDepartment = user.getDepartment();
             String userDesignation = user.getDesignation();
@@ -206,7 +206,7 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-1 control-label">Designation: </label>
+        <label class="col-sm-2 control-label">Designation: </label>
         <div class="col-sm-4">
             <div id="user_designation_div">
                 <%
@@ -239,7 +239,7 @@
         }
     %>
     <div class="form-group">
-        <label class="col-sm-1 control-label">Basic Salary: </label>
+        <label class="col-sm-2 control-label">Basic Salary: </label>
         <div class="col-sm-4">
             <div class="input-group">
                 <span class="input-group-addon">$</span>

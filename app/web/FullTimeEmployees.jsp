@@ -14,63 +14,55 @@
     </head>
     <body onload="fulltime_setup()">
         <%@include file="header.jsp"%>
-        <div id="employee_error_modal" class="modal">
-            <!-- Modal content -->
-            <div class="message-modal-content">
+
+        <div id="edit_employee_modal" class="modal"  style="display:none;">
+            <div class="modal-content" style="width: 1100px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('edit_employee_modal')">×</span>
+                    <center><h2>Edit Employee</h2></center>
+                </div>
                 <div class="modal-body">
+                    <div id="employee_content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="viewEmployeeModal" class="modal" style="display:none;">
+            <div class="modal-content" style="width: 800px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('viewEmployeeModal')">×</span>
+                    <center><h2>View Employee</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="viewEmployeeContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view_leavemc_modal" class="modal">
+            <div class="modal-content" style="width: 800px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('view_leavemc_modal')">×</span>
+                    <center><h2>Leaves and MC History</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="leavemc_content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="employee_error_modal" class="modal">
+            <div class="modal-content" style="width: 300px;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('employee_error_modal')">×</span>
-                    <div id="employee_error_status"></div>
-                    <hr>
+                    <center><h2><div id="employee_error_status"></div></h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="employee_error_message"></div>
                 </div>
             </div>
         </div>
-
-        <div class="modal fade bs-example-modal-lg" id="edit_employee_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="width: 1200px;">
-                <div class="modal-content" style="width: 1200px;">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3>Edit Employee</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div id="employee_content"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="modal fade bs-example-modal-lg" id="viewEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="width: 800px;">
-                <div class="modal-content" style="width: 800px;">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3>View Employee</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div id="viewEmployeeModal-details"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="modal fade bs-example-modal-lg" id="view_leavemc_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="width: 800px;">
-                <div class="modal-content" style="width: 800px;">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3>Leave & MC History</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div id="leavemc_content"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div id="page-content-wrapper">
             <div id="page-content">
-                <div class="container">
+                <div class="container" style="width: 100%">
                     <div id="page-title">
                         <h2>Full Time Employees</h2>
                     </div>
@@ -88,7 +80,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <br><br>
+                                <br>
                                 <div id="employees_table"></div>
                             </div>
                         </div>

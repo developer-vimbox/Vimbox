@@ -13,237 +13,189 @@
     String leadId = request.getParameter("getLid");
     Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
 %>
-<style>
-   /* Style the list */
-    ul.tab {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        border: 1px solid #ccc;
-        background-color: #f1f1f1;
-    }
 
-    /* Float the list items side by side */
-    ul.tab li {float: left;}
-
-    /* Style the links inside the list items */
-    ul.tab li a {
-        display: inline-block;
-        color: black;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        transition: 0.3s;
-        font-size: 17px;
-    }
-
-    /* Change background color of links on hover */
-    ul.tab li a:hover {background-color: #ddd;}
-
-    /* Create an active/current tablink class */
-    ul.tab li a:focus, .active {background-color: #ccc;}
-
-    /* Style the tab content */
-    .tabcontent {
-        display: none;
-        padding: 6px 12px;
-        border: 1px solid #ccc;
-        border-top: none;
-    }
-
-    .tabcontent {
-        -webkit-animation: fadeEffect 1s;
-        animation: fadeEffect 1s; /* Fading effect takes 1 second */
-    }
-
-    @-webkit-keyframes fadeEffect {
-        from {opacity: 0;}
-        to {opacity: 1;}
-    }
-
-    @keyframes fadeEffect {
-        from {opacity: 0;}
-        to {opacity: 1;}
-    } 
-</style>
-<b>Status: <%=lead.getStatus()%></b> <br>
-<table width='100%'>
-    <col width="50%">
-    <col width="50%">
-    <tr>
-        <td>
-            <fieldset>
-                <legend>Customer Info</legend>
-                <table width='100%' style="min-height:120px">
-                    <col width="20%">
-                <%
-                    Customer customer = lead.getCustomer();
-                    if(customer != null){
-                        out.println("<tr>");
-                        out.println("<td align='right'><b>Name :</b></td>");
-                        out.println("<td>" + customer.toString() + "</td>");
-                        out.println("</tr>");
-                        
-                        out.println("<tr>");
-                        out.println("<td align='right'><b>Contact :</b></td>");
-                        out.println("<td>" + customer.getContact() + "</td>");
-                        out.println("</tr>");
-                        
-                        out.println("<tr>");
-                        out.println("<td align='right'><b>Email :</b></td>");
-                        out.println("<td>" + customer.getEmail() + "</td>");
-                        out.println("</tr>");
+<div class="form-horizontal" style="font-size: 14px; font-color: black;">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Status: </label>
+        <label class="col-sm-4" style="padding-top: 7px;">
+            <%=lead.getStatus()%>
+        </label>
+    </div>
+    <%
+        if (lead.getStatus().equals("Rejected")) {%>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Rejection Reason: </label>
+        <label class="col-sm-4" style="padding-top: 7px;">
+            <%=lead.getReason()%>
+        </label>
+    </div>
+    <%}%>
+</div>
+<hr>
+<div class="form-horizontal" style="font-size: 14px;">
+    <div class="form-group">
+        <div class="col-sm-6">
+            <h3 class="mrg10A">Customer Information </h3>
+        </div>
+        <div class="col-sm-5">
+            <h3 class="mrg10A">Lead Information </h3>
+        </div>
+    </div>
+    <%
+        Customer customer = lead.getCustomer();
+        if (customer != null) {%>
+    <div class="form-group">
+        <label class ="col-sm-2 control-label">Name: </label>
+        <div class ="col-sm-4" style="padding-top: 7px;">
+            <%=customer.toString()%>
+        </div>
+        <label class ="col-sm-2 control-label">Lead ID: </label>
+        <div class ="col-sm-4" style="padding-top: 7px;">
+            <%=lead.getId()%>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class ="col-sm-2 control-label">Contact: </label>
+        <div class ="col-sm-4" style="padding-top: 7px;">
+            <%=customer.getContact()%>
+        </div>
+        <label class ="col-sm-2 control-label">Lead Type: </label>
+        <div class ="col-sm-4" style="padding-top: 7px;">
+            <%
+                String[] leadTypes = lead.getType().split("\\|");
+                for (int i = 0;
+                        i < leadTypes.length;
+                        i++) {
+                    String leadType = leadTypes[i];
+                    out.println(leadType);
+                    if (i < leadTypes.length - 1) {
+                        out.println(", ");
                     }
-                %>
-                </table>
-            </fieldset>
-        </td>
-        <td>
-            <fieldset>
-                <legend>Lead Info</legend>
-                <table width='100%' style="min-height:120px">
-                    <col width="20%">
-                    <tr>
-                        <td align="right"><b>Lead ID :</b></td>
-                        <td><%=lead.getId()%></td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>Lead Type :</b></td>
-                        <td>
-                            <%
-                                String[] leadTypes = lead.getType().split("\\|");
-                                for(int i=0; i<leadTypes.length; i++){
-                                    String leadType = leadTypes[i];
-                                    out.println(leadType);
-                                    if(i < leadTypes.length-1){
-                                        out.println(", ");
-                                    }
-                                }
-                            %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>Source :</b></td>
-                        <td><%=lead.getSource()%></td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>Referral :</b></td>
-                        <td><%=lead.getReferral()%></td>
-                    </tr>
-                    <%
-                        if(lead.getStatus().equals("Rejected")){
-                            out.println("<tr>");
-                            out.println("<td align='right'><b>Reason :</b></td>");
-                            out.println("<td>" + lead.getReason() + "</td>");
-                            out.println("</tr>");
-                        }
-                    %>
-                </table>
-            </fieldset>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <fieldset>
-                <legend>Moving Info</legend>
-                <table>
-                    <col width="100">
-                    <tr>
-                        <td align="right"><b>Move Type :</b></td>
-                        <td>
-                            <%
-                                String[] toms = lead.getTom().split("\\|");
-                                for (int i=0; i<toms.length; i++) {
-                                    String tom = toms[i];
-                                    out.println(tom);
-                                    if(i<toms.length-1){
-                                        out.println(", ");
-                                    }
-                                }
-                            %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right"><b>DOM :</b></td>
-                        <td>
-                            <%
-                                String[] doms = lead.getDom().split("\\|");
-                                for (int i=0; i<doms.length; i++) {
-                                    String dom = doms[i];
-                                    out.println(dom);
-                                    if(i<doms.length-1){
-                                        out.println(", ");
-                                    }
-                                }
-                            %>
-                        </td>
-                    </tr>
-                </table>
-                <fieldset>
-                    <b><u>Moving From</u></b><br>
-                    <div style="overflow:auto;height:40px;">
-                        <%
-                            ArrayList<String[]> movingFroms = lead.getAddressFrom();
-                            for(int i=0; i<movingFroms.size(); i++){
-                                String[] movingFrom = movingFroms.get(i);
-                                String address = movingFrom[0];
-                                if(!address.isEmpty()){
-                                    String[] addressDetails = address.split("_");
-                                    out.println("<li>");
-                                    out.println("Address " + (i+1) + " : " + addressDetails[0] + " #" + addressDetails[1] + "-" + addressDetails[2] + " S" + addressDetails[3]);
-                                    out.println("</li>");
-                                }
-                            }
-                        %>
-                    </div>
-                </fieldset>
-                <br>
-                <fieldset>
-                    <b><u>Moving To</u></b><br>
-                    <div style="overflow:auto;height:40px;">
-                        <%
-                            ArrayList<String[]> movingTos = lead.getAddressTo();
-                            for(int i=0; i<movingTos.size(); i++){
-                                String[] movingTo = movingTos.get(i);
-                                String address = movingTo[0];
-                                if(!address.isEmpty()){
-                                    String[] addressDetails = address.split("_");
-                                    out.println("<li>");
-                                    out.println("Address " + (i+1) + " : " + addressDetails[0] + " #" + addressDetails[1] + "-" + addressDetails[2] + " S" + addressDetails[3]);
-                                    out.println("</li>");
-                                }
-                            }
-                        %>
-                    </div>
-                </fieldset>
-            </fieldset>      
-        </td>
-    </tr>
+                }
+            %>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class ="col-sm-2 control-label">Email: </label>
+        <div class ="col-sm-4" style="padding-top: 7px;">
+            <%=customer.getEmail()%>
+        </div>
+        <label class ="col-sm-2 control-label">Referral: </label>
+        <div class ="col-sm-4" style="padding-top: 7px;">
+            <%=lead.getReferral()%>
+        </div>
+    </div>
+    <%}%>
+</div>
+<hr>
+<div class="form-horizontal" style="font-size: 14px;">
+    <div class="form-group">
+        <div class="col-sm-6">
+            <h3 class="mrg10A">Moving Information</h3>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class ="col-sm-3 control-label">Move Type: </label>
+        <div class ="col-sm-8" style="padding-top: 7px;">
+            <%
+                String[] toms = lead.getTom().split("\\|");
+                for (int i = 0;
+                        i < toms.length;
+                        i++) {
+                    String tom = toms[i];
+                    out.println(tom);
+                    if (i < toms.length - 1) {
+                        out.println(", ");
+                    }
+                }
+            %>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class ="col-sm-3 control-label">Date of Move: </label>
+        <div class ="col-sm-8" style="padding-top: 7px;">
+            <%
+                String[] doms = lead.getDom().split("\\|");
+                for (int i = 0;
+                        i < doms.length;
+                        i++) {
+                    String dom = doms[i];
+                    out.println(dom);
+                    if (i < doms.length - 1) {
+                        out.println(", ");
+                    }
+                }
+            %>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class ="col-sm-3 control-label">Moving From: </label>
+        <div class ="col-sm-8" style="padding-top: 7px;">
+            <%
+                ArrayList<String[]> movingFroms = lead.getAddressFrom();
+                for (int i = 0;
+                        i < movingFroms.size();
+                        i++) {
+                    String[] movingFrom = movingFroms.get(i);
+                    String address = movingFrom[0];
+                    if (!address.isEmpty()) {
+                        String[] addressDetails = address.split("_");
+                        out.println("<li>");
+                        out.println("Address " + (i + 1) + " : " + addressDetails[0] + " #" + addressDetails[1] + "-" + addressDetails[2] + " S" + addressDetails[3]);
+                        out.println("</li>");
+                    }
+                }
+            %>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class ="col-sm-3 control-label">Moving To: </label>
+        <div class ="col-sm-8" style="padding-top: 7px;">
+            <%
+                ArrayList<String[]> movingTos = lead.getAddressTo();
+                for (int i = 0;
+                        i < movingTos.size();
+                        i++) {
+                    String[] movingTo = movingTos.get(i);
+                    String address = movingTo[0];
+                    if (!address.isEmpty()) {
+                        String[] addressDetails = address.split("_");
+                        out.println("<li>");
+                        out.println("Address " + (i + 1) + " : " + addressDetails[0] + " #" + addressDetails[1] + "-" + addressDetails[2] + " S" + addressDetails[3]);
+                        out.println("</li>");
+                    }
+                }
+            %>
+        </div>
+    </div>
+</div>
 <%
-    if(lead.getType().contains("Enquiry")){
+    if (lead.getType()
+            .contains("Enquiry")) {
 %>
-<tr>
-    <td colspan="2">
-        <fieldset>
-            <legend>Enquiry Info</legend>
-            <table width="100%">
-                <col width="10%">
-                <tr>
-                    <td align="right"><b>Enquiry :</b></td>
-                    <td><%=lead.getEnquiry()%></td>
-                </tr>
-            </table>    
-        </fieldset>
-    </td>
-</tr>
+<hr>
+<div class="form-horizontal" style="font-size: 14px;">
+    <div class="form-group">
+        <div class="col-sm-6">
+            <h3 class="mrg10A">Enquiry Information</h3>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class ="col-sm-3 control-label">Enquiry: </label>
+        <div class ="col-sm-8" style="padding-top: 7px;">
+            <%=lead.getEnquiry()%>
+        </div>
+    </div>
+</div>
 <%
     }
 %>
+<table width='100%'>
 
-<%
-    if(lead.getType().contains("Sales")){
-%>
+    <%
+        if (lead.getType()
+                .contains("Sales")) {
+    %>
     <tr>
         <td colspan="2">
             <fieldset>
@@ -341,27 +293,27 @@
                     <tr>
                         <td>
                             <hr>
-                            
+
                             <!-- Sales -->
                             <ul class="tab" id="sales_list">
+                                <%
+                                    ArrayList<LeadDiv> leadDivs = lead.getSalesDivs();
+                                    for (LeadDiv leadDiv : leadDivs) {
+                                        String leadDivStr = leadDiv.getSalesDiv();
+                                        String leadDivId = leadDivStr.substring(0, leadDivStr.indexOf("|"));
+                                        String leadDivAddr = leadDivStr.substring(leadDivStr.indexOf("|") + 1);
+                                        out.println("<li><a href='#' class='tablinks' onclick=\"openSales(event, '" + leadDivId + "')\"><label>" + leadDivAddr + "</label></a></li>");
+                                    }
+                                %>
+                            </ul>
+
                             <%
-                                ArrayList<LeadDiv> leadDivs = lead.getSalesDivs();
+                                double overall = 0;
                                 for (LeadDiv leadDiv : leadDivs) {
                                     String leadDivStr = leadDiv.getSalesDiv();
                                     String leadDivId = leadDivStr.substring(0, leadDivStr.indexOf("|"));
-                                    String leadDivAddr = leadDivStr.substring(leadDivStr.indexOf("|") + 1);
-                                    out.println("<li><a href='#' class='tablinks' onclick=\"openSales(event, '" + leadDivId + "')\"><label>" + leadDivAddr + "</label></a></li>");
-                                }
+                                    double sum = 0;
                             %>
-                        </ul>
-
-                        <%
-                            double overall = 0;
-                            for (LeadDiv leadDiv : leadDivs) {
-                                String leadDivStr = leadDiv.getSalesDiv();
-                                String leadDivId = leadDivStr.substring(0, leadDivStr.indexOf("|"));
-                                double sum = 0;
-                        %>
                             <div id="<%=leadDivId%>" class="tabcontent">
                                 <table width="100%">
                                     <tr height="95%">
@@ -632,10 +584,10 @@
                                                 <tr>
                                                     <td align="right">
                                                         Total : <b>S$ 
-                                                        <%
-                                                            out.println(sum);
-                                                            overall += sum;
-                                                        %>
+                                                            <%
+                                                                out.println(sum);
+                                                                overall += sum;
+                                                            %>
                                                         </b>
                                                     </td>
                                                 </tr>
@@ -644,9 +596,9 @@
                                     </tr>
                                 </table>  
                             </div>
-                        <%
-                            }
-                        %>
+                            <%
+                                }
+                            %>
                         </td>
                     </tr>
                 </table>
@@ -665,7 +617,7 @@
             </fieldset>
         </td>
     </tr>
-<%
-    }
-%>
+    <%
+        }
+    %>
 </table>

@@ -17,14 +17,16 @@
             <div id="page-content" style="min-height: 7630px;">
                 <div class="container">
                     <div id="page-title">
-                        <h2>Add Payslip</h2>
+                        <h2>Create Payslip</h2>
                     </div>
                     <div class="panel">
                         <div class="panel-body">
-                            <h3 class="title-hero">
-                                Payslip Information
-                            </h3> <hr>
                             <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <h3 class="mrg10A">Payslip Information </h3>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Employee: </label>
                                     <div class="col-sm-5">
@@ -66,9 +68,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <h3 class="title-hero">
-                                Payslip Information
-                            </h3> <hr>
                             <div class="form-horizontal">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Payment Date: </label>
@@ -91,13 +90,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <h3 class="title-hero">
-                                Payment Breakdown
-                            </h3> <hr>
                             <div class="form-horizontal">
+                                <hr>
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <h3 class="mrg10A">Payment Breakdown </h3>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label"></label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-7">
                                         <table style="width: 100%;">
                                             <tr>
                                                 <td>

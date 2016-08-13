@@ -17,25 +17,35 @@
         <%@include file="header.jsp"%>
         <%            ArrayList<User> users = UserDAO.getFullTimeUsers();
         %>
-
-        <!-- Customer Error Modal -->
-        <div id="customer_error_modal" class="modal">
-            <div class="error-modal-content">
+        <div id="customer_modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('customer_modal')">×</span>
+                    <center><h2>Select Customer</h2></center>
+                </div>
                 <div class="modal-body">
-                    <span class="close" onclick="closeModal('customer_error_modal')">×</span>
-                    <div id="customer_error_status"></div>
-                    <hr>
-                    <div id="customer_error_message"></div>
+                    <div id="customer_content"></div>
                 </div>
             </div>
         </div>
-        <!-- Ticket Error Modal -->
+        <div id="add_customer_modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('add_customer_modal')">×</span>
+                    <center><h2>Add New Customer</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="add_customer_content"></div>
+                </div>
+            </div>
+        </div>
         <div id="ticket_error_modal" class="modal">
             <div class="error-modal-content">
-                <div class="modal-body">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('ticket_error_modal')">×</span>
-                    <div id="ticket_error_status"></div>
-                    <hr>
+                    <center><h2><div id="ticket_error_status"></div></h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="ticket_error_message"></div>
                 </div>
             </div>
@@ -76,29 +86,18 @@
                         <h2>Create Ticket</h2> <br>
                         <div class="panel">
                             <div class="panel-body">
-                                <h3 class="title-hero">
-                                    Select Customer
-                                </h3> <hr>
                                 <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <h3 class="mrg10A">Select Customer </h3>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <div class="col-sm-4">
                                             <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                                 <input type="text" id="customer_search" placeholder="Enter customer name" class="form-control" style="width: 400px;color:black;">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="customerSearch('ticket')" data-toggle="modal" data-target="#customer_modal">Search</button>
-                                                    <div class="modal" id="customer_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
-                                                        <div class="modal-dialog" style="width: 500px;">
-                                                            <div class="modal-content" style="width: 500px;">
-                                                                <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                    <h3>Ticket Details</h3>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div id="customer_content"></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="customerSearch('ticket')">Search</button>
                                                     <button class="btn btn-default  bootstrap-touchspin-up" type="button"  onclick="addNewCustomer()">Add New</button>
                                                 </span>
                                             </div>
@@ -106,10 +105,13 @@
                                     </div>
                                 </div>
                                 <br>
-                                <h3 class="title-hero">
-                                    Ticket Information
-                                </h3> <hr>
                                 <div class="form-horizontal">
+                                    <hr>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <h3 class="mrg10A">Ticket Information </h3>
+                                        </div>
+                                    </div>
                                     <div id="customer_information_table" style="display:none">
                                         <input type="hidden" id="customer_id" name="customer_id">
                                         <div class="form-group">

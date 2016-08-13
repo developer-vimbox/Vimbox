@@ -69,9 +69,9 @@
                 <td><%=dateTime%></td>
                 <td><%=status%></td>
                 <td>
-                    <button onclick="viewTicket('<%=ticketId%>')" data-toggle="modal" data-target="#viewTicketModal">VT</button>
-                        
-                    <button onclick="viewComments('<%=ticketId%>')" data-toggle="modal" data-target="#viewCommentsModal">VC</button>
+                    <button class="btn btn-default" onclick="viewTicket('<%=ticketId%>')">VT</button>
+                    <button class="btn btn-default" onclick="viewComments('<%=ticketId%>')">VC</button>
+
                 </td>
             </tr>
             <%
@@ -79,6 +79,27 @@
                 }
             %>
         </table>
-
+        <div id="viewTicketModal" class="modal">
+            <div class="modal-content" style="width: 500px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('viewTicketModal')">×</span>
+                    <center><h2>Ticket Details</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="viewTicketModalContent"></div> 
+                </div>
+            </div>
+        </div>
+        <div id="viewCommentsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('viewCommentsModal')">×</span>
+                    <center><h2>Comments History</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="commentsContent"></div> 
+                </div>
+            </div>
+        </div>
     </body>
 </html>

@@ -49,12 +49,12 @@
     <body>
         <%@include file="header.jsp"%>
         <div id="attendance_error_modal" class="modal">
-            <!-- Modal content -->
-            <div class="message-modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('attendance_error_modal')">×</span>
+                    <center><h2><div id="attendance_error_status"></div></h2></center>
+                </div>
                 <div class="modal-body">
-                    <span class="close" onclick="closeModal('leave_error_modal')">×</span>
-                    <div id="attendance_error_status"></div>
-                    <hr>
                     <div id="attendance_error_message"></div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
         <div id="page-content-wrapper">
             <div id="page-content">
 
-                <div class="container">
+                <div class="container" style="width: 100%;">
 
 
 
@@ -88,14 +88,13 @@
             if (attendance != null) {
                 attendance_record = attendance.getAttendance_record();
                 late_record = attendance.getLate_record();
-                out.println("Attendance for today has been taken. <button class=\"btn btn-default\" onclick=\"window.location.href='EditAttendance.jsp?date=" + dtString + "&action=1'\">Edit</button> <br><br>");
+                out.println("<div class='alert alert-success' style='width: 400px;'><button class=\"btn btn-sm btn-default\" onclick=\"window.location.href='EditAttendance.jsp?date=" + dtString + "&action=1'\">Edit Attendance</button> &nbsp; Attendance for today has been taken</div>");
             } else {
                 out.println("<form action='CreateAttendanceController' method='post' id='attendance_form'>");
             }
         %>
         <input type="hidden" name="attendance_date" value="<%=dtString%>">
         <table class="table table-hover">
-
             <thead>
             <tr>
                 <th>NRIC</th>

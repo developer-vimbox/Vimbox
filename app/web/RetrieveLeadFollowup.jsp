@@ -6,7 +6,7 @@
     String leadId = request.getParameter("getLid");
     ArrayList<LeadFollowup> followups = LeadFollowupDAO.getLeadFollowupsById(Integer.parseInt(leadId));
     out.println("Lead ID :" + leadId + "<br><br>");
-    String table = "<table class='table table-hover'><tr><th>Date & Time</th><th>Follow-Up</th></tr>";
+    String table = "<table class='table table-hover' width='100%'><tr><th>Date & Time</th><th>Follow-Up</th></tr>";
     for(LeadFollowup followup:followups){
         table+="<tr>";
         table+="<td align='center'>" + Converter.convertDate(followup.getDatetime()) + "</td>";

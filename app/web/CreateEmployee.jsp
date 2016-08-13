@@ -13,17 +13,19 @@
     <body>
         <%@include file="header.jsp"%>
         <div id="page-content-wrapper">
-            <div id="page-content" style="min-height: 7630px;">
-                <div class="container">
+            <div id="page-content">
+                <div class="container" style="width: 100%;">
                     <div id="page-title">
                         <h2>Add Employee</h2> <br>
                     </div>
                     <div class="panel">
                         <div class="panel-body">
-                            <h3 class="title-hero">
-                                Employee Information
-                            </h3> <hr>
                             <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <h3 class="mrg10A">Employee Information </h3>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Employee Type: </label>
                                     <div class="col-sm-5">
@@ -151,10 +153,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <h3 class="title-hero">
-                                Emergency Contact
-                            </h3> <hr>
+                            <hr>
                             <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <h3 class="mrg10A">Emergency Contact </h3>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Contact Person Name: </label>
                                     <div class="col-sm-5">
@@ -181,10 +186,13 @@
                                 </div>
                             </div>
                             <div id="full_time_user_account" style="display:none">
-                                <h3 class="title-hero">
-                                    User Account Information
-                                </h3> <hr>
+                                <hr>
                                 <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <h3 class="mrg10A">User Account Information </h3>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Email Address: </label>
                                         <div class="col-sm-5">
@@ -199,10 +207,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <h3 class="title-hero">
-                                Payment Information
-                            </h3> <hr>
+                            <hr>
                             <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <h3 class="mrg10A">Payment Information </h3>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Method of Payment: </label>
                                     <div class="col-sm-5">
@@ -247,12 +258,12 @@
             </div>
         </div> 
         <div id="employee_error_modal" class="modal">
-            <!-- Modal content -->
-            <div class="message-modal-content">
-                <div class="modal-body">
+            <div class="modal-content" style="width: 400px;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('employee_error_modal')">×</span>
-                    <div id="employee_error_status"></div>
-                    <hr>
+                    <center><h2><div id="employee_error_status"></div></h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="employee_error_message"></div>
                 </div>
             </div>

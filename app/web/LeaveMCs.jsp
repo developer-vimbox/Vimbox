@@ -11,12 +11,12 @@
     <body onload="leaveMc_setup()">
         <%@include file="header.jsp"%>
         <div id="leave_mc_error_modal" class="modal">
-            <!-- Modal content -->
-            <div class="message-modal-content">
-                <div class="modal-body">
+            <div class="modal-content" style="width: 350px;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('leave_mc_error_modal')">×</span>
-                    <div id="leave_mc_error_status"></div>
-                    <hr>
+                    <center><h2><div id="leave_mc_error_status"></div></h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="leave_mc_error_message"></div>
                 </div>
             </div>

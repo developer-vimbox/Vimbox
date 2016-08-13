@@ -24,25 +24,25 @@
                     <script type="text/javascript" src="assets/widgets/tocify/tocify.js"></script>
 
                     <script type="text/javascript">
-                        $(function () {
-                            var toc = $("#tocify-menu").tocify({context: ".toc-tocify", showEffect: "fadeIn", extendPage: false, selectors: "h2, h3, h4"});
-                        });
-                        jQuery(document).ready(function ($) {
+    $(function () {
+        var toc = $("#tocify-menu").tocify({context: ".toc-tocify", showEffect: "fadeIn", extendPage: false, selectors: "h2, h3, h4"});
+    });
+    jQuery(document).ready(function ($) {
 
-                            /* Sticky bars */
+        /* Sticky bars */
 
-                            $(function () {
-                                "use strict";
+        $(function () {
+            "use strict";
 
-                                $('.sticky-nav').hcSticky({
-                                    top: 50,
-                                    innerTop: 50,
-                                    stickTo: 'document'
-                                });
+            $('.sticky-nav').hcSticky({
+                top: 50,
+                innerTop: 50,
+                stickTo: 'document'
+            });
 
-                            });
+        });
 
-                        });
+    });
                     </script>
 
                     <div id="page-title">

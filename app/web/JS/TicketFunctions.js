@@ -46,10 +46,12 @@ function submitTicket() {
 }
 
 function editTicket(ticket_id) {
+    var modal = document.getElementById("edit_ticket_modal");
     var content = document.getElementById("edit_ticket_content");
     $.post("EditTicket.jsp", {ticket_id: ticket_id}, function (data) {
         content.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
 function updateTicket() {
@@ -89,17 +91,17 @@ function updateTicket() {
 }
 
 function viewTicket(ticket_id) {
+    var modal = document.getElementById("viewTicketModal");
     var content = document.getElementById("viewTicketModalContent");
     $.get("RetrieveTicket.jsp", {getTid: ticket_id}, function (data) {
         content.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
-function viewEachTicket(ticket_id) {
-    var content = document.getElementById("viewEachTicketModalContent");
-    $.get("RetrieveTicket.jsp", {getTid: ticket_id}, function (data) {
-        content.innerHTML = data;
-    });
+function closeTicket(ticket_id) {
+    var modal = document.getElementById("resolveModal" + ticket_id);
+    modal.style.display = "block";
 }
 
 function resolveTicket(ticket_id) {
@@ -129,6 +131,11 @@ function resolveTicket(ticket_id) {
             });
 }
 
+function commentTicket(ticketId) {
+    var modal = document.getElementById("commentModal" + ticketId);
+    modal.style.display = "block";
+}
+
 function followupTicket(ticket_id) {
     var comment_ticket_id = $('#comment_ticket_id' + ticket_id).val();
     var ticket_comment = $('#ticket_comment' + ticket_id).val();
@@ -145,6 +152,7 @@ function followupTicket(ticket_id) {
                 errorModal.style.display = "block";
                 if (status === "SUCCESS") {
                     $('#ticket_comment' + ticket_id).val("");
+                    document.getElementById("commentModal" + ticket_id).style.display = "none";
                 }
             })
             .fail(function (error) {
@@ -155,17 +163,12 @@ function followupTicket(ticket_id) {
 }
 
 function viewComments(ticketId) {
+    var modal = document.getElementById("viewCommentsModal");
     var content = document.getElementById("commentsContent");
     $.get("RetrieveTicketComment.jsp", {getTid: ticketId}, function (data) {
         content.innerHTML = data;
     });
-}
-
-function viewEachComment(ticketId) {
-    var content = document.getElementById("viewEachCommentModalContent");
-    $.get("RetrieveTicketComment.jsp", {getTid: ticketId}, function (data) {
-        content.innerHTML = data;
-    });
+    modal.style.display = "block";
 }
 
 function searchPending() {
@@ -189,9 +192,11 @@ function searchResolved() {
 }
 
 function viewTicketsHistory(custId) {
+    var modal = document.getElementById("ticketsHistoryModal");
     var ticketsHistoryContent = document.getElementById("ticketsHistoryContent");
     $.get("TicketsHistory.jsp", {getId: custId}, function (data) {
         ticketsHistoryContent.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 

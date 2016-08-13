@@ -24,22 +24,28 @@
     String dateTime = Converter.convertDate(ticket.getDatetime_of_creation());
     String status = ticket.getStatus();
 %>
-<table>
-    <tr>
-        <td align="right">Ticket ID: </td>
-        <td><%=ticketId%></td>
-    </tr>
-    <tr>
-        <td align="right">Date & Time: </td>
-        <td><%=dateTime%></td>
-    </tr>
-    <tr>
-        <td align="right">Ticket Owner: </td>
-        <td><%=ticket.getOwner_user().toString()%></td>
-    </tr>
-    <tr>
-        <td align="right">Assigned To: </td>
-        <td>
+<div class="form-horizontal" style="font-size: 14px;">
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Ticket ID: </label>
+        <div class="col-sm-5" style="padding-top: 7px;">
+            <%=ticketId%>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Date & Time: </label>
+        <div class="col-sm-5" style="padding-top: 7px;">
+            <%=dateTime%>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Ticket Owner: </label>
+        <div class="col-sm-5" style="padding-top: 7px;">
+            <%=ticket.getOwner_user().toString()%>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Assigned To: </label>
+        <div class="col-sm-5" style="padding-top: 7px;">
             <%
                 ArrayList<User> assigned = ticket.getAssigned_users();
                 if (assigned.size() > 1) {
@@ -50,30 +56,38 @@
                     out.println(assigned.get(0).toString());
                 }
             %>
-        </td>
-    </tr>
-    <tr>
-        <td align="right">Subject: </td>
-        <td><%=subject%></td>
-    </tr>
-    <tr>
-        <td align="right">Customer Details: </td>
-        <td>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Subject: </label>
+        <div class="col-sm-5" style="padding-top: 7px;">
+            <%=subject%>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Customer Details: </label>
+        <div class="col-sm-5" style="padding-top: 7px;">
             <%=customerName%><br>
             <%=contact%><br>
             <%=email%>
-        </td>
-    </tr>
-    <tr>
-        <td align="right">Status: </td>
-        <td><%=status%></td>
-    </tr>
-    <tr>
-        <td align="right">Description: </td>
-        <td><%=ticket.getDescription()%></td>
-    </tr>
-    <tr>
-        <td align="right">Solution: </td>
-        <td><%=ticket.getSolution()%></td>
-    </tr>
-</table>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Status: </label>
+        <div class="col-sm-5" style="padding-top: 7px;">
+            <%=status%>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Description: </label>
+        <div class="col-sm-5" style="padding-top: 7px;">
+            <%=ticket.getDescription()%>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Solution: </label>
+        <div class="col-sm-5" style="padding-top: 7px;">
+            <%=ticket.getSolution()%>
+        </div>
+    </div>
+</div>

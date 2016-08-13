@@ -54,17 +54,38 @@
                     out.println("<td>" + Converter.convertDate(lead.getDt()) + "</td>");
             %>
             <td>
-                <button onclick="viewLead('<%=lead.getId()%>')" data-toggle="modal" data-target="#viewLeadModal">VS</button>
-                <button onclick="viewFollowups('<%=lead.getId()%>')" data-toggle="modal" data-target="#viewFollowUpModal">VF</button>
+                <button class="btn btn-default" onclick="viewLead('<%=lead.getId()%>')">VS</button>
+                <button class="btn btn-default" onclick="viewFollowups('<%=lead.getId()%>')">VF</button>
             </td>
             <%
                 }
             %>
-        </table>  
+        </table>
+        <div id="viewFollowUpModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('viewFollowUpModal')">×</span>
+                    <center><h2>Follow Up History</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="followUpContent"></div> 
+                </div>
+            </div>
+        </div>
         <%
             }
         %>
-
+        <div id="viewLeadModal" class="modal">
+            <div class="modal-content" style="width: 800px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('viewLeadModal')">×</span>
+                    <center><h2>Lead Details</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="leadContent"></div>
+                </div>
+            </div>
+        </div>
         <div id="lead_error_modal" class="modal">
             <div class="error-modal-content">
                 <div class="modal-body">

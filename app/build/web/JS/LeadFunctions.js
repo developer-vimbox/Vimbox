@@ -85,24 +85,30 @@ function followupLead(lead_id) {
 }
 
 function viewLead(leadId) {
+    var modal = document.getElementById("viewLeadModal");
     var content = document.getElementById("leadContent");
     $.get("RetrieveLeadDetails.jsp", {getLid: leadId}, function (data) {
         content.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
 function viewFollowups(leadId) {
+    var modal = document.getElementById("viewFollowUpModal");
     var div1 = document.getElementById("followUpContent");
     $.get("RetrieveLeadFollowup.jsp", {getLid: leadId}, function (data) {
         div1.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
 function viewLeadsHistory(custId) {
+    var modal = document.getElementById("leadsHistoryModal");
     var leadsHistoryContent = document.getElementById("leadsHistoryContent");
     $.get("LeadsHistory.jsp", {getId: custId}, function (data) {
         leadsHistoryContent.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
 //------------------------- LeadType Functions---------------------------//

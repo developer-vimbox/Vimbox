@@ -19,7 +19,7 @@
         <input type="hidden" id="customer_id" value="<%=customer_id%>"> 
         <div class="form-horizontal">
             <div class="form-group">
-                <label class="col-sm-3 control-label">Salutation: </label>
+                <label class="col-sm-4 control-label">Salutation: </label>
                 <div class="col-sm-6">
                     <select id="edit_salutation" autofocus class="form-control">
                         <%                        String[] salutations = {"Mr", "Ms", "Mrs", "Mdm"};
@@ -36,31 +36,31 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">First Name: </label>
+                <label class="col-sm-4 control-label">First Name: </label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control" id="edit_first_name" value="<%=customer.getFirst_name()%>" required>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">Last Name: </label>
+                <label class="col-sm-4 control-label">Last Name: </label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control" id="edit_last_name" value="<%=customer.getLast_name()%>" required>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">Customer's Contact: </label>
+                <label class="col-sm-4 control-label">Customer's Contact: </label>
                 <div class="col-sm-6">
                     <input type="number" class="form-control" id="edit_contact" value="<%=contact%>">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">Email: </label>
+                <label class="col-sm-4 control-label">Email: </label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control" id="edit_email" value="<%=customer.getEmail()%>">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label"></label>
+                <label class="col-sm-4 control-label"></label>
                 <div class="col-sm-6 text-center">
                     <button onclick="updateCustomer(); return false;" class="btn btn-primary">Edit</button>
                 </div>

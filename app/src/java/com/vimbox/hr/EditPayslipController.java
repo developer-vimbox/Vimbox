@@ -96,7 +96,7 @@ public class EditPayslipController extends HttpServlet {
         String abd_amt = request.getParameter("abd_amount");
         ArrayList<String> abd_description = null;
         ArrayList<String> abd_amount = null;
-        if(abd_desc != null){
+        if(!abd_desc.trim().isEmpty()){
             abd_description = new ArrayList<String>();
             abd_amount = new ArrayList<String>();
             String[] arrayD = abd_desc.split("\\|");
@@ -116,13 +116,12 @@ public class EditPayslipController extends HttpServlet {
         String dbd_amt = request.getParameter("dbd_amount");
         ArrayList<String> dbd_description = null;
         ArrayList<String> dbd_amount = null;
-        if(dbd_desc != null){                         
+        if(!dbd_desc.trim().isEmpty()){                         
             dbd_description = new ArrayList<String>();
             dbd_amount = new ArrayList<String>();
             String[] arrayD = dbd_desc.split("\\|");
             for(int i=0; i<arrayD.length; i++){
                 String string = arrayD[i];
-                System.out.println(string);
                 dbd_description.add(string);
             }
             String[] arrayA = dbd_amt.split("\\|");
@@ -136,7 +135,7 @@ public class EditPayslipController extends HttpServlet {
         String apbd_amt = request.getParameter("apbd_amount");
         ArrayList<String> apbd_description = null;
         ArrayList<String> apbd_amount = null;
-        if(apbd_desc != null){        
+        if(!apbd_desc.trim().isEmpty()){        
             apbd_description = new ArrayList<String>();
             apbd_amount = new ArrayList<String>();
             String[] arrayD = apbd_desc.split("\\|");

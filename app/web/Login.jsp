@@ -83,7 +83,7 @@
                             <div class="message-modal-content">
                                 <div class="modal-body">
                                     <span class="close" onclick="closeModal('messageModal')">×</span>
-                                    <div id="message-status"></div>
+                                    <center><div style="padding-top: 10px;" id="message-status"></div></center>
                                     <hr>
                                     <div id="message-content"></div>
                                 </div>

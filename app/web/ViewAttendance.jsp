@@ -13,17 +13,19 @@
     <body onload="attendance_setup()">
         <%@include file="header.jsp"%>
         <div id="view_attendance_modal" class="modal" style="display:none;">
-            <!-- Modal content -->
-            <div class="attendance-modal-content">
-                <div class="modal-body">
+            <div class="modal-content" style="width: fit-content;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('view_attendance_modal')">×</span>
+                    <center><h2>View Attendance</h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="attendance_modal_details"></div>
                 </div>
             </div>
         </div>
         <div id="page-content-wrapper">
             <div id="page-content">
-                <div class="container">
+                <div class="container" style="width: 100%;">
                     <div id="page-title">
                         <h2>Attendances</h2> <br>
                     </div>

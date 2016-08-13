@@ -15,7 +15,7 @@
         <%@include file="header.jsp"%>
         <div id="page-content-wrapper">
             <div id="page-content">
-                <div class="container">
+                <div class="container" style="width: 100%">
                     <div id="page-title">
                         <h2>Part Time Employees</h2>
                     </div>

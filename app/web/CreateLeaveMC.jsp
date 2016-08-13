@@ -42,12 +42,12 @@
     <body>
         <%@include file="header.jsp"%>
         <div id="leave_error_modal" class="modal">
-            <!-- Modal content -->
-            <div class="message-modal-content">
-                <div class="modal-body">
+            <div class="modal-content" style="width: 400px;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('leave_error_modal')">×</span>
-                    <div id="leave_error_status"></div>
-                    <hr>
+                    <center><h2><div id="leave_error_status"></div></h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="leave_error_message"></div>
                 </div>
             </div>
@@ -62,9 +62,11 @@
                     <div class="panel">
                         <div class="panel-body">
                             <form class="form-horizontal" id="leave_form" action="CreateLeaveController" method="post" enctype="multipart/form-data">
-                                <h3 class="title-hero">
-                                    Employee Information
-                                </h3><hr>
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <h3 class="mrg10A">Employee Information </h3>
+                                    </div>
+                                </div>
                                  <div class="form-group">
                                     <label class="col-sm-3 control-label">Employee :</label>
                                     <div class="col-sm-3">
@@ -90,11 +92,12 @@
                                        <label class="control-label" id="leave_employee_mc"></label>
                                     </div>
                                 </div>
-                               
-                                <br>
-                                <h3 class="title-hero">
-                                    Leave / MC Information
-                                </h3><hr>
+                                        <hr>
+                               <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <h3 class="mrg10A">Leave/MC Information </h3>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Leave Type :</label>
                                     <div class="col-sm-3">

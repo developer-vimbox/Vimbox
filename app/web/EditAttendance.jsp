@@ -55,12 +55,12 @@
     <body>
         <%@include file="header.jsp"%>
         <div id="attendance_error_modal" class="modal">
-            <!-- Modal content -->
             <div class="message-modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('attendance_error_modal')">×</span>
+                    <center><h2><div id="attendance_error_status"></div></h2></center>
+                </div>
                 <div class="modal-body">
-                    <span class="close" onclick="closeModal('leave_error_modal')">×</span>
-                    <div id="attendance_error_status"></div>
-                    <hr>
                     <div id="attendance_error_message"></div>
                 </div>
             </div>
@@ -110,9 +110,10 @@
                                             <th>Employee</th>
                                             <th>Status</th>
                                             <th>Duration</th>
-                                            <th>Present</th>
-                                            <th>Absent</th>
-                                            <th colspan='2'>Late</th>
+                                            <th style="text-align: center">Present</th>
+                                            <th style="text-align: center">Absent</th>
+                                            <th style="text-align: right">Late</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
 
@@ -138,16 +139,16 @@
                                                 if (!employeeDuration.matches("0900 - 1800|0830 - 1730")) {
                                                     String employeeAttendance = attendance_record.get(nric);
                                             %>
-                                            <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Present" <%if (employeeAttendance != null && employeeAttendance.equals("Present")) {
+                                            <td style="text-align: center"><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Present" <%if (employeeAttendance != null && employeeAttendance.equals("Present")) {
                                                     out.println("checked");
                                                 }%>></td>
-                                            <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Absent" <%if (employeeAttendance != null && employeeAttendance.equals("Absent")) {
+                                            <td style="text-align: center"><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Absent" <%if (employeeAttendance != null && employeeAttendance.equals("Absent")) {
                                                     out.println("checked");
                                                 }%>></td>
-                                            <td align='center'><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Late" <%if (employeeAttendance != null && employeeAttendance.equals("Late")) {
+                                            <td style="text-align: right"><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Late" <%if (employeeAttendance != null && employeeAttendance.equals("Late")) {
                                                     out.println("checked");
                                                 }%>></td>
-                                            <td align='center'>
+                                            <td>
                                                     <select name="late_<%=nric%>_h" id="late_<%=nric%>_h" <%if (employeeAttendance != null && !employeeAttendance.equals("Late"))out.println("disabled");%>>
                                                     
                                                     <%

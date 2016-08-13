@@ -10,12 +10,6 @@
     } else {
 %>
 <table class="table table-hover">
-    <col width="18%">
-    <col width="18%">
-    <col width="18%">
-    <col width="18%">
-    <col width="18%">
-    <col width="10%">
     <thead>
     <tr>
         <th>Date</th>
@@ -57,7 +51,7 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <span class="close" onclick="closeModal('view_mc_modal')">×</span>
-                        <img src="${pageContext.request.contextPath}<%=path%>" width="100%" height="600"/>
+                        <img src="${pageContext.request.contextPath}/Images/Rekted.png" />
                     </div>
                 </div>
             </div>

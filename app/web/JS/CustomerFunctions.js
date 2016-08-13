@@ -1,9 +1,11 @@
 function customerSearch(module) {
+    var modal = document.getElementById("customer_modal");
     var name = $('#customer_search').val();
     var content = document.getElementById("customer_content");
     $.get("SearchCustomersByName.jsp", {getName: name, getAction: module}, function (data) {
         content.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
 function customerSearchHeader(module) {
@@ -17,8 +19,8 @@ function customerSearchHeader(module) {
 }
 
 function addNewCustomer() {
-    var modal = document.getElementById("customer_modal");
-    $("#customer_content").load("CreateCustomer.jsp");
+    var modal = document.getElementById("add_customer_modal");
+    $("#add_customer_content").load("CreateCustomer.jsp");
     modal.style.display = "block";
 }
 
@@ -37,8 +39,9 @@ function createCustomer() {
                 var status = data.status;
                 var errorMsg = data.message;
                 if (status === "SUCCESS") {
-                    document.getElementById("customer_modal").style.display = "none";
+                    document.getElementById("add_customer_modal").style.display = "none";
                     $('#customer_id').val(data.customer_id);
+                    $("#customer_name").html(data.customer_salutation + " " + data.customer_first_name + " " + data.customer_last_name);
                     $("#customer_salutation").html(data.customer_salutation);
                     $("#customer_first_name").html(data.customer_first_name);
                     $("#customer_last_name").html(data.customer_last_name);
@@ -70,10 +73,12 @@ function selectCustomer(customer_id, customer_salutation, customer_first_name, c
 }
 
 function editCustomer(customer_id){
+    var modal = document.getElementById("edit_customer_modal");
     var content = document.getElementById("edit_customer_content");
     $.get("EditCustomer.jsp", {getId: customer_id}, function (data) {
         content.innerHTML = data;
     });
+    modal.style.display = "block";
 }
 
 function updateCustomer(){

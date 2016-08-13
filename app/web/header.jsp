@@ -1,6 +1,8 @@
 <%@page import="com.vimbox.user.User"%>
 <%@include file="ValidateLogin.jsp"%>
 <script src="JS/CustomerFunctions.js"></script>
+<script src="JS/LeadFunctions.js"></script>
+<script src="JS/TicketFunctions.js"></script>
 
 <style>
     /* Loading Spinner */
@@ -12,7 +14,7 @@
         display:none;
     }
 </style>
-
+<script src="JS/ModalFunctions.js"></script>
 <script type="text/javascript">
     /* jQuery UI Tabs */
 
@@ -227,14 +229,13 @@
                         <span><%=designation%></span>
                         <i class="glyph-icon icon-angle-down"></i>
                     </a>
-                    <div class="dropdown-menu float-left">
-                        <div class="box-sm">  
+                    <div class="dropdown-menu float-left" style="left: 97px;">
+                        <div class="box-sm" style="width: 250px;">  
                             <div class="pad5A button-pane button-pane-alt text-center">
                                 <a href="ChangePassword.jsp" class="btn display-block font-normal btn-primary" style="margin-bottom: 5px">
                                     <i class="glyph-icon icon-unlock-alt"></i>
                                     Change Password
                                 </a>
-
                                 <a href="Logout.jsp" class="btn display-block font-normal btn-danger">
                                     <i class="glyph-icon icon-power-off"></i>
                                     Logout
@@ -276,15 +277,15 @@
             <div id="header-nav-right">
                 <div class="dropdown">
                     <input type="text" id="customer_search_header" class="searchbar" placeholder="Search Customer">
-                    <button class="btn btn-round btn-primary" onclick='customerSearchHeader("crm")' data-toggle="modal" data-target="#search_cust_header" style=" margin-right: 10px">
+                    <button class="btn btn-round btn-primary" onclick='customerSearchHeader("crm")' data-toggle="modal" data-target=".bs-example-modal-lg" style=" margin-right: 10px">
                         <i class="glyph-icon icon-search"></i>
                     </button>
                 </div>
-                <div class="modal fade bs-example-modal-lg" id="search_cust_header" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                    <div class="modal-content">
+                <div id="customer_modal_header" class="modal">
+                    <div class="modal-content" style="width: 700px;">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Search Results</h4>
+                            <span class="close" onclick="closeModal('customer_modal_header')">×</span>
+                            <center><h2>Customer Search</h2></center>
                         </div>
                         <div class="modal-body">
                             <div class="results">
@@ -293,114 +294,54 @@
                                         <div id="customer_content_header"></div>
                                     </div>
 
-                                    <div class="modal" id="edit_customer_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" style="width: 500px;">
-                                            <div class="modal-content" style="width: 500px;">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h3>Edit Customer Details</h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="edit_customer_content"></div>
-                                                </div>
+                                    <div id="edit_customer_modal" class="modal">
+                                        <div class="modal-content" style="width: 500px;">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('edit_customer_modal')">×</span>
+                                                <center><h2>Edit Customer</h2></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="edit_customer_content"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="leadsHistoryModal" class="modal">
+                                        <div class="modal-content" style="width: 900px;">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('leadsHistoryModal')">×</span>
+                                                <center><h2>Leads History</h2></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="leadsHistoryContent"></div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div id="customer_error_modal" class="modal">
                                         <div class="error-modal-content">
-                                            <div class="modal-body">
+                                            <div class="modal-header">
                                                 <span class="close" onclick="closeModal('customer_error_modal')">×</span>
-                                                <div id="customer_error_status"></div>
-                                                <hr>
+                                                <center><h2><div id="customer_error_status"></div></h2></center>
+                                            </div>
+                                            <div class="modal-body">
                                                 <div id="customer_error_message"></div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="modal" id="ticketsHistoryModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" style="width: 900px;">
-                                            <div class="modal-content" style="width: 900px;">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h3>Tickets History</h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="ticketsHistoryContent"></div>
-                                                </div>
+                                    <div id="ticketsHistoryModal" class="modal">
+                                        <div class="modal-content" style="width: 900px;">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('ticketsHistoryModal')">×</span>
+                                                <center><h2>Tickets History</h2></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="ticketsHistoryContent"></div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="modal" id="leadsHistoryModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" style="width: 900px;">
-                                            <div class="modal-content" style="width: 900px;">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h3>Leads History</h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="leadsHistoryContent"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal" id="viewLeadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
-                                        <div class="modal-dialog" style="width: 900px;">
-                                            <div class="modal-content" style="width: 900px;">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h3>View Lead</h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="leadContent"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal" id="viewFollowUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
-                                        <div class="modal-dialog" style="width: 700px;">
-                                            <div class="modal-content" style="width: 700px;">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h3>Follow Up History</h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="followUpContent"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal" id="viewTicketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
-                                        <div class="modal-dialog" style="width: 500px;">
-                                            <div class="modal-content" style="width: 500px;">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h3>Ticket Details</h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="viewTicketModalContent"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="modal" id="viewCommentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
-                                        <div class="modal-dialog" style="width: 500px;">
-                                            <div class="modal-content" style="width: 500px;">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    <h3>Comments History</h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="commentsContent"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                 </div><!--.row-->
                             </div><!--.results-->

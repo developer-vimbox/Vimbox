@@ -13,11 +13,13 @@
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Payslip payslip = PayslipDAO.getPayslip(array[0], sdf.parse(array[1]));
 %>
-<h3 class="title-hero">
-    Payslip Information
-</h3> <hr>
 <input type="hidden" id="payslip_id" value="<%=payslip.getPayslip_id()%>">
 <div class="form-horizontal">
+    <div class="form-group">
+        <div class="col-sm-6">
+            <h3 class="mrg10A">Payslip Information </h3>
+        </div>
+    </div>
     <div class="form-group">
         <label class="col-sm-3 control-label">Start Date: </label>
         <div class="col-sm-5">
@@ -68,20 +70,23 @@
         </div>
     </div>
 </div>
-<h3 class="title-hero">
-    Payment Breakdown
-</h3> <hr>
 <div class="form-horizontal">
+    <hr>
+    <div class="form-group">
+        <div class="col-sm-6">
+            <h3 class="mrg10A">Payment Breakdown </h3>
+        </div>
+    </div>
     <div class="form-group">
         <label class="col-sm-2 control-label"></label>
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <table style="width: 100%;">
                 <%
                     DecimalFormat df = new DecimalFormat("#0.00");
                 %>
                 <tr>
                     <td>
-                        <table class="table">
+                        <table class="table table-hover">
                             <col width='50%'>
                             <tr>
                                 <th colspan="2" align="center"><b>Basic & Allowance</b></th>
@@ -125,7 +130,7 @@
                                                 </td>
                                                 <td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>
                                             </tr>
-     
+
                                             <%
                                                         }
                                                     }
@@ -284,7 +289,7 @@
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label"></label>
-        <div class="col-sm-6 text-center">
+        <div class="col-sm-8 text-center">
             <button class="btn btn-primary" onclick="updatePayslip()">Edit Payslip</button>
         </div>
     </div>

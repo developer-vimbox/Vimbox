@@ -41,17 +41,23 @@
         <!-- The Modal for View Tickets-->
         <div class="modal" id="viewTicketModal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('viewTicketModal')">×</span>
-                <div id="viewTicketModalContent">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('viewTicketModal')">×</span>
+                    <center><h2>Ticket Details</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="viewTicketModalContent"></div>
                 </div>
             </div>
         </div>
         <!-- The Modal for View Comment-->
         <div id="viewCommentsModal" class="modal">
-            <!-- Modal content -->
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('viewCommentsModal')">×</span>
+                    <center><h2>Comments History</h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="commentsContent"></div> 
                 </div>
             </div>

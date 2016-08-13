@@ -14,21 +14,22 @@
         <%            String nric = user.getNric();
         %>
         <div id="messageModal" class="modal">
-            <div class="message-modal-content">
-                <div class="modal-body">
+            <div class="modal-content" style="width: 300px;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('messageModal')">×</span>
-                    <div id="message-status"></div>
-                    <hr>
+                    <center><h2><div id="message-status"></div></h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="message-content"></div>
                 </div>
             </div>
         </div>
+        
         <input type="hidden" id="user_id" value="<%=nric%>">
 
         <div id="page-content-wrapper">
             <div id="page-content">
-
-                <div class="container">
+                <div class="container" style="width: 100%">
 
                     <!-- Tocify -->
 
