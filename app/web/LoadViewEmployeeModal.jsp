@@ -163,7 +163,7 @@
         <div class="col-sm-3" style="padding-top: 7px;">
             <%
                 double leave = user.getLeave() - user.getUsed_leave();
-                out.println(df.format(leave / 9) + " days");
+                out.println((int)leave / 8 + " days " + (int)leave % 8 + " hours");
             %>
         </div>
     </div>

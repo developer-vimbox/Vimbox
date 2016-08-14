@@ -50,28 +50,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">NRIC: </label>
+                                    <label class="col-sm-3 control-label">NRIC / FIN: </label>
                                     <div class="col-sm-5">
-                                        <div class="input-group mrg15T mrg15B">
-                                            <div class="input-group-btn">
-                                                <select id="user_nric_first_alphabet" class="form-control" style="width: 57px;">
-                                                    <option value="S">S</option>
-                                                    <option value="T">T</option>
-                                                    <option value="F">F</option>
-                                                    <option value="G">G</option>
-                                                </select>
-                                            </div>
-                                            <input type="number" class="form-control" id="user_nric">
-                                            <div class="input-group-btn">
-                                                <select id="user_nric_last_alphabet" class="form-control" style="width: 57px;">
-                                                    <%                                char[] alphabets = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-                                                        for (char alphabet : alphabets) {
-                                                            out.println("<option value='" + alphabet + "'>" + alphabet + "</option>");
-                                                        }
-                                                    %>
-                                                </select>
-                                            </div>
-                                        </div>
+                                        <input type="number" class="form-control" id="user_nric">
                                     </div>
                                 </div>
                                 <div class="form-group">

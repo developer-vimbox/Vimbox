@@ -132,7 +132,22 @@ public class CreateLeaveController extends HttpServlet {
                 errorMsg += "Please upload image proof for MC<br>";
             } else {
                 //path = System.getProperty("user.dir") + "/MC" + File.separator + fileName;
-                path = "C:\\Users\\NYuSheng\\Documents\\GitHub\\Vimbox\\app\\web\\Images\\MC" + File.separator + fileName;
+                path = this.getClass().getClassLoader().getResource("").getPath();
+                int occurence = 0;
+                int slash = 0;
+                for (int i = path.length() - 1; i >= 0; i--) {
+                    char ch = path.charAt(i);
+                    if (ch == '/') {
+                        occurence += 1;
+                    }
+                    if (occurence == 3) {
+                        slash = i;
+                        break;
+                    }
+                }
+                path = path.substring(0, slash + 1) + "images/MC";
+                path = path.replaceAll("%20", " ");
+                path = path + File.separator + fileName;
             }
         }
 
@@ -140,7 +155,7 @@ public class CreateLeaveController extends HttpServlet {
             OutputStream out = null;
             InputStream filecontent = null;
             try {
-                UserLeaveDAO.createLeaveRecord(leaveType, leaveName, nric, used, usedString, path);
+                UserLeaveDAO.createLeaveRecord(leaveType, leaveName, nric, used, usedString, "/images/MC/" + fileName);
                 if (filePart != null) {
                     out = new FileOutputStream(new File(path));
                     filecontent = filePart.getInputStream();

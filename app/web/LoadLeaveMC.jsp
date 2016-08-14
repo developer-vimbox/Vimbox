@@ -85,7 +85,7 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <span class="close" onclick="closeModal('view_mc_modal')">×</span>
-                        <img src="${pageContext.request.contextPath}/Images/Rekted.png" />
+                        <img src="${pageContext.request.contextPath}<%=path%>" width="300" height="300"/>
                     </div>
                 </div>
             </div>

@@ -85,7 +85,7 @@ function createEmployee() {
     } else {
         var user_first_name = $('#user_first_name').val();
         var user_last_name = $('#user_last_name').val();
-        var user_nric = $('#user_nric_first_alphabet').val() + $('#user_nric').val() + $('#user_nric_last_alphabet').val();
+        var user_nric = $('#user_nric').val();
         var user_dj = $('#user_dj').val();
         var user_madd = $('#user_madd').val();
         var user_radd = $('#user_radd').val();
@@ -117,9 +117,15 @@ function createEmployee() {
                     message.innerHTML = errorMsg;
                     modal.style.display = "block";
                     if (dataStatus === "SUCCESS") {
-                        setTimeout(function () {
-                            location.reload()
-                        }, 500);
+                        if(employeeType === 'Full'){
+                            setTimeout(function () {
+                                window.location.href = "FullTimeEmployees.jsp";
+                            }, 500);
+                        }else{
+                            setTimeout(function () {
+                                window.location.href = "PartTimeEmployees.jsp";
+                            }, 500);
+                        }
                     }
                 })
                 .fail(function (error) {
@@ -849,7 +855,13 @@ function viewMC(){
 $(document).on('change', '#start_date', function () {
     var eDate = $('#end_date').val();
     if(eDate === ''){
-        $('#end_date').val($('#start_date').val());
+        var startDate = new Date($('#start_date').val());
+        var date = startDate.getDate();
+        var month = startDate.getMonth(); //months from 1-12
+        var year = startDate.getFullYear();
+        if(Number(year) > 1000){
+            $('#end_date').val(new Date(year, month, date + 1).toDateInputValue());
+        }
     }
 });
 
