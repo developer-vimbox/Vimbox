@@ -248,12 +248,21 @@ function create_leadSetup() {
     checkLeadInformation();
 }
 
-function showfield(name) {
-    if (name == 'Others') {
-        document.getElementById('referralOthers').innerHTML = '<label class="col-sm-6 control-label">Others: </label>  <div class="col-sm-4"><input class="form-control" type="text" name="referralOthers" style="width: 200px;" /></div>';
-    } else {
-        document.getElementById('referralOthers').innerHTML = '';
+function showfield(name, e) {
+    if(e.id === 'enquiry'){
+        if (name == 'Others') {
+            document.getElementById('enquiryOthers').innerHTML = '<label class="col-sm-6 control-label">Others: </label>  <div class="col-sm-4"><input class="form-control" type="text" name="enquiryOthers" style="width: 200px;" /></div>';
+        } else {
+            document.getElementById('enquiryOthers').innerHTML = '';
+        }
+    }else{
+        if (name == 'Others') {
+            document.getElementById('referralOthers').innerHTML = '<label class="col-sm-6 control-label">Others: </label>  <div class="col-sm-4"><input class="form-control" type="text" name="referralOthers" style="width: 200px;" /></div>';
+        } else {
+            document.getElementById('referralOthers').innerHTML = '';
+        }
     }
+    
 }
 
 $(document).on('change keyup paste', '.servicesTable tbody tr', function (event) {

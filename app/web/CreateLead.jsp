@@ -161,7 +161,7 @@
             <div id="page-content">
                 <div class="container">
                     <div id="page-title">
-                        <h2>Create New Leads</h2> <br>
+                        <h2>Create New Lead</h2> <br>
                     </div>
                     <div class="panel">
                         <div class="panel-body">
@@ -362,7 +362,11 @@
                                                 <div class="col-sm-6">
                                                     <select class="form-control" name="enquiry" id="enquiry" onchange="showfield(this.options[this.selectedIndex].value, this)">
                                                         <option value="SELECT">--Select--</option>
-
+                                                        <%                                
+                                                            for (String enquiry : enquiries) {
+                                                                out.println("<option value='" + enquiry + "'>" + enquiry + "</option>");
+                                                            }
+                                                        %>
                                                         <option value="Others">Others</option>
                                                     </select>
                                                 </div>
@@ -378,11 +382,12 @@
                                         <div class="col-sm-4">
                                             <div class="form-group row">
                                                 <div class="col-sm-6">
-                                                    <select class="form-control" name="referral" id="referral" onchange="showfield(this.options[this.selectedIndex].value)">
-                                                        <option value="Friend">Friend</option>
-                                                        <option value="Magazine">Magazine</option>
-                                                        <option value="Website">Website</option>
-
+                                                    <select class="form-control" name="referral" id="referral" onchange="showfield(this.options[this.selectedIndex].value, this)">
+                                                        <%                                
+                                                            for (String referral : referrals) {
+                                                                out.println("<option value='" + referral + "'>" + referral + "</option>");
+                                                            }
+                                                        %>
                                                         <option value="Others">Others</option>
                                                     </select>
                                                 </div>
