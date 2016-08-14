@@ -65,9 +65,10 @@ public class EditLeadController extends HttpServlet {
         if(enquiry.equals("SELECT")){
             leadType = "Sales";
         }else{
-            LeadDAO.createLeadEnquiry(leadId, enquiry);
             leadType = "Enquiry";
         }
+        LeadDAO.createLeadEnquiry(leadId, enquiry);
+        
         // Customer details //
         String cId = request.getParameter("customer_id");
         int custId = -1;

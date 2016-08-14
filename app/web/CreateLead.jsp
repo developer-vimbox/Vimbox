@@ -519,7 +519,6 @@
 
             jQuery(document).bind('keydown', 'ctrl+shift', function (e) {
                 var tableClassName = $(document.activeElement.parentNode.parentNode.parentNode.parentNode).attr('class');
-
                 var activeElement = document.activeElement.parentNode;
                 var tagname = activeElement.tagName;
                 while (tagname !== 'DIV') {
@@ -528,25 +527,25 @@
                 }
 
                 switch (tableClassName) {
-                    case "customerBoxTable":
+                    case "table customerBoxTable":
                         addCustomerBox(activeElement.id);
                         break;
-                    case "customerItemTable":
+                    case "table customerItemTable":
                         addItem(activeElement.id);
                         break;
-                    case "customerSpecialItemTable":
+                    case "table customerSpecialItemTable":
                         addSpecialItem(activeElement.id);
                         break;
-                    case "vimboxBoxTable":
+                    case "table vimboxBoxTable":
                         addVimboxBox(activeElement.id);
                         break;
-                    case "vimboxMaterialTable":
+                    case "table vimboxMaterialTable":
                         addVimboxMaterial(activeElement.id);
                         break;
-                    case "customerCommentTable":
+                    case "table customerCommentTable":
                         addCustomerComment(activeElement.id);
                         break;
-                    case "customerRemarkTable":
+                    case "table customerRemarkTable":
                         addCustomerRemark(activeElement.id);
                         break;
                     default:

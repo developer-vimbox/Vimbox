@@ -98,13 +98,12 @@
                 <tr>
                     <td align="right">Box :</td>
                     <td>
-                        <table class="table  customerBoxTable">
+                        <table class="table customerBoxTable">
 <!--                            <col width="80">-->
                             <tr>
                                 <td align="right">Quantity:</td>
                                 <td>
                                     <input class='form-control' type="number" min="0" id="<%=divId%>_customerBoxUnit">
-                                    <br>
                                     <button class='btn btn-default' onclick="addCustomerBox('<%=divId%>');
                                             return false;">Add</button>
                                 </td>

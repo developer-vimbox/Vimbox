@@ -530,7 +530,7 @@ function addItem(divId) {
         addUnits(Number(itemUnit), divId);
         $("#" + divId + "_itemName").val("");
         $("#" + divId + "_itemUnit").val("");
-        $("#" + divId + "_itemQty");
+        $("#" + divId + "_itemQty").val("");
         $("#" + divId + "_itemRemark").val("");
         $("#" + divId + "_itemName").focus();
         update_services(divId);

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 13, 2016 at 08:31 PM
+-- Generation Time: Aug 14, 2016 at 07:56 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
 --
 
 INSERT INTO `customers` (`customer_id`, `salutation`, `first_name`, `last_name`, `contact`, `email`) VALUES
-(1, 'Ms', 'pamela', 'seah', 90827736, 'pamela@gmail.com'),
+(1, 'Ms', 'pamelas', 'seah', 90827736, 'pamela@gmail.com'),
 (2, 'Mr', 'khairul', 'anwar', 98873304, 'khairul@gmail.com');
 
 -- --------------------------------------------------------
@@ -55,13 +55,6 @@ CREATE TABLE IF NOT EXISTS `customers_history` (
   `id` int(11) NOT NULL,
   PRIMARY KEY (`customer_id`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `customers_history`
---
-
-INSERT INTO `customers_history` (`customer_id`, `id`) VALUES
-(1, 26593276);
 
 -- --------------------------------------------------------
 
@@ -104,14 +97,6 @@ CREATE TABLE IF NOT EXISTS `leadenquiry` (
   PRIMARY KEY (`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `leadenquiry`
---
-
-INSERT INTO `leadenquiry` (`lead_id`, `enquiry`) VALUES
-(128866189, 'Material Prices'),
-(484323620, 'Material Prices');
-
 -- --------------------------------------------------------
 
 --
@@ -132,21 +117,6 @@ CREATE TABLE IF NOT EXISTS `leadinfo` (
   `referral` varchar(200) NOT NULL,
   PRIMARY KEY (`owner_user`,`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `leadinfo`
---
-
-INSERT INTO `leadinfo` (`owner_user`, `lead_id`, `type`, `customer_id`, `tom`, `dom`, `datetime_of_creation`, `status`, `reason`, `source`, `referral`) VALUES
-('S9344895B', 128866189, 'Enquiry', -1, '', '', '2016-08-12 15:39:47', 'Pending', '', 'Call', 'Friend'),
-('S9344895B', 135863016, 'Sales', -1, '', '', '2016-08-12 17:02:25', 'Pending', '', 'Call', 'Friend'),
-('S9344895B', 253556432, 'Sales', -1, '', '', '2016-08-12 16:55:46', 'Pending', '', 'Call', 'Friend'),
-('S9344895B', 290982562, 'Sales', -1, '', '', '2016-08-12 15:38:28', 'Pending', '', 'Call', 'Friend'),
-('S9344895B', 396519050, 'Sales', -1, '', '', '2016-08-12 16:50:36', 'Pending', '', 'Call', 'Friend'),
-('S9344895B', 484323620, 'Enquiry', -1, '', '', '2016-08-12 15:33:15', 'Pending', '', 'Call', 'Friend'),
-('S9344895B', 556407039, 'Sales', -1, '', '', '2016-08-12 14:56:34', 'Pending', '', 'Call', 'Friend'),
-('S9344895B', 602776587, 'Sales', -1, '', '', '2016-08-12 15:45:44', 'Pending', '', 'Call', 'Friend'),
-('S9344895B', 703050505, 'Sales', -1, '', '', '2016-08-12 17:06:46', 'Pending', '', 'Call', 'Friend');
 
 -- --------------------------------------------------------
 
@@ -179,15 +149,6 @@ CREATE TABLE IF NOT EXISTS `leadmove` (
   PRIMARY KEY (`lead_id`,`sales_div`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `leadmove`
---
-
-INSERT INTO `leadmove` (`lead_id`, `sales_div`, `type`, `address`, `storeys`, `pushing`) VALUES
-(290982562, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'from', '864 Yishun Ave 4, Block 864_11_11_760864', ' ', ' '),
-(556407039, 'sales1|864 Yishun Ave 4, Block 864 #22-22 S760864', 'from', '864 Yishun Ave 4, Block 864_22_22_760864', ' ', ' '),
-(703050505, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'from', '864 Yishun Ave 4, Block 864_11_11_760864', ' ', ' ');
-
 -- --------------------------------------------------------
 
 --
@@ -200,30 +161,6 @@ CREATE TABLE IF NOT EXISTS `leadother` (
   `other` varchar(100) NOT NULL,
   `charge` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `leadother`
---
-
-INSERT INTO `leadother` (`lead_id`, `sales_div`, `other`, `charge`) VALUES
-(556407039, 'sales1|864 Yishun Ave 4, Block 864 #22-22 S760864', 'storeyCharge', '0.00'),
-(556407039, 'sales1|864 Yishun Ave 4, Block 864 #22-22 S760864', 'pushCharge', '0.00'),
-(556407039, 'sales1|864 Yishun Ave 4, Block 864 #22-22 S760864', 'detourCharge', '0.00'),
-(556407039, 'sales1|864 Yishun Ave 4, Block 864 #22-22 S760864', 'materialCharge', '0.00'),
-(556407039, 'sales1|864 Yishun Ave 4, Block 864 #22-22 S760864', 'markup', '0.00'),
-(556407039, 'sales1|864 Yishun Ave 4, Block 864 #22-22 S760864', 'discount', '0.00'),
-(290982562, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'storeyCharge', '0.00'),
-(290982562, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'pushCharge', '0.00'),
-(290982562, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'detourCharge', '0.00'),
-(290982562, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'materialCharge', '0.00'),
-(290982562, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'markup', '0.00'),
-(290982562, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'discount', '0.00'),
-(703050505, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'storeyCharge', '0.00'),
-(703050505, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'pushCharge', '0.00'),
-(703050505, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'detourCharge', '0.00'),
-(703050505, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'materialCharge', '0.00'),
-(703050505, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'markup', '0.00'),
-(703050505, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', 'discount', '0.00');
 
 -- --------------------------------------------------------
 
@@ -251,15 +188,6 @@ CREATE TABLE IF NOT EXISTS `leadsalesdiv` (
   `survey_area_name` varchar(255) NOT NULL,
   PRIMARY KEY (`lead_id`,`sales_div`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `leadsalesdiv`
---
-
-INSERT INTO `leadsalesdiv` (`lead_id`, `sales_div`, `survey_area`, `survey_area_name`) VALUES
-(290982562, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', '', ''),
-(556407039, 'sales1|864 Yishun Ave 4, Block 864 #22-22 S760864', '', ''),
-(703050505, 'sales1|864 Yishun Ave 4, Block 864 #11-11 S760864', '', '');
 
 -- --------------------------------------------------------
 
@@ -403,16 +331,6 @@ CREATE TABLE IF NOT EXISTS `sitesurvey_assigned` (
   `status` varchar(20) NOT NULL,
   PRIMARY KEY (`lead_id`,`start_datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `sitesurvey_assigned`
---
-
-INSERT INTO `sitesurvey_assigned` (`lead_id`, `ss_user`, `address_tag`, `address`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
-(290982562, 'S9289374H', 'from|', '864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-08-27 14:00:00', '2016-08-27 14:30:00', '1400 - 1500', '', 'Pending'),
-(290982562, 'S9289374H', 'from|', '864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-08-27 14:30:00', '2016-08-27 15:00:00', '1400 - 1500', '', 'Pending'),
-(556407039, 'S9289374H', 'from|', '864 Yishun Ave 4, Block 864 #22-22 S760864|', '2016-08-19 13:00:00', '2016-08-19 13:30:00', '1300 - 1400', '', 'Pending'),
-(556407039, 'S9289374H', 'from|', '864 Yishun Ave 4, Block 864 #22-22 S760864|', '2016-08-19 13:30:00', '2016-08-19 14:00:00', '1300 - 1400', '', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -715,7 +633,7 @@ CREATE TABLE IF NOT EXISTS `tickets` (
 --
 
 INSERT INTO `tickets` (`ticket_id`, `owner_user`, `assigned_users`, `customer_id`, `subject`, `datetime_of_creation`, `datetime_of_edit`, `description`, `solution`, `status`) VALUES
-(26593276, 'S9344895B', 'S9289374H', 1, 'Test', '2016-08-12 14:24:13', '2016-08-12 14:24:13', 'test', '', 'Pending');
+(26593276, 'S9344895B', 'S9289374H|S9887362K|S9344895B', 1, 'Test', '2016-08-12 14:24:13', '2016-08-14 15:26:32', 'test', 'resolved', 'Resolved');
 
 -- --------------------------------------------------------
 
@@ -887,9 +805,9 @@ CREATE TABLE IF NOT EXISTS `users_leave` (
 --
 
 INSERT INTO `users_leave` (`nric`, `date_joined`, `leave`, `mc`, `used_leave`, `used_mc`) VALUES
-('S9289374H', '2016-08-12', 63, 14, 0, 0),
-('S9344895B', '2016-06-18', 63, 14, 0, 0),
-('S9887362K', '2016-08-12', 63, 14, 0, 0);
+('S9289374H', '2016-08-12', 56, 14, 0, 0),
+('S9344895B', '2016-06-18', 56, 14, 0, 2),
+('S9887362K', '2016-08-12', 56, 14, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -907,6 +825,14 @@ CREATE TABLE IF NOT EXISTS `users_leave_record` (
   `img` varchar(100) NOT NULL,
   PRIMARY KEY (`nric`,`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_leave_record`
+--
+
+INSERT INTO `users_leave_record` (`leave_type`, `leave_name`, `nric`, `date`, `time_string`, `leave_duration`, `img`) VALUES
+('Paid', 'MC', 'S9344895B', '2016-08-19', '0900 - 1800', 9, '/images/MC/pokemon.png'),
+('Paid', 'MC', 'S9344895B', '2016-08-20', '0900 - 1800', 9, '/images/MC/pokemon.png');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
