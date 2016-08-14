@@ -6,67 +6,67 @@
 <%@page import="org.joda.time.DateTime"%>
 <%@page import="org.joda.time.format.DateTimeFormatter"%>
 <%@page import="org.joda.time.format.DateTimeFormat"%>
-<style>
-    .tooltip {
-        position: relative;
-    }
+<style type="text/css">
+.tooltipp {
+    position: relative;
+}
 
-    .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 120px;
-        background-color: black;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px 0;
-        position: absolute;
-        z-index: 1;
-        bottom: 150%;
-        left: 50%;
-        margin-left: -60px;
-    }
+.tooltipp .tooltiptextt {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+}
 
-    .tooltip .tooltiptext::after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: black transparent transparent transparent;
-    }
+.tooltipp .tooltiptextt::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
 
-    .tooltip:hover .tooltiptext {
-        visibility: visible;
-    }
+.tooltipp:hover .tooltiptextt {
+    visibility: visible;
+}
 
-    .controls {
-        margin-top: 10px;
-        border: 1px solid transparent;
-        border-radius: 2px 0 0 2px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        height: 32px;
-        outline: none;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    }
+.controls {
+    margin-top: 10px;
+    border: 1px solid transparent;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 32px;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
-    #pac-input {
-        background-color: #fff;
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-        margin-left: 12px;
-        padding: 0 11px 0 13px;
-        text-overflow: ellipsis;
-        width: 300px;
-        display: none;
-    }
+#pac-input {
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 300px;
+    display: none;
+}
 
-    #pac-input:focus {
-        border-color: #4d90fe;
-    }
+#pac-input:focus {
+    border-color: #4d90fe;
+}
 </style>
 
 <h2>Schedule</h2><hr>
@@ -151,9 +151,9 @@
                                                     }
                                                 }
                                                 if (taken) {
-                                                    out.println("<td class='occupied tooltip' data-state='occupied'><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'>");
+                                                    out.println("<td class='occupied tooltipp' data-state='occupied'><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'>");
                                     %>
-                                <table class='tooltiptext' width="100%">
+                                <table class='tooltiptextt' width="100%">
                                     <tr>
                                         <td align="right">Lead ID :</td>
                                         <td><%=ss.getLead()%></td>
