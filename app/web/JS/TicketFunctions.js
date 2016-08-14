@@ -171,24 +171,23 @@ function viewComments(ticketId) {
     modal.style.display = "block";
 }
 
-function searchPending() {
-    var kw = document.getElementById("pKw").value;
-    var modal = document.getElementById("pkwModal");
-    var pkwDiv = document.getElementById("pkwContent");
+function initForum(){
+    searchPending('');
+    searchResolved('');
+}
+
+function searchPending(kw) {
+    var pkwDiv = document.getElementById("pending");
     $.get("SearchTickets.jsp", {getKeyword: kw, getStatus: "pending"}, function (data) {
         pkwDiv.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
-function searchResolved() {
-    var kw = document.getElementById("rKw").value;
-    var modal = document.getElementById("rkwModal");
-    var rkwDiv = document.getElementById("rkwContent");
+function searchResolved(kw) {
+    var rkwDiv = document.getElementById("resolved");
     $.get("SearchTickets.jsp", {getKeyword: kw, getStatus: "resolved"}, function (data) {
         rkwDiv.innerHTML = data;
     });
-    modal.style.display = "block";
 }
 
 function viewTicketsHistory(custId) {

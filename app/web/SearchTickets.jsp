@@ -15,8 +15,6 @@
         <title>Ticket Results</title>
     </head>
     <body>
-        
-        <center><h3 class="modal-title"><b>Search Results</b></h3></center><hr>
         <%
             String keyword = request.getParameter("getKeyword");
             String status = request.getParameter("getStatus");
@@ -45,16 +43,19 @@
                 results = TicketDAO.getSearchTicketsByString(keyword, status);
             }
             
-            if(results.isEmpty()){  
+            if(!keyword.trim().isEmpty()){
+                if(results.isEmpty()){  
         %>
             No results found
         <%
-            }else{
-                if(results.size()==1){
-                    out.println(results.size() + " record found");
                 }else{
-                    out.println(results.size() + " records found");
+                    if(results.size()==1){
+                        out.println(results.size() + " record found");
+                    }else{
+                        out.println(results.size() + " records found");
+                    }
                 }
+            }
         %>
         <br><br>
         <div id="resultsTable">
@@ -104,8 +105,5 @@
         %>
             </table>
         </div>
-        <%
-            }
-        %>
     </body>
 </html>
