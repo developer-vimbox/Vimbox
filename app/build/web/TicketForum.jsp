@@ -16,28 +16,8 @@
         <script src="JS/CustomerFunctions.js"></script>
         <script src="JS/LeadFunctions.js"></script>
     </head>
-    <body>
+    <body onload="initForum()">
         <%@include file="header.jsp"%>
-        <!-- The Modal for Pending Tickets-->
-        <div id="pkwModal" class="modal">
-            <!-- Modal content -->
-            <div class="search-modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('pkwModal')">×</span>
-                    <div id="pkwContent"></div>
-                </div>
-            </div>
-        </div>
-        <!-- The Modal for resolved tickets -->
-        <div id="rkwModal" class="modal">
-            <!-- Modal content -->
-            <div class="search-modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('rkwModal')">×</span>
-                    <div id="rkwContent"></div>
-                </div>
-            </div>
-        </div>
         <!-- The Modal for View Tickets-->
         <div class="modal" id="viewTicketModal">
             <div class="modal-content">
@@ -91,9 +71,6 @@
 
                         });
                     </script>
-                    <%                ArrayList<Ticket> pendingTickets = TicketDAO.getPendingTickets();
-                        ArrayList<Ticket> resolvedTickets = TicketDAO.getResolvedTickets();
-                    %>
                     <div id="page-title">
                         <h2>Ticket Forum</h2> <br/>
                         <div class="panel">
@@ -110,58 +87,13 @@
                                                     <div class="input-group bootstrap-touchspin">
                                                         <input type = "text" id="pKw" placeholder="Enter keyword or date (YYYY-MM-DD)" class = "form-control"  style="width: 400px;color:black;">
                                                         <span class="input-group-btn">
-                                                            <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="searchPending()">Search Pending</button>
+                                                            <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="searchPending($('#pKw').val())">Search Pending</button>
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <br/><br/>
-                                            <br/>
-                                            <table class="table table-hover">
-                                                <tr>
-                                                    <th>Ticket ID</th>
-                                                    <th>Cust Name</th>
-                                                    <th>Cust Contact</th>
-                                                    <th>Cust Email</th>
-                                                    <th>Subject</th>
-                                                    <th>Date & Time</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                <%
-                                                    for (Ticket pendingTicket : pendingTickets) {
-                                                        int ticketId = pendingTicket.getTicket_id();
-                                                        Customer customer = pendingTicket.getCustomer();
-                                                        String customerName = customer.toString();
-                                                        String contact = customer.getContact() + "";
-                                                        if (contact.equals("0")) {
-                                                            contact = "N/A";
-                                                        }
-                                                        String email = customer.getEmail();
-                                                        if (email.isEmpty()) {
-                                                            email = "N/A";
-                                                        }
-                                                        String subject = pendingTicket.getSubject();
-                                                        String dateTime = Converter.convertDate(pendingTicket.getDatetime_of_creation());
-                                                        String status = pendingTicket.getStatus();
-                                                %>
-                                                <tr>
-                                                    <td><%=ticketId%></td>
-                                                    <td><%=customerName%></td>
-                                                    <td><%=contact%></td>
-                                                    <td><%=email%></td>
-                                                    <td><%=subject%></td>
-                                                    <td><%=dateTime%></td>
-                                                    <td><%=status%></td>
-                                                    <td>
-                                                        <button class="btn btn-default" onclick="viewTicket('<%=ticketId%>')">VT</button>
-                                                        <button class="btn btn-default"  onclick="viewComments('<%=ticketId%>')">VC</button>
-                                                    </td>
-                                                </tr>
-                                                <%
-                                                    }
-                                                %>
-                                            </table>
+                                            <div id="pending"></div>
                                         </div>
                                         <div id="resolvedTickets" class="tab-pane">
                                             <div class="form-group">
@@ -169,58 +101,13 @@
                                                     <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                                         <input type = "text"  id="rKw" placeholder="Enter keyword or date (YYYY-MM-DD)" class = "form-control"  style="width: 400px;color:black;">
                                                         <span class="input-group-btn">
-                                                            <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="searchResolved()">Search Resolved</button>
+                                                            <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="searchResolved($('#rKw').val())">Search Resolved</button>
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <br/><br/>
-                                            <br/>
-                                            <table class="table table-hover">
-                                                <tr>
-                                                    <th>Ticket ID</th>
-                                                    <th>Cust Name</th>
-                                                    <th>Cust Contact</th>
-                                                    <th>Cust Email</th>
-                                                    <th>Subject</th>
-                                                    <th>Date & Time</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                <%
-                                                    for (Ticket resolvedTicket : resolvedTickets) {
-                                                        int ticketId = resolvedTicket.getTicket_id();
-                                                        Customer customer = resolvedTicket.getCustomer();
-                                                        String customerName = customer.toString();
-                                                        String contact = customer.getContact() + "";
-                                                        if (contact.equals("0")) {
-                                                            contact = "N/A";
-                                                        }
-                                                        String email = customer.getEmail();
-                                                        if (email.isEmpty()) {
-                                                            email = "N/A";
-                                                        }
-                                                        String subject = resolvedTicket.getSubject();
-                                                        String dateTime = Converter.convertDate(resolvedTicket.getDatetime_of_creation());
-                                                        String status = resolvedTicket.getStatus();
-                                                %>
-                                                <tr>
-                                                    <td><%=ticketId%></td>
-                                                    <td><%=customerName%></td>
-                                                    <td><%=contact%></td>
-                                                    <td><%=email%></td>
-                                                    <td><%=subject%></td>
-                                                    <td><%=dateTime%></td>
-                                                    <td><%=status%></td>
-                                                    <td>
-                                                        <button class="btn btn-default " value="<%=ticketId%>" onclick="viewTicket('<%=ticketId%>')">VT</button>
-                                                        <button class="btn btn-default " value="<%=ticketId%>" onclick="viewComments('<%=ticketId%>')">VC</button>
-                                                    </td>
-                                                </tr>
-                                                <%
-                                                    }
-                                                %>
-                                            </table>
+                                            <div id="resolved"></div>
                                         </div>
                                     </div>
                                 </div>

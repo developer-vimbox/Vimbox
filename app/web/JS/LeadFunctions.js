@@ -44,7 +44,7 @@ function addDom(divName) {
     var newdiv = document.createElement('div');
     var stringDiv = "";
     stringDiv += '<div class="input-group">';
-    stringDiv += "<span class='input-group-btn'><input class='btn btn-round btn-warning' type='button' value='x' onClick='removeDom("+domCounter+");'></span>";
+    stringDiv += "<span class='input-group-btn'><input class='btn btn-round btn-warning' type='button' value='x' onClick='removeDom(" + domCounter + ");'></span>";
     stringDiv += "<div id='" + domCounter + "'><input class='form-control' type='date' name='dom'/></div>";
     stringDiv += "</div>";
     newdiv.innerHTML = stringDiv;
@@ -54,7 +54,7 @@ function addDom(divName) {
 
 function addFollowup(leadId) {
     var modal = document.getElementById("commentModal");
-     $.get("AddFollowUpComment.jsp", {leadId: leadId}, function (data) {
+    $.get("AddFollowUpComment.jsp", {leadId: leadId}, function (data) {
         document.getElementById('comment-content').innerHTML = data;
     });
 
@@ -78,7 +78,7 @@ function followupLead(lead_id) {
                 errorStatus.innerHTML = status;
                 errorMessage.innerHTML = errorMsg;
                 errorModal.style.display = "block";
-                
+
             })
             .fail(function (error) {
                 errorStatus.innerHTML = "ERROR";
@@ -170,8 +170,8 @@ function edit_leadSetup() {
         var matCharge = materialCharges.find(function (obj) {
             return obj.id === divId;
         });
-        
-        
+
+
         $("#" + divId + "_customerItemsTable > tbody  > tr").each(function () {
             var inputs = this.getElementsByTagName("input");
             var name = inputs[0].value;
@@ -184,7 +184,7 @@ function edit_leadSetup() {
             }
             totalUnit.value += Number(inputs[4].value);
         });
-        
+
         $("#" + divId + "_vimboxItemsTable > tbody  > tr").each(function () {
             var inputs = this.getElementsByTagName("input");
             var name = inputs[0].value;
@@ -197,7 +197,7 @@ function edit_leadSetup() {
                 matCharge.value += Number(charges);
             }
         });
-        
+
         $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
             var cellHtml = this.innerHTML.trim();
             var manpowerPresent = cellHtml.match(/manpower/i);
@@ -211,7 +211,7 @@ function edit_leadSetup() {
                 (mp.value)[id] = Number(document.getElementById(divId + '_' + id + "manpowerInput").value);
             }
         });
-        
+
         var svcs = [];
         $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
             var inputs = this.getElementsByTagName("input");
@@ -221,7 +221,7 @@ function edit_leadSetup() {
             $(table).append("<tr>" + generateBreakdown(id, divId) + "</tr>");
             svcs.push(id);
         });
-        
+
         $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
             var cellHtml = this.innerHTML.trim();
             var inputs = this.getElementsByTagName('input');
@@ -249,20 +249,20 @@ function create_leadSetup() {
 }
 
 function showfield(name, e) {
-    if(e.id === 'enquiry'){
+    if (e.id === 'enquiry') {
         if (name == 'Others') {
             document.getElementById('enquiryOthers').innerHTML = '<label class="col-sm-6 control-label">Others: </label>  <div class="col-sm-4"><input class="form-control" type="text" name="enquiryOthers" style="width: 200px;" /></div>';
         } else {
             document.getElementById('enquiryOthers').innerHTML = '';
         }
-    }else{
+    } else {
         if (name == 'Others') {
             document.getElementById('referralOthers').innerHTML = '<label class="col-sm-6 control-label">Others: </label>  <div class="col-sm-4"><input class="form-control" type="text" name="referralOthers" style="width: 200px;" /></div>';
         } else {
             document.getElementById('referralOthers').innerHTML = '';
         }
     }
-    
+
 }
 
 $(document).on('change keyup paste', '.servicesTable tbody tr', function (event) {
@@ -320,8 +320,8 @@ function update_services(divId) {
     $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
         update_service(this, divId);
         entered = true;
-    });  
-    if(entered === false){
+    });
+    if (entered === false) {
         update_total(divId);
     }
 }
@@ -360,7 +360,7 @@ function update_service(element, divId) {
     var frml = formula.find(function (obj) {
         return obj.id === divId;
     });
-    
+
     var id = $(element).attr("id");
     var fml = (frml.value)[id].split(" ");
     var symbol;
@@ -381,7 +381,7 @@ function update_service(element, divId) {
                         break;
                     case "MP":
                         sum = (mp.value)[id.substring(id.indexOf("_") + 1)];
-                        
+
                         break;
                 }
             } else {
@@ -767,7 +767,7 @@ function selectServiceSlot(e, divId) {
     var frml = formula.find(function (obj) {
         return obj.id === divId;
     });
-    
+
     var cell = $(e);
     var state = cell.data('state') || '';
     var cellHtml = cell.html().trim();
@@ -827,7 +827,7 @@ function generateBreakdown(id, divId) {
     var frml = formula.find(function (obj) {
         return obj.id === divId;
     });
-    
+
     var fml = (frml.value)[id].split(" ");
     var breakdown = "<td colspan='2'><table width='100%' cellpadding=0 cellspacing=0 style='border-collapse: collapse;'><col width='50%'><col width='50%'>";
     for (i = 0; i < fml.length; i++) {
@@ -865,7 +865,7 @@ function removeManpower(id, divId) {
     var mp = manpower.find(function (obj) {
         return obj.id === divId;
     });
-    
+
     var mpLbl = id + "manpowerLabel";
     var mprLbl = id + "manpowerReasonLabel";
     var mpIpt = id + "manpowerInput";
@@ -886,15 +886,15 @@ function submitManpower(divId) {
     var id = $("#" + divId + "_manpowerId").val();
     var addManpower = $("#" + divId + "_additionalManpower").val();
     var manReason = $("#" + divId + "_manpowerReason").val();
-    
-    if(!addManpower || !manReason){
+
+    if (!addManpower || !manReason) {
         var modal = document.getElementById("salesModal");
         var status = document.getElementById("salesStatus");
         var message = document.getElementById("salesMessage");
-        status.innerHTML= "ERROR";
+        status.innerHTML = "ERROR";
         message.innerHTML = "Please enter both the required manpower and reason";
         modal.style.display = "block";
-    }else{
+    } else {
         mp[id] = Number(addManpower);
         var mpLbl = divId + "_" + id + "manpowerLabel";
         var mprLbl = divId + "_" + id + "manpowerReasonLabel";
@@ -912,7 +912,7 @@ function submitManpower(divId) {
     }
 }
 
-function closeManpowerModal(divId){
+function closeManpowerModal(divId) {
     var frml = formula.find(function (obj) {
         return obj.id === divId;
     });
@@ -931,7 +931,12 @@ function closeManpowerModal(divId){
 
 function selectService(divId) {
     var modal = document.getElementById(divId + "_serviceModal");
-    modal.style.display = "block";
+//    $.getJSON("LoadServices", {leadDivStr: leadDivStr})
+//            .done(function (data) {
+//                document.getElementById('service-body').innerHTML = data;
+//                modal.style.display = "block";
+//            })
+modal.style.display = "block";
 }
 //--------------------------------End-----------------------------------//
 
@@ -986,14 +991,14 @@ function viewSchedule() {
     var pending = true;
     if (elem != null) {
         var input = elem.getElementsByTagName('input')[0];
-        if(input.value === 'no'){
+        if (input.value === 'no') {
             pending = false;
             errorStatus.innerHTML = "ERROR";
             errorMessage.innerHTML = "A site survey is ongoing/completed on this date";
             errorModal.style.display = "block";
         }
     }
-    if(pending){
+    if (pending) {
         var siteSurveyor = $('#employee_search').val();
         var fromArray = document.getElementsByName("addressfrom");
         var addressFrom = "";

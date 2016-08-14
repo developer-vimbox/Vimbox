@@ -42,10 +42,53 @@
 
     String divId = request.getParameter("counter");
 %>
+       <!-- Service Modal -->
+                        <div id="<%=divId%>_serviceModal" class="modal">
+                            <!-- Modal content -->
+                            <div class="service-content">
+                                <div class="service-body">
+                                    <span class="close" onclick="closeModal('<%=divId%>_serviceModal')">×</span>
+                                    <table class='table' width="100%" border="1" style="table-layout: fixed;" id="<%=divId%>_serviceTable">
+                                        <%
+                                            for (int i = 0; i < serviceTable.length; i++) {
+                                                out.println("<tr>");
+                                                for (int j = 0; j < serviceTable[i].length; j++) {
+                                                    if (i == 0) {
+                                                        // Table Header //
+                                                        out.println("<th>" + serviceTable[i][j] + "</th>");
+                                                    } else {
+                                                        // Table Data //
+                                                        String[] serviceChargeArray = serviceTable[i][j].split(",");
+                                                        out.println("<td align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\"");
+                                                        if (serviceTable[0][j].equals("Manpower")) {
+                                                            out.println("id='" + divId + (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_") + "_service'");
+                                                        }
+                                                        out.println(">" + serviceChargeArray[0] + "</br>");
+
+                                                        if (serviceTable[0][j].equals("Manpower")) {
+                                                            String id = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
+                                                            out.println("Manpower : <label id='" + divId + "_" + id + "manpowerLabel'></label><input type='hidden' name='" + divId + "_" + id + "manpowerInput' id='" + divId + "_" + id + "manpowerInput'></br>");
+                                                            out.println("Reason : <label id='" + divId + "_" + id + "manpowerReasonLabel'></label><input type='hidden' name='" + divId + "_" + id + "reasonInput' id='" + divId + "_" + id + "reasonInput'></br>");
+                                                        }
+                                                        try {
+                                                            out.println("<input type='hidden' name='svcTableCell' value='{" + serviceTable[0][j] + "|" + serviceChargeArray[0] + "," + serviceChargeArray[1] + "}'>");
+                                                        } catch (IndexOutOfBoundsException e) {
+                                                        }
+
+                                                        out.println("</td>");
+                                                    }
+                                                }
+                                                out.println("</tr>");
+                                            }
+                                        %>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 <input type="hidden" id="<%=divId%>_divId" class="divId" name="divId">
 <table class="salesInfoTable">
     <tr>
-        <td style="width:30%;">
+        <td style="width:40%;">
             <table class="table table-bordered salesTable" border="1">
                 <thead>
                 <tr style="background-color:#F5BCA9">
@@ -242,49 +285,7 @@
                     <td align="center">
                         <button class='btn btn-default' style="width:100%" onclick="selectService('<%=divId%>');
                                 return false;">Add service</button>
-                        <!-- Service Modal -->
-                        <div id="<%=divId%>_serviceModal" class="service">
-                            <!-- Modal content -->
-                            <div class="service-content">
-                                <div class="service-body">
-                                    <span class="close" onclick="closeModal('<%=divId%>_serviceModal')">×</span>
-                                    <table class='table' width="100%" border="1" style="table-layout: fixed;" id="<%=divId%>_serviceTable">
-                                        <%
-                                            for (int i = 0; i < serviceTable.length; i++) {
-                                                out.println("<tr>");
-                                                for (int j = 0; j < serviceTable[i].length; j++) {
-                                                    if (i == 0) {
-                                                        // Table Header //
-                                                        out.println("<th>" + serviceTable[i][j] + "</th>");
-                                                    } else {
-                                                        // Table Data //
-                                                        String[] serviceChargeArray = serviceTable[i][j].split(",");
-                                                        out.println("<td bgcolor='#6698FF' align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\"");
-                                                        if (serviceTable[0][j].equals("Manpower")) {
-                                                            out.println("id='" + divId + (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_") + "_service'");
-                                                        }
-                                                        out.println(">" + serviceChargeArray[0] + "</br>");
-
-                                                        if (serviceTable[0][j].equals("Manpower")) {
-                                                            String id = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
-                                                            out.println("Manpower : <label id='" + divId + "_" + id + "manpowerLabel'></label><input type='hidden' name='" + divId + "_" + id + "manpowerInput' id='" + divId + "_" + id + "manpowerInput'></br>");
-                                                            out.println("Reason : <label id='" + divId + "_" + id + "manpowerReasonLabel'></label><input type='hidden' name='" + divId + "_" + id + "reasonInput' id='" + divId + "_" + id + "reasonInput'></br>");
-                                                        }
-                                                        try {
-                                                            out.println("<input type='hidden' name='svcTableCell' value='{" + serviceTable[0][j] + "|" + serviceChargeArray[0] + "," + serviceChargeArray[1] + "}'>");
-                                                        } catch (IndexOutOfBoundsException e) {
-                                                        }
-
-                                                        out.println("</td>");
-                                                    }
-                                                }
-                                                out.println("</tr>");
-                                            }
-                                        %>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                 
                     </td>
                 </tr> 
                 <tr style="background-color:#F6CEE3">

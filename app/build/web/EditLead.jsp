@@ -231,7 +231,69 @@
                     }
                 }
             }
+
+            ArrayList<LeadDiv> tempLeadDivs = lead.getSalesDivs();
+            for (LeadDiv templeadDiv : tempLeadDivs) {
+                String leadDivStr = templeadDiv.getSalesDiv();
+                String divId = leadDivStr.substring(0, leadDivStr.indexOf("|"));
+                String leadDivAddr = leadDivStr.substring(leadDivStr.indexOf("|") + 1);%>
+                 <div id="<%=divId%>_serviceModal" class="modal">
+                                                                    <!-- Modal content -->
+                                                                    <div class="service-content">
+                                                                        <div id='service-body' class="service-body">
+                                                                            <span class="close" onclick="closeModal('<%=divId%>_serviceModal')">×</span>
+                                                                            <table class='table' width="100%" border="1" style="table-layout: fixed;" id="<%=divId%>_serviceTable">
+                                                                                <%
+                                                                                    ArrayList<String[]> services = templeadDiv.getServices();
+                                                                                    for (int i = 0; i < serviceTable.length; i++) {
+                                                                                        out.println("<tr>");
+                                                                                        for (int j = 0; j < serviceTable[i].length; j++) {
+                                                                                            if (i == 0) {
+                                                                                                // Table Header //
+                                                                                                out.println("<th>" + serviceTable[i][j] + "</th>");
+                                                                                            } else {
+                                                                                                // Table Data //
+                                                                                                String[] serviceChargeArray = serviceTable[i][j].split(",");
+                                                                                                out.println("<td align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\"");
+                                                                                                if (serviceTable[0][j].equals("Manpower")) {
+                                                                                                    out.println("id='" + divId + (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_") + "_service'");
+                                                                                                }
+                                                                                                out.println(">" + serviceChargeArray[0] + "</br>");
+
+                                                                                                if (serviceTable[0][j].equals("Manpower")) {
+                                                                                                    String id = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
+                                                                                                    String mp = "";
+                                                                                                    String mr = "";
+                                                                                                    for (String[] svc : services) {
+                                                                                                        if (svc[0].replaceAll(" ", "_").equals(id)) {
+                                                                                                            mp = svc[3];
+                                                                                                            mr = svc[4];
+                                                                                                            break;
+                                                                                                        }
+                                                                                                    }
+                                                                                                    out.println("Manpower : <label id='" + divId + "_" + id + "manpowerLabel'>" + mp + "</label><input type='hidden' name='" + divId + "_" + id + "manpowerInput' id='" + divId + "_" + id + "manpowerInput' value='" + mp + "'></br>");
+                                                                                                    out.println("Reason : <label id='" + divId + "_" + id + "manpowerReasonLabel'>" + mr + "</label><input type='hidden' name='" + divId + "_" + id + "reasonInput' id='" + divId + "_" + id + "reasonInput' value='" + mr + "'></br>");
+                                                                                                }
+                                                                                                try {
+                                                                                                    out.println("<input type='hidden' name='svcTableCell' value='{" + serviceTable[0][j] + "|" + serviceChargeArray[0] + "," + serviceChargeArray[1] + "}'>");
+                                                                                                } catch (IndexOutOfBoundsException e) {
+                                                                                                }
+
+                                                                                                out.println("</td>");
+                                                                                            }
+                                                                                        }
+                                                                                        out.println("</tr>");
+                                                                                    }
+                                                                                %>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                
+           <% }
+            
         %>
+
         <div id="page-content-wrapper">
 
             <div id="page-content">
@@ -680,9 +742,10 @@
                                                 %>
                                                 <div id="<%=divId%>" class="tabcontent">
                                                     <input type="hidden" id="<%=divId%>_divId" class="divId" name="divId" value="<%=leadDivStr%>">
+                                                    
                                                     <table class="salesInfoTable">
                                                         <tr>
-                                                            <td style="width:30%;">
+                                                            <td style="width:40%;">
                                                                 <table class="table table-bordered salesTable" border="1">
                                                                     <thead>
                                                                         <tr style="background-color:#F5BCA9">
@@ -818,7 +881,7 @@
                                                             </td>
                                                         </tr>
                                                         <tr style="background-color:#CEE3F6">
-                                                           <td colspan="2"><center><b><u>Vimbox Item List</u></b></center></td>
+                                                            <td colspan="2"><center><b><u>Vimbox Item List</u></b></center></td>
                                                         </tr>
                                                         <tr>
                                                             <td align="right">Box:</td>
@@ -828,10 +891,10 @@
                                                                     <tr>
                                                                         <td align="right">Quantity:</td>
                                                                         <td>
-                                                                             <input class="form-control" type="number" min="0" id="<%=divId%>_vimboxBoxUnit">
-                                    <br>
-                                    <button class="btn btn-default" onclick="addVimboxBox('<%=divId%>');
-                                            return false;">Add</button>
+                                                                            <input class="form-control" type="number" min="0" id="<%=divId%>_vimboxBoxUnit">
+                                                                            <br>
+                                                                            <button class="btn btn-default" onclick="addVimboxBox('<%=divId%>');
+                                                                                    return false;">Add</button>
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -858,9 +921,9 @@
                                                                         <td align="right">Charges:</td>
                                                                         <td>
                                                                             <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input class="form-control" type="number" min="0" step="0.01" id="<%=divId%>_vimboxMaterialCharge">
-                                    </div>
+                                                                                <span class="input-group-addon">$</span>
+                                                                                <input class="form-control" type="number" min="0" step="0.01" id="<%=divId%>_vimboxMaterialCharge">
+                                                                            </div>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -874,7 +937,7 @@
                                                             </td>
                                                         </tr>
                                                         <tr style="background-color:#A9F5D0">
-                                                             <td colspan="2"><center><b><u>Services</u></b></center></td>
+                                                            <td colspan="2"><center><b><u>Services</u></b></center></td>
                                                         </tr>
                                                         <tr>
                                                             <td align="right">Svcs:</td>
@@ -882,63 +945,12 @@
                                                                 <button class='btn btn-default' style="width:100%" onclick="selectService('<%=divId%>');
                                                                         return false;">Services</button>
                                                                 <!-- Service Modal -->
-                                                                <div id="<%=divId%>_serviceModal" class="service">
-                                                                    <!-- Modal content -->
-                                                                    <div class="service-content">
-                                                                        <div class="service-body">
-                                                                            <span class="close" onclick="closeModal('<%=divId%>_serviceModal')">×</span>
-                                                                            <table class='table' width="100%" border="1" style="table-layout: fixed;" id="<%=divId%>_serviceTable">
-                                                                                <%
-                                                                                    ArrayList<String[]> services = leadDiv.getServices();
-                                                                                    for (int i = 0; i < serviceTable.length; i++) {
-                                                                                        out.println("<tr>");
-                                                                                        for (int j = 0; j < serviceTable[i].length; j++) {
-                                                                                            if (i == 0) {
-                                                                                                // Table Header //
-                                                                                                out.println("<th>" + serviceTable[i][j] + "</th>");
-                                                                                            } else {
-                                                                                                // Table Data //
-                                                                                                String[] serviceChargeArray = serviceTable[i][j].split(",");
-                                                                                                out.println("<td bgcolor='#6698FF' align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\"");
-                                                                                                if (serviceTable[0][j].equals("Manpower")) {
-                                                                                                    out.println("id='" + divId + (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_") + "_service'");
-                                                                                                }
-                                                                                                out.println(">" + serviceChargeArray[0] + "</br>");
 
-                                                                                                if (serviceTable[0][j].equals("Manpower")) {
-                                                                                                    String id = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
-                                                                                                    String mp = "";
-                                                                                                    String mr = "";
-                                                                                                    for (String[] svc : services) {
-                                                                                                        if (svc[0].replaceAll(" ", "_").equals(id)) {
-                                                                                                            mp = svc[3];
-                                                                                                            mr = svc[4];
-                                                                                                            break;
-                                                                                                        }
-                                                                                                    }
-                                                                                                    out.println("Manpower : <label id='" + divId + "_" + id + "manpowerLabel'>" + mp + "</label><input type='hidden' name='" + divId + "_" + id + "manpowerInput' id='" + divId + "_" + id + "manpowerInput' value='" + mp + "'></br>");
-                                                                                                    out.println("Reason : <label id='" + divId + "_" + id + "manpowerReasonLabel'>" + mr + "</label><input type='hidden' name='" + divId + "_" + id + "reasonInput' id='" + divId + "_" + id + "reasonInput' value='" + mr + "'></br>");
-                                                                                                }
-                                                                                                try {
-                                                                                                    out.println("<input type='hidden' name='svcTableCell' value='{" + serviceTable[0][j] + "|" + serviceChargeArray[0] + "," + serviceChargeArray[1] + "}'>");
-                                                                                                } catch (IndexOutOfBoundsException e) {
-                                                                                                }
-
-                                                                                                out.println("</td>");
-                                                                                            }
-                                                                                        }
-                                                                                        out.println("</tr>");
-                                                                                    }
-                                                                                %>
-                                                                            </table>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                             </td>
                                                         </tr> 
                                                         <tr style="background-color:#F6CEE3">
-                                                            
-                    <td colspan="2"><center><b><u>Comments & Remarks</u></b></center></td>
+
+                                                            <td colspan="2"><center><b><u>Comments & Remarks</u></b></center></td>
                                                         </tr>
                                                         <tr>
                                                             <td align="right">Cmt:</td>
@@ -947,10 +959,10 @@
                                                                     <tr>
                                                                         <td>
                                                                             <input class='form-control' type="text" size="40" id="<%=divId%>_customerComment" placeholder="Enter customer comment">
-                                    <br>
-                                    <button class='btn btn-default' onclick="addCustomerComment('<%=divId%>');
-                                            return false;">Add Comment</button>
-                                                </td>
+                                                                            <br>
+                                                                            <button class='btn btn-default' onclick="addCustomerComment('<%=divId%>');
+                                                                                    return false;">Add Comment</button>
+                                                                        </td>
                                                                     </tr>
                                                                 </table>
                                                             </td>
@@ -961,11 +973,11 @@
                                                                 <table class="customerRemarkTable">
                                                                     <tr>
                                                                         <td>
-                                                                          <input class='form-control' type="text" size="40" id="<%=divId%>_customerRemark" placeholder="Enter remark for customer">
-                                    <br>
-                                    <button class='btn btn-default' onclick="addCustomerRemark('<%=divId%>');
-                                            return false;">Add Remark</button>
-                                                </td>
+                                                                            <input class='form-control' type="text" size="40" id="<%=divId%>_customerRemark" placeholder="Enter remark for customer">
+                                                                            <br>
+                                                                            <button class='btn btn-default' onclick="addCustomerRemark('<%=divId%>');
+                                                                                    return false;">Add Remark</button>
+                                                                        </td>
                                                                     </tr>
                                                                 </table>
                                                             </td>
@@ -977,14 +989,14 @@
                                                             <tr style="height:50%">
                                                                 <td>
                                                                     <table class='table table-bordered' border="1"><thead>
-                                                                        <tr style="height:10%">
-                                                                            <th style="width:20%">Item</th>
-                                                                            <th style="width:40%">Remarks</th>
-                                                                            <th style="width:10%">Additional Charges</th>
-                                                                            <th style="width:10%">Quantity</th>
-                                                                            <th style="width:10%">Units</th>
-                                                                            <th style="width:20%"><div id="<%=divId%>_totalUnits"></div></th>
-                                                                                </tr> </thead>
+                                                                            <tr style="height:10%">
+                                                                                <th style="width:20%">Item</th>
+                                                                                <th style="width:40%">Remarks</th>
+                                                                                <th style="width:10%">Additional Charges</th>
+                                                                                <th style="width:10%">Quantity</th>
+                                                                                <th style="width:10%">Units</th>
+                                                                                <th style="width:20%"><div id="<%=divId%>_totalUnits"></div></th>
+                                                            </tr> </thead>
                                                             <tr>
                                                                 <td colspan="6">
                                                                     <table class='table table-bordered' border="1">
@@ -992,100 +1004,100 @@
                                                                             <td>
                                                                                 <table class='table table-bordered' border="1">
                                                                                     <tr style="background-color:#F5BCA9" height="10%">
-                                                                                         <td><center><b><u>Customer Item List</u></b></center></td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            <div style="overflow:auto;height:100%;">
-                                                                                                <table class='table' id="<%=divId%>_customerItemsTable" valign="top" style="width:100%;">
-                                                                                                    <col width="20%">
-                                                                                                    <col width="40%">
-                                                                                                    <col width="10%">
-                                                                                                    <col width="10%">
-                                                                                                    <col width="10%">
-                                                                                                    <col width="20%">
-                                                                                                    <tbody>
-                                                                                                        <%
-                                                                                                            ArrayList<Item> customerItems = leadDiv.getCustomerItems();
-                                                                                                            for (Item item : customerItems) {
-                                                                                                                String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='" + divId + "_customerItemName' value='" + item.getName() + "'></td>";
-                                                                                                                tr += "<td>" + item.getRemark() + "<input type='hidden' name='" + divId + "_customerItemRemark' value='" + item.getRemark() + "'></td>";
-                                                                                                                if (item.getCharges() > 0) {
-                                                                                                                    tr += "<td align='center'>" + item.getCharges() + "<input type='hidden' name='" + divId + "_customerItemCharge' value='" + item.getCharges() + "'></td>";
-                                                                                                                } else {
-                                                                                                                    tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_customerItemCharge' value=''></td>";
-                                                                                                                }
-
-                                                                                                                tr += "<td align='center'>" + item.getQty() + "<input type='hidden' name='" + divId + "_customerItemQty' value='" + item.getQty() + "'></td>";
-                                                                                                                tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='" + divId + "_customerItemUnit' value='" + item.getUnits() + "'></td>";
-                                                                                                                if (item.getName().equals("Boxes")) {
-                                                                                                                    tr += "<td align='right'><input class='btn btn-default' type='button' value='x' onclick=\"deleteBox(this, '" + divId + "')\"/></td></tr>";
-                                                                                                                } else {
-                                                                                                                    tr += "<td align='right'><input class='btn btn-default' type='button' value='x' onclick=\"deleteItem(this, '" + divId + "')\"/></td></tr>";
-                                                                                                                }
-                                                                                                                out.println(tr);
-                                                                                                            }
-                                                                                                        %>
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </div>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
+                                                                                        <td><center><b><u>Customer Item List</u></b></center></td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td>
-                                                                                <table class='table table-bordered' border="1">
-                                                                                    <tr style="background-color:#CEE3F6" height="10%">
-                                                                                        <td><center><b><u>Vimbox Item List</u></b></center></td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            <div style="overflow:auto;height:100%;">
-                                                                                                <table  class='table' id="<%=divId%>_vimboxItemsTable" valign="top" style="width:100%;">
-                                                                                                    <col width="20%">
-                                                                                                    <col width="40%">
-                                                                                                    <col width="10%">
-                                                                                                    <col width="10%">
-                                                                                                    <col width="10%">
-                                                                                                    <col width="20%">
-                                                                                                    <tbody>
-                                                                                                        <%
-                                                                                                            ArrayList<Item> vimboxItems = leadDiv.getVimboxItems();
-                                                                                                            for (Item item : vimboxItems) {
-                                                                                                                String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='" + divId + "_vimboxItemName' value='" + item.getName() + "'></td>";
-                                                                                                                tr += "<td>&nbsp;<input type='hidden' name='" + divId + "_vimboxItemRemark' value=''></td>";
-                                                                                                                tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_vimboxItemCharge' value=''></td>";
-                                                                                                                tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='" + divId + "_vimboxItemQty' value='" + item.getUnits() + "'></td>";
-                                                                                                                tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='" + divId + "_vimboxItemUnit' value='" + item.getUnits() + "'></td>";
-                                                                                                                tr += "<td align='right'><input class='btn btn-default' type='button' value='x' onclick=\"deleteBox(this, '" + divId + "')\"/></td></tr>";
-                                                                                                                out.println(tr);
-                                                                                                            }
+                                                                                <div style="overflow:auto;height:100%;">
+                                                                                    <table class='table' id="<%=divId%>_customerItemsTable" valign="top" style="width:100%;">
+                                                                                        <col width="20%">
+                                                                                        <col width="40%">
+                                                                                        <col width="10%">
+                                                                                        <col width="10%">
+                                                                                        <col width="10%">
+                                                                                        <col width="20%">
+                                                                                        <tbody>
+                                                                                            <%
+                                                                                                ArrayList<Item> customerItems = leadDiv.getCustomerItems();
+                                                                                                for (Item item : customerItems) {
+                                                                                                    String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='" + divId + "_customerItemName' value='" + item.getName() + "'></td>";
+                                                                                                    tr += "<td>" + item.getRemark() + "<input type='hidden' name='" + divId + "_customerItemRemark' value='" + item.getRemark() + "'></td>";
+                                                                                                    if (item.getCharges() > 0) {
+                                                                                                        tr += "<td align='center'>" + item.getCharges() + "<input type='hidden' name='" + divId + "_customerItemCharge' value='" + item.getCharges() + "'></td>";
+                                                                                                    } else {
+                                                                                                        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_customerItemCharge' value=''></td>";
+                                                                                                    }
 
-                                                                                                            ArrayList<Item> materials = leadDiv.getMaterials();
-                                                                                                            for (Item item : materials) {
-                                                                                                                String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='" + divId + "_vimboxMaterialName' value='" + item.getName() + "'></td>";
-                                                                                                                tr += "<td>&nbsp;</td>";
-                                                                                                                tr += "<td align='center'>" + item.getCharges() + "<input type='hidden' name='" + divId + "_vimboxMaterialCharge' value='" + item.getCharges() + "'></td>";
-                                                                                                                tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='" + divId + "_vimboxMaterialQty' value='" + item.getUnits() + "'></td>";
-                                                                                                                tr += "<td align='center'>&nbsp;</td>";
-                                                                                                                tr += "<td align='right'><input clas='btn btn-default' type='button' value='x' onclick=\"deleteMaterial(this, '" + divId + "')\"/></td></tr>";
-                                                                                                                out.println(tr);
-                                                                                                            }
-                                                                                                        %>
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </div>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
+                                                                                                    tr += "<td align='center'>" + item.getQty() + "<input type='hidden' name='" + divId + "_customerItemQty' value='" + item.getQty() + "'></td>";
+                                                                                                    tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='" + divId + "_customerItemUnit' value='" + item.getUnits() + "'></td>";
+                                                                                                    if (item.getName().equals("Boxes")) {
+                                                                                                        tr += "<td align='right'><input class='btn btn-default' type='button' value='x' onclick=\"deleteBox(this, '" + divId + "')\"/></td></tr>";
+                                                                                                    } else {
+                                                                                                        tr += "<td align='right'><input class='btn btn-default' type='button' value='x' onclick=\"deleteItem(this, '" + divId + "')\"/></td></tr>";
+                                                                                                    }
+                                                                                                    out.println(tr);
+                                                                                                }
+                                                                                            %>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
                                                                             </td>
                                                                         </tr>
                                                                     </table>
                                                                 </td>
                                                             </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table class='table table-bordered' border="1">
+                                                                        <tr style="background-color:#CEE3F6" height="10%">
+                                                                            <td><center><b><u>Vimbox Item List</u></b></center></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div style="overflow:auto;height:100%;">
+                                                                        <table  class='table' id="<%=divId%>_vimboxItemsTable" valign="top" style="width:100%;">
+                                                                            <col width="20%">
+                                                                            <col width="40%">
+                                                                            <col width="10%">
+                                                                            <col width="10%">
+                                                                            <col width="10%">
+                                                                            <col width="20%">
+                                                                            <tbody>
+                                                                                <%
+                                                                                    ArrayList<Item> vimboxItems = leadDiv.getVimboxItems();
+                                                                                    for (Item item : vimboxItems) {
+                                                                                        String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='" + divId + "_vimboxItemName' value='" + item.getName() + "'></td>";
+                                                                                        tr += "<td>&nbsp;<input type='hidden' name='" + divId + "_vimboxItemRemark' value=''></td>";
+                                                                                        tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;<input type='hidden' name='" + divId + "_vimboxItemCharge' value=''></td>";
+                                                                                        tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='" + divId + "_vimboxItemQty' value='" + item.getUnits() + "'></td>";
+                                                                                        tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='" + divId + "_vimboxItemUnit' value='" + item.getUnits() + "'></td>";
+                                                                                        tr += "<td align='right'><input class='btn btn-default' type='button' value='x' onclick=\"deleteBox(this, '" + divId + "')\"/></td></tr>";
+                                                                                        out.println(tr);
+                                                                                    }
+
+                                                                                    ArrayList<Item> materials = leadDiv.getMaterials();
+                                                                                    for (Item item : materials) {
+                                                                                        String tr = "<tr><td>" + item.getName() + "<input type='hidden' name='" + divId + "_vimboxMaterialName' value='" + item.getName() + "'></td>";
+                                                                                        tr += "<td>&nbsp;</td>";
+                                                                                        tr += "<td align='center'>" + item.getCharges() + "<input type='hidden' name='" + divId + "_vimboxMaterialCharge' value='" + item.getCharges() + "'></td>";
+                                                                                        tr += "<td align='center'>" + item.getUnits() + "<input type='hidden' name='" + divId + "_vimboxMaterialQty' value='" + item.getUnits() + "'></td>";
+                                                                                        tr += "<td align='center'>&nbsp;</td>";
+                                                                                        tr += "<td align='right'><input class='btn btn-default' type='button' value='x' onclick=\"deleteMaterial(this, '" + divId + "')\"/></td></tr>";
+                                                                                        out.println(tr);
+                                                                                    }
+                                                                                %>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
                                                         </table>
+                                                    </td>
+                                                    </tr>
+                                                    </table>
+                                                    </td>
+                                                    </tr>
+                                                    </table>
                                                     </td> 
                                                     </tr>
                                                     <tr style="height:40%">
@@ -1094,202 +1106,203 @@
                                                                 <tr>
                                                                     <td style="width:50%">
                                                                         <table>
-                                                                            <tr style="height:10%;background-color:#A9F5D0!important;">
-                                                                               <th><center><u><b>Services</b></u></center></th>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div style="overflow:auto;height:100%;">
-                                                                                        <table class="table table-bordered servicesTable" id="<%=divId%>_servicesTable" valign="top" width="100%">
-                                                                                            <tbody>
-                                                                                                <%
-                                                                                                    for (String[] service : services) {
-                                                                                                        String[] svc = service[0].split("_");
-                                                                                                        String tr = "<tr id='" + divId + "_" + service[0] + "'><td>";
-                                                                                                        tr += "<table class='serviceTable'>";
-                                                                                                        String secSvc = "";
-                                                                                                        for (int i = 1; i < svc.length; i++) {
-                                                                                                            secSvc += (svc[i]);
-                                                                                                            if (i < svc.length - 1) {
-                                                                                                                secSvc += " ";
-                                                                                                            }
-                                                                                                        }
+                                                                            <tr style="height:50%;background-color:#A9F5D0!important;">
+                                                                                <th><center><u><b>Services</b></u></center></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="overflow:auto;">
+                                                                            <table class="table table-bordered servicesTable" id="<%=divId%>_servicesTable" valign="top" width="100%">
+                                                                                <tbody>
+                                                                                    <%
+                                                                                    ArrayList<String[]> services = leadDiv.getServices();
+                                                                                        for (String[] service : services) {
+                                                                                            String[] svc = service[0].split("_");
+                                                                                            String tr = "<tr id='" + divId + "_" + service[0] + "'><td>";
+                                                                                            tr += "<table class='serviceTable'>";
+                                                                                            String secSvc = "";
+                                                                                            for (int i = 1; i < svc.length; i++) {
+                                                                                                secSvc += (svc[i]);
+                                                                                                if (i < svc.length - 1) {
+                                                                                                    secSvc += " ";
+                                                                                                }
+                                                                                            }
 
-                                                                                                        tr += "<tr height='10%'><td>" + svc[0] + " - " + secSvc + "<input type='hidden' name='" + divId + "_serviceName' value='" + service[0] + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='" + divId + "_serviceCharge' value='" + service[1] + "'><input type='hidden' value='" + service[2] + "'></td></tr>";
-                                                                                                        tr += "</table></td></tr>";
-                                                                                                        out.println(tr);
-                                                                                                    }
-                                                                                                %>
-                                                                                            </tbody>
-                                                                                        </table>
+                                                                                            tr += "<tr'><td>" + svc[0] + " - " + secSvc + "<input type='hidden' name='" + divId + "_serviceName' value='" + service[0] + "'></td><td align='right'><div class='input-group'><span class='input-group-addon'>$</span><input class='form-control' type='number' step='0.01' min='0' name='" + divId + "_serviceCharge' value='" + service[1] + "'><input type='hidden' value='" + service[2] + "'></td></tr>";
+                                                                                            tr += "</table></td></tr>";
+                                                                                            out.println(tr);
+                                                                                        }
+                                                                                    %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <%
+                                                                    HashMap<String, String> others = leadDiv.getOtherCharges();
+                                                                %>
+                                                                <tr height="5%">
+                                                                    <td>
+                                                                        <table class='table' width="100%">
+                                                                            <tr>
+                                                                                <td align="left">Storey Charges:</td>
+                                                                                <td align="right">
+                                                                                    <div class="input-group">
+                                                                                        <span class="input-group-addon">$</span>
+                                                                                        <input class='form-control storeyCharge' type="number" step="0.01" min="0" id="<%=divId%>_storeyCharge" name="<%=divId%>_storeyCharge" value="<%=others.get("storeyCharge")%>">
+                                                                                    </div> </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr height="5%">
+                                                                    <td>
+                                                                        <table class='table' width="100%">
+                                                                            <tr>
+                                                                                <td align="left">Pushing Charges:</td>
+                                                                                <td align="right">
+                                                                                    <div class="input-group">
+                                                                                        <span class="input-group-addon">$</span>
+                                                                                        <input class='form-control pushCharge'  type="number" step="0.01" min="0" id="<%=divId%>_pushCharge"  name="<%=divId%>_pushCharge" value="<%=others.get("pushCharge")%>">
                                                                                     </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <%
-                                                                                HashMap<String, String> others = leadDiv.getOtherCharges();
-                                                                            %>
-                                                                            <tr height="5%">
-                                                                                <td>
-                                                                                    <table class='table' width="100%">
-                                                                                        <tr>
-                                                                                            <td align="left">Storey Charges:</td>
-                                                                                            <td align="right">
-                                                                                                  <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input class='form-control storeyCharge' type="number" step="0.01" min="0" id="<%=divId%>_storeyCharge" name="<%=divId%>_storeyCharge" value="<%=others.get("storeyCharge")%>">
-                                    </div> </td>
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr height="5%">
-                                                                                <td>
-                                                                                    <table class='table' width="100%">
-                                                                                        <tr>
-                                                                                            <td align="left">Pushing Charges:</td>
-                                                                                            <td align="right">
-                                                                                                 <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input class='form-control pushCharge'  type="number" step="0.01" min="0" id="<%=divId%>_pushCharge"  name="<%=divId%>_pushCharge" value="<%=others.get("pushCharge")%>">
-                                    </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr height="5%">
-                                                                                <td>
-                                                                                    <table class='table' width="100%">
-                                                                                        <tr>
-                                                                                            <td align="left">Detour Charges:</td>
-                                                                                            <td align="right">
-                                                                                                <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input class='form-control detourCharge' type="number" step="0.01" min="0" id="<%=divId%>_detourCharge"  name="<%=divId%>_detourCharge" value="<%=others.get("detourCharge")%>">
-                                    </div>
-                                                                                                </td>
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr height="5%">
-                                                                                <td>
-                                                                                    <table class='table' width="100%">
-                                                                                        <tr>
-                                                                                            <td align="left">Material Charges:</td>
-                                                                                            <td align="right">
-																							  <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input class='form-control materialCharge' type="number" step="0.01" min="0" id="<%=divId%>_materialCharge"  name="<%=divId%>_materialCharge" value="<%=others.get("materialCharge")%>">
-                                    </div>
-																						</td>
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr height="5%">
-                                                                                <td>
-                                                                                    <table class='table' width="100%">
-                                                                                        <tr>
-                                                                                            <td align="left">Additional Markup:</td>
-                                                                                            <td align="right">
-																							  <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input class='form-control markup' type="number" step="0.01" min="0" id="<%=divId%>_markup"  name="<%=divId%>_markup" value="<%=others.get("markup")%>">
-                                    </div>
-																							</td>
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr height="5%">
-                                                                                <td>
-                                                                                    <table class='table' width="100%">
-                                                                                        <tr>
-                                                                                            <td align="left">Discount:</td>
-                                                                                            <td align="right">
-                                                                                                <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input  class='form-control discount' type="number" step="0.01" min="0" id="<%=divId%>_discount"  name="<%=divId%>_discount" value="<%=others.get("discount")%>">
-                                    </div>
-                                                                                            </td>
-                                                                                                
-                                                                                        </tr>
-                                                                                    </table>
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
                                                                     </td>
+                                                                </tr>
+                                                                <tr height="5%">
                                                                     <td>
-                                                                        <table>
-                                                                            <tr style="height:50%">
-                                                                                <td>
-                                                                                    <table>
-                                                                                          <tr style="height:10%;background-color:#F6CEE3;">
-                                            <th><center><b><u>Customer Comments</u></b></center></th>
-                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                <div style="overflow:auto;height:100%;">
-                                                                                                    <table id="<%=divId%>_commentsTable" valign="top">
-                                                                                                        <tbody>
-                                                                                                            <%
-                                                                                                                ArrayList<String> comments = leadDiv.getComments();
-                                                                                                                for (String comment : comments) {
-                                                                                                                    out.println("<tr><td>" + comment + "<input type='hidden' name='" + divId + "_comments' value='" + comment + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>");
-                                                                                                                }
-                                                                                                            %>    
-                                                                                                        </tbody>
-                                                                                                    </table>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </table>
+                                                                        <table class='table' width="100%">
+                                                                            <tr>
+                                                                                <td align="left">Detour Charges:</td>
+                                                                                <td align="right">
+                                                                                    <div class="input-group">
+                                                                                        <span class="input-group-addon">$</span>
+                                                                                        <input class='form-control detourCharge' type="number" step="0.01" min="0" id="<%=divId%>_detourCharge"  name="<%=divId%>_detourCharge" value="<%=others.get("detourCharge")%>">
+                                                                                    </div>
                                                                                 </td>
                                                                             </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr height="5%">
+                                                                    <td>
+                                                                        <table class='table' width="100%">
                                                                             <tr>
-                                                                                <td>
-                                                                                    <table>
-                                                                                        <tr style="height:10%;background-color:#F6CEE3;">
-                                            <th><center><b><u>Remarks</u></b></center></th>
-                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                <div style="overflow:auto;height:100%;">
-                                                                                                    <table id="<%=divId%>_remarksTable" valign="top">
-                                                                                                        <tbody>
-                                                                                                            <%
-                                                                                                                ArrayList<String> remarks = leadDiv.getRemarks();
-                                                                                                                for (String remark : remarks) {
-                                                                                                                    out.println("<tr><td>" + remark + "<input type='hidden' name='" + divId + "_remarks' value='" + remark + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>");
-                                                                                                                }
-                                                                                                            %>  
-                                                                                                        </tbody>
-                                                                                                    </table>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </table>
+                                                                                <td align="left">Material Charges:</td>
+                                                                                <td align="right">
+                                                                                    <div class="input-group">
+                                                                                        <span class="input-group-addon">$</span>
+                                                                                        <input class='form-control materialCharge' type="number" step="0.01" min="0" id="<%=divId%>_materialCharge"  name="<%=divId%>_materialCharge" value="<%=others.get("materialCharge")%>">
+                                                                                    </div>
                                                                                 </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr height="5%">
+                                                                    <td>
+                                                                        <table class='table' width="100%">
+                                                                            <tr>
+                                                                                <td align="left">Additional Markup:</td>
+                                                                                <td align="right">
+                                                                                    <div class="input-group">
+                                                                                        <span class="input-group-addon">$</span>
+                                                                                        <input class='form-control markup' type="number" step="0.01" min="0" id="<%=divId%>_markup"  name="<%=divId%>_markup" value="<%=others.get("markup")%>">
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr height="5%">
+                                                                    <td>
+                                                                        <table class='table' width="100%">
+                                                                            <tr>
+                                                                                <td align="left">Discount:</td>
+                                                                                <td align="right">
+                                                                                    <div class="input-group">
+                                                                                        <span class="input-group-addon">$</span>
+                                                                                        <input  class='form-control discount' type="number" step="0.01" min="0" id="<%=divId%>_discount"  name="<%=divId%>_discount" value="<%=others.get("discount")%>">
+                                                                                    </div>
+                                                                                </td>
+
                                                                             </tr>
                                                                         </table>
                                                                     </td>
                                                                 </tr>
                                                             </table>
                                                         </td>
+                                                        <td>
+                                                            <table>
+                                                                <tr style="height:50%">
+                                                                    <td>
+                                                                        <table>
+                                                                            <tr style="height:10%;background-color:#F6CEE3;">
+                                                                                <th><center><b><u>Customer Comments</u></b></center></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="overflow:auto;height:100%;">
+                                                                            <table id="<%=divId%>_commentsTable" valign="top">
+                                                                                <tbody>
+                                                                                    <%
+                                                                                        ArrayList<String> comments = leadDiv.getComments();
+                                                                                        for (String comment : comments) {
+                                                                                            out.println("<tr><td>" + comment + "<input type='hidden' name='" + divId + "_comments' value='" + comment + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>");
+                                                                                        }
+                                                                                    %>    
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table>
+                                                                <tr style="height:10%;background-color:#F6CEE3;">
+                                                                    <th><center><b><u>Remarks</u></b></center></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div style="overflow:auto;height:100%;">
+                                                                <table id="<%=divId%>_remarksTable" valign="top">
+                                                                    <tbody>
+                                                                        <%
+                                                                            ArrayList<String> remarks = leadDiv.getRemarks();
+                                                                            for (String remark : remarks) {
+                                                                                out.println("<tr><td>" + remark + "<input type='hidden' name='" + divId + "_remarks' value='" + remark + "'></td><td align='right'><input type='button' value='x' onclick='deleteRow(this)'/></td></tr>");
+                                                                            }
+                                                                        %>  
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </table>
+                                                    </td>
+                                                    </tr>
+                                                    </table>
+                                                    </td>
+                                                    </tr>
+                                                    </table>
+                                                    </td>
                                                     </tr>
                                                     <tr style="height:10%">
                                                         <td>
                                                             <table class='table'>
-															 <tr>
-                    <td align="right" style="width:50%">Total :</td>
-                    <td align="center">
-                        <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input class="form-control" type="number" step="0.01" min="0" name="totalPrice" id="<%=divId%>_totalPrice" value="0.00">
-                                    </div>
-                    </td>
-                </tr>
+                                                                <tr>
+                                                                    <td align="right" style="width:50%">Total :</td>
+                                                                    <td align="center">
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-addon">$</span>
+                                                                            <input class="form-control" type="number" step="0.01" min="0" name="totalPrice" id="<%=divId%>_totalPrice" value="0.00">
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
                                                             </table>
                                                         </td>
                                                     </tr>
