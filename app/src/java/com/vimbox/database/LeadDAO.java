@@ -31,7 +31,7 @@ public class LeadDAO {
     private static final String CREATE_LEAD_REMARK = "INSERT INTO leadremark VALUES (?,?,?)";
     private static final String CREATE_LEAD_SALES_DIV = "INSERT INTO leadsalesdiv VALUES (?,?,?,?)";
     
-    private static final String GET_LEAD_INFO = "SELECT * FROM leadinfo WHERE owner_user=?";
+    private static final String GET_LEAD_INFO = "SELECT * FROM leadinfo WHERE owner_user=? ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_ENQUIRY = "SELECT * FROM leadenquiry WHERE lead_id=?";
     private static final String GET_LEAD_INFO_BY_ID = "SELECT * FROM leadinfo WHERE lead_id=?";
     private static final String GET_LEAD_MOVE_FROM = "SELECT * FROM leadmove WHERE lead_id=? AND type='from'";

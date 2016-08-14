@@ -8,15 +8,6 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create new lead</title>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-        <script src="http://malsup.github.com/jquery.form.js"></script> 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
-        <script src="JS/jquery.hotkeys.js"></script>
-        <script src="JS/ModalFunctions.js"></script>
-        <script src="JS/LeadFunctions.js"></script>
-        <script src="JS/AddressSearch.js"></script>
-        <script src="JS/CustomerFunctions.js"></script>
         <style>
 
             table.salesTable td {
@@ -98,6 +89,13 @@
     </head>
     <body onload="create_leadSetup()">
         <%@include file="header.jsp"%>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
+        <script src="JS/jquery.hotkeys.js"></script>
+        <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
+        <script src="JS/AddressSearch.js"></script>
+        <script src="JS/CustomerFunctions.js"></script>
         <!-- The Modal -->
         <div id="saModal" class="modal">
             <!-- Modal content -->

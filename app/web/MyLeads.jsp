@@ -110,13 +110,7 @@
                                                     String url = "window.location.href='EditLead.jsp?lId=" + lead.getId() + "'";
                                                     out.println("<tr>");
                                                     out.println("<td align='center'>" + lead.getId() + "</td>");
-                                                    String types = lead.getType();
-                                                    String[] typesArr = types.split("\\|");
-                                                    out.println("<td align='center'><ul>");
-                                                    for (String type : typesArr) {
-                                                        out.println("<li>" + type + "</li>");
-                                                    }
-                                                    out.println("</ul></td>");
+                                                    out.println("<td align='center'>" + lead.getType() + "</td>");
 
                                                     Customer customer = lead.getCustomer();
                                                     if (customer != null) {
