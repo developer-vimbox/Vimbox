@@ -362,12 +362,16 @@
                                 <ul class="tab" id="sales_list">
                                     <%
                                         ArrayList<LeadDiv> leadDivs = lead.getSalesDivs();
+                                         out.println(" <ul class='nav-responsive nav nav-tabs'>");
                                         for (LeadDiv leadDiv : leadDivs) {
                                             String leadDivStr = leadDiv.getSalesDiv();
                                             String leadDivId = leadDivStr.substring(0, leadDivStr.indexOf("|"));
                                             String leadDivAddr = leadDivStr.substring(leadDivStr.indexOf("|") + 1);
-                                            out.println("<li><a href='#' class='tablinks' onclick=\"openSales(event, '" + leadDivId + "')\"><label>" + leadDivAddr + "</label></a></li>");
+                                           
+                                            out.println("<li><a data-toggle='tab' href='#' class='tablinks' onclick=\"openSales(event, '" + leadDivId + "')\"><label>" + leadDivAddr + "</label></a></li>");
+                                            
                                         }
+                                        out.println("</ul>");
                                     %>
                                 </ul>
 
