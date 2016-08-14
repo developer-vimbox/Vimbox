@@ -76,7 +76,7 @@
             }
         %>
         <div id="viewLeadModal" class="modal">
-            <div class="modal-content" style="width: 800px;">
+            <div class="modal-content" style="width: 80%;">
                 <div class="modal-header">
                     <span class="close" onclick="closeModal('viewLeadModal')">×</span>
                     <center><h2>Lead Details</h2></center>

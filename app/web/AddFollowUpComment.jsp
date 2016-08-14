@@ -8,8 +8,6 @@
     Lead lead = LeadDAO.getLeadById(templead);
     if (lead != null) {
 %>
-
-<center><h3 class="modal-title"><b>Add Comment</b></h3></center>
     <%
         if (!lead.getStatus().equals("Rejected") || ! !lead.getStatus().equals("Confirmed")) {
     %>
@@ -28,7 +26,7 @@
         </div>
         </div>
     <div class="form-group text-center">
-        <button class="btn btn-default" onclick="followupLead(<%=lead.getId()%>)">Add Follow-Up</button>
+        <button class="btn btn-primary" onclick="followupLead(<%=lead.getId()%>)">Add Follow-Up</button>
     </div>
 </div>
 

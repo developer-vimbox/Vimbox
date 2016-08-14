@@ -40,6 +40,7 @@ function createCustomer() {
                 var errorMsg = data.message;
                 if (status === "SUCCESS") {
                     document.getElementById("add_customer_modal").style.display = "none";
+                    document.getElementById("customer_modal").style.display = "none";
                     $('#customer_id').val(data.customer_id);
                     $("#customer_name").html(data.customer_salutation + " " + data.customer_first_name + " " + data.customer_last_name);
                     $("#customer_salutation").html(data.customer_salutation);

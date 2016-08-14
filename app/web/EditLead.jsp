@@ -160,9 +160,25 @@
         </div>
         <div id="customer_modal" class="modal">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('customer_modal')">×</span>
+                    <center><h2>Select Customer</h2></center>
+                </div>
+                <div class="modal-body">
+                    <br>
                     <div id="customer_content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="add_customer_modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('add_customer_modal')">×</span>
+                    <center><h2>Add New Customer</h2></center>
+                </div>
+                <div class="modal-body">
+                    <br>
+                    <div id="add_customer_content"></div>
                 </div>
             </div>
         </div>
@@ -220,8 +236,8 @@
         %>
         <div id="page-content-wrapper">
 
-            <div id="page-content" style="min-height: 7630px;">
-                <div class="container">
+            <div id="page-content">
+                <div class="container" style="width: 100%;">
                     <div id="page-title">
                         <h2>Edit Lead</h2> <br>
                     </div>

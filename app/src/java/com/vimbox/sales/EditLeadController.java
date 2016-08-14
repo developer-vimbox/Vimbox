@@ -50,16 +50,10 @@ public class EditLeadController extends HttpServlet {
         if(referral.equals("Others")){
             referral = request.getParameter("referralOthers");
         }
-        String[] leadTypes = request.getParameterValues("leadType");
-        String leadType = "";
-        if(leadTypes != null){
-            for(int i=0; i<leadTypes.length; i++){
-                String lt = leadTypes[i];
-                leadType += lt;
-                if(i<leadTypes.length-1){
-                    leadType += "|";
-                }
-            }
+        
+        String enquiry = request.getParameter("enquiry");
+        if (enquiry.equals("Others")) {
+            enquiry = request.getParameter("enquiryOthers");
         }
         //---------//
         
@@ -67,6 +61,13 @@ public class EditLeadController extends HttpServlet {
         LeadDAO.deleteLead(leadId);
         //------------------------------------//
         
+        String leadType = "";
+        if(enquiry.equals("SELECT")){
+            leadType = "Sales";
+        }else{
+            LeadDAO.createLeadEnquiry(leadId, enquiry);
+            leadType = "Enquiry";
+        }
         // Customer details //
         String cId = request.getParameter("customer_id");
         int custId = -1;
@@ -205,11 +206,6 @@ public class EditLeadController extends HttpServlet {
         LeadDAO.createLeadMove(leadId, salesDivTo, "to", addTo, storeTo, distTo);
             //----------------------------------//
         //----------------//
-        
-        if(leadType.contains("Enquiry")){
-            String enquiry = request.getParameter("enquiry");
-            LeadDAO.createLeadEnquiry(leadId, enquiry);
-        }
         
         if(leadType.contains("Sales")){
             String[] surveyStatuses = request.getParameterValues("surveyStatus");

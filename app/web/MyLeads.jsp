@@ -19,9 +19,12 @@
         <!-- The Modal -->
         <div id="commentModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-body">
+            <div class="modal-content" style="width: 450px;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('commentModal')">×</span>
+                    <center><h2>Follow Up Comment</h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="comment-content"></div>
                 </div>
             </div>
@@ -38,10 +41,12 @@
         </div>
         <!-- The Modal -->
         <div id="viewLeadModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content" style="width: 60%;">
-                <div class="modal-body">
+            <div class="modal-content" style="width: 80%;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('viewLeadModal')">×</span>
+                    <center><h2>Lead Details</h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="leadContent"></div>
                 </div>
             </div>
@@ -57,10 +62,21 @@
                 </div>
             </div>
         </div>
+        <div id="viewFollowUpModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('viewFollowUpModal')">×</span>
+                    <center><h2>Follow Up History</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="followUpContent"></div> 
+                </div>
+            </div>
+        </div>
         <div id="page-content-wrapper">
 
-            <div id="page-content" style="min-height: 7630px;">
-                <div class="container">
+            <div id="page-content">
+                <div class="container" style="width: 100%;">
                     <div id="page-title">
                         <h2>My Leads</h2> <br>
                     </div>
