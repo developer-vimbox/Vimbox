@@ -178,17 +178,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="ticket_error_modal" class="modal">
-                                            <div class="error-modal-content">
-                                                <div class="modal-header">
-                                                    <span class="close" onclick="closeModal('ticket_error_modal')">×</span>
-                                                    <center><h2><div id="ticket_error_status"></div></h2></center>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="ticket_error_message"></div>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                         <div id="customer_error_modal" class="modal">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -320,15 +310,15 @@
                                                     }
                                                 %>
                                             </table>
-
-                                            <div id="ticket_error_modal" class="modal">
-                                                <div class="error-modal-content">
-                                                    <div class="modal-body">
-                                                        <span class="close" onclick="closeModal('ticket_error_modal')">×</span>
-                                                        <div id="ticket_error_status"></div>
-                                                        <hr>
-                                                        <div id="ticket_error_message"></div>
-                                                    </div>
+                                        </div>
+                                        <div id="ticket_error_modal" class="modal">
+                                            <div class="modal-content" style="width: 400px;">
+                                                <div class="modal-header">
+                                                    <span class="close" onclick="closeModal('ticket_error_modal')">×</span>
+                                                    <center><h2><div id="ticket_error_status"></div></h2></center>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="ticket_error_message"></div>
                                                 </div>
                                             </div>
                                         </div>

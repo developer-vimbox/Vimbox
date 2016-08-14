@@ -8,15 +8,6 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create new lead</title>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-        <script src="http://malsup.github.com/jquery.form.js"></script> 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
-        <script src="JS/jquery.hotkeys.js"></script>
-        <script src="JS/ModalFunctions.js"></script>
-        <script src="JS/LeadFunctions.js"></script>
-        <script src="JS/AddressSearch.js"></script>
-        <script src="JS/CustomerFunctions.js"></script>
         <style>
 
             table.salesTable td {
@@ -98,6 +89,13 @@
     </head>
     <body onload="create_leadSetup()">
         <%@include file="header.jsp"%>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
+        <script src="JS/jquery.hotkeys.js"></script>
+        <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
+        <script src="JS/AddressSearch.js"></script>
+        <script src="JS/CustomerFunctions.js"></script>
         <!-- The Modal -->
         <div id="saModal" class="modal">
             <!-- Modal content -->
@@ -160,7 +158,7 @@
         %>
         <div id="page-content-wrapper">
 
-            <div id="page-content" style="min-height: 7630px;">
+            <div id="page-content">
                 <div class="container">
                     <div id="page-title">
                         <h2>Create New Leads</h2> <br>
@@ -172,21 +170,21 @@
                             <form class='form-horizontal' method="POST" action="CreateLeadController" autocomplete="on" id="create_lead_form">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Lead ID: </label>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" style="padding-top: 7px;">
                                         <%=leadId%><input type="hidden" id="leadId" name="leadId" value="<%=leadId%>">
                                         <br><br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Status: </label>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" style="padding-top: 7px;">
                                         Pending<input type="hidden" name="status" value="Pending">
                                         <br><br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Source: </label>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" style="padding-top: 7px;">
                                         <%
                                             for (int i = 0; i < sources.size(); i++) {
                                                 String source = sources.get(i);
@@ -204,7 +202,7 @@
                                     <legend>Customer Information</legend>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label"> </label>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-4" style="padding-top: 7px;">
                                             <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                                 <input type="text" id="customer_search" placeholder="Enter customer name" class="form-control" style="width: 400px;color:black;">
                                                 <span class="input-group-btn"> 
@@ -220,31 +218,31 @@
                                         <input type="hidden" id="customer_id" name="customer_id">
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Salutation: </label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-4" style="padding-top: 7px;">
                                                 <label id="customer_salutation"></label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">First Name: </label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-4" style="padding-top: 7px;">
                                                 <label id="customer_first_name"></label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Last Name: </label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-4" style="padding-top: 7px;">
                                                 <label id="customer_last_name"></label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Contact: </label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-4" style="padding-top: 7px;">
                                                 <label id="customer_contact"></label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Email: </label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-4" style="padding-top: 7px;">
                                                 <label id="customer_email"></label>
                                             </div>
                                         </div>
@@ -255,7 +253,7 @@
                                     <legend>Moving Information</legend>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Move Type: </label>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-6" style="padding-top: 7px;">
                                             <%                                                for (String type : moveTypes) {
                                                     out.println("<input class='checkbox-inline' type='checkbox' name='tom' value='" + type + "'>" + type);
                                                 }
