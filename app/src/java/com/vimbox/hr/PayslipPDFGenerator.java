@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.vimbox.hr;
 
 import com.itextpdf.text.BaseColor;
@@ -13,14 +8,12 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.vimbox.database.PayslipDAO;
 import com.vimbox.user.User;
 import com.vimbox.util.Converter;
-import java.awt.Color;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -85,7 +78,7 @@ public class PayslipPDFGenerator extends HttpServlet {
                     break;
                 }
             }
-            path = path.substring(0, slash + 1) + "Images/VimboxIcon.png";
+            path = path.substring(0, slash + 1) + "images/VimboxIcon.png";
             path = path.replaceAll("%20", " ");
             Image img = Image.getInstance(path);
             img.scaleAbsolute(80f, 80f);

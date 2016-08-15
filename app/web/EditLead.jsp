@@ -756,7 +756,7 @@
                                                             <td align="right">Box :</td>
                                                             <td>
                                                                 <table class="table  customerBoxTable">
-                                                                    <!--                            <col width="80">-->
+                                                                    <col width="80">
                                                                     <tr>
                                                                         <td align="right">Quantity:</td>
                                                                         <td>

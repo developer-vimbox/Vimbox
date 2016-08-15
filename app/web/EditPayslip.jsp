@@ -171,7 +171,7 @@
                                                 <td align='center'>
                                                     <div class='input-group' style='margin-left: 5px;'>
                                                         <span class='input-group-addon'>$</span>
-                                                        <input type='number' class="form-control" step='0.01' min='0' name='payslip_abdamount' value='<%=df.format(entry.getValue())%>' placeholder='amount'>
+                                                        <input type='number' class="form-control" step='0.01' min='0' name='payslip_dbdamount' value='<%=df.format(entry.getValue())%>' placeholder='amount'>
                                                     </div>
                                                 </td>
                                                 <td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>

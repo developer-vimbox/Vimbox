@@ -200,8 +200,9 @@ function deletePayslip(id) {
                 message.innerHTML = errorMsg;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
+                    loadPayslips("");
                     setTimeout(function () {
-                        window.location.href = "Payslips.jsp";
+                        modal.style.display = "none";
                     }, 500);
                 }
             })
@@ -224,8 +225,9 @@ function deleteLeave_mc(id) {
                 message.innerHTML = errorMsg;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
+                    loadLeaveMCs("");
                     setTimeout(function () {
-                        window.location.href = "LeaveMCs.jsp";
+                        modal.style.display = "none";
                     }, 500);
                 }
             })
@@ -279,9 +281,20 @@ function updateEmployee() {
                 message.innerHTML = errorMsg;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
-                    setTimeout(function () {
-                        location.reload()
-                    }, 500);
+                    if(employeeType === 'Full'){
+                        loadEmployees("", "full-time");
+                        setTimeout(function () {
+                            document.getElementById("edit_employee_modal").style.display = "none";
+                            modal.style.display = "none";
+                        }, 500);
+                    }else{
+                        loadEmployees("", "part-time");
+                        setTimeout(function () {
+                            document.getElementById("edit_employee_modal").style.display = "none";
+                            modal.style.display = "none";
+                        }, 500);
+                    }
+                    
                 }
             })
             .fail(function (error) {
@@ -311,8 +324,10 @@ function fgPayslips() {
                 message.innerHTML = errorMsg;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
+                    loadPayslips("");
                     setTimeout(function () {
-                        location.reload()
+                        document.getElementById("fastCreateModal").style.display = "none";
+                        modal.style.display = "none";
                     }, 500);
                 }
             })
@@ -571,7 +586,6 @@ function updateTotal() {
     var deduction = document.getElementById('payslip_deduction').innerHTML;
     var overtime = document.getElementById('payslip_overtime').innerHTML;
     var additional = document.getElementById('payslip_additional').innerHTML;
-
     document.getElementById('payslip_netpay').innerHTML = (Number(basic) + Number(allowance) - Number(deduction) + Number(overtime) + Number(additional)).toFixed(2);
 }
 
@@ -591,6 +605,7 @@ function updatepayslip_dbd() {
     var total = 0;
     $("input[name='payslip_dbdamount']").each(function () {
         var value = $(this).val(); // grab name of original
+        console.log(value);
         if (!isNaN(value)) {
             total += Number(value);
         }
@@ -772,8 +787,9 @@ function updatePayslip() {
                 message.innerHTML = data.message;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
+                    loadPayslips("");
                     setTimeout(function () {
-                        location.reload()
+                        modal.style.display = "none"
                     }, 500);
                 }
             })
