@@ -561,7 +561,7 @@
                                                     String pushingDistance = addTo[2];
                                                     String stringDiv = "";
                                                     if (address.length > 1) {
-                                                        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '');\">×</span><hr>";
+                                                        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
                                                         stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
                                                         stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
                                                         stringDiv += "<div class ='col-sm-4'>";

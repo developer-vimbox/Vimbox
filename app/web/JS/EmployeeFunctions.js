@@ -829,13 +829,13 @@ $(document).on('change', '#leaveEmployee', function () {
                 var leave = data.remainingLeave;
                 var mc = data.remainingMC;
                 if (leave !== '') {
-                    document.getElementById('leave_employee_leave').innerHTML = leave + " days";
+                    document.getElementById('leave_employee_leave').innerHTML = leave;
                 } else {
                     document.getElementById('leave_employee_leave').innerHTML = "";
                 }
 
                 if (mc !== '') {
-                    document.getElementById('leave_employee_mc').innerHTML = mc + " days";
+                    document.getElementById('leave_employee_mc').innerHTML = mc + " Days";
                 } else {
                     document.getElementById('leave_employee_mc').innerHTML = "";
                 }

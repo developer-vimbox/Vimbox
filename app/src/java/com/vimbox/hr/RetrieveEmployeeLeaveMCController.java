@@ -39,7 +39,7 @@ public class RetrieveEmployeeLeaveMCController extends HttpServlet {
 
         User user = UserDAO.getUserByNRIC(nric);
         if (user != null) {
-            leave = df.format((user.getLeave() - user.getUsed_leave()) / 9);
+            leave = (int)(user.getLeave() - user.getUsed_leave()) / 8 + " Days " + (int)(user.getLeave() - user.getUsed_leave()) % 8 + " Hours";
             mc = (user.getMc() - user.getUsed_mc()) + "";
             workingDays = UserPopulationDAO.getUserWorkingDays(user.getDepartment(), user.getDesignation()) + "";
         }
