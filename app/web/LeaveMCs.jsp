@@ -25,7 +25,7 @@
             <div id="page-content" style="min-height: 7630px;">
                 <div class="container">
                     <div id="page-title">
-                        <h2>Leave Record</h2> <br>
+                        <h2>Leave / MC Record</h2> <br>
                     </div>
                     <div class="panel">
                         <div class="panel-body">

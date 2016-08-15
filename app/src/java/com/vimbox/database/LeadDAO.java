@@ -101,6 +101,7 @@ public class LeadDAO {
             ps = con.prepareStatement(DELETE_LEAD_SALES_DIV);
             ps.setInt(1, leadId);
             ps.executeUpdate();
+            SiteSurveyDAO.deleteSiteSurveysByLeadId(leadId);
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
