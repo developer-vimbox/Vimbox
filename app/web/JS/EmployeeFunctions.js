@@ -22,7 +22,7 @@ function loadEmployees(keyword, timer) {
     });
 }
 
-function loadDesignations() {
+function loadDesignations(department) {
     var radios = document.getElementsByTagName('input');
     var value;
     for (var i = 0; i < radios.length; i++) {
@@ -31,7 +31,8 @@ function loadDesignations() {
             value = radios[i].value;
         }
     }
-    var user_department = document.getElementById("user_department");
+    var user_department = document.getElementById(department);
+    
     var selectedValue = user_department.options[user_department.selectedIndex].value;
     var content = document.getElementById("user_designation_div");
     $.get("RetrieveEmployeeDesignations.jsp", {user_department: selectedValue, type: value}, function (data) {
@@ -50,8 +51,8 @@ function parttime_setup() {
 function loadFullTimeDiv() {
     var full_time_department = document.getElementById("full_time_department");
     full_time_department.style.display = "block";
-    document.getElementById("user_department").value = "";
-    loadDesignations();
+    document.getElementById("fulltime_user_department").value = "";
+    loadDesignations("fulltime_user_department");
     document.getElementById("full_time_user_account").style.display = "block";
     document.getElementById("part_time_department").style.display = "none";
 
@@ -61,8 +62,8 @@ function loadPartTimeDiv() {
     document.getElementById("full_time_department").style.display = "none";
     document.getElementById("full_time_user_account").style.display = "none";
     document.getElementById("part_time_department").style.display = "block";
-    document.getElementById("user_department").value = "";
-    loadDesignations();
+    document.getElementById("parttime_user_department").value = "";
+    loadDesignations("parttime_user_department");
 }
 
 function createEmployee() {
