@@ -94,7 +94,10 @@ function createEmployee() {
         var user_fax = $('#user_fax').val();
         var user_home = $('#user_home').val();
         var user_designation = $('#user_designation').val();
-        var user_department = $('#user_department').val();
+        var user_department = $('#fulltime_user_department').val();
+        if(user_department == null){
+            user_department = $('#parttime_user_department').val();
+        }
         var user_salary = $('#user_salary').val();
         var emergency_name = $('#emergency_name').val();
         var emergency_relationship = $('#emergency_relationship').val();
