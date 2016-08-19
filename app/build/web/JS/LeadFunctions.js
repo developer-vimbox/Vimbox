@@ -530,7 +530,7 @@ function addItem(divId) {
         addUnits(Number(itemUnit), divId);
         $("#" + divId + "_itemName").val("");
         $("#" + divId + "_itemUnit").val("");
-        $("#" + divId + "_itemQty");
+        $("#" + divId + "_itemQty").val("");
         $("#" + divId + "_itemRemark").val("");
         $("#" + divId + "_itemName").focus();
         update_services(divId);
@@ -1262,7 +1262,7 @@ function assignSiteSurveyor() {
         stringDiv += "</table></td></tr>";
         stringDiv += "<tr><td align='right'><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + date + "|" + surveyorId + "'>" + surveyorName + "</td></tr>";
         stringDiv += "<tr><td align='right'><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + date + "|" + remarks + "'>" + remarks + "</td></tr>";
-        stringDiv += "<tr><td align='right'><b>Status :</b></td><td>Pending</td></tr>";
+        stringDiv += "<tr><td align='right'><b>Status :</b></td><td><input type='hidden' name='siteSurvey_status' value='" + date + "|Pending'>Pending</td></tr>";
         stringDiv += "</table></div>";
         newdiv.innerHTML = stringDiv;
         document.getElementById("survey").appendChild(newdiv);

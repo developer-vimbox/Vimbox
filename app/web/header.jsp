@@ -543,6 +543,7 @@
                             <ul>
                                 <li> <a href="CreateLead.jsp" title="Create Lead"><span>Create Lead</span></a></li>
                                 <li> <a href="MyLeads.jsp" title="My Leads"><span>My Leads</span></a></li>
+                                <li> <a href="MySalesSites.jsp" title="My Sites"><span>My Sites</span></a></li>
                             </ul>
 
                         </div><!-- .sidebar-submenu -->

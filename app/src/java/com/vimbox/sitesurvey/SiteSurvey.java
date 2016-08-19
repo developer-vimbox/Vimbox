@@ -7,6 +7,7 @@ import org.joda.time.LocalDateTime;
 
 public class SiteSurvey {
     private int lead;
+    private User owner;
     private User siteSurveyor;
     private String address;
     private String addressTag;
@@ -16,8 +17,9 @@ public class SiteSurvey {
     private String timeslot;
     private String status;
 
-    public SiteSurvey(int lead, User siteSurveyor, String address, String addressTag, DateTime start, DateTime end, String timeslot, String remarks, String status) {
+    public SiteSurvey(int lead, User owner, User siteSurveyor, String address, String addressTag, DateTime start, DateTime end, String timeslot, String remarks, String status) {
         this.lead = lead;
+        this.owner = owner;
         this.siteSurveyor = siteSurveyor;
         this.address = address;
         this.addressTag = addressTag;
@@ -36,6 +38,10 @@ public class SiteSurvey {
         return lead;
     }
 
+    public User getOwner(){
+        return owner;
+    }
+    
     public User getSiteSurveyor() {
         return siteSurveyor;
     }

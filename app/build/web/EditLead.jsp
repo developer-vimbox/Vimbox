@@ -35,59 +35,6 @@
                 width:100%;
                 height:100%;
             }
-
-            /* Style the list */
-            ul.tab {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                border: 1px solid #ccc;
-                background-color: #f1f1f1;
-            }
-
-            /* Float the list items side by side */
-            ul.tab li {float: left;}
-
-            /* Style the links inside the list items */
-            ul.tab li a {
-                display: inline-block;
-                color: black;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                transition: 0.3s;
-                font-size: 17px;
-            }
-
-            /* Change background color of links on hover */
-            ul.tab li a:hover {background-color: #ddd;}
-
-            /* Create an active/current tablink class */
-            ul.tab li a:focus, .active {background-color: #ccc;}
-
-            /* Style the tab content */
-            .tabcontent {
-                display: none;
-                padding: 6px 12px;
-                border: 1px solid #ccc;
-                border-top: none;
-            }
-
-            .tabcontent {
-                -webkit-animation: fadeEffect 1s;
-                animation: fadeEffect 1s; /* Fading effect takes 1 second */
-            }
-
-            @-webkit-keyframes fadeEffect {
-                from {opacity: 0;}
-                to {opacity: 1;}
-            }
-
-            @keyframes fadeEffect {
-                from {opacity: 0;}
-                to {opacity: 1;}
-            }
         </style>
     </head>
     <body onload="edit_leadSetup()">
@@ -561,7 +508,7 @@
                                                     String pushingDistance = addTo[2];
                                                     String stringDiv = "";
                                                     if (address.length > 1) {
-                                                        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '');\">×</span><hr>";
+                                                        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
                                                         stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
                                                         stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
                                                         stringDiv += "<div class ='col-sm-4'>";
@@ -655,7 +602,11 @@
                                                         }
 
                                                         if (!s.equals(ss)) {
-                                                            out.println("<div id='" + ss + "'>");
+                                                            if(!sStatus.equals("Cancelled")){
+                                                                out.println("<div id='" + ss + "'>");
+                                                            }else{
+                                                                out.println("<div>");
+                                                            }
                                                             if (sStatus.equals("Pending")) {
                                                                 out.println("<span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
                                                             }
@@ -673,7 +624,7 @@
                                                             out.println("</table></td></tr>");
                                                             out.println("<tr><td ><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName + "</td></tr>");
                                                             out.println("<tr><td ><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem + "</td></tr>");
-                                                            out.println("<tr><td ><b>Status :</b></td><td>" + sStatus + "</td></tr>");
+                                                            out.println("<tr><td ><b>Status :</b></td><td><input type='hidden' name='siteSurvey_status' value='" + ss + "|" + sStatus + "'>" + sStatus + "</td></tr>");
                                                             out.println("</table></div>");
 
                                                             ss = s;
@@ -692,11 +643,17 @@
                                                             addresses.add(survey.getAddress());
                                                         }
                                                         if (i == surveys.size() - 1) {
-                                                            out.println("<div id='" + ss + "'>");
+                                                            if(!sStatus.equals("Cancelled")){
+                                                                out.println("<div id='" + ss + "'>");
+                                                            }else{
+                                                                out.println("<div>");
+                                                            }
                                                             if (sStatus.equals("Pending")) {
                                                                 out.println("<span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
                                                                 out.println("<input type='hidden' name='surveyStatus' value='yes'>");
-                                                            } else {
+                                                            }else if(sStatus.equals("Cancelled")){
+                                                                out.println("<input type='hidden' name='surveyStatus' value='yes'>");
+                                                            }else{
                                                                 out.println("<input type='hidden' name='surveyStatus' value='no'>");
                                                             }
                                                             out.println("<hr><table style='margin-left: 20%;'><col width='100'>");
@@ -713,7 +670,7 @@
                                                             out.println("</table></td></tr>");
                                                             out.println("<tr><td><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName + "</td></tr>");
                                                             out.println("<tr><td><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem + "</td></tr>");
-                                                            out.println("<tr><td><b>Status :</b></td><td>" + survey.getStatus() + "</td></tr>");
+                                                            out.println("<tr><td ><b>Status :</b></td><td><input type='hidden' name='siteSurvey_status' value='" + ss + "|" + survey.getStatus() + "'>" + survey.getStatus() + "</td></tr>");
                                                             out.println("</table></div>");
                                                         }
                                                     }
@@ -756,7 +713,7 @@
                                                             <td align="right">Box :</td>
                                                             <td>
                                                                 <table class="table  customerBoxTable">
-                                                                    <!--                            <col width="80">-->
+                                                                    <col width="80">
                                                                     <tr>
                                                                         <td align="right">Quantity:</td>
                                                                         <td>

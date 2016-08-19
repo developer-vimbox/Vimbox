@@ -975,3 +975,41 @@ function complete() {
         }
     });
 }
+
+function sales_survey_setup(nric){
+    loadSalesSurveys('', nric);
+}
+
+function loadSalesSurveys(keyword, nric){
+    $.get("LoadSalesSurveys.jsp", {keyword: keyword, nric: nric}, function (data) {
+        document.getElementById("surveys_table").innerHTML = data;
+    });
+}
+
+function confirmCancel(leadId, date, timeslot, nric) {
+    var modal = document.getElementById("survey_error_modal");
+    var status = document.getElementById("survey_error_status");
+    var message = document.getElementById("survey_error_message");
+
+    status.innerHTML = "Cancel Confirmation";
+    var table = "<table width='100%'>";
+    table += "<tr><td colspan='2'>Are you sure that you want to cancel this site survey?</td></tr>";
+    table += "<tr><td align='center'><button onclick=\"cancel('" + leadId + "','" + date + "','" + timeslot + "','" + nric + "')\">YES</button></td><td align='center'><button onclick=\"closeModal('survey_error_modal'); return false;\">No</button></td></tr>";
+    table += "</table>";
+    message.innerHTML = table;
+    modal.style.display = "block";
+}
+
+function cancel(leadId, date, timeslot, nric){
+    var modal = document.getElementById("survey_error_modal");
+    var status = document.getElementById("survey_error_status");
+    var message = document.getElementById("survey_error_message");
+    $.get("CancelSiteSurveyController", {leadId: leadId, date: date, timeslot: timeslot}, function (data) {
+        status.innerHTML = data.status;
+        message.innerHTML = data.message;
+        loadSalesSurveys('', nric);
+        setTimeout(function () {
+            modal.style.display = "none";
+        }, 500);
+    });
+}

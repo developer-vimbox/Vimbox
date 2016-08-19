@@ -210,6 +210,7 @@ public class CreateLeadController extends HttpServlet {
             String[] addresses = request.getParameterValues("siteSurvey_address");
             String[] surveyors = request.getParameterValues("siteSurvey_surveyor");
             String[] remarks = request.getParameterValues("siteSurvey_remarks");
+            String[] statuses = request.getParameterValues("siteSurvey_status");
 
             if (surveyDates != null) {
                 HashMap<String, Integer> ts = new HashMap<String, Integer>();
@@ -221,6 +222,7 @@ public class CreateLeadController extends HttpServlet {
                 for (String surveyDate : surveyDates) {
                     String surveyorId = "";
                     String remark = "";
+                    String stts = "";
                     ArrayList<String> times = new ArrayList<String>();
                     ArrayList<String> adds = new ArrayList<String>();
                     ArrayList<String> addsTags = new ArrayList<String>();
@@ -259,6 +261,12 @@ public class CreateLeadController extends HttpServlet {
                             remark = rem.split("\\|", -1)[1];
                         }
                     }
+                    
+                    for(String stats: statuses){
+                        if (stats.contains(surveyDate)) {
+                            stts = stats.split("\\|")[1];
+                        }
+                    }
                     String timeslot = "";
                     if (!times.isEmpty()) {
                         timeslot = times.get(0);
@@ -273,7 +281,7 @@ public class CreateLeadController extends HttpServlet {
                             count = ts.get(tts);
                         }
                     }
-                    SiteSurveyDAO.createSiteSurveyAssignment(leadId, surveyorId, surveyDate, times, adds, addsTags, timeslot, remark, "Pending");
+                    SiteSurveyDAO.createSiteSurveyAssignment(leadId, owner.getNric(), surveyorId, surveyDate, times, adds, addsTags, timeslot, remark, stts);
                 }
             }
 

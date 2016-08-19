@@ -136,21 +136,20 @@
                                         for (String timing : timings) {
                                             if (surveys.isEmpty()) {
                                                 out.println("<td onclick='selectSlot(this)'");
-                                                if (siteSurveyor.getNric().equals(nric) && timeslots.contains(timing)) {
-                                                    out.println("class='selected' data-state='selected'");
-                                                }
                                                 out.println("><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'></td>");
                                             } else {
                                                 boolean taken = false;
                                                 SiteSurvey ss = null;
+                                                String status = "";
                                                 for (SiteSurvey survey : surveys) {
                                                     taken = survey.checkTaken(timing);
                                                     if (taken) {
+                                                        status = survey.getStatus();
                                                         ss = survey;
                                                         break;
                                                     }
                                                 }
-                                                if (taken) {
+                                                if (taken && !status.equals("Cancelled")) {
                                                     out.println("<td class='occupied tooltipp' data-state='occupied'><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'>");
                                     %>
                                 <table class='tooltiptextt' width="100%">
@@ -177,7 +176,7 @@
                                                 out.println("</td>");
                                             } else {
                                                 out.println("<td onclick='selectSlot(this)'");
-                                                if (siteSurveyor.getNric().equals(nric) && timeslots.contains(timing)) {
+                                                if (siteSurveyor.getNric().equals(nric) && timeslots.contains(timing) && !status.equals("Cancelled")) {
                                                     out.println("class='selected' data-state='selected'");
                                                 }
                                                 out.println("><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'></td>");

@@ -208,88 +208,84 @@ public class EditLeadController extends HttpServlet {
             //----------------------------------//
         //----------------//
         
-        if(leadType.contains("Sales")){
-            String[] surveyStatuses = request.getParameterValues("surveyStatus");
+        if(leadType.equals("Sales")){
             String[] surveyDates = request.getParameterValues("siteSurvey_date");
             String[] timeslots = request.getParameterValues("siteSurvey_timeslot");
             String[] addresses = request.getParameterValues("siteSurvey_address");
             String[] surveyors = request.getParameterValues("siteSurvey_surveyor");
             String[] remarks = request.getParameterValues("siteSurvey_remarks");
-            
-            if(surveyDates != null){
+            String[] statuses = request.getParameterValues("siteSurvey_status");
+
+            if (surveyDates != null) {
                 HashMap<String, Integer> ts = new HashMap<String, Integer>();
                 String[] timings = new String[]{"0900 - 0930", "0930 - 1000", "1000 - 1030", "1030 - 1100", "1100 - 1130", "1130 - 1200", "1200 - 1230", "1230 - 1300", "1300 - 1330", "1330 - 1400", "1400 - 1430", "1430 - 1500", "1500 - 1530", "1530 - 1600", "1600 - 1630", "1630 - 1700", "1700 - 1730", "1730 - 1800"};
-                for(int i=0; i<timings.length; i++){
+                for (int i = 0; i < timings.length; i++) {
                     ts.put(timings[i], i);
                 }
-                
-                SiteSurveyDAO.deleteSiteSurveysByLeadId(leadId);
-                for(int j=0; j<surveyDates.length; j++){
-                    String surveyDate = surveyDates[j];
-                    String surveyStatus = "yes";
-                    if(surveyStatuses != null){
-                        surveyStatus = surveyStatuses[j];
+
+                for (String surveyDate : surveyDates) {
+                    String surveyorId = "";
+                    String remark = "";
+                    String stts = "";
+                    ArrayList<String> times = new ArrayList<String>();
+                    ArrayList<String> adds = new ArrayList<String>();
+                    ArrayList<String> addsTags = new ArrayList<String>();
+                    for (String timeslot : timeslots) {
+                        if (timeslot.contains(surveyDate)) {
+                            if (!times.contains(timeslot.split("\\|")[1])) {
+                                times.add(timeslot.split("\\|")[1]);
+                            }
+                        }
+                    }
+
+                    for (String addr : addresses) {
+                        if (addr.contains(surveyDate)) {
+                            if (!adds.contains(addr.split("\\|")[1])) {
+                                adds.add(addr.split("\\|")[1]);
+                            }
+                        }
+                    }
+
+                    for(String add : adds){
+                        if(addressFromSet.contains(add)){
+                            addsTags.add("from");
+                        }else{
+                            addsTags.add("to");
+                        }
+                    }
+
+                    for (String sur : surveyors) {
+                        if (sur.contains(surveyDate)) {
+                            surveyorId = sur.split("\\|")[1];
+                        }
+                    }
+
+                    for (String rem : remarks) {
+                        if (rem.contains(surveyDate)) {
+                            remark = rem.split("\\|", -1)[1];
+                        }
                     }
                     
-                    if(surveyStatus.equals("yes")){
-                        String surveyorId = "";
-                        String remark = "";
-                        ArrayList<String> times = new ArrayList<String>();
-                        ArrayList<String> adds = new ArrayList<String>();
-                        ArrayList<String> addsTags = new ArrayList<String>();
-                        for(String timeslot : timeslots){
-                            if(timeslot.contains(surveyDate)){
-                                if(!adds.contains(timeslot.split("\\|")[1])){
-                                    times.add(timeslot.split("\\|")[1]);
-                                }
-                            }
+                    for(String stats: statuses){
+                        if (stats.contains(surveyDate)) {
+                            stts = stats.split("\\|")[1];
                         }
-
-                        for(String addr : addresses){
-                            if(addr.contains(surveyDate)){
-                                if(!adds.contains(addr.split("\\|")[1])){
-                                    adds.add(addr.split("\\|")[1]);
-                                }
-                            }
-                        }
-
-                        for(String add : adds){
-                            if(addressFromSet.contains(add)){
-                                addsTags.add("from");
-                            }else{
-                                addsTags.add("to");
-                            }
-                        }
-
-                        for(String sur : surveyors){
-                            if(sur.contains(surveyDate)){
-                                surveyorId = sur.split("\\|")[1];
-                            }
-                        }
-
-                        for(String rem : remarks){
-                            if(rem.contains(surveyDate)){
-                                remark = rem.split("\\|", -1)[1];
-                            }
-                        }
-
-                        String timeslot = "";
-                        if(!times.isEmpty()){
-                            timeslot = times.get(0);
-                            int count = ts.get(timeslot);
-                            for(int i=1; i<times.size(); i++){
-                                String tts = times.get(i);
-                                if(ts.get(tts) == count + 1){
-                                    timeslot = timeslot.substring(0, timeslot.lastIndexOf(" ")) + " " + tts.substring(tts.lastIndexOf(" ") + 1);
-                                }else{
-                                    timeslot += "<br>" + tts;
-                                }
-                                count = ts.get(tts);
-                            }
-                        }
-                        SiteSurveyDAO.createSiteSurveyAssignment(leadId, surveyorId, surveyDate, times, adds, addsTags, timeslot, remark, "Pending");
-                
                     }
+                    String timeslot = "";
+                    if (!times.isEmpty()) {
+                        timeslot = times.get(0);
+                        int count = ts.get(timeslot);
+                        for (int i = 1; i < times.size(); i++) {
+                            String tts = times.get(i);
+                            if (ts.get(tts) == count + 1) {
+                                timeslot = timeslot.substring(0, timeslot.lastIndexOf(" ")) + " " + tts.substring(tts.lastIndexOf(" ") + 1);
+                            } else {
+                                timeslot += "<br>" + tts;
+                            }
+                            count = ts.get(tts);
+                        }
+                    }
+                    SiteSurveyDAO.createSiteSurveyAssignment(leadId, owner.getNric(), surveyorId, surveyDate, times, adds, addsTags, timeslot, remark, stts);
                 }
             }
         
