@@ -17,7 +17,6 @@
 <script src="JS/ModalFunctions.js"></script>
 <script type="text/javascript">
     /* jQuery UI Tabs */
-
     $(function () {
         "use strict";
         $(".tabs").tabs();
@@ -31,12 +30,14 @@
     });
 </script>
 
-<script type="text/javascript" src="../../assets/widgets/tabs/tabs-responsive.js"></script>
+<script type="text/javascript" src="assets/widgets/tabs/tabs-responsive.js"></script>
 <script type="text/javascript">
     /* Responsive tabs */
+    $(document).ready(function() {
     $(function () {
         "use strict";
         $('.nav-responsive').tabdrop();
+    });
     });
 </script>
 
@@ -570,6 +571,7 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
+                                <li><a href="MySiteSurveySchedules.jsp" title="My Site Survey Schedules"><span>My Site Survey Schedules</span></a></li>
                             </ul>
 
                         </div><!-- .sidebar-submenu -->
