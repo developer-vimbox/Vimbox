@@ -32,59 +32,6 @@
                 width:100%;
                 height:100%;
             }
-
-            /* Style the list */
-            ul.tab {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                border: 1px solid #ccc;
-                background-color: #f1f1f1;
-            }
-
-            /* Float the list items side by side */
-            ul.tab li {float: left;}
-
-            /* Style the links inside the list items */
-            ul.tab li a {
-                display: inline-block;
-                color: black;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                transition: 0.3s;
-                font-size: 17px;
-            }
-
-            /* Change background color of links on hover */
-            ul.tab li a:hover {background-color: #ddd;}
-
-            /* Create an active/current tablink class */
-            ul.tab li a:focus, .active {background-color: #ccc;}
-
-            /* Style the tab content */
-            .tabcontent {
-                display: none;
-                padding: 6px 12px;
-                border: 1px solid #ccc;
-                border-top: none;
-            }
-
-            .tabcontent {
-                -webkit-animation: fadeEffect 1s;
-                animation: fadeEffect 1s; /* Fading effect takes 1 second */
-            }
-
-            @-webkit-keyframes fadeEffect {
-                from {opacity: 0;}
-                to {opacity: 1;}
-            }
-
-            @keyframes fadeEffect {
-                from {opacity: 0;}
-                to {opacity: 1;}
-            }
         </style>
     </head>
     <body onload="create_leadSetup()">
@@ -97,6 +44,17 @@
         <script src="JS/AddressSearch.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
         <!-- The Modal -->
+        <div id="cal_modal" class="modal">
+            <div class="modal-content" style="width: 95%;">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('cal_modal')">×</span>
+                    <br>
+                    <div id="cal_content"></div>
+                    <br>
+                    <div id="ssCalTable"></div>
+                </div>
+            </div>
+        </div>
         <div id="saModal" class="modal">
             <!-- Modal content -->
             <div class="error-modal-content">
@@ -318,6 +276,12 @@
                                     <fieldset>
                                         <b><u>Site Survey Details</u></b><br><br>
                                         <div class="form-group">
+                                            <label class="col-sm-3 control-label">Site Survey Calendar: </label>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewCal();">View Calendar</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="col-sm-3 control-label">Survey Date: </label>
                                             <div class="col-sm-4">
                                                 <input class="form-control" type="date" id="sitesurvey_date">
@@ -342,6 +306,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div id="survey"></div>
                                     </fieldset>
                                     <br>
@@ -362,7 +327,7 @@
                                                 <div class="col-sm-6">
                                                     <select class="form-control" name="enquiry" id="enquiry" onchange="showfield(this.options[this.selectedIndex].value, this)">
                                                         <option value="SELECT">--Select--</option>
-                                                        <%                                
+                                                        <%
                                                             for (String enquiry : enquiries) {
                                                                 out.println("<option value='" + enquiry + "'>" + enquiry + "</option>");
                                                             }
@@ -383,7 +348,7 @@
                                             <div class="form-group row">
                                                 <div class="col-sm-6">
                                                     <select class="form-control" name="referral" id="referral" onchange="showfield(this.options[this.selectedIndex].value, this)">
-                                                        <%                                
+                                                        <%
                                                             for (String referral : referrals) {
                                                                 out.println("<option value='" + referral + "'>" + referral + "</option>");
                                                             }
@@ -408,7 +373,7 @@
                                     //for (String type : types) {
                                     //  out.println("<input class='checkbox-inline' type='checkbox' name='leadType' value='" + type + "'>" + type);
                                     // }
-                                %>
+%>
                                                             </div>
                                 
                                                         </div>
@@ -519,7 +484,6 @@
 
             jQuery(document).bind('keydown', 'ctrl+shift', function (e) {
                 var tableClassName = $(document.activeElement.parentNode.parentNode.parentNode.parentNode).attr('class');
-
                 var activeElement = document.activeElement.parentNode;
                 var tagname = activeElement.tagName;
                 while (tagname !== 'DIV') {
@@ -528,25 +492,25 @@
                 }
 
                 switch (tableClassName) {
-                    case "customerBoxTable":
+                    case "table customerBoxTable":
                         addCustomerBox(activeElement.id);
                         break;
-                    case "customerItemTable":
+                    case "table customerItemTable":
                         addItem(activeElement.id);
                         break;
-                    case "customerSpecialItemTable":
+                    case "table customerSpecialItemTable":
                         addSpecialItem(activeElement.id);
                         break;
-                    case "vimboxBoxTable":
+                    case "table vimboxBoxTable":
                         addVimboxBox(activeElement.id);
                         break;
-                    case "vimboxMaterialTable":
+                    case "table vimboxMaterialTable":
                         addVimboxMaterial(activeElement.id);
                         break;
-                    case "customerCommentTable":
+                    case "table customerCommentTable":
                         addCustomerComment(activeElement.id);
                         break;
-                    case "customerRemarkTable":
+                    case "table customerRemarkTable":
                         addCustomerRemark(activeElement.id);
                         break;
                     default:

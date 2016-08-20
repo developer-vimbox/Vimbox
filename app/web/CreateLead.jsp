@@ -44,6 +44,17 @@
         <script src="JS/AddressSearch.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
         <!-- The Modal -->
+        <div id="cal_modal" class="modal">
+            <div class="modal-content" style="width: 95%;">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('cal_modal')">×</span>
+                    <br>
+                    <div id="cal_content"></div>
+                    <br>
+                    <div id="ssCalTable"></div>
+                </div>
+            </div>
+        </div>
         <div id="saModal" class="modal">
             <!-- Modal content -->
             <div class="error-modal-content">
@@ -265,6 +276,12 @@
                                     <fieldset>
                                         <b><u>Site Survey Details</u></b><br><br>
                                         <div class="form-group">
+                                            <label class="col-sm-3 control-label">Site Survey Calendar: </label>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewCal();">View Calendar</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="col-sm-3 control-label">Survey Date: </label>
                                             <div class="col-sm-4">
                                                 <input class="form-control" type="date" id="sitesurvey_date">
@@ -289,6 +306,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div id="survey"></div>
                                     </fieldset>
                                     <br>
@@ -309,7 +327,7 @@
                                                 <div class="col-sm-6">
                                                     <select class="form-control" name="enquiry" id="enquiry" onchange="showfield(this.options[this.selectedIndex].value, this)">
                                                         <option value="SELECT">--Select--</option>
-                                                        <%                                
+                                                        <%
                                                             for (String enquiry : enquiries) {
                                                                 out.println("<option value='" + enquiry + "'>" + enquiry + "</option>");
                                                             }
@@ -330,7 +348,7 @@
                                             <div class="form-group row">
                                                 <div class="col-sm-6">
                                                     <select class="form-control" name="referral" id="referral" onchange="showfield(this.options[this.selectedIndex].value, this)">
-                                                        <%                                
+                                                        <%
                                                             for (String referral : referrals) {
                                                                 out.println("<option value='" + referral + "'>" + referral + "</option>");
                                                             }
@@ -355,7 +373,7 @@
                                     //for (String type : types) {
                                     //  out.println("<input class='checkbox-inline' type='checkbox' name='leadType' value='" + type + "'>" + type);
                                     // }
-                                %>
+%>
                                                             </div>
                                 
                                                         </div>

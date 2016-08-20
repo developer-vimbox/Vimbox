@@ -949,6 +949,36 @@ function confirmCancel() {
     modal.style.display = "block";
 }
 
+function viewCal() {
+    var modal = document.getElementById("cal_modal");
+    $("#cal_content").load("SiteSurveyCalendar.jsp");
+    var d = new Date();
+    var m = d.getMonth();
+    var y = d.getFullYear();
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[d.getMonth()]; 
+    $("#dMonth").html(n);
+    $("#dYear").html(y);
+    var content = document.getElementById("ssCalTable");
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
+}
+
+function changeMonthYear() {
+    var content = document.getElementById("ssCalTable");
+    var iYear = document.getElementById('iYear').value;
+    var iMonth = document.getElementById('iMonth').value;
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[iMonth]; 
+    $("#dMonth").html(n);
+    $("#dYear").html(iYear);
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth}, function (data) {
+        content.innerHTML = data;
+    });
+}
+
 function cancelLeadForm() {
     var modal = document.getElementById("lead_error_modal");
     var status = document.getElementById("lead_error_status");
