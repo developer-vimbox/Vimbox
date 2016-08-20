@@ -21,10 +21,6 @@
         <title> Site Surveys Schedule</title>
 
         <script type="text/javascript">
-//            var img = document.getElementById("takenImg");
-//            if (img) {
-//                img.addEventListener("mouseover", showInfo, false);
-//            }
 $(document).ready(function() {
     $("body").tooltip({ 
         selector: '[data-toggle=tooltip]'
@@ -67,8 +63,15 @@ $(document).ready(function() {
                                                     if (surveys != null) {
                                                         for (SiteSurvey ss : surveys) {
                                                             String times = ss.getTimeSlots();
-                                                            
-                                                            if (slot.equals(times)) {
+                                                             Date sd = ss.getStart().toDate();
+                                                            Date ed = ss.getEnd().toDate();
+                                                            String startTime = new SimpleDateFormat("HHmm").format(sd);
+                                                            String endTime = new SimpleDateFormat("HHmm").format(ed);
+                                                            String firstTime = times.substring(0, times.indexOf(" "));
+                                                            String lastTime = times.substring(times.indexOf("-") + 1); //endtime of leadId
+                                                            String fTime = startTime + " - " + endTime;
+                                                            if(fTime.equals(slot)){
+//                                                            if (slot.equals(times)) {
                                                                 int lead = ss.getLead();
                                                                 String add = ss.getAddress();
                                                                 String leadString = "Lead ID: " + lead;
