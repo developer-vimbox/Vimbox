@@ -21,11 +21,11 @@
         <title> Site Surveys Schedule</title>
 
         <script type="text/javascript">
-$(document).ready(function() {
-    $("body").tooltip({ 
-        selector: '[data-toggle=tooltip]'
-    });
-});
+            $(document).ready(function () {
+                $("body").tooltip({
+                    selector: '[data-toggle=tooltip]'
+                });
+            });
 
         </script>
     </head>
@@ -63,24 +63,51 @@ $(document).ready(function() {
                                                     if (surveys != null) {
                                                         for (SiteSurvey ss : surveys) {
                                                             String times = ss.getTimeSlots();
-                                                             Date sd = ss.getStart().toDate();
+                                                            Date sd = ss.getStart().toDate();
                                                             Date ed = ss.getEnd().toDate();
                                                             String startTime = new SimpleDateFormat("HHmm").format(sd);
                                                             String endTime = new SimpleDateFormat("HHmm").format(ed);
-                                                            String firstTime = times.substring(0, times.indexOf(" "));
-                                                            String lastTime = times.substring(times.indexOf("-") + 1); //endtime of leadId
                                                             String fTime = startTime + " - " + endTime;
-                                                            if(fTime.equals(slot)){
-//                                                            if (slot.equals(times)) {
+                                                            User ss_user = ss.getSiteSurveyor();
+                                                            User ss_owner = ss.getOwner();
+                                                            String ssOwner = ss_owner.getFirst_name() + " " + ss_owner.getLast_name();
+                                                            String ssUser = ss_user.getFirst_name() + " " + ss_user.getLast_name();
+                                                            String ssAddress = ss.getAddress();
+                                                            String[] addrArray = ssAddress.split("\\|");
+                                                            String ssAddressTag = ss.getAddressTag();
+                                                            String[] addrTagArray = ssAddressTag.split("\\|");
+                                                            String status = ss.getStatus();
+                                                            String remarks = ss.getRemarks();
+                                                            String statusCol = "";
+
+                                                            if (status.equals("Completed")) {
+                                                                statusCol = "btn-success";
+                                                            } else if (status.equals("Cancelled")) {
+                                                                statusCol = "btn-danger";
+                                                            } else if (status.equals("Pending")) {
+                                                                statusCol = "btn-info";
+                                                            }
+                                                            if (fTime.equals(slot)) {
                                                                 int lead = ss.getLead();
                                                                 String add = ss.getAddress();
                                                                 String leadString = "Lead ID: " + lead;
-                                                                String addString =  "Address: " + add;
-                                                                
+                                                                String addString = "Address: " + add;
+
                                                 %>
                                                 <a id='takenImg'  title="<%=leadString%><%=addString%>">
-                                                    
-                                                     <img data-toggle="tooltip" data-html="true" data-placement="right" src='Images/Red_Square.png' style='width:3%;height:1%;' title="<%=leadString%><br><%=addString%>"/> 
+                                                    <!--<button  data-toggle="tooltip" data-html="true" data-placement="right"><%=leadString%><br><%=addString%></button>-->
+                                                    <img data-toggle="tooltip" data-html="true" data-placement="right" src='Images/Red_Square.png' style='width:3%;height:1%;' title="<%=leadString%><br>
+                                                         <ul>
+                                                         <%
+                                                             if (addrArray != null) {
+                                                                 for (int i = 0; i < addrArray.length; i++) {
+                                                                     String addr = addrArray[i];
+                                                                     String addTag = addrTagArray[i];%>
+                                                                     <li><%=addr%></li>
+                                                                 <%}
+                                                             }
+                                                         %>
+                                                         </ul>"/> 
                                                 </a>
                                                 <%}
                                                         }
