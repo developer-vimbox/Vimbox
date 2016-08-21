@@ -1043,8 +1043,6 @@ function viewSch(seldate) {
 }
 function showWeeklySch(selopt) {
     var opt = selopt.value;
-
-    alert(opt);
     if (opt == 'week') {
         var chdate = document.getElementById("seldate");
         chdate.style.visibility = 'hidden';
