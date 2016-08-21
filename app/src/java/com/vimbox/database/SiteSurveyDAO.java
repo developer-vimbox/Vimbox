@@ -472,9 +472,11 @@ public class SiteSurveyDAO {
                 DateTime end = dtf.parseDateTime(datetimeString);
 
                 String remarks = rs.getString("remarks");
+                String ss_owner = rs.getString("ss_owner");
+                User assignee = UserDAO.getUserByNRIC(ss_owner);
                 String timeslot = rs.getString("timeslot");
                 String status = rs.getString("status");
-                results.add(new SiteSurvey(leadId, user, user, address, addressTag, start, end, timeslot, remarks, status));
+                results.add(new SiteSurvey(leadId, assignee, user, address, addressTag, start, end, timeslot, remarks, status));
 
             }
 

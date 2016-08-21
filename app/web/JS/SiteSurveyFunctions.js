@@ -36,10 +36,10 @@ function initSurvey() {
         manpower.push({id: divId, value: {}});
         materialCharges.push({id: divId, value: 0});
     }
-    
+
     $('.tabcontent').each(function () {
         var divId = this.id;
-        
+
         var totalUnit = totalUnits.find(function (obj) {
             return obj.id === divId;
         });
@@ -58,15 +58,15 @@ function initSurvey() {
         var matCharge = materialCharges.find(function (obj) {
             return obj.id === divId;
         });
-        
+
         var customerTable = document.getElementById(divId + "_CustomerItemTable");
         var vimboxTable = document.getElementById(divId + "_VimboxItemTable");
-        
+
         var customerTableAreas = customerTable.getElementsByTagName("table");
         var vimboxTableAreas = vimboxTable.getElementsByTagName("table");
-        
-        if(customerTableAreas != null){
-            for(i = 0;i < customerTableAreas.length; i++){
+
+        if (customerTableAreas != null) {
+            for (i = 0; i < customerTableAreas.length; i++) {
                 var tableArea = customerTableAreas[i];
                 var id = tableArea.id;
                 var idArr = id.split("_");
@@ -75,7 +75,7 @@ function initSurvey() {
                 var areaTotal = 0;
                 $("#" + id + " > tbody  > tr").each(function () {
                     var inputs = this.getElementsByTagName("input");
-                    if(inputs.length > 0){
+                    if (inputs.length > 0) {
                         var name = inputs[0].value;
                         if (name === "Boxes") {
                             box.value += Number(inputs[4].value);
@@ -91,8 +91,8 @@ function initSurvey() {
                 areaUnits.push({id: idArr[1] + "_" + idArr[2] + "_SelectedItemsTable", value: areaTotal});
                 selectedItemType.push({id: idArr[1] + "_" + idArr[2], value: "ItemsDiv"});
             }
-            
-            for(i = 0;i < vimboxTableAreas.length; i++){
+
+            for (i = 0; i < vimboxTableAreas.length; i++) {
                 var tableArea = vimboxTableAreas[i];
                 var id = tableArea.id;
                 var idArr = id.split("_");
@@ -102,10 +102,10 @@ function initSurvey() {
                 var areaTotal = areaUnits.find(function (obj) {
                     return obj.id === tempVar1 + "_" + tempVar2 + "_SelectedItemsTable";
                 });
-                
+
                 $("#" + id + " > tbody  > tr").each(function () {
                     var inputs = this.getElementsByTagName("input");
-                    if(inputs.length > 0){
+                    if (inputs.length > 0) {
                         var name = inputs[0].value;
                         if (name === "Boxes") {
                             box.value += Number(inputs[4].value);
@@ -121,7 +121,7 @@ function initSurvey() {
                 document.getElementById(tempVar1 + "_" + tempVar2 + "_total").innerHTML = areaTotal.value;
             }
         }
-        
+
         $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
             var cellHtml = this.innerHTML.trim();
             var manpowerPresent = cellHtml.match(/manpower/i);
@@ -135,7 +135,7 @@ function initSurvey() {
                 (mp.value)[id] = Number(document.getElementById(divId + '_' + id + "manpowerInput").value);
             }
         });
-        
+
         var svcs = [];
         $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
             var inputs = this.getElementsByTagName("input");
@@ -145,7 +145,7 @@ function initSurvey() {
             $(table).append("<tr>" + generateBreakdown(id, divId) + "</tr>");
             svcs.push(id);
         });
-        
+
         $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
             var cellHtml = this.innerHTML.trim();
             var inputs = this.getElementsByTagName('input');
@@ -504,7 +504,7 @@ function addItem(tableId, salesDiv) {
         tr += "<td align='center'><input type='button' value='x' onclick=\"deleteSiteItem(this, '" + tableId + "', '" + salesDiv + "')\"/></td>";
         tr += "</tr>"
         $(tr).prependTo("#" + tableId + " > tbody");
-        
+
         if (selectedObject.value === 'VimboxDiv') {
             tr = "<tr id='" + tableId + "_tr" + trCounter + "'>";
             tr += "<td><input type='hidden' value='" + name + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxName'>" + name + "</td>";
@@ -950,8 +950,8 @@ function complete() {
         datatype: 'json',
         type: 'GET',
         url: "SaveSiteSurveyController",
-        data: $('#siteSurvey_form').serialize(), 
-        success: function(response) {
+        data: $('#siteSurvey_form').serialize(),
+        success: function (response) {
             var modal = document.getElementById("survey_error_modal");
             var status = document.getElementById("survey_error_status");
             var message = document.getElementById("survey_error_message");
@@ -965,7 +965,7 @@ function complete() {
                 }, 500);
             }
         },
-        error: function(response) {
+        error: function (response) {
             var modal = document.getElementById("survey_error_modal");
             var status = document.getElementById("survey_error_status");
             var message = document.getElementById("survey_error_message");
@@ -976,11 +976,11 @@ function complete() {
     });
 }
 
-function sales_survey_setup(nric){
+function sales_survey_setup(nric) {
     loadSalesSurveys('', nric);
 }
 
-function loadSalesSurveys(keyword, nric){
+function loadSalesSurveys(keyword, nric) {
     $.get("LoadSalesSurveys.jsp", {keyword: keyword, nric: nric}, function (data) {
         document.getElementById("surveys_table").innerHTML = data;
     });
@@ -1000,7 +1000,7 @@ function confirmCancel(leadId, date, timeslot, nric) {
     modal.style.display = "block";
 }
 
-function cancel(leadId, date, timeslot, nric){
+function cancel(leadId, date, timeslot, nric) {
     var modal = document.getElementById("survey_error_modal");
     var status = document.getElementById("survey_error_status");
     var message = document.getElementById("survey_error_message");
@@ -1012,4 +1012,66 @@ function cancel(leadId, date, timeslot, nric){
             modal.style.display = "none";
         }, 500);
     });
+}
+function showSch(tdydate) {
+    $(document).ready(function () {
+        var schtable = document.getElementById("shwschedules");
+        $.ajax({
+            url: 'LoadMySurveySchedule.jsp',
+            type: 'POST',
+            data: {date: tdydate},
+            success: function (response) {
+                $(schtable).html(response);
+            }
+        });
+    });
+
+}
+function viewSch(seldate) {
+    var date = seldate.value;
+    $(document).ready(function () {
+        var schtable = document.getElementById("shwschedules");
+        $.ajax({
+            url: 'LoadMySurveySchedule.jsp',
+            type: 'POST',
+            data: {date: date},
+            success: function (response) {
+                $(schtable).html(response);
+            }
+        });
+    });
+}
+function showWeeklySch(selopt) {
+    var opt = selopt.value;
+
+    alert(opt);
+    if (opt == 'week') {
+        var chdate = document.getElementById("seldate");
+        chdate.style.visibility = 'hidden';
+        var chdatelbl = document.getElementById("seldatelbl");
+        chdatelbl.style.visibility = 'hidden';
+        $(document).ready(function () {
+            var schtable = document.getElementById("shwschedules");
+            $.ajax({
+                url: 'LoadMySurveyWeeklySchedule.jsp',
+                type: 'POST',
+                success: function (response) {
+                    $(schtable).html(response);
+                }
+            });
+        });
+    } else {
+        var chdate = document.getElementById("seldate");
+        var chdatelbl = document.getElementById("seldatelbl");
+        chdate.style.visibility = 'visible';
+        chdatelbl.style.visibility = 'visible';
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(mm < 10){
+            mm = "0" + mm;
+        }
+        showSch(yyyy+"-"+mm+"-"+dd);
+    }
 }
