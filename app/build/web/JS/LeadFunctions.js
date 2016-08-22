@@ -960,7 +960,7 @@ function viewCal() {
     $("#dMonth").html(n);
     $("#dYear").html(y);
     var content = document.getElementById("ssCalTable");
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss"}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
@@ -970,11 +970,12 @@ function changeMonthYear() {
     var content = document.getElementById("ssCalTable");
     var iYear = document.getElementById('iYear').value;
     var iMonth = document.getElementById('iMonth').value;
+    var ss = document.getElementById('ssSelect').value;
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var n = m_names[iMonth]; 
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss}, function (data) {
         content.innerHTML = data;
     });
 }
@@ -1010,6 +1011,86 @@ function cancelLead(leadId) {
     $('#lId').val(leadId);
     document.getElementById('leadIdLbl').innerHTML = leadId;
     modal.style.display = "block";
+}
+
+function viewDaySchedule() {
+    var errorModal = document.getElementById("salesModal");
+    var errorStatus = document.getElementById("salesStatus");
+    var errorMessage = document.getElementById("salesMessage");
+    var date = $('#sitesurvey_date').val();
+    var elem = document.getElementById(date);
+    var pending = true;
+    if (elem != null) {
+        var input = elem.getElementsByTagName('input')[0];
+        if (input.value === 'no') {
+            pending = false;
+            errorStatus.innerHTML = "ERROR";
+            errorMessage.innerHTML = "A site survey is ongoing/completed on this date";
+            errorModal.style.display = "block";
+        }
+    }
+    if (pending) {
+        var siteSurveyor = $('#employee_search').val();
+        var fromArray = document.getElementsByName("addressfrom");
+        var addressFrom = "";
+        for (i = 0; i < fromArray.length; i++) {
+            addressFrom += fromArray[i].value + "|";
+        }
+        var toArray = document.getElementsByName("addressto");
+        var addressTo = "";
+        for (i = 0; i < toArray.length; i++) {
+            addressTo += toArray[i].value + "|";
+        }
+
+        $.getJSON("ValidateSiteSurveyorDetails", {date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo})
+                .done(function (data) {
+                    if (data.status === "SUCCESS") {
+                        var div = document.getElementById(date);
+                        var nric = "";
+                        var timeslots = "";
+                        var addresses = "";
+                        if (div != null) {
+                            nric = ($("#" + date + " input[name=siteSurvey_surveyor]").val().split("|"))[1];
+                            var timeArray = $("#" + date + " input[name=siteSurvey_timeslot]");
+                            for (var i = 0; i < timeArray.length; i++) {
+                                if (timeArray[i].value.includes(date)) {
+                                    timeslots += (timeArray[i].value.split("|"))[1] + "|";
+                                }
+                            }
+
+                            var addressArray = $("#" + date + " input[name=siteSurvey_address]");
+                            for (var i = 0; i < addressArray.length; i++) {
+                                if (addressArray[i].value.includes(date)) {
+                                    addresses += (addressArray[i].value.split("|"))[1] + "|";
+                                }
+                            }
+
+                            var remarksArray = $("#" + date + " input[name=siteSurvey_remarks]");
+                            var remarks = "";
+                            for (var i = 0; i < remarksArray.length; i++) {
+                                if (remarksArray[i].value.includes(date)) {
+                                    remarks = (remarksArray[i].value.split("|"))[1];
+                                    break;
+                                }
+                            }
+                        }
+                        toggleCounter = 0;
+                        $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: $('#leadId').val(), date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
+                            document.getElementById("schedule_content").innerHTML = results;
+                            document.getElementById("schedule_modal").style.display = "block";
+                        });
+                    } else {
+                        errorStatus.innerHTML = data.status;
+                        errorMessage.innerHTML = data.message;
+                        errorModal.style.display = "block";
+                    }
+                })
+                .fail(function (error) {
+                    errorStatus.innerHTML = "ERROR";
+                    errorMessage.innerHTML = error;
+                    errorModal.style.display = "block";
+                });
+    }
 }
 
 function viewSchedule() {

@@ -43,15 +43,34 @@
         <script src="JS/LeadFunctions.js"></script>
         <script src="JS/AddressSearch.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
-        <!-- The Modal -->
+        
+        <div id="salesModal" class="modal">
+            <!-- Modal content -->
+            <div class="error-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('salesModal')">×</span>
+                    <div id="salesStatus"></div>
+                    <hr>
+                    <div id="salesMessage"></div>
+                </div>
+            </div>
+        </div>
         <div id="cal_modal" class="modal">
-            <div class="modal-content" style="width: 95%;">
+            <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">
                     <span class="close" onclick="closeModal('cal_modal')">×</span>
                     <br>
                     <div id="cal_content"></div>
                     <br>
                     <div id="ssCalTable"></div>
+                </div>
+            </div>
+        </div>
+        <div id="schedule_modal" class="modal">
+            <div class="survey-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                    <div id="schedule_content"></div>
                 </div>
             </div>
         </div>
@@ -63,18 +82,6 @@
                     <div id="saStatus"></div>
                     <hr>
                     <div id="saMessage"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="salesModal" class="modal">
-            <!-- Modal content -->
-            <div class="error-modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('salesModal')">×</span>
-                    <div id="salesStatus"></div>
-                    <hr>
-                    <div id="salesMessage"></div>
                 </div>
             </div>
         </div>
@@ -278,7 +285,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Site Survey Calendar: </label>
                                             <div class="col-sm-4">
-                                                <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewCal();">View Calendar</button>
+                                                <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewCal();">View Calendar</button>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -298,15 +305,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="schedule_modal" class="modal">
-                                            <div class="survey-modal-content">
-                                                <div class="modal-body">
-                                                    <span class="close" onclick="closeModal('schedule_modal')">×</span>
-                                                    <div id="schedule_content"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div id="survey"></div>
                                     </fieldset>
                                     <br>
@@ -373,68 +371,68 @@
                                     //for (String type : types) {
                                     //  out.println("<input class='checkbox-inline' type='checkbox' name='leadType' value='" + type + "'>" + type);
                                     // }
-%>
-                                                            </div>
-                                
-                                                        </div>
-                                                    </div>
-                                
-                                                    <div id="Enquiry" style="display:none">
-                                                        <br>
-                                                        <fieldset>
-                                                            <b><u>Enquiry Details</u></b><br><br>
-                                                            <table>
-                                                                <col width="100">
-                                                                <tr>
-                                                                    <td align="right"><b>Remarks :</b></td>
-                                                                    <td>
-                                                                        <textarea class='form-control' name="enquiry" cols="75" rows="6" autocomplete="off"></textarea>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </fieldset>
-                                                    </div>
-                                
-                                                    <div id="Sales" style="display:none">
-                                                        <br>
-                                                        <fieldset>
-                                                            <b><u>Site Survey Details</u></b><br><br>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Survey Date: </label>
-                                                                <div class="col-sm-4">
-                                                                    <input class='form-control' type="date" id="sitesurvey_date">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">Surveyor: </label>
-                                                                <div class="col-sm-4">
-                                                                    <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                                                        <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
-                                                                        <span class="input-group-btn"> 
-                                                                            <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div id="schedule_modal" class="modal">
-                                                                <div class="survey-modal-content">
-                                                                    <div class="modal-body">
-                                                                        <span class="close" onclick="closeModal('schedule_modal')">×</span>
-                                                                        <div id="schedule_content"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div id="survey"></div>
-                                                        </fieldset>
-                                                        <br>
-                                                        <fieldset>
-                                                            <b><u>Sales Details</u></b><hr>
-                                                            <ul class="tab" id="sales_list">
-                                                            </ul>
-                                                            <div id="sales_container"></div>
-                                                        </fieldset>
-                                                    </div>
-                                                </fieldset>-->
+                                %>
+                                                                                            </div>
+                                                                
+                                                                                        </div>
+                                                                                    </div>
+                                                                
+                                                                                    <div id="Enquiry" style="display:none">
+                                                                                        <br>
+                                                                                        <fieldset>
+                                                                                            <b><u>Enquiry Details</u></b><br><br>
+                                                                                            <table>
+                                                                                                <col width="100">
+                                                                                                <tr>
+                                                                                                    <td align="right"><b>Remarks :</b></td>
+                                                                                                    <td>
+                                                                                                        <textarea class='form-control' name="enquiry" cols="75" rows="6" autocomplete="off"></textarea>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </fieldset>
+                                                                                    </div>
+                                                                
+                                                                                    <div id="Sales" style="display:none">
+                                                                                        <br>
+                                                                                        <fieldset>
+                                                                                            <b><u>Site Survey Details</u></b><br><br>
+                                                                                            <div class="form-group">
+                                                                                                <label class="col-sm-3 control-label">Survey Date: </label>
+                                                                                                <div class="col-sm-4">
+                                                                                                    <input class='form-control' type="date" id="sitesurvey_date">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group">
+                                                                                                <label class="col-sm-3 control-label">Surveyor: </label>
+                                                                                                <div class="col-sm-4">
+                                                                                                    <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                                                                        <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
+                                                                                                        <span class="input-group-btn"> 
+                                                                                                            <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div id="schedule_modal" class="modal">
+                                                                                                <div class="survey-modal-content">
+                                                                                                    <div class="modal-body">
+                                                                                                        <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                                                                                                        <div id="schedule_content"></div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div id="survey"></div>
+                                                                                        </fieldset>
+                                                                                        <br>
+                                                                                        <fieldset>
+                                                                                            <b><u>Sales Details</u></b><hr>
+                                                                                            <ul class="tab" id="sales_list">
+                                                                                            </ul>
+                                                                                            <div id="sales_container"></div>
+                                                                                        </fieldset>
+                                                                                    </div>
+                                                                                </fieldset>-->
                                 <br>
                                 <table>
                                     <tr>

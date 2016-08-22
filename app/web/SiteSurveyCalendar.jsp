@@ -1,3 +1,5 @@
+<%@page import="com.vimbox.database.UserDAO"%>
+<%@page import="com.vimbox.user.User"%>
 <%@ page  language="java" import="java.util.*,java.text.*"%>
 <%!
     public int nullIntconv(String inv) {
@@ -23,6 +25,7 @@
         iMonth = iTMonth;
     }
 
+    ArrayList<User> siteSurveyors = UserDAO.getAllSurveyors();
 %>
         <script src="JS/LeadFunctions.js"></script>
         <!-- Calendar -->
@@ -41,10 +44,9 @@
                 <tr>
                     <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
-                                <td width="3%"><label class="control-label" style="padding-top: 7px;">Year:</label></td>
                                 <td width="7%">
                                     <select class="form-control" id="iYear" name="iYear" onchange="changeMonthYear()">
-                                        <%            // start year and end year in combo box to change year in calendar
+                                        <%            
                                             for (int iy = iTYear - 5; iy <= iTYear + 5; iy++) {
                                                 if (iy == iYear) {
                                         %>
@@ -57,13 +59,12 @@
                                                 }
                                             }
                                         %>
-                                    </select></td>
-                                <td width="73%" align="center"><h3><label id="dMonth" style="padding-top: 8px;"><%=new SimpleDateFormat("MMMM").format(new Date(2008,iMonth,01))%></label> <label id="dYear"> <%=iYear%></label></h3></td>
-                                <td width="4%"><label class="control-label">Month:</label></td>
+                                    </select>
+                                </td>
+                                <td width="1%"><label class="control-label"></label></td>
                                 <td width="9%">
                                     <select class="form-control" id="iMonth" name="iMonth" onchange="changeMonthYear()">
                                         <%
-                                            // print month in combo box to change month in calendar
                                             for (int im = 0; im <= 11; im++) {
                                                 if (im == iMonth) {
                                         %>
@@ -76,7 +77,24 @@
                                                 }
                                             }
                                         %>
-                                    </select></td>
+                                    </select>
+                                </td>
+                                <td width="68%" align="center"><h2><label id="dMonth" style="padding-top: 8px;"><%=new SimpleDateFormat("MMMM").format(new Date(2008,iMonth,01))%></label> <label id="dYear"> <%=iYear%></label></h2></td>
+                                <td width="15%">
+                                    <select class="form-control" id="ssSelect" name="ssSelect" onchange="changeMonthYear()">
+                                        <option value="allss" selected="selected">-- All Site Surveyors --</option>
+                                        <%
+                                            for (User ss : siteSurveyors) {
+                                                String nric = ss.getNric();
+                                                String firstName = ss.getFirst_name();
+                                                String lastName = ss.getLast_name();
+                                        %>
+                                        <option value="<%=nric%>"><%=firstName%> <%=lastName%></option>
+                                        <%
+                                            }
+                                        %>
+                                    </select>
+                                </td>
                             </tr>
                         </table></td>
                 </tr>
