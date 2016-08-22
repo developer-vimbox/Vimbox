@@ -143,14 +143,15 @@
                         <div class="fc-day-number" style="font-size: 16px; padding-top: 2px;">
                             <%
                                 currDate = fmt.parseDateTime(iYear + "-" + (iMonth + 1) + "-" + curDate);
-                                if (currDate.isBefore(dt)) { // past dates
-                                    if (curDate == iTDate && iYear == iTYear && iMonth == iTMonth) {
+                                String strDate = fmt.print(currDate);
+                                if (currDate.isBefore(dt)) {
+                                    if (curDate == iTDate && iYear == iTYear && iMonth == iTMonth) { // today
                             %>
-                            <button class="btn btn-round btn-primary" onclick="viewDaySchedule();">
+                            <button class="btn btn-round btn-primary" onclick="viewDaySchedule('<%=strDate%>');">
                                 <%=curDate%>
                             </button>
                             <%
-                            } else {
+                            } else { // past dates
                             %>
                             <span class="btn btn-round btn-default">
                                 <%=curDate%>
@@ -158,13 +159,14 @@
                             <%
                                 } } else { // future dates
                             %>
-                            <button class="btn btn-round btn-primary">
+                            <button class="btn btn-round btn-default" onclick="viewDaySchedule('<%=strDate%>');">
                                 <%=curDate%>
                             </button>
                             <%
                                 }
                             %>
                         </div>
+                        <input type="hidden" id="selectedDate" value=<%=strDate%>>
                         <div class="fc-day-content">
                             <%   for (SiteSurvey ss : surveys) {
                                     DateTime start = ss.getStart();
@@ -186,12 +188,9 @@
                                         String statusCol = "";
                                         if (status.equals("Completed")) {
                                             statusCol = "btn-success";
-                                        } else if (status.equals("Cancelled")) {
-                                            statusCol = "btn-danger";
                                         } else if (status.equals("Pending")) {
                                             statusCol = "btn-info";
                                         }
-                                        if (!status.equals("Cancelled")) {
                             %>
                             <div style="position: relative;">
                                 <div class="tooltippp"><label class="<%=statusCol%>"><b><%=timeslot%></b> <%=lead%> <%=ssUser%></label>
@@ -237,7 +236,6 @@
                                 </div>
                             </div>
                             <%
-                                    }
                                 }
                             %>
                             <div style="position: relative; height: 0px;"> &nbsp;</div>

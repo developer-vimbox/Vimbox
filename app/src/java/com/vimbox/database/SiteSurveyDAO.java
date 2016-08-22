@@ -25,8 +25,8 @@ public class SiteSurveyDAO {
     private static final String CANCEL_SITE_SURVEY = "UPDATE sitesurvey_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
     private static final String DELETE_SITE_SURVEYS_BY_LEAD_ID = "DELETE FROM sitesurvey_assigned WHERE lead_id = ? AND status='Pending'";
     private static final String GET_SITE_SURVEYS_BY_USER_STARTDATE = "SELECT * FROM sitesurvey_assigned where ss_user = ? and date(start_datetime) = ? AND status != 'Cancelled' ORDER BY start_datetime";
-    private static final String GET_ALL_SITE_SURVEYS = "SELECT * FROM sitesurvey_assigned group by lead_id";
-    private static final String GET_SITE_SURVEYS_BY_USER = "SELECT * FROM sitesurvey_assigned where ss_user = ? group by lead_id";
+    private static final String GET_ALL_SITE_SURVEYS = "SELECT * FROM sitesurvey_assigned where status != 'Cancelled' group by lead_id";
+    private static final String GET_SITE_SURVEYS_BY_USER = "SELECT * FROM sitesurvey_assigned where ss_user = ?  AND status != 'Cancelled' group by lead_id";
 
     public static void deleteSiteSurveysByLeadId(int leadId) {
         Connection con = null;

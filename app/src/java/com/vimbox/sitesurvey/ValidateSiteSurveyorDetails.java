@@ -34,63 +34,69 @@ public class ValidateSiteSurveyorDetails extends HttpServlet {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
-        
+
         String errorMsg = "";
-        
+
         String date = request.getParameter("date");
         String siteSurveyor = request.getParameter("siteSurveyor");
         String addressFrom = request.getParameter("addressFrom");
         String addressTo = request.getParameter("addressTo");
         DateTime dt = null;
-        
-        if(addressFrom.isEmpty() && addressTo.isEmpty()){
+/*
+        if (addressFrom.isEmpty() && addressTo.isEmpty()) {
             errorMsg += "Please input at least one address<br>";
         }
-        
-        if(!addressFrom.isEmpty()){
-            addressFrom = addressFrom.substring(0,addressFrom.length()-1);
+*/
+        if (!addressFrom.isEmpty()) {
+            addressFrom = addressFrom.substring(0, addressFrom.length() - 1);
             String[] arrays = addressFrom.split("\\|", -1);
-            for(String array : arrays){
-                if(array.trim().isEmpty()){
+            for (String array : arrays) {
+                if (array.trim().isEmpty()) {
                     errorMsg += "Please ensure that the moving from addresses are correctly filled<br>";
                     break;
                 }
             }
         }
-        
-        if(!addressTo.isEmpty()){
-            addressTo = addressTo.substring(0,addressTo.length()-1);
+
+        if (!addressTo.isEmpty()) {
+            addressTo = addressTo.substring(0, addressTo.length() - 1);
             String[] arrays = addressTo.split("\\|");
-            for(String array : arrays){
-                if(array.trim().isEmpty()){
+            for (String array : arrays) {
+                if (array.trim().isEmpty()) {
                     errorMsg += "Please ensure that the moving to addresses are correctly filled<br>";
                     break;
                 }
             }
         }
-        
-        if(date.isEmpty()){
+/*
+        if (date.isEmpty()) {
             errorMsg += "Please enter a survey date<br>";
-        }else{
-            try{
+        } else {
+            try {
                 dt = dtf.parseDateTime(date);
-            }catch(Exception e){
+            } catch (Exception e) {
                 errorMsg += "Please enter a valid survey date<br>";
             }
         }
-        
-        ArrayList<User> users = UserDAO.getSiteSurveyorsByName(siteSurveyor);
-        if(users.isEmpty()){
+*/
+        ArrayList<User> users = new ArrayList<User>();
+        if (siteSurveyor.equals("allss")) {
+            users = UserDAO.getAllSurveyors();
+        } else {
+            User u = UserDAO.getUserByNRIC(siteSurveyor);
+            users.add(u);
+        }
+        if (users.isEmpty()) {
             errorMsg += "No site surveyors found<br>";
         }
-        
-        if(errorMsg.isEmpty()){
+
+        if (errorMsg.isEmpty()) {
             jsonOutput.addProperty("status", "SUCCESS");
-        }else{
+        } else {
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);
         }
-        
+
         jsonOut.println(jsonOutput);
     }
 

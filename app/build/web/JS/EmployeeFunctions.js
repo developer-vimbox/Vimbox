@@ -22,7 +22,7 @@ function loadEmployees(keyword, timer) {
     });
 }
 
-function loadDesignations() {
+function loadDesignations(department) {
     var radios = document.getElementsByTagName('input');
     var value;
     for (var i = 0; i < radios.length; i++) {
@@ -31,7 +31,8 @@ function loadDesignations() {
             value = radios[i].value;
         }
     }
-    var user_department = document.getElementById("user_department");
+    var user_department = document.getElementById(department);
+    
     var selectedValue = user_department.options[user_department.selectedIndex].value;
     var content = document.getElementById("user_designation_div");
     $.get("RetrieveEmployeeDesignations.jsp", {user_department: selectedValue, type: value}, function (data) {
@@ -50,8 +51,8 @@ function parttime_setup() {
 function loadFullTimeDiv() {
     var full_time_department = document.getElementById("full_time_department");
     full_time_department.style.display = "block";
-    document.getElementById("user_department").value = "";
-    loadDesignations();
+    document.getElementById("fulltime_user_department").value = "";
+    loadDesignations("fulltime_user_department");
     document.getElementById("full_time_user_account").style.display = "block";
     document.getElementById("part_time_department").style.display = "none";
 
@@ -61,8 +62,8 @@ function loadPartTimeDiv() {
     document.getElementById("full_time_department").style.display = "none";
     document.getElementById("full_time_user_account").style.display = "none";
     document.getElementById("part_time_department").style.display = "block";
-    document.getElementById("user_department").value = "";
-    loadDesignations();
+    document.getElementById("parttime_user_department").value = "";
+    loadDesignations("parttime_user_department");
 }
 
 function createEmployee() {
@@ -93,7 +94,10 @@ function createEmployee() {
         var user_fax = $('#user_fax').val();
         var user_home = $('#user_home').val();
         var user_designation = $('#user_designation').val();
-        var user_department = $('#user_department').val();
+        var user_department = $('#fulltime_user_department').val();
+        if(user_department == null){
+            user_department = $('#parttime_user_department').val();
+        }
         var user_salary = $('#user_salary').val();
         var emergency_name = $('#emergency_name').val();
         var emergency_relationship = $('#emergency_relationship').val();
@@ -200,8 +204,9 @@ function deletePayslip(id) {
                 message.innerHTML = errorMsg;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
+                    loadPayslips("");
                     setTimeout(function () {
-                        window.location.href = "Payslips.jsp";
+                        modal.style.display = "none";
                     }, 500);
                 }
             })
@@ -224,8 +229,9 @@ function deleteLeave_mc(id) {
                 message.innerHTML = errorMsg;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
+                    loadLeaveMCs("");
                     setTimeout(function () {
-                        window.location.href = "LeaveMCs.jsp";
+                        modal.style.display = "none";
                     }, 500);
                 }
             })
@@ -279,9 +285,20 @@ function updateEmployee() {
                 message.innerHTML = errorMsg;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
-                    setTimeout(function () {
-                        location.reload()
-                    }, 500);
+                    if(employeeType === 'Full'){
+                        loadEmployees("", "full-time");
+                        setTimeout(function () {
+                            document.getElementById("edit_employee_modal").style.display = "none";
+                            modal.style.display = "none";
+                        }, 500);
+                    }else{
+                        loadEmployees("", "part-time");
+                        setTimeout(function () {
+                            document.getElementById("edit_employee_modal").style.display = "none";
+                            modal.style.display = "none";
+                        }, 500);
+                    }
+                    
                 }
             })
             .fail(function (error) {
@@ -311,8 +328,10 @@ function fgPayslips() {
                 message.innerHTML = errorMsg;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
+                    loadPayslips("");
                     setTimeout(function () {
-                        location.reload()
+                        document.getElementById("fastCreateModal").style.display = "none";
+                        modal.style.display = "none";
                     }, 500);
                 }
             })
@@ -571,7 +590,6 @@ function updateTotal() {
     var deduction = document.getElementById('payslip_deduction').innerHTML;
     var overtime = document.getElementById('payslip_overtime').innerHTML;
     var additional = document.getElementById('payslip_additional').innerHTML;
-
     document.getElementById('payslip_netpay').innerHTML = (Number(basic) + Number(allowance) - Number(deduction) + Number(overtime) + Number(additional)).toFixed(2);
 }
 
@@ -591,6 +609,7 @@ function updatepayslip_dbd() {
     var total = 0;
     $("input[name='payslip_dbdamount']").each(function () {
         var value = $(this).val(); // grab name of original
+        console.log(value);
         if (!isNaN(value)) {
             total += Number(value);
         }
@@ -772,8 +791,9 @@ function updatePayslip() {
                 message.innerHTML = data.message;
                 modal.style.display = "block";
                 if (dataStatus === "SUCCESS") {
+                    loadPayslips("");
                     setTimeout(function () {
-                        location.reload()
+                        modal.style.display = "none"
                     }, 500);
                 }
             })
@@ -813,13 +833,13 @@ $(document).on('change', '#leaveEmployee', function () {
                 var leave = data.remainingLeave;
                 var mc = data.remainingMC;
                 if (leave !== '') {
-                    document.getElementById('leave_employee_leave').innerHTML = leave + " days";
+                    document.getElementById('leave_employee_leave').innerHTML = leave;
                 } else {
                     document.getElementById('leave_employee_leave').innerHTML = "";
                 }
 
                 if (mc !== '') {
-                    document.getElementById('leave_employee_mc').innerHTML = mc + " days";
+                    document.getElementById('leave_employee_mc').innerHTML = mc + " Days";
                 } else {
                     document.getElementById('leave_employee_mc').innerHTML = "";
                 }

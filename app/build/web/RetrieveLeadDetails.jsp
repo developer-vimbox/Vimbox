@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="com.vimbox.sitesurvey.SiteSurvey"%>
 <%@page import="com.vimbox.sales.LeadDiv"%>
 <%@page import="java.util.Map"%>
@@ -12,6 +13,7 @@
 <%
     String leadId = request.getParameter("getLid");
     Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
+    DecimalFormat df = new DecimalFormat("#,##0.00");
 %>
 
 <div class="form-horizontal" style="font-size: 14px; font-color: black;">
@@ -525,7 +527,7 @@
                                                                             for (String[] service : services) {
                                                                                 String[] svc = service[0].split("_");
                                                                                 String tr = "<tr id='" + leadDivId + "_" + service[0] + "'><td>";
-                                                                                tr += "<table class='serviceTable'>";
+                                                                                tr += "<table width='100%'>";
                                                                                 String secSvc = "";
                                                                                 for (int i = 1; i < svc.length; i++) {
                                                                                     secSvc += (svc[i]);
@@ -534,8 +536,9 @@
                                                                                     }
                                                                                 }
 
-                                                                                tr += "<tr height='10%'><td>" + svc[0] + " - " + secSvc + "<input type='hidden' name='" + leadDivId + "_serviceName' value='" + service[0] + "'></td><td align='right'>$ <input type='number' disabled step='0.01' min='0' name='" + leadDivId + "_serviceCharge' value='" + service[1] + "'><input type='hidden' value='" + service[2] + "'></td></tr>";
+                                                                                tr += "<tr height='10%'><td>" + svc[0] + " - " + secSvc + "</td><td align='right'>S$" + service[1] + "</td></tr>";
                                                                                 tr += "</table></td></tr>";
+                                                                                sum += Double.parseDouble(service[1]);
                                                                                 out.println(tr);
                                                                             }
                                                                         %>
@@ -653,7 +656,7 @@
                                                         <td align="right">
                                                             Total : <b>S$ 
                                                                 <%
-                                                                    out.println(sum);
+                                                                    out.println(df.format(sum));
                                                                     overall += sum;
                                                                 %>
                                                             </b>
@@ -681,7 +684,7 @@
                     <table width="100%">
                         <tr>
                             <td align="center">
-                                <h2><b>S$<%out.println(overall);%></b></h2>
+                                <h2><b>S$<%out.println(df.format(overall));%></b></h2>
                             </td>
                         </tr>
                     </table>

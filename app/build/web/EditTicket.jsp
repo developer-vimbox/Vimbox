@@ -60,13 +60,13 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">Customer's Name: </label>
                     <div class="col-sm-6">
-                        <label class="form-control"><%=customer.getSalutation()%>. <%=customer.getFirst_name()%> <%=customer.getLast_name()%></label>
+                        <label class="form-control" id="customer_name"><%=customer.getSalutation()%>. <%=customer.getFirst_name()%> <%=customer.getLast_name()%></label>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-4 control-label">Customer's Contact: </label>
                     <div class="col-sm-6">
-                        <label class="form-control">
+                        <label class="form-control" id="customer_contact">
                             <%
                                 int contact = customer.getContact();
                                 if (contact != 0) {
@@ -79,7 +79,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">Customer's Email: </label>
                     <div class="col-sm-6">
-                        <label class="form-control"><%=customer.getEmail()%></label>    
+                        <label class="form-control" id="customer_email"><%=customer.getEmail()%></label>    
                     </div>
                 </div>    
             </div>

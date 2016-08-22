@@ -15,7 +15,17 @@ function submitTicket() {
     var customer_id = $('#customer_id').val();
     var assigned_users = "";
     $(document.getElementsByName("assigned")).each(function () {
-        if (this.closest('div').id !== "additionalAssigned") {
+        var activeElement = this;
+        console.log(this);
+        var tagname = activeElement.tagName;
+        var divId = activeElement.id;
+        while (tagname !== 'DIV' || (divId !== "additionalAssigned" && divId !== "dynamicInput")) {
+            activeElement = activeElement.parentNode;
+            tagname = activeElement.tagName;
+            divId = activeElement.id;
+        }
+        
+        if (divId !== "additionalAssigned") {
             assigned_users += ($(this).val() + "|");
         }
     });

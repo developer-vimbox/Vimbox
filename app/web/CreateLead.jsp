@@ -44,17 +44,6 @@
         <script src="JS/AddressSearch.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
         
-        <div id="salesModal" class="modal">
-            <!-- Modal content -->
-            <div class="error-modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('salesModal')">×</span>
-                    <div id="salesStatus"></div>
-                    <hr>
-                    <div id="salesMessage"></div>
-                </div>
-            </div>
-        </div>
         <div id="cal_modal" class="modal">
             <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">
@@ -67,10 +56,21 @@
             </div>
         </div>
         <div id="schedule_modal" class="modal">
-            <div class="survey-modal-content">
+            <div class="survey-modal-content" style="width: 100%;">
                 <div class="modal-body">
                     <span class="close" onclick="closeModal('schedule_modal')">×</span>
                     <div id="schedule_content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="salesModal" class="modal">
+            <!-- Modal content -->
+            <div class="error-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('salesModal')">×</span>
+                    <div id="salesStatus"></div>
+                    <hr>
+                    <div id="salesMessage"></div>
                 </div>
             </div>
         </div>

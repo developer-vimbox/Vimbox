@@ -95,7 +95,7 @@
                                     <label class="col-sm-3 control-label">Department: </label>
                                     <div class="col-sm-5">
                                         <div id="full_time_department" style="display:none">
-                                            <select id="user_department" onchange="loadDesignations()" class="form-control">
+                                            <select id="fulltime_user_department" onchange="loadDesignations('fulltime_user_department')" class="form-control">
                                                 <option value="">--Select--</option>
                                                 <%
                                                     ArrayList<String> fulltimeDepartments = UserPopulationDAO.getFullUserDepartments();
@@ -106,7 +106,7 @@
                                             </select>
                                         </div>
                                         <div id="part_time_department" style="display:none">
-                                            <select id="user_department" onchange="loadDesignations()" class="form-control">
+                                            <select id="parttime_user_department" onchange="loadDesignations('parttime_user_department')" class="form-control">
                                                 <option value="">--Select--</option>
                                                 <%
                                                     ArrayList<String> parttimeDepartments = UserPopulationDAO.getPartUserDepartments();

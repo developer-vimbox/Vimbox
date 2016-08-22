@@ -1013,11 +1013,11 @@ function cancelLead(leadId) {
     modal.style.display = "block";
 }
 
-function viewDaySchedule() {
+function viewDaySchedule(date) {
     var errorModal = document.getElementById("salesModal");
     var errorStatus = document.getElementById("salesStatus");
     var errorMessage = document.getElementById("salesMessage");
-    var date = $('#sitesurvey_date').val();
+    //var date = $('#selectedDate').val();
     var elem = document.getElementById(date);
     var pending = true;
     if (elem != null) {
@@ -1030,7 +1030,7 @@ function viewDaySchedule() {
         }
     }
     if (pending) {
-        var siteSurveyor = $('#employee_search').val();
+        var siteSurveyor = $('#ssSelect').val();
         var fromArray = document.getElementsByName("addressfrom");
         var addressFrom = "";
         for (i = 0; i < fromArray.length; i++) {
