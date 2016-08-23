@@ -21,13 +21,14 @@
         out.println("<br><br>");
     }
 %>
-<table border="1" width="100%">
+<table class="table table-hover" width="100%">
     <col width="20%">
     <col width="30%">
     <col width="20%">
     <col width="10%">
     <col width="10%">
     <col width="10%">
+    <thead>
     <tr>
         <th>Lead ID</th>
         <th>Address</th>
@@ -36,6 +37,7 @@
         <th>Time Slot</th>
         <th>Action</th>
     </tr>
+    </thead>
     <%
         String leadId = ""; 
         String date = "";
@@ -72,11 +74,11 @@
                 out.println("<td align='center'>" + timeslot + "</td>");
                 out.println("<td align='center'>");
                 if(status.equals("Pending")){
-                    out.println("<button onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', 'Start')\">Start Survey</button>");
+                    out.println("<button class='btn btn-default' onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', 'Start')\">Start Survey</button>");
                 }else if (status.equals("Ongoing")){
-                    out.println("<button onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', '')\">Continue Survey</button>");
+                    out.println("<button class='btn btn-default' onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', '')\">Continue Survey</button>");
                 }else{
-                    out.println("<button onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
+                    out.println("<button class='btn btn-default' onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -107,11 +109,11 @@
                 out.println("<td align='center'>" + timeslot + "</td>");
                 out.println("<td align='center'>");
                 if(status.equals("Pending")){
-                    out.println("<button onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', 'Start')\">Start Survey</button>");
+                    out.println("<button class='btn btn-default' onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', 'Start')\">Start Survey</button>");
                 }else if (status.equals("Ongoing")){
-                    out.println("<button onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', '')\">Continue Survey</button>");
+                    out.println("<button class='btn btn-default' onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', '')\">Continue Survey</button>");
                 }else{
-                    out.println("<button onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
+                    out.println("<button class='btn btn-default' onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");

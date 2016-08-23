@@ -12,6 +12,9 @@ var manpower = [];
 
 function survey_setup(userId) {
     loadSurveys("", userId, '');
+    
+}
+function survey_setup_completed(userId){
     loadSurveys("", userId, 'Completed');
 }
 
@@ -1073,21 +1076,6 @@ function showWeeklySch(selopt) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
-
-//        var chdate = document.getElementById("selmth");
-//        chdate.style.visibility = 'hidden';
-//        var chdatelbl = document.getElementById("seldatelbl");
-//        chdatelbl.style.visibility = 'hidden';
-//        $(document).ready(function () {
-//            var schtable = document.getElementById("shwschedules");
-//            $.ajax({
-//                url: 'LoadMySurveyWeeklySchedule.jsp',
-//                type: 'POST',
-//                success: function (response) {
-//                    $(schtable).html(response);
-//                }
-//            });
-//        });
     } else {
         var chdate = document.getElementById("seldate");
         var chdatelbl = document.getElementById("seldatelbl");

@@ -16,7 +16,7 @@
     }
 %>
 
-<table border="1" width="100%">
+<table class="table table-bordered" width="100%">
     <col width="10%">
     <col width="10%">
     <col width="40%">
@@ -24,6 +24,7 @@
     <col width="10%">
     <col width="10%">
     <col width="10%">
+    <thead>
     <tr>
         <th>Lead ID</th>
         <th>Assignee</th>
@@ -33,6 +34,7 @@
         <th>Status</th>
         <th>Action</th>
     </tr>
+    </thead>
     <%
         String leadId = ""; 
         String date = "";
@@ -70,7 +72,7 @@
                 out.println("<td align='center'>" + status + "</td>");
                 out.println("<td align='center'>");
                 if(status.equals("Pending")){
-                    out.println("<button onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "', '" + nric + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "', '" + nric + "')\">Cancel</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -102,7 +104,7 @@
                 out.println("<td align='center'>" + status + "</td>");
                 out.println("<td align='center'>");
                 if(status.equals("Pending")){
-                    out.println("<button onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "', '" + nric + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "', '" + nric + "')\">Cancel</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
