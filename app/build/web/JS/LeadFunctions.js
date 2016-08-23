@@ -1216,8 +1216,8 @@ function selectSlot(e) {
                     }
                 }
 
-                var tr = "<tr data-value='{" + nric + "|" + employee + "|" + timeslot + "}'><td>" + timeslot + "<input type='hidden' name='timeslot' value='" + timeslot + "'></td>";
-                tr += "<td><input type='button' value='x' onclick='deleteSurveyRow(this)'/></td></tr>";
+                var tr = "<tr data-value='{" + nric + "|" + employee + "|" + timeslot + "}'><input type='hidden' name='timeslot' value='" + timeslot + "'>";
+                tr += "<td><div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + timeslot + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteSurveyRow(this)'/></span></div></td></tr>";
                 var after = true;
 
                 loop1:
@@ -1320,8 +1320,10 @@ function deleteAddressRow(btn) {
 function addAddress() {
     var address = $('#address_select').val();
     if (address !== '') {
-        var tr = "<tr><td>" + address + "<input type='hidden' name='site_address' value='" + address + "'></td>";
-        tr += "<td><input type='button' value='x' onclick='deleteAddressRow(this)'/></td></tr>";
+        var tr = "<tr><input type='hidden' name='site_address' value='" + address + "'>";
+        tr += "<td><div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + address + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteAddressRow(this)'/></span></div></td></tr>";
+        
+        
         $(tr).prependTo("#address_table > tbody");
     }
     $('#address_select').val('');
@@ -1359,22 +1361,26 @@ function assignSiteSurveyor() {
         var stringDiv = "";
         stringDiv += "<div id='" + date + "'>";
         stringDiv += "<span class='close' onClick=\"removeSiteSurvey('" + date + "')\">x</span>";
-        stringDiv += "<hr><table><col width='100'>";
-        stringDiv += "<tr><td align='right'><b>Date :</b></td><td><input type='hidden' name='siteSurvey_date' value='" + date + "'>" + date + "</td></tr>";
-        stringDiv += "<tr><td align='right'><b>Timeslot :</b></td><td><table>";
+        stringDiv += "<hr><div class='form-horizontal'>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Date: </label><div class='col-sm-4' style='padding-top: 7px;'>";
+        stringDiv += "<input type='hidden' name='siteSurvey_date' value='" + date + "'>" + date + "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Time Slot: </label><div class='col-sm-4' style='padding-top: 7px;'>";
         for (i = 0; i < timeslots.length; i++) {
-            stringDiv += "<tr><td><input type='hidden' name='siteSurvey_timeslot' value='" + date + "|" + timeslots[i].value + "'>" + timeslots[i].value + "</td></tr>";
+            stringDiv += "<input type='hidden' name='siteSurvey_timeslot' value='" + date + "|" + timeslots[i].value + "'>" + timeslots[i].value + "<br>";
         }
-        stringDiv += "</table></td></tr>";
-        stringDiv += "<tr><td align='right'><b>Address :</b></td><td><table>";
+        stringDiv += "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label><div class='col-sm-4' style='padding-top: 7px;'>";
         for (i = 0; i < addresses.length; i++) {
-            stringDiv += "<tr><td><input type='hidden' name='siteSurvey_address' value='" + date + "|" + addresses[i].value + "'>" + addresses[i].value + "</td></tr>";
+            stringDiv += "<input type='hidden' name='siteSurvey_address' value='" + date + "|" + addresses[i].value + "'>" + addresses[i].value + "<br>";
         }
-        stringDiv += "</table></td></tr>";
-        stringDiv += "<tr><td align='right'><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + date + "|" + surveyorId + "'>" + surveyorName + "</td></tr>";
-        stringDiv += "<tr><td align='right'><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + date + "|" + remarks + "'>" + remarks + "</td></tr>";
-        stringDiv += "<tr><td align='right'><b>Status :</b></td><td><input type='hidden' name='siteSurvey_status' value='" + date + "|Pending'>Pending</td></tr>";
-        stringDiv += "</table></div>";
+        stringDiv += "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Surveyor: </label><div class='col-sm-4' style='padding-top: 7px;'>";
+        stringDiv += "<input type='hidden' name='siteSurvey_surveyor' value='" + date + "|" + surveyorId + "'>" + surveyorName + "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Remarks: </label><div class='col-sm-4' style='padding-top: 7px;'>";
+        stringDiv += "<input type='hidden' name='siteSurvey_remarks' value='" + date + "|" + remarks + "'>" + remarks + "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Status: </label><div class='col-sm-4' style='padding-top: 7px;'>";
+        stringDiv += "<input type='hidden' name='siteSurvey_status' value='" + date + "|Pending'>Pending</div></div>";
+        stringDiv += "</div></div>";
         newdiv.innerHTML = stringDiv;
         document.getElementById("survey").appendChild(newdiv);
 
@@ -1663,8 +1669,8 @@ function selectTimeSlot() {
                     if (cellState !== 'selected' && cellState !== 'occupied') {
                         tableCell.addClass('selected');
                         tableCell.data('state', 'selected');
-                        var tr = "<tr data-value='{" + employeeSelected + "|" + timeslot + "}'><td>" + timeslot + "<input type='hidden' name='timeslot' value='" + timeslot + "'></td>";
-                        tr += "<td><input type='button' value='x' onclick='deleteSurveyRow(this)'/></td></tr>";
+                        var tr = "<tr data-value='{" + employeeSelected + "|" + timeslot + "}'><input type='hidden' name='timeslot' value='" + timeslot + "'>";
+                        tr += "<td><div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + timeslot + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteSurveyRow(this)'/></span></div></td></tr>";
                         var after = true;
                         var timetable = document.getElementById("timeslot_table");
                         loop1:

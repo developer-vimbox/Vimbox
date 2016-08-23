@@ -47,30 +47,49 @@
         <script src="JS/AddressSearch.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
         <!-- The Modal -->
-        <div id="saModal" class="modal">
-            <!-- Modal content -->
-            <div class="error-modal-content">
+        <div id="cal_modal" class="modal">
+            <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">
-                    <span class="close" onclick="closeModal('saModal')">×</span>
-                    <div id="saStatus"></div>
-                    <hr>
-                    <div id="saMessage"></div>
+                    <span class="close" onclick="closeModal('cal_modal')">×</span>
+                    <br>
+                    <div id="cal_content"></div>
+                    <br>
+                    <div id="ssCalTable"></div>
                 </div>
             </div>
         </div>
-
+        <div id="schedule_modal" class="modal">
+            <div class="modal-content" style="width: 95%;">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                    <div id="schedule_content"></div>
+                </div>
+            </div>
+        </div>
         <div id="salesModal" class="modal">
             <!-- Modal content -->
-            <div class="error-modal-content">
-                <div class="modal-body">
+            <div class="modal-content" style="width: 400px;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('salesModal')">×</span>
-                    <div id="salesStatus"></div>
-                    <hr>
+                    <center><h3><div id="salesStatus"></div></h3></center>
+                </div>
+                <div class="modal-body">
                     <div id="salesMessage"></div>
                 </div>
             </div>
         </div>
-
+        <div id="saModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('saModal')">×</span>
+                    <center><h3><div id="saStatus"></div></h3></center>
+                </div>
+                <div class="modal-body">
+                    <div id="saMessage"></div>
+                </div>
+            </div>
+        </div>
         <div id="cancelLeadModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
@@ -184,61 +203,61 @@
                 String leadDivStr = templeadDiv.getSalesDiv();
                 String divId = leadDivStr.substring(0, leadDivStr.indexOf("|"));
                 String leadDivAddr = leadDivStr.substring(leadDivStr.indexOf("|") + 1);%>
-                 <div id="<%=divId%>_serviceModal" class="modal">
-                                                                    <!-- Modal content -->
-                                                                    <div class="service-content">
-                                                                        <div id='service-body' class="service-body">
-                                                                            <span class="close" onclick="closeModal('<%=divId%>_serviceModal')">×</span>
-                                                                            <table class='table' width="100%" border="1" style="table-layout: fixed;" id="<%=divId%>_serviceTable">
-                                                                                <%
-                                                                                    ArrayList<String[]> services = templeadDiv.getServices();
-                                                                                    for (int i = 0; i < serviceTable.length; i++) {
-                                                                                        out.println("<tr>");
-                                                                                        for (int j = 0; j < serviceTable[i].length; j++) {
-                                                                                            if (i == 0) {
-                                                                                                // Table Header //
-                                                                                                out.println("<th>" + serviceTable[i][j] + "</th>");
-                                                                                            } else {
-                                                                                                // Table Data //
-                                                                                                String[] serviceChargeArray = serviceTable[i][j].split(",");
-                                                                                                out.println("<td align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\"");
-                                                                                                if (serviceTable[0][j].equals("Manpower")) {
-                                                                                                    out.println("id='" + divId + (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_") + "_service'");
-                                                                                                }
-                                                                                                out.println(">" + serviceChargeArray[0] + "</br>");
+        <div id="<%=divId%>_serviceModal" class="modal">
+            <!-- Modal content -->
+            <div class="service-content">
+                <div id='service-body' class="service-body">
+                    <span class="close" onclick="closeModal('<%=divId%>_serviceModal')">×</span>
+                    <table class='table' width="100%" border="1" style="table-layout: fixed;" id="<%=divId%>_serviceTable">
+                        <%
+                            ArrayList<String[]> services = templeadDiv.getServices();
+                            for (int i = 0; i < serviceTable.length; i++) {
+                                out.println("<tr>");
+                                for (int j = 0; j < serviceTable[i].length; j++) {
+                                    if (i == 0) {
+                                        // Table Header //
+                                        out.println("<th>" + serviceTable[i][j] + "</th>");
+                                    } else {
+                                        // Table Data //
+                                        String[] serviceChargeArray = serviceTable[i][j].split(",");
+                                        out.println("<td align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\"");
+                                        if (serviceTable[0][j].equals("Manpower")) {
+                                            out.println("id='" + divId + (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_") + "_service'");
+                                        }
+                                        out.println(">" + serviceChargeArray[0] + "</br>");
 
-                                                                                                if (serviceTable[0][j].equals("Manpower")) {
-                                                                                                    String id = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
-                                                                                                    String mp = "";
-                                                                                                    String mr = "";
-                                                                                                    for (String[] svc : services) {
-                                                                                                        if (svc[0].replaceAll(" ", "_").equals(id)) {
-                                                                                                            mp = svc[3];
-                                                                                                            mr = svc[4];
-                                                                                                            break;
-                                                                                                        }
-                                                                                                    }
-                                                                                                    out.println("Manpower : <label id='" + divId + "_" + id + "manpowerLabel'>" + mp + "</label><input type='hidden' name='" + divId + "_" + id + "manpowerInput' id='" + divId + "_" + id + "manpowerInput' value='" + mp + "'></br>");
-                                                                                                    out.println("Reason : <label id='" + divId + "_" + id + "manpowerReasonLabel'>" + mr + "</label><input type='hidden' name='" + divId + "_" + id + "reasonInput' id='" + divId + "_" + id + "reasonInput' value='" + mr + "'></br>");
-                                                                                                }
-                                                                                                try {
-                                                                                                    out.println("<input type='hidden' name='svcTableCell' value='{" + serviceTable[0][j] + "|" + serviceChargeArray[0] + "," + serviceChargeArray[1] + "}'>");
-                                                                                                } catch (IndexOutOfBoundsException e) {
-                                                                                                }
+                                        if (serviceTable[0][j].equals("Manpower")) {
+                                            String id = (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_");
+                                            String mp = "";
+                                            String mr = "";
+                                            for (String[] svc : services) {
+                                                if (svc[0].replaceAll(" ", "_").equals(id)) {
+                                                    mp = svc[3];
+                                                    mr = svc[4];
+                                                    break;
+                                                }
+                                            }
+                                            out.println("Manpower : <label id='" + divId + "_" + id + "manpowerLabel'>" + mp + "</label><input type='hidden' name='" + divId + "_" + id + "manpowerInput' id='" + divId + "_" + id + "manpowerInput' value='" + mp + "'></br>");
+                                            out.println("Reason : <label id='" + divId + "_" + id + "manpowerReasonLabel'>" + mr + "</label><input type='hidden' name='" + divId + "_" + id + "reasonInput' id='" + divId + "_" + id + "reasonInput' value='" + mr + "'></br>");
+                                        }
+                                        try {
+                                            out.println("<input type='hidden' name='svcTableCell' value='{" + serviceTable[0][j] + "|" + serviceChargeArray[0] + "," + serviceChargeArray[1] + "}'>");
+                                        } catch (IndexOutOfBoundsException e) {
+                                        }
 
-                                                                                                out.println("</td>");
-                                                                                            }
-                                                                                        }
-                                                                                        out.println("</tr>");
-                                                                                    }
-                                                                                %>
-                                                                            </table>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                
-           <% }
-            
+                                        out.println("</td>");
+                                    }
+                                }
+                                out.println("</tr>");
+                            }
+                        %>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <% }
+
         %>
 
         <div id="page-content-wrapper">
@@ -555,28 +574,9 @@
                                         <fieldset>
                                             <b><u>Site Survey Details</u></b><br><br>
                                             <div class="form-group">
-                                                <label class="col-sm-3 control-label">Survey Date: </label>
+                                                <label class="col-sm-3 control-label">Site Survey Calendar: </label>
                                                 <div class="col-sm-4">
-                                                    <input class='form-control' type="date" id="sitesurvey_date">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">Surveyor: </label>
-                                                <div class="col-sm-4">
-                                                    <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                                        <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
-                                                        <span class="input-group-btn"> 
-                                                            <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id="schedule_modal" class="modal">
-                                                <div class="survey-modal-content">
-                                                    <div class="modal-body">
-                                                        <span class="close" onclick="closeModal('schedule_modal')">×</span>
-                                                        <div id="schedule_content"></div>
-                                                    </div>
+                                                    <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewCal();">View Calendar</button>
                                                 </div>
                                             </div>
 
@@ -602,31 +602,71 @@
                                                         }
 
                                                         if (!s.equals(ss)) {
-                                                            if(!sStatus.equals("Cancelled")){
+                                                            if (!sStatus.equals("Cancelled")) {
                                                                 out.println("<div id='" + ss + "'>");
-                                                            }else{
+                                                            } else {
                                                                 out.println("<div>");
                                                             }
                                                             if (sStatus.equals("Pending")) {
                                                                 out.println("<span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
                                                             }
-                                                            out.println("<hr><table style='margin-left: 20%;'><col width='100'>");
-                                                            out.println("<tr><td ><b>Date :</b></td><td><input type='hidden' name='siteSurvey_date' value='" + ss + "'>" + ss + "</td></tr>");
-                                                            out.println("<tr><td ><b>Timeslot :</b></td><td><table>");
-                                                            for (int j = 0; j < timeslots.size(); j++) {
-                                                                out.println("<tr><td><input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) + "</td></tr>");
+                                                        %>
+                                                         <hr>
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Date: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                out.println("<input type='hidden' name='siteSurvey_date' value='" + ss + "'>" + ss);
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Time Slot: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                for (int j = 0; j < timeslots.size(); j++) {
+                                                                out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) +"<br>");
                                                             }
-                                                            out.println("</table></td></tr>");
-                                                            out.println("<tr><td ><b>Address :</b></td><td><table>");
-                                                            for (int j = 0; j < addresses.size(); j++) {
-                                                                out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "</td></tr>");
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Address: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                for (int j = 0; j < addresses.size(); j++) {
+                                                                out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "<br>");
                                                             }
-                                                            out.println("</table></td></tr>");
-                                                            out.println("<tr><td ><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName + "</td></tr>");
-                                                            out.println("<tr><td ><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem + "</td></tr>");
-                                                            out.println("<tr><td ><b>Status :</b></td><td><input type='hidden' name='siteSurvey_status' value='" + ss + "|" + sStatus + "'>" + sStatus + "</td></tr>");
-                                                            out.println("</table></div>");
-
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Surveyor: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                out.println("<input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName);
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Remarks: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                out.println("<input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem);
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Status: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                out.println("<input type='hidden' name='siteSurvey_status' value='" + ss + "|" + survey.getStatus() + "'>" + survey.getStatus());
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                        <%
                                                             ss = s;
                                                             sId = survey.getSiteSurveyor().getNric();
                                                             sName = survey.getSiteSurveyor().toString();
@@ -643,35 +683,76 @@
                                                             addresses.add(survey.getAddress());
                                                         }
                                                         if (i == surveys.size() - 1) {
-                                                            if(!sStatus.equals("Cancelled")){
+                                                            if (!sStatus.equals("Cancelled")) {
                                                                 out.println("<div id='" + ss + "'>");
-                                                            }else{
+                                                            } else {
                                                                 out.println("<div>");
                                                             }
                                                             if (sStatus.equals("Pending")) {
                                                                 out.println("<span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
                                                                 out.println("<input type='hidden' name='surveyStatus' value='yes'>");
-                                                            }else if(sStatus.equals("Cancelled")){
+                                                            } else if (sStatus.equals("Cancelled")) {
                                                                 out.println("<input type='hidden' name='surveyStatus' value='yes'>");
-                                                            }else{
+                                                            } else {
                                                                 out.println("<input type='hidden' name='surveyStatus' value='no'>");
                                                             }
-                                                            out.println("<hr><table style='margin-left: 20%;'><col width='100'>");
-                                                            out.println("<tr><td ><b>Date :</b></td><td><input type='hidden' name='siteSurvey_date' value='" + ss + "'>" + ss + "</td></tr>");
-                                                            out.println("<tr><td ><b>Timeslot :</b></td><td><table>");
-                                                            for (int j = 0; j < timeslots.size(); j++) {
-                                                                out.println("<tr><td><input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) + "</td></tr>");
+                                                %>
+                                                <hr>
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Date: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                out.println("<input type='hidden' name='siteSurvey_date' value='" + ss + "'>" + ss);
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Time Slot: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                for (int j = 0; j < timeslots.size(); j++) {
+                                                                out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) +"<br>");
                                                             }
-                                                            out.println("</table></td></tr>");
-                                                            out.println("<tr><td ><b>Address :</b></td><td><table>");
-                                                            for (int j = 0; j < addresses.size(); j++) {
-                                                                out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "</td></tr>");
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Address: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                for (int j = 0; j < addresses.size(); j++) {
+                                                                out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "<br>");
                                                             }
-                                                            out.println("</table></td></tr>");
-                                                            out.println("<tr><td><b>Surveyor :</b></td><td><input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName + "</td></tr>");
-                                                            out.println("<tr><td><b>Remarks :</b></td><td><input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem + "</td></tr>");
-                                                            out.println("<tr><td ><b>Status :</b></td><td><input type='hidden' name='siteSurvey_status' value='" + ss + "|" + survey.getStatus() + "'>" + survey.getStatus() + "</td></tr>");
-                                                            out.println("</table></div>");
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Surveyor: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                out.println("<input type='hidden' name='siteSurvey_surveyor' value='" + ss + "|" + sId + "'>" + sName);
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Remarks: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                out.println("<input type='hidden' name='siteSurvey_remarks' value='" + ss + "|" + sRem + "'>" + sRem);
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Status: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                                out.println("<input type='hidden' name='siteSurvey_status' value='" + ss + "|" + survey.getStatus() + "'>" + survey.getStatus());
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <%
                                                         }
                                                     }
                                                 %>
@@ -699,7 +780,7 @@
                                                 %>
                                                 <div id="<%=divId%>" class="tabcontent">
                                                     <input type="hidden" id="<%=divId%>_divId" class="divId" name="divId" value="<%=leadDivStr%>">
-                                                    
+
                                                     <table class="salesInfoTable">
                                                         <tr>
                                                             <td style="width:40%;">
@@ -1072,7 +1153,7 @@
                                                                             <table class="table table-bordered servicesTable" id="<%=divId%>_servicesTable" valign="top" width="100%">
                                                                                 <tbody>
                                                                                     <%
-                                                                                    ArrayList<String[]> services = leadDiv.getServices();
+                                                                                        ArrayList<String[]> services = leadDiv.getServices();
                                                                                         for (String[] service : services) {
                                                                                             String[] svc = service[0].split("_");
                                                                                             String tr = "<tr id='" + divId + "_" + service[0] + "'><td>";
