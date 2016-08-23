@@ -14,7 +14,7 @@ import org.joda.time.format.DateTimeFormatter;
 public class SiteSurveyDAO {
 
     private static final String GET_SITE_SURVEYS_BY_USER_DATE = "SELECT * FROM sitesurvey_assigned WHERE ss_user=? AND start_datetime LIKE ? AND lead_id != ? AND status != 'Cancelled' ORDER BY start_datetime";
-    private static final String GET_NC_SITE_SURVEYS_BY_USER_KEYWORD = "SELECT * FROM sitesurvey_assigned WHERE ss_user=? AND (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?) AND status!='Completed'";
+    private static final String GET_NC_SITE_SURVEYS_BY_USER_KEYWORD = "SELECT * FROM sitesurvey_assigned WHERE ss_user=? AND (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?) AND status!='Completed' AND status!='Cancelled'";
     private static final String GET_C_SITE_SURVEYS_BY_USER_KEYWORD = "SELECT * FROM sitesurvey_assigned WHERE ss_user=? AND (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?) AND status='Completed'";
     private static final String GET_SITE_SURVEYS_BY_OWNER_KEYWORD = "SELECT * FROM sitesurvey_assigned WHERE ss_owner=? AND (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?)";
     private static final String CREATE_SITE_SURVEY_ASSIGNMENT = "INSERT INTO sitesurvey_assigned VALUES (?,?,?,?,?,?,?,?,?,?)";
