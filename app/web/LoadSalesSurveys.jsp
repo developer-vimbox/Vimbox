@@ -17,14 +17,16 @@
 %>
 
 <table border="1" width="100%">
-    <col width="20%">
-    <col width="20%">
-    <col width="20%">
-    <col width="20%">
+    <col width="10%">
+    <col width="10%">
+    <col width="40%">
+    <col width="10%">
+    <col width="10%">
     <col width="10%">
     <col width="10%">
     <tr>
         <th>Lead ID</th>
+        <th>Assignee</th>
         <th>Address</th>
         <th>Date</th>
         <th>Time Slot</th>
@@ -36,6 +38,7 @@
         String date = "";
         String timeslot = "";
         String status = "";
+        String surveyor = "";
         ArrayList<String> address = new ArrayList<String>();
         for(int i=0 ; i<surveys.size(); i++){
             SiteSurvey survey = surveys.get(i);
@@ -43,17 +46,20 @@
             String nextDate = survey.getDate();
             String nextTimeslot = survey.getTimeSlots();
             String nextStatus = survey.getStatus();
+            String nextSurveyor = survey.getSiteSurveyor().toString();
             if(i==0){
                 leadId = nextLeadId;
                 date = nextDate;
                 timeslot = nextTimeslot;
                 status = nextStatus;
+                surveyor = nextSurveyor;
                 address.add(survey.getAddress());
             }
             
             if(!leadId.equals(nextLeadId) || !date.equals(nextDate) || !timeslot.equals(nextTimeslot)){
                 out.println("<tr>");
                 out.println("<td align='center'>" + leadId + "</td>");
+                out.println("<td align='center'>" + surveyor + "</td>");
                 out.println("<td align='center'><ul>");
                 for(String add:address){
                     out.println("<li>" + add + "</li>");
@@ -77,6 +83,7 @@
             date = nextDate;
             timeslot = nextTimeslot;
             status = nextStatus;
+            surveyor = nextSurveyor;
             if(!address.contains(survey.getAddress())){
                 address.add(survey.getAddress());
             }
@@ -84,6 +91,7 @@
             if(i == surveys.size()-1){
                 out.println("<tr>");
                 out.println("<td align='center'>" + leadId + "</td>");
+                out.println("<td align='center'>" + surveyor + "</td>");
                 out.println("<td align='center'><ul>");
                 for(String add:address){
                     out.println("<li>" + add + "</li>");
