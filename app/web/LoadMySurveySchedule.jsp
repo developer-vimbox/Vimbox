@@ -9,13 +9,13 @@
 
     ArrayList<SiteSurvey> surveys = SiteSurveyDAO.getSiteSurveysByUserandSd(user.getNric(), date);
 %>
-<table class ='table table-rounded'>
+<table class ='table table-bordered'>
     <thead>
         <tr>
-            <td align='right'>TimeSlots</td>
-            <td>Site Surveys on: <br>
+            <th align='right'>TimeSlots</th>
+            <th>Site Surveys on: <br>
                 <b><%=date%></b>
-            </td>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -49,7 +49,9 @@
                             } else if (status.equals("Cancelled")) {
                                 statusCol = "btn-danger";
                             } else if (status.equals("Pending")) {
-                                statusCol = "btn-info";
+                                statusCol = "btn-warning";
+                            }else if(status.equals("Ongoing")) {
+                                statusCol= "btn-info";
                             }
                             if (fTime.equals(slot)) {
                                 int lead = ss.getLead();

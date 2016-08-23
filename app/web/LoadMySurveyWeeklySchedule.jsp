@@ -11,7 +11,7 @@
 <table class ='table table-bordered'>
     <thead>
         <tr>
-            <td align='right'>TimeSlots</td>
+            <th align='right'>TimeSlots</th>
             <%
                 Date shwdate = new java.util.Date();
 
@@ -19,9 +19,9 @@
                     String currdate = new SimpleDateFormat("yyyy-MM-dd").format(shwdate);
                     allsurveys.add(SiteSurveyDAO.getSiteSurveysByUserandSd(user.getNric(), currdate));
             %>
-            <td>Site Surveys on:<br>
+            <th>Site Surveys on:<br>
                 <b><%=currdate%></b>
-            </td>
+            </th>
             <%
                     Date tmrw = new Date(shwdate.getTime() + (1000 * 60 * 60 * 24));
                     shwdate = tmrw;
@@ -61,7 +61,9 @@
                             } else if (status.equals("Cancelled")) {
                                 statusCol = "btn-danger";
                             } else if (status.equals("Pending")) {
-                                statusCol = "btn-info";
+                                statusCol = "btn-warning";
+                            }else if(status.equals("Ongoing")) {
+                                statusCol= "btn-info";
                             }
                             if (fTime.equals(slot)) {
                                 int lead = ss.getLead();

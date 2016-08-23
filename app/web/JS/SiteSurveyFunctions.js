@@ -1058,18 +1058,62 @@ function showWeeklySch(selopt) {
                 }
             });
         });
+    } else if (opt == 'month') {
+    var modal = document.getElementById("cal_modal");
+    $("#cal_content").load("MyScheduleCalendar.jsp");
+    var d = new Date();
+    var m = d.getMonth();
+    var y = d.getFullYear();
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[d.getMonth()]; 
+    $("#dMonth").html(n);
+    $("#dYear").html(y);
+    var content = document.getElementById("ssCalTable");
+    $.get("LoadMySurveyMonthlySchedule.jsp", {getYear: y, getMonth: m}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
+
+//        var chdate = document.getElementById("selmth");
+//        chdate.style.visibility = 'hidden';
+//        var chdatelbl = document.getElementById("seldatelbl");
+//        chdatelbl.style.visibility = 'hidden';
+//        $(document).ready(function () {
+//            var schtable = document.getElementById("shwschedules");
+//            $.ajax({
+//                url: 'LoadMySurveyWeeklySchedule.jsp',
+//                type: 'POST',
+//                success: function (response) {
+//                    $(schtable).html(response);
+//                }
+//            });
+//        });
     } else {
         var chdate = document.getElementById("seldate");
         var chdatelbl = document.getElementById("seldatelbl");
         chdate.style.visibility = 'visible';
         chdatelbl.style.visibility = 'visible';
+        chdate.value
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
         var yyyy = today.getFullYear();
-        if(mm < 10){
+        if (mm < 10) {
             mm = "0" + mm;
         }
-        showSch(yyyy+"-"+mm+"-"+dd);
+        chdate.value = yyyy + "-" + mm + "-" + dd;
+        showSch(yyyy + "-" + mm + "-" + dd);
     }
+}
+function changeMonthAndYear() {
+    var content = document.getElementById("ssCalTable");
+    var iYear = document.getElementById('iYear').value;
+    var iMonth = document.getElementById('iMonth').value;
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[iMonth]; 
+    $("#dMonth").html(n);
+    $("#dYear").html(iYear);
+    $.get("LoadMySurveyMonthlySchedule.jsp", {getYear: iYear, getMonth: iMonth}, function (data) {
+        content.innerHTML = data;
+    });
 }
