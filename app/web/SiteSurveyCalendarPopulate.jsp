@@ -100,7 +100,7 @@
 <div class="fc-view fc-view-month fc-grid">
     <table width="100%" cellspacing="0" class="fc-border-separate">
         <thead>
-            <tr class="fc-first fc-last">
+            <tr class="fc-first fc-last" bgcolor="#f9fafe" style="font-size: 14px;">
                 <th style="width: 14.2%" class="fc-day-header fc-sun fc-widget-header fc-first">Sun</th>
                 <th style="width: 14.2%" class="fc-day-header fc-mon fc-widget-header">Mon</th>
                 <th style="width: 14.2%" class="fc-day-header fc-tue fc-widget-header">Tue</th>
@@ -123,7 +123,7 @@
                         if (cnt < weekStartDay || curDate > days) {
                 %>
                 <td align="center" class="fc-day fc-mon fc-widget-content fc-future fc-last">
-                    <div style="min-height: 100px; background-color: #fafafa;">
+                    <div style="min-height: 120px; background-color: #fafafa;">
                         &nbsp;
                     </div>
                 </td>
@@ -139,7 +139,7 @@
                     <%
                         }
                     %>
-                    <div style="min-height: 100px;">
+                    <div style="min-height: 120px;">
                         <div class="fc-day-number" style="font-size: 16px; padding-top: 2px;">
                             <%
                                 currDate = fmt.parseDateTime(iYear + "-" + (iMonth + 1) + "-" + curDate);
@@ -153,9 +153,9 @@
                             <%
                             } else { // past dates
                             %>
-                            <span class="btn btn-round btn-default">
+                            <button class="btn btn-round btn-default" onclick="invalidDate();">
                                 <%=curDate%>
-                            </span>
+                            </button>
                             <%
                                 } } else { // future dates
                             %>
@@ -189,6 +189,8 @@
                                         if (status.equals("Completed")) {
                                             statusCol = "btn-success";
                                         } else if (status.equals("Pending")) {
+                                            statusCol = "btn-warning";
+                                        } else if (status.equals("Ongoing")) {
                                             statusCol = "btn-info";
                                         }
                             %>
@@ -259,7 +261,8 @@
 <br>
 <div>
     Status:
-    <label class="btn btn-info">Pending</label>
+    <label class="btn btn-info">Ongoing</label>
+    <label class="btn btn-warning">Pending</label>
     <label class="btn btn-success">Completed</label>
 </div>
 

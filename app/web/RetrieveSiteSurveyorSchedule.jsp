@@ -121,6 +121,16 @@
                 <tr>
                     <td style="vertical-align: top;">
                         <div id="mapForm" style="visibility: hidden">
+                            <%
+                                if (addresses.isEmpty()) {
+                            %>
+                            <button class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt" style="width: 60px;" onclick="toggleView();
+                                return false;">
+                            </button>
+                            <%
+                                }
+                            %>
+
                             <input id="pac-input" class="controls" type="text" placeholder="Search Box">
                             <div id="map"></div>
                             <div id="map-legends" style="display: none"></div>
@@ -209,20 +219,19 @@
                         </div>
                     </td>
                 </tr>
-            </table>
+
         </td>
         <td>
             <table width="100%">
-                <col width="50%">
-                <col width="50%">
                 <tr>
                     <td align="center" colspan="2"  style="vertical-align: top;">
-                        <button class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="width:100%" onclick="toggleView();
+                        <%
+                            if (!addresses.isEmpty()) {
+                        %>
+                        <button class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="width:80%" onclick="toggleView();
                                 return false;"> &nbsp; &nbsp;Toggle
                         </button>
                         <%
-                            if (addresses.isEmpty()) {
-                                out.println("<br><br>Please input at least one address.");
                             }
                         %>
                     </td>
@@ -286,77 +295,91 @@
                     if (!addresses.isEmpty()) {
                 %>
                 <tr>
-                    <td align="right" style="vertical-align: top;"><b>Address :</b></td>
                     <td>
-                        <select id="address_select">
-                            <option value="">--Select--</option>
-                            <%
-                                for (String address : addresses) {
-                                    out.println("<option value='" + address + "'>" + address + "</option>");
-                                }
-                            %>
-                        </select>
-                        <button onclick="addAddress();
-                                return false;">+</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Date :</b></td>
-                    <td><%=dateString%><input type="hidden" id="survey_date" value="<%=dateString%>"></td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Time Slot :</b></td>
-                    <td>
-                        <table id="timeslot_table">
-                            <tbody>
-                                <%
-                                    if (timeslotArray != null) {
-                                        for (int i = 0; i < timeslotArray.length; i++) {
-                                            out.println("<tr data-value='{" + nric + "|" + selected + "|" + timeslotArray[i] + "}'><td>" + timeslotArray[i] + "<input type='hidden' name='timeslot' value='" + timeslotArray[i] + "'></td>");
-                                            out.println("<td><input type='button' value='x' onclick='deleteSurveyRow(this)'/></td></tr>");
-                                        }
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Surveyor :</b></td>
-                    <td><input type="hidden" id="surveyor" <%if (!nric.isEmpty()) {
-                            out.println("value='" + nric + "'");
-                        }%>>
-                        <input type="hidden" id="surveyor_name" <%if (selected != null) {
-                                out.println("value='" + selected.toString() + "'");
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Address: </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <select id="address_select" class="form-control">
+                                            <option value="">--Select--</option>
+                                            <%
+                                                for (String address : addresses) {
+                                                    out.println("<option value='" + address + "'>" + address + "</option>");
+                                                }
+                                            %>
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" onclick="addAddress();
+                                                    return false;">+</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Date: </label>
+                                <div class="col-sm-6">
+                                    <%=dateString%><input type="hidden" id="survey_date" value="<%=dateString%>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Time Slot: </label>
+                                <div class="col-sm-6">
+                                    <table id="timeslot_table">
+                                        <tbody>
+                                            <%
+                                                if (timeslotArray != null) {
+                                                    for (int i = 0; i < timeslotArray.length; i++) {
+                                                        out.println("<tr data-value='{" + nric + "|" + selected + "|" + timeslotArray[i] + "}'><td>" + timeslotArray[i] + "<input type='hidden' name='timeslot' value='" + timeslotArray[i] + "'></td>");
+                                                        out.println("<td><input type='button' value='x' class='form-control' onclick='deleteSurveyRow(this)'/></td></tr>");
+                                                    }
+                                                }
+                                            %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Surveyor: </label>
+                                <div class="col-sm-6">
+                                    <input type="hidden" id="surveyor" <%if (!nric.isEmpty()) {
+                                            out.println("value='" + nric + "'");
+                                        }%>>
+                                    <input type="hidden" id="surveyor_name" <%if (selected != null) {
+                                            out.println("value='" + selected.toString() + "'");
 
-                            }%>>
-                        <label id="surveyor_label"><%if (selected != null) {
-                                out.println(selected);
-                            }%></label></td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Address :</b></td>
-                    <td>
-                        <table id="address_table">
-                            <tbody>
-                                <%
-                                    if (addArray != null) {
-                                        for (int i = 0; i < addArray.length; i++) {
-                                            out.println("<tr><td>" + addArray[i] + "<input type='hidden' name='site_address' value='" + addArray[i] + "'></td>");
-                                            out.println("<td><input type='button' value='x' onclick='deleteAddressRow(this)'/></td></tr>");
-                                        }
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Remarks :</b></td>
-                    <td>
-                        <textarea id="site_remarks"><%if (remarks != null) {
-                                out.println(remarks);
-                            }%></textarea>
+                                        }%>>
+                                    <label id="surveyor_label" class="form-control"><%if (selected != null) {
+                                            out.println(selected);
+                                        }%></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Address: </label>
+                                <div class="col-sm-6">
+                                    <table id="address_table">
+                                        <tbody>
+                                            <%
+                                                if (addArray != null) {
+                                                    for (int i = 0; i < addArray.length; i++) {
+                                                        out.println("<tr><td>" + addArray[i] + "<input type='hidden' name='site_address' value='" + addArray[i] + "'></td>");
+                                                        out.println("<td><input type='button' value='x' onclick='deleteAddressRow(this)'/></td></tr>");
+                                                    }
+                                                }
+                                            %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Remarks: </label>
+                                <div class="col-sm-6">
+                                        <textarea class="form-control" id="site_remarks"><%if (remarks != null) {
+                                            out.println(remarks);
+                                        }%></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr>

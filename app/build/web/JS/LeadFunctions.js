@@ -936,7 +936,7 @@ function selectService(divId) {
 //                document.getElementById('service-body').innerHTML = data;
 //                modal.style.display = "block";
 //            })
-modal.style.display = "block";
+    modal.style.display = "block";
 }
 //--------------------------------End-----------------------------------//
 
@@ -956,7 +956,7 @@ function viewCal() {
     var m = d.getMonth();
     var y = d.getFullYear();
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var n = m_names[d.getMonth()]; 
+    var n = m_names[d.getMonth()];
     $("#dMonth").html(n);
     $("#dYear").html(y);
     var content = document.getElementById("ssCalTable");
@@ -972,7 +972,7 @@ function changeMonthYear() {
     var iMonth = document.getElementById('iMonth').value;
     var ss = document.getElementById('ssSelect').value;
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var n = m_names[iMonth]; 
+    var n = m_names[iMonth];
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
     $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss}, function (data) {
@@ -1382,11 +1382,17 @@ function assignSiteSurveyor() {
         message.innerHTML = "Site survey assigned!";
         modal.style.display = "block";
         document.getElementById("schedule_modal").style.display = "none";
+        setTimeout(function () {
+            modal.style.display = "none";
+        }, 1000);
     } else {
 
         status.innerHTML = "ERROR";
         message.innerHTML = errorMsg;
         modal.style.display = "block";
+        setTimeout(function () {
+            modal.style.display = "none";
+        }, 1000);
     }
 }
 
@@ -1729,4 +1735,16 @@ function selectSurveyor() {
 
         }
     }
+}
+
+function invalidDate() {
+    var modal = document.getElementById("salesModal");
+    var salesStatus = document.getElementById("salesStatus");
+    var salesMessage = document.getElementById("salesMessage");
+    salesStatus.innerHTML = "Invalid Date";
+    salesMessage.innerHTML = "Unable to assign past dates.";
+    modal.style.display = "block";
+    setTimeout(function () {
+        modal.style.display = "none";
+    }, 1300);
 }

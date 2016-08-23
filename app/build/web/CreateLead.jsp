@@ -43,7 +43,7 @@
         <script src="JS/LeadFunctions.js"></script>
         <script src="JS/AddressSearch.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
-        
+
         <div id="cal_modal" class="modal">
             <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div id="schedule_modal" class="modal">
-            <div class="survey-modal-content" style="width: 100%;">
+            <div class="modal-content" style="width: 95%;">
                 <div class="modal-body">
                     <span class="close" onclick="closeModal('schedule_modal')">×</span>
                     <div id="schedule_content"></div>
@@ -65,22 +65,24 @@
         </div>
         <div id="salesModal" class="modal">
             <!-- Modal content -->
-            <div class="error-modal-content">
-                <div class="modal-body">
+            <div class="modal-content" style="width: 400px;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('salesModal')">×</span>
-                    <div id="salesStatus"></div>
-                    <hr>
+                    <center><h3><div id="salesStatus"></div></h3></center>
+                </div>
+                <div class="modal-body">
                     <div id="salesMessage"></div>
                 </div>
             </div>
         </div>
         <div id="saModal" class="modal">
             <!-- Modal content -->
-            <div class="error-modal-content">
-                <div class="modal-body">
+            <div class="modal-content">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('saModal')">×</span>
-                    <div id="saStatus"></div>
-                    <hr>
+                    <center><h3><div id="saStatus"></div></h3></center>
+                </div>
+                <div class="modal-body">
                     <div id="saMessage"></div>
                 </div>
             </div>
@@ -110,11 +112,12 @@
             </div>
         </div>
         <div id="customer_error_modal" class="modal">
-            <div class="error-modal-content">
-                <div class="modal-body">
+            <div class="modal-content">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('customer_error_modal')">×</span>
-                    <div id="customer_error_status"></div>
-                    <hr>
+                    <center><h2><div id="customer_error_status"></div></h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="customer_error_message"></div>
                 </div>
             </div>
@@ -288,6 +291,7 @@
                                                 <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewCal();">View Calendar</button>
                                             </div>
                                         </div>
+                                        <!--
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Survey Date: </label>
                                             <div class="col-sm-4">
@@ -305,6 +309,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        -->
                                         <div id="survey"></div>
                                     </fieldset>
                                     <br>
@@ -371,7 +376,7 @@
                                     //for (String type : types) {
                                     //  out.println("<input class='checkbox-inline' type='checkbox' name='leadType' value='" + type + "'>" + type);
                                     // }
-                                %>
+%>
                                                                                             </div>
                                                                 
                                                                                         </div>
