@@ -111,7 +111,7 @@
     }
 %>
 
-<h2>Schedule for <%=dateString%></h2><hr>
+<center><h2>Schedule for <%=dateString%></h2></center><hr>
 <table width="100%">
     <col width="80%">
     <col width="20%">
@@ -119,18 +119,15 @@
         <td>
             <table width="100%">
                 <tr>
+                    <td>
+                        <button class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="width:15%; float: right;" onclick="toggleView();
+                                return false;"> &nbsp; &nbsp;Toggle
+                        </button> <br><br>
+                    </td>
+                </tr>
+                <tr>
                     <td style="vertical-align: top;">
                         <div id="mapForm" style="visibility: hidden">
-                            <%
-                                if (addresses.isEmpty()) {
-                            %>
-                            <button class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt" style="width: 60px;" onclick="toggleView();
-                                return false;">
-                            </button>
-                            <%
-                                }
-                            %>
-
                             <input id="pac-input" class="controls" type="text" placeholder="Search Box">
                             <div id="map"></div>
                             <div id="map-legends" style="display: none"></div>
@@ -219,87 +216,86 @@
                         </div>
                     </td>
                 </tr>
-
         </td>
         <td>
             <table width="100%">
                 <tr>
-                    <td align="center" colspan="2"  style="vertical-align: top;">
+                    <td colspan="2"  style="vertical-align: top;">
                         <%
                             if (!addresses.isEmpty()) {
                         %>
-                        <button class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="width:80%" onclick="toggleView();
-                                return false;"> &nbsp; &nbsp;Toggle
-                        </button>
+                        <hr>
+                        <h3 class="mrg10A">Site Survey Information</h3>
                         <%
                             }
                         %>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="2"  style="vertical-align: top;">
                         <div id="mapInput" style="display:none;">
                             <%
                                 if (!addresses.isEmpty()) {
                             %>
-                            <table width="100%">
-                                <col width="80">
-                                <tr>
-                                    <td align="right"><b>Surveyor :</b></td>
-                                    <td>
-                                        <select id="surveyor_select">
-                                            <option value="">--Select--</option>
-                                            <%
-                                                for (User siteSurveyor : siteSurveyors) {
-                                                    if (selected != null) {
-                                                        out.println("<option value='" + siteSurveyor.getNric() + "|" + siteSurveyor + "' ");
-                                                        if (selected.getNric().equals(siteSurveyor.getNric())) {
-                                                            out.println("selected");
+                            <div class="form-horizontal" >
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Surveyor: </label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <select id="surveyor_select" class="form-control">
+                                                <option value="">--Select--</option>
+                                                <%
+                                                    for (User siteSurveyor : siteSurveyors) {
+                                                        if (selected != null) {
+                                                            out.println("<option value='" + siteSurveyor.getNric() + "|" + siteSurveyor + "' ");
+                                                            if (selected.getNric().equals(siteSurveyor.getNric())) {
+                                                                out.println("selected");
+                                                            }
+                                                            out.println(">" + siteSurveyor + "</option>");
+                                                        } else {
+                                                            out.println("<option value='" + siteSurveyor.getNric() + "|" + siteSurveyor + "'>" + siteSurveyor + "</option>");
                                                         }
-                                                        out.println(">" + siteSurveyor + "</option>");
-                                                    } else {
-                                                        out.println("<option value='" + siteSurveyor.getNric() + "|" + siteSurveyor + "'>" + siteSurveyor + "</option>");
                                                     }
-                                                }
-                                            %>
-                                        </select>
-                                        <button onclick="selectSurveyor();
-                                                return false;">Select</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right"><b>Time Slot :</b></td>
-                                    <td>
-                                        <select id="timeslot">
-                                            <option value="">--Select--</option>
-                                            <%
-                                                for (String timing : timings) {
-                                                    out.println("<option value='" + timing + "'>" + timing + "</option>");
-                                                }
-                                            %>
-                                        </select>
-                                        <button onclick="selectTimeSlot();
-                                                return false;">+</button>
-                                    </td> 
-                                </tr>
-                            </table>
+                                                %>
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" onclick="selectSurveyor();
+                                                        return false;">Select</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Select Time Slot: </label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <select id="timeslot" class="form-control">
+                                                <option value="">--Select--</option>
+                                                <%
+                                                    for (String timing : timings) {
+                                                        out.println("<option value='" + timing + "'>" + timing + "</option>");
+                                                    }
+                                                %>
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-round btn-primary" onclick="selectTimeSlot();
+                                                        return false;">+</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <%
                                 }
                             %>
                         </div>
                     </td>
-                    <td></td>
                 </tr>
                 <%
                     if (!addresses.isEmpty()) {
                 %>
                 <tr>
                     <td>
-                        <div class="form-horizontal">
+                        <div class="form-horizontal" >
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">Address: </label>
-                                <div class="col-sm-6">
+                                <label class="col-sm-4 control-label">Select Address: </label>
+                                <div class="col-sm-4">
                                     <div class="input-group">
                                         <select id="address_select" class="form-control">
                                             <option value="">--Select--</option>
@@ -310,38 +306,26 @@
                                             %>
                                         </select>
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default" onclick="addAddress();
+                                            <button class="btn btn-round btn-primary" class="form-control" onclick="addAddress();
                                                     return false;">+</button>
                                         </span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="form-horizontal" >
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Date: </label>
-                                <div class="col-sm-6">
-                                    <%=dateString%><input type="hidden" id="survey_date" value="<%=dateString%>">
+                                <div class="col-sm-4">
+                                    <span class="form-control"><%=dateString%></span><input type="hidden" id="survey_date" value="<%=dateString%>">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">Time Slot: </label>
-                                <div class="col-sm-6">
-                                    <table id="timeslot_table">
-                                        <tbody>
-                                            <%
-                                                if (timeslotArray != null) {
-                                                    for (int i = 0; i < timeslotArray.length; i++) {
-                                                        out.println("<tr data-value='{" + nric + "|" + selected + "|" + timeslotArray[i] + "}'><td>" + timeslotArray[i] + "<input type='hidden' name='timeslot' value='" + timeslotArray[i] + "'></td>");
-                                                        out.println("<td><input type='button' value='x' class='form-control' onclick='deleteSurveyRow(this)'/></td></tr>");
-                                                    }
-                                                }
-                                            %>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="form-horizontal" >
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Surveyor: </label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <input type="hidden" id="surveyor" <%if (!nric.isEmpty()) {
                                             out.println("value='" + nric + "'");
                                         }%>>
@@ -349,21 +333,44 @@
                                             out.println("value='" + selected.toString() + "'");
 
                                         }%>>
-                                    <label id="surveyor_label" class="form-control"><%if (selected != null) {
+                                    <span class="form-control" id="surveyor_label"><%if (selected != null) {
                                             out.println(selected);
-                                        }%></label>
+                                        }%></span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-horizontal" >
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Time Slot: </label>
+                                <div class="col-sm-4">
+                                    <table id="timeslot_table">
+                                        <tbody>
+
+                                            <%
+                                                if (timeslotArray != null) {
+                                                    for (int i = 0; i < timeslotArray.length; i++) {
+                                                        out.println("<tr data-value='{" + nric + "|" + selected + "|" + timeslotArray[i] + "}'><input type='hidden' name='timeslot' value='" + timeslotArray[i] + "'>");
+                                                        out.println("<td><div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + timeslotArray[i] + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteSurveyRow(this)'/></span></div></td></tr>");
+                                                    }
+                                                }
+                                            %>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>     
+                        <div class="form-horizontal" >
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Address: </label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <table id="address_table">
                                         <tbody>
                                             <%
                                                 if (addArray != null) {
                                                     for (int i = 0; i < addArray.length; i++) {
-                                                        out.println("<tr><td>" + addArray[i] + "<input type='hidden' name='site_address' value='" + addArray[i] + "'></td>");
-                                                        out.println("<td><input type='button' value='x' onclick='deleteAddressRow(this)'/></td></tr>");
+                                                        out.println("<tr><input type='hidden' name='site_address' value='" + addArray[i] + "'>");
+                                                        out.println("<td><div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + addArray[i] + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteAddressRow(this)'/></span></div></td></tr>");
                                                     }
                                                 }
                                             %>
@@ -371,20 +378,24 @@
                                     </table>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Remarks: </label>
-                                <div class="col-sm-6">
-                                        <textarea class="form-control" id="site_remarks"><%if (remarks != null) {
+                                <div class="col-sm-4">
+                                    <textarea class="form-control" id="site_remarks"><%if (remarks != null) {
                                             out.println(remarks);
                                         }%></textarea>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> </label>
+                                <div class="col-sm-4 text-center">
+                                    <button class="btn btn-primary" onclick="assignSiteSurveyor();
+                                            return false;">Assign Site Survey</button>
+                                </div>
+                            </div>
                         </div>
                     </td>
-                </tr>
-                <tr>
-                    <td align="center" colspan="2"><button style="width:100%" onclick="assignSiteSurveyor();
-                            return false;">Assign!</button></td>
                 </tr>
                 <%
                     }

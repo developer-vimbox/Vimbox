@@ -25,8 +25,8 @@ public class SiteSurveyDAO {
     private static final String CANCEL_SITE_SURVEY = "UPDATE sitesurvey_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
     private static final String DELETE_SITE_SURVEYS_BY_LEAD_ID = "DELETE FROM sitesurvey_assigned WHERE lead_id = ? AND status='Pending'";
     private static final String GET_SITE_SURVEYS_BY_USER_STARTDATE = "SELECT * FROM sitesurvey_assigned where ss_user = ? and date(start_datetime) = ? AND status != 'Cancelled' ORDER BY start_datetime";
-    private static final String GET_ALL_SITE_SURVEYS = "SELECT * FROM sitesurvey_assigned where status != 'Cancelled' group by lead_id";
-    private static final String GET_SITE_SURVEYS_BY_USER = "SELECT * FROM sitesurvey_assigned where ss_user = ?  AND status != 'Cancelled' group by lead_id";
+    private static final String GET_ALL_NON_CANCELLED_SITE_SURVEYS = "SELECT * FROM sitesurvey_assigned where status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
+    private static final String GET_NON_CANCELLED_SITE_SURVEYS_BY_USER = "SELECT * FROM vimbox.sitesurvey_assigned where ss_user = ? AND status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
 
     public static void deleteSiteSurveysByLeadId(int leadId) {
         Connection con = null;
@@ -499,10 +499,10 @@ public class SiteSurveyDAO {
         try {
             con = ConnectionManager.getConnection();
             if(ssIC.equals("allss")) {
-                ps = con.prepareStatement(GET_ALL_SITE_SURVEYS);
+                ps = con.prepareStatement(GET_ALL_NON_CANCELLED_SITE_SURVEYS);
                 rs = ps.executeQuery();
             } else {
-                ps = con.prepareStatement(GET_SITE_SURVEYS_BY_USER);
+                ps = con.prepareStatement(GET_NON_CANCELLED_SITE_SURVEYS_BY_USER);
                 ps.setString(1, ssIC);
                 rs = ps.executeQuery();
             }
