@@ -55,7 +55,12 @@
                             String status = ss.getStatus();
                             String remarks = ss.getRemarks();
                             String statusCol = "";
-
+                            String dataplacement = "";
+                            if(k < 5){
+                                dataplacement = "right";
+                            }else{
+                                dataplacement = "left";
+                            }
                             if (status.equals("Completed")) {
                                 statusCol = "btn-success";
                             } else if (status.equals("Cancelled")) {
@@ -73,7 +78,7 @@
                 %>
                 <a id='takenImg'  title="<%=leadString%>">
                     <!--<img data-toggle="tooltip" data-html="true" data-placement="right" src='Images/Red_Square.png' style='width:3%;height:1%;' title="<%=leadString%><br>-->
-                    <button class='<%=statusCol%>' data-toggle="tooltip" data-html="true" data-placement="right" title="
+                    <button class='<%=statusCol%>' data-toggle="tooltip" data-html="true" data-placement="<%=dataplacement%>" title="
                             <table>
                             <tr><td align='right' style='vertical-align: top; padding-right: 5px;'>Lead ID:</td><td align='left'><%=lead%></td></tr>
                             <tr><td align='right' style='vertical-align: top; padding-right: 5px;'>Status:</td><td align='left'><%=status%></td></tr>
