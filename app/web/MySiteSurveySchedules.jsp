@@ -29,19 +29,32 @@
             });
             var today = new Date();
             var dd = today.getDate();
-            var mm = today.getMonth() + 1; 
-            if(mm < 10){
-                mm = "0"+ mm;
+            var mm = today.getMonth() + 1;
+            if (mm < 10) {
+                mm = "0" + mm;
             }
             var yyyy = today.getFullYear();
-            document.body.onload = showSch(yyyy+"-"+mm+"-"+dd);
+            document.body.onload = showSch(yyyy + "-" + mm + "-" + dd);
         </script>
     </head>
     <%
-    String date = new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
+        String month = new SimpleDateFormat("MM").format(new java.util.Date());
+        String year = new SimpleDateFormat("YYYY").format(new java.util.Date());
     %>
     <body>
         <%@include file="header.jsp"%>
+         <div id="cal_modal" class="modal">
+            <div class="modal-content" style="width: 90%;">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('cal_modal')">×</span>
+                    <br>
+                    <div id="cal_content"></div>
+                    <br>
+                    <div id="ssCalTable"></div>
+                </div>
+            </div>
+        </div>
         <div id="page-content-wrapper">
 
             <div id="page-content">
@@ -52,7 +65,7 @@
                     <div class="panel">
                         <div class="panel-body">
                             <%                                String[] timings = new String[]{"0900 - 0930", "0930 - 1000", "1000 - 1030", "1030 - 1100", "1100 - 1130", "1130 - 1200", "1200 - 1230", "1230 - 1300", "1300 - 1330", "1330 - 1400", "1400 - 1430", "1430 - 1500", "1500 - 1530", "1530 - 1600", "1600 - 1630", "1630 - 1700", "1700 - 1730", "1730 - 1800"};
-                                
+
                                 ArrayList<SiteSurvey> surveys = SiteSurveyDAO.getSiteSurveysByUserandSd(user.getNric(), date);
                             %>
                             <div class="form-horizontal">
@@ -63,6 +76,7 @@
                                             <select name="assigned" class="form-control" onchange="showWeeklySch(this)">
                                                 <option value="day">Day</option>
                                                 <option value="week">Week</option>
+                                                <option value="month">Month</option>
                                             </select>
                                         </div>
 
@@ -75,9 +89,18 @@
 
                                     </div>
                                 </div>
-                                    <div class='shwschedules' id="shwschedules">
-                                    </div>
-                               
+                                        
+                                        <div align="right">
+    Status:
+    <label class="btn btn-info">Ongoing</label>
+    <label class="btn btn-warning">Pending</label>
+    <label class="btn btn-success">Completed</label>
+    <label class="btn btn-danger">Cancelled</label>
+</div>
+                                        <br>
+                                <div class='shwschedules' id="shwschedules">
+                                </div>
+
                             </div>
                         </div>
                     </div>

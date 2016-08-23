@@ -23,13 +23,15 @@
 %>
 <table border="1" width="100%">
     <col width="20%">
+    <col width="30%">
     <col width="20%">
-    <col width="20%">
-    <col width="20%">
-    <col width="20%">
+    <col width="10%">
+    <col width="10%">
+    <col width="10%">
     <tr>
         <th>Lead ID</th>
         <th>Address</th>
+        <th>Remarks</th>
         <th>Date</th>
         <th>Time Slot</th>
         <th>Action</th>
@@ -39,18 +41,21 @@
         String date = "";
         String timeslot = "";
         String status = "";
+        String remarks = "";
         ArrayList<String> address = new ArrayList<String>();
         for(int i=0 ; i<surveys.size(); i++){
             SiteSurvey survey = surveys.get(i);
             String nextLeadId = survey.getLead() + "";
             String nextDate = survey.getDate();
             String nextTimeslot = survey.getTimeSlots();
+            String nextRemarks = survey.getRemarks();
             String nextStatus = survey.getStatus();
             if(i==0){
                 leadId = nextLeadId;
                 date = nextDate;
                 timeslot = nextTimeslot;
                 status = nextStatus;
+                remarks = nextRemarks;
                 address.add(survey.getAddress());
             }
             
@@ -62,6 +67,7 @@
                     out.println("<li>" + add + "</li>");
                 }
                 out.println("</ul></td>");
+                out.println("<td align='center'>" + remarks + "</td>");
                 out.println("<td align='center'>" + date + "</td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
                 out.println("<td align='center'>");
@@ -83,6 +89,7 @@
             date = nextDate;
             timeslot = nextTimeslot;
             status = nextStatus;
+            remarks = nextRemarks;
             if(!address.contains(survey.getAddress())){
                 address.add(survey.getAddress());
             }
@@ -95,6 +102,7 @@
                     out.println("<li>" + add + "</li>");
                 }
                 out.println("</ul></td>");
+                out.println("<td align='center'>" + remarks + "</td>");
                 out.println("<td align='center'>" + date + "</td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
                 out.println("<td align='center'>");

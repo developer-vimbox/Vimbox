@@ -571,7 +571,7 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
-                                <li><a href="MySiteSurveySchedules.jsp" title="My Site Survey Schedules"><span>My Site Survey Schedules</span></a></li>
+                                <li><a href="MySiteSurveySchedules.jsp" title="My Schedule"><span>My Schedule</span></a></li>
                             </ul>
 
                         </div><!-- .sidebar-submenu -->
