@@ -34,7 +34,7 @@
             }
         </style>
     </head>
-    <body onload="create_leadSetup()">
+    <body>
         <%@include file="header.jsp"%>
         <script src="http://malsup.github.com/jquery.form.js"></script> 
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
@@ -219,32 +219,6 @@
                                 <br>
                                 <fieldset>
                                     <legend>Moving Information</legend>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Move Type: </label>
-                                        <div class="col-sm-6" style="padding-top: 7px;">
-                                            <%                                                for (String type : moveTypes) {
-                                                    out.println("<input class='checkbox-inline' type='checkbox' name='tom' value='" + type + "'>" + type);
-                                                }
-                                            %>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Date Of Move: </label>
-                                        <div class="col-sm-5">
-                                            <div id="dynamicDom">
-                                                <div class="input-group">
-                                                    <span class="input-group-btn">
-                                                        <input class="btn btn-round btn-primary" type="button" value="+" onClick="addDom('dynamicDom');">
-                                                    </span>
-                                                    <div id="1">
-                                                        <input class='form-control' type='date' name='dom'/>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
                                     <fieldset>
                                         <b><u>Moving From</u></b><br><br>
                                         <div class="form-group">
@@ -278,6 +252,26 @@
                                         <div id="to">
                                         </div>
                                     </fieldset>
+                                    <br>
+                                    <fieldset>
+                                        <b><u>Operations Details</u></b><br><br>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Move Type: </label>
+                                            <div class="col-sm-6" style="padding-top: 7px;">
+                                                <%                                                for (String type : moveTypes) {
+                                                        out.println("<input class='checkbox-inline' type='checkbox' name='tom' value='" + type + "'>" + type);
+                                                    }
+                                                %>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Moving Calendar: </label>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewMovCal();">View Calendar</button>
+                                            </div>
+                                        </div>
+                                        <div id="operation"></div>
+                                    </fieldset>
                                 </fieldset>
                                 <br>
                                 <fieldset>
@@ -291,25 +285,6 @@
                                                 <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewCal();">View Calendar</button>
                                             </div>
                                         </div>
-                                        <!--
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Survey Date: </label>
-                                            <div class="col-sm-4">
-                                                <input class="form-control" type="date" id="sitesurvey_date">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Surveyor: </label>
-                                            <div class="col-sm-4">
-                                                <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                                    <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
-                                                    <span class="input-group-btn"> 
-                                                        <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        -->
                                         <div id="survey"></div>
                                     </fieldset>
                                     <br>

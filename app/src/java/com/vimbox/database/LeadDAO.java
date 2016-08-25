@@ -1,6 +1,7 @@
 package com.vimbox.database;
 
 import com.vimbox.customer.Customer;
+import com.vimbox.operations.Job;
 import com.vimbox.sales.Item;
 import com.vimbox.sales.Lead;
 import com.vimbox.sales.LeadArea;
@@ -20,7 +21,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class LeadDAO {
 
-    private static final String CREATE_LEAD_INFO = "INSERT INTO leadinfo(owner_user,lead_id,type,customer_id,tom,dom,datetime_of_creation,status,reason,source,referral) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String CREATE_LEAD_INFO = "INSERT INTO leadinfo(owner_user,lead_id,type,customer_id,tom,datetime_of_creation,status,reason,source,referral) VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String CREATE_LEAD_ENQUIRY = "INSERT INTO leadenquiry(lead_id,enquiry) VALUES (?,?)";
     private static final String CREATE_LEAD_MOVE = "INSERT INTO leadmove VALUES (?,?,?,?,?,?)";
     private static final String CREATE_LEAD_CUST_ITEM = "INSERT INTO leadcustitem VALUES (?,?,?,?,?,?,?,?)";
@@ -128,7 +129,7 @@ public class LeadDAO {
                 int custId = rs.getInt("customer_id");
                 Customer customer = CustomerDAO.getCustomerById(custId);
                 String tom = rs.getString("tom");
-                String dom = rs.getString("dom");
+                ArrayList<Job> jobs = JobsDAO.getJobsByLeadId(leadId);
                 String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0, tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
@@ -345,7 +346,7 @@ public class LeadDAO {
                 }
                 
                 ArrayList<SiteSurvey> siteSurveys = SiteSurveyDAO.getSiteSurveysByLeadId(leadId);
-                results.add(new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, siteSurveys, dt, tom, dom, addressFrom, addressTo, leadDivs));
+                results.add(new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, siteSurveys, dt, tom, jobs, addressFrom, addressTo, leadDivs));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -375,7 +376,7 @@ public class LeadDAO {
                 int custId = rs.getInt("customer_id");
                 Customer customer = CustomerDAO.getCustomerById(custId);
                 String tom = rs.getString("tom");
-                String dom = rs.getString("dom");
+                ArrayList<Job> jobs = JobsDAO.getJobsByLeadId(leadId);
                 String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0, tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
@@ -593,7 +594,7 @@ public class LeadDAO {
                 }
                 
                 ArrayList<SiteSurvey> siteSurveys = SiteSurveyDAO.getSiteSurveysByLeadId(leadId);
-                lead = new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, siteSurveys, dt, tom, dom, addressFrom, addressTo, leadDivs);
+                lead = new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, siteSurveys, dt, tom, jobs, addressFrom, addressTo, leadDivs);
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -603,7 +604,7 @@ public class LeadDAO {
         return lead;
     }
     
-    public static void createLeadInfo(User owner, int leadId, String type, int custId, String typesOfMove, String datesOfMove, String dt, String status, String source, String referral) {
+    public static void createLeadInfo(User owner, int leadId, String type, int custId, String typesOfMove, String dt, String status, String source, String referral) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -614,12 +615,11 @@ public class LeadDAO {
             ps.setString(3, type);
             ps.setInt(4, custId);
             ps.setString(5, typesOfMove);
-            ps.setString(6, datesOfMove);
-            ps.setString(7, dt);
-            ps.setString(8, status);
-            ps.setString(9, "");
-            ps.setString(10, source);
-            ps.setString(11, referral);
+            ps.setString(6, dt);
+            ps.setString(7, status);
+            ps.setString(8, "");
+            ps.setString(9, source);
+            ps.setString(10, referral);
             ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();

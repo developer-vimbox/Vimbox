@@ -9,6 +9,8 @@ var boxes = [];
 var manpower = [];
 var domCounter = 2;
 
+var domPass = true;
+
 function initSalesDiv(divId) {
     boxes.push({id: divId, value: 0});
     totalUnits.push({id: divId, value: 0});
@@ -38,18 +40,6 @@ function openSales(evt, cityName) {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
     $('#' + cityName).scrollView();
-}
-
-function addDom(divName) {
-    var newdiv = document.createElement('div');
-    var stringDiv = "";
-    stringDiv += '<div class="input-group">';
-    stringDiv += "<span class='input-group-btn'><input class='btn btn-round btn-warning' type='button' value='x' onClick='removeDom(" + domCounter + ");'></span>";
-    stringDiv += "<div id='" + domCounter + "'><input class='form-control' type='date' name='dom'/></div>";
-    stringDiv += "</div>";
-    newdiv.innerHTML = stringDiv;
-    document.getElementById(divName).appendChild(newdiv);
-    domCounter++;
 }
 
 function addFollowup(leadId) {
@@ -115,19 +105,6 @@ function viewLeadsHistory(custId) {
 }
 
 //------------------------- LeadType Functions---------------------------//
-function  checkLeadInformation() {
-    var el = document.getElementById('leadInfo');
-    var tops = el.getElementsByTagName('input');
-    for (var i = 0, len = tops.length; i < len; i++) {
-        if (tops[i].type === 'checkbox') {
-            tops[i].onclick = showDiv;
-            if (tops[i].checked) {
-                tops[i].click();
-                tops[i].click();
-            }
-        }
-    }
-}
 
 function showDiv(e) {
     var divId = this.value.replace(" ", "");
@@ -241,11 +218,6 @@ function edit_leadSetup() {
         document.getElementById(divId + "_totalUnits").innerHTML = "Total Units : " + totalUnit.value;
         update_services(divId);
     });
-    checkLeadInformation();
-}
-
-function create_leadSetup() {
-    checkLeadInformation();
 }
 
 function showfield(name, e) {
@@ -966,6 +938,56 @@ function viewCal() {
     modal.style.display = "block";
 }
 
+function viewMovCal(){
+    var errorModal = document.getElementById("salesModal");
+    var errorStatus = document.getElementById("salesStatus");
+    var errorMessage = document.getElementById("salesMessage");
+    
+    var modal = document.getElementById("cal_modal");
+    $("#cal_content").load("MovingCalendar.jsp");
+    var d = new Date();
+    var m = d.getMonth();
+    var y = d.getFullYear();
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[d.getMonth()];
+    $("#dMonth").html(n);
+    $("#dYear").html(y); 
+    
+    var fromArray = document.getElementsByName("addressfrom");
+    var addressFrom = "";
+    for (i = 0; i < fromArray.length; i++) {
+        addressFrom += fromArray[i].value + "|";
+    }
+    var toArray = document.getElementsByName("addressto");
+    var addressTo = "";
+    for (i = 0; i < toArray.length; i++) {
+        addressTo += toArray[i].value + "|";
+    }
+    
+    $.getJSON("ValidateMovingDates", {addressFrom: addressFrom, addressTo: addressTo})
+    .done(function (data) {
+        if (data.status !== "SUCCESS") {
+            errorStatus.innerHTML = "WARNING";
+            errorMessage.innerHTML = data.message + "In order to select dom timeslots<br>";
+            errorModal.style.display = "block";
+            domPass = false;
+        }else{
+            domPass = true;
+        } 
+    })
+    .fail(function (error) {
+        errorStatus.innerHTML = "ERROR";
+        errorMessage.innerHTML = error;
+        errorModal.style.display = "block";
+    });
+    
+    var content = document.getElementById("ssCalTable");
+    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
+}
+
 function changeMonthYear() {
     var content = document.getElementById("ssCalTable");
     var iYear = document.getElementById('iYear').value;
@@ -976,6 +998,19 @@ function changeMonthYear() {
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
     $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss}, function (data) {
+        content.innerHTML = data;
+    });
+}
+
+function changeMoveMonthYear(){
+    var content = document.getElementById("ssCalTable");
+    var iYear = document.getElementById('iYear').value;
+    var iMonth = document.getElementById('iMonth').value;
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[iMonth];
+    $("#dMonth").html(n);
+    $("#dYear").html(iYear);
+    $.get("MovingCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth}, function (data) {
         content.innerHTML = data;
     });
 }
@@ -1093,6 +1128,134 @@ function viewDaySchedule(date) {
     }
 }
 
+function assignDOM() {
+    var date = $('#move_date').val();
+    var timeslots = document.getElementsByName("move_timeslot");
+    var addressesFr = document.getElementsByName("move_addressFrom");
+    var addressesTo = document.getElementsByName("move_addressTo");
+    
+    var remarks = $('#move_remarks').val();
+
+    var errorMsg = "";
+    if (timeslots.length === 0) {
+        errorMsg += "Please choose a time slot<br>";
+    }
+    if (addressesFr.length === 0) {
+        errorMsg += "Please choose an moving from address<br>";
+    }
+    if (addressesTo.length === 0) {
+        errorMsg += "Please choose an moving to address<br>";
+    }
+    
+    
+    var modal = document.getElementById("salesModal");
+    var status = document.getElementById("salesStatus");
+    var message = document.getElementById("salesMessage");
+    
+    if(!errorMsg){                           
+        var elem = document.getElementById("dom_" + date);
+        if (elem != null) {
+            elem.parentNode.removeChild(elem);
+        }
+
+        var newdiv = document.createElement('div');
+        var stringDiv = "";
+        stringDiv += "<div id='dom_" + date + "'>";
+        stringDiv += "<span class='close' onClick=\"removeSiteSurvey('dom_" + date + "')\">x</span>";
+        stringDiv += "<hr><table><col width='100'>";
+        stringDiv += "<tr><td align='right'><b>Date :</b></td><td><input type='hidden' name='move_date' value='" + date + "'>" + date + "</td></tr>";
+        stringDiv += "<tr><td align='right'><b>Timeslot :</b></td><td><table>";
+        for (i = 0; i < timeslots.length; i++) {
+            stringDiv += "<tr><td><input type='hidden' name='move_timeslots' value='" + date + "|" + timeslots[i].value + "'>" + timeslots[i].value + "</td></tr>";
+        }
+        stringDiv += "</table></td></tr>";
+        stringDiv += "<tr><td align='right'><b>From :</b></td><td><table>";
+        for (i = 0; i < addressesFr.length; i++) {
+            stringDiv += "<tr><td><input type='hidden' name='move_addressFr' value='" + date + "|" + addressesFr[i].value + "'>" + addressesFr[i].value + "</td></tr>";
+        }
+        stringDiv += "</table></td></tr>";
+        stringDiv += "<tr><td align='right'><b>To :</b></td><td><table>";
+        for (i = 0; i < addressesTo.length; i++) {
+            stringDiv += "<tr><td><input type='hidden' name='move_addressTo' value='" + date + "|" + addressesTo[i].value + "'>" + addressesTo[i].value + "</td></tr>";
+        }
+        stringDiv += "</table></td></tr>";
+        stringDiv += "<tr><td align='right'><b>Remarks :</b></td><td><input type='hidden' name='move_remarks' value='" + date + "|" + remarks + "'><input type='hidden' name='move_status' value='" + date + "|Booking'>" + remarks + "</td></tr>";
+        stringDiv += "</table></div>";
+        newdiv.innerHTML = stringDiv;
+        document.getElementById("operation").appendChild(newdiv);
+
+        status.innerHTML = "SUCCESS";
+        message.innerHTML = "Date of Move selected!";
+        modal.style.display = "block";
+        document.getElementById("schedule_modal").style.display = "none";
+        setTimeout(function () {
+            modal.style.display = "none";
+        }, 1000);
+    }else{
+        status.innerHTML = "ERROR";
+        message.innerHTML = errorMsg;
+        modal.style.display = "block";
+    }
+}
+
+function viewMoveDaySchedule(date) {
+    var div = document.getElementById("dom_" + date);
+    var timeslots = "";
+    var addressesFr = "";
+    var addressesTo = "";
+
+    if (div != null) {
+        var timeArray = $("#dom_" + date + " input[name=move_timeslots]");
+        for (var i = 0; i < timeArray.length; i++) {
+            if (timeArray[i].value.includes(date)) {
+                timeslots += (timeArray[i].value.split("|"))[1] + "|";
+            }
+        }
+
+        var addressFrArray = $("#dom_" + date + " input[name=move_addressFr]");
+        for (var i = 0; i < addressFrArray.length; i++) {
+            if (addressFrArray[i].value.includes(date)) {
+                addressesFr += (addressFrArray[i].value.split("|"))[1] + "|";
+            }
+        }
+        
+        var addressToArray = $("#dom_" + date + " input[name=move_addressTo]");
+        for (var i = 0; i < addressToArray.length; i++) {
+            if (addressToArray[i].value.includes(date)) {
+                addressesTo += (addressToArray[i].value.split("|"))[1] + "|";
+            }
+        }
+
+        var remarksArray = $("#dom_" + date + " input[name=move_remarks]");
+        var remarks = "";
+        for (var i = 0; i < remarksArray.length; i++) {
+            if (remarksArray[i].value.includes(date)) {
+                remarks = (remarksArray[i].value.split("|"))[1];
+                break;
+            }
+        }
+    }
+    
+    var addressFrom = "";
+    var addressTo = "";
+    if(domPass){
+        var fromArray = document.getElementsByName("addressfrom");
+        for (i = 0; i < fromArray.length; i++) {
+            addressFrom += fromArray[i].value + "|";
+        }
+        var toArray = document.getElementsByName("addressto");
+        for (i = 0; i < toArray.length; i++) {
+            addressTo += toArray[i].value + "|";
+        }
+    }
+    
+    $.get("RetrieveMovingSchedule.jsp", {leadId: $('#leadId').val(), date: date, addressFrom: addressFrom, addressTo: addressTo, timeslots: timeslots, addressesFr: addressesFr, addressesTo: addressesTo, remarks: remarks}, function (results) {
+        document.getElementById("schedule_content").innerHTML = results;
+        document.getElementById("schedule_modal").style.display = "block";
+    });
+                
+}
+
 function viewSchedule() {
     var errorModal = document.getElementById("salesModal");
     var errorStatus = document.getElementById("salesStatus");
@@ -1170,6 +1333,62 @@ function viewSchedule() {
                     errorMessage.innerHTML = error;
                     errorModal.style.display = "block";
                 });
+    }
+}
+
+function selectDOMSlot(e){
+    var cell = $(e);
+    var state = cell.data('state') || '';
+    var cellHtml = cell.html().trim();
+
+    if (cellHtml) {
+        var cellTiming = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
+        var timetable = document.getElementById("move_timeslot_table");
+        switch (state) {
+            case '':
+                var tr = "<tr data-value='{" + cellTiming + "}'><td>" + cellTiming + "<input type='hidden' name='move_timeslot' value='" + cellTiming + "'></td>";
+                tr += "<td><input type='button' value='x' class='form-control' onclick='deleteMoveTimeRow(this)'/></td></tr>";
+                var after = true;
+                loop1:
+                for (var i = 0, timerow; timerow = timetable.rows[i]; i++) {
+                    var tableCell = $(timerow).data('value');
+                    var tableTimeSlot = tableCell.substring(tableCell.indexOf("{") + 1, tableCell.lastIndexOf("}"));
+                    var num = cellTiming.localeCompare(tableTimeSlot);
+                    if (num === -1) {
+                        after = false;
+                    }
+
+                    if (i === 0 && after === false) {
+                        $(tr).prependTo("#move_timeslot_table > tbody");
+                        break loop1;
+                    } else if (after === false) {
+                        $('#move_timeslot_table > tbody > tr').eq(i - 1).after(tr);
+                        break loop1;
+                    }
+                }
+
+
+                if (after) {
+                    $('#move_timeslot_table').append(tr);
+                }
+                
+                cell.addClass('selected');
+                cell.data('state', 'selected');
+                break;
+            case 'selected':
+                var table = document.getElementById("move_timeslot_table");
+                for (var i = 0, row; row = table.rows[i]; i++) {
+                    if ($(row).data('value').includes(cellTiming)) {
+                        row.parentNode.removeChild(row);
+                        break;
+                    }
+                }
+                cell.removeClass('selected');
+                cell.data('state', '');
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -1312,6 +1531,25 @@ function deleteSurveyRow(btn) {
     }
 }
 
+function deleteMoveTimeRow(btn){
+    var row = btn.parentNode.parentNode;
+    var value = $(row).data('value');
+    row.parentNode.removeChild(row);
+    var table = document.getElementById("moving_table");
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            //iterate through columns
+            //columns would be accessed using the "col" variable assigned in the for loop
+            var tableCell = $(col);
+            var tableCellHtml = tableCell.html().trim();
+            if (tableCellHtml.includes(value)) {
+                tableCell.removeClass('selected');
+                tableCell.data('state', '');
+            }
+        }
+    }
+}
+
 function deleteAddressRow(btn) {
     var row = btn.parentNode.parentNode;
     row.parentNode.removeChild(row);
@@ -1327,6 +1565,26 @@ function addAddress() {
         $(tr).prependTo("#address_table > tbody");
     }
     $('#address_select').val('');
+}
+
+function addMoveFrAddress(){
+    var address = $('#move_addressFrom_select').val();
+    if (address !== '') {
+        var tr = "<tr><td>" + address + "<input type='hidden' name='move_addressFrom' value='" + address + "'></td>";
+        tr += "<td><input type='button' value='x' onclick='deleteAddressRow(this)'/></td></tr>";
+        $(tr).prependTo("#move_addressFrom_table > tbody");
+    }
+    $('#move_addressFrom_select').val('');
+}
+
+function addMoveToAddress(){
+    var address = $('#move_addressTo_select').val();
+    if (address !== '') {
+        var tr = "<tr><td>" + address + "<input type='hidden' name='move_addressTo' value='" + address + "'></td>";
+        tr += "<td><input type='button' value='x' onclick='deleteAddressRow(this)'/></td></tr>";
+        $(tr).prependTo("#move_addressTo_table > tbody");
+    }
+    $('#move_addressTo_select').val('');
 }
 
 function assignSiteSurveyor() {

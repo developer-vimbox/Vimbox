@@ -1,6 +1,7 @@
 package com.vimbox.sales;
 
 import com.vimbox.customer.Customer;
+import com.vimbox.operations.Job;
 import com.vimbox.sitesurvey.SiteSurvey;
 import com.vimbox.user.User;
 import java.util.ArrayList;
@@ -20,13 +21,13 @@ public class Lead {
     private DateTime dt;
     
     private String tom;
-    private String dom;
+    private ArrayList<Job> jobs;
     private ArrayList<String[]> addressFrom;
     private ArrayList<String[]> addressTo;
     
     private ArrayList<LeadDiv> leadDivs;
 
-    public Lead(User owner, int id, String type, Customer customer, String status, String reason, String source, String referral, String enquiry, ArrayList<SiteSurvey> siteSurveys, DateTime dt, String tom, String dom, ArrayList<String[]> addressFrom, ArrayList<String[]> addressTo, ArrayList<LeadDiv> leadDivs) {
+    public Lead(User owner, int id, String type, Customer customer, String status, String reason, String source, String referral, String enquiry, ArrayList<SiteSurvey> siteSurveys, DateTime dt, String tom, ArrayList<Job> jobs, ArrayList<String[]> addressFrom, ArrayList<String[]> addressTo, ArrayList<LeadDiv> leadDivs) {
         this.owner = owner;
         this.id = id;
         this.type = type;
@@ -39,7 +40,7 @@ public class Lead {
         this.siteSurveys = siteSurveys;
         this.dt = dt;
         this.tom = tom;
-        this.dom = dom;
+        this.jobs = jobs;
         this.addressFrom = addressFrom;
         this.addressTo = addressTo;
         this.leadDivs = leadDivs;
@@ -85,8 +86,8 @@ public class Lead {
         return tom;
     }
 
-    public String getDom() {
-        return dom;
+    public ArrayList<Job> getJobs() {
+        return jobs;
     }
 
     public ArrayList<String[]> getAddressFrom() {

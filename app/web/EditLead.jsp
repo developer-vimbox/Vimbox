@@ -1,3 +1,5 @@
+<%@page import="java.util.Map"%>
+<%@page import="com.vimbox.operations.Job"%>
 <%@page import="com.vimbox.sales.LeadDiv"%>
 <%@page import="com.vimbox.sitesurvey.SiteSurvey"%>
 <%@page import="com.vimbox.sales.Lead"%>
@@ -374,71 +376,7 @@
                                     <br>
                                     <fieldset>
                                         <legend>Moving Information</legend>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Move Type: </label>
-                                            <div class="col-sm-6" style="padding-top: 7px;">
-                                                <%
-                                                    String[] tom = lead.getTom().split("\\|");
-
-                                                    for (String type : moveTypes) {
-                                                        boolean present = false;
-                                                        for (String tm : tom) {
-                                                            if (tm.equals(type)) {
-                                                                present = true;
-                                                            }
-                                                        }
-                                                        if (present) {
-                                                            out.println(" <label class=\"checkbox-inline\"><input type='checkbox' name='tom' value='" + type + "' checked>" + type + "</label>");
-                                                        } else {
-                                                            out.println("<label class=\"checkbox-inline\"><input type='checkbox' name='tom' value='" + type + "'>" + type + "</label>");
-                                                        }
-                                                    }
-                                                %>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Date Of Move: </label>
-                                            <div class="col-sm-5">
-                                                <div id="dynamicDom">
-                                                    <div class="input-group">
-                                                        <span class="input-group-btn">
-                                                            <input class="btn btn-round btn-primary" type="button" value="+" onclick="addDom('dynamicDom');">
-                                                        </span>
-                                                        <div id="1">
-                                                            <%
-                                                                String dom = lead.getDom();
-                                                                if (dom.isEmpty()) {
-                                                            %>
-                                                            <input class="form-control" type="date" name="dom">
-                                                        </div>
-                                                        <%
-                                                            } else {
-                                                                int counter = 2;
-                                                                String[] dates = dom.split("\\|");
-                                                                for (int i = 0; i < dates.length; i++) {
-                                                                    String date = dates[i];
-                                                                    if (i == 0) {
-                                                                        out.println("<input class='form-control' type='date' name'dom' value='" + date + "'>");
-//                                                                    out.println("<input class='btn btn-round btn-primary' type='button' value='+' onClick=\"addDom('dynamicDom');\"></div>");
-                                                                    } else {
-                                                                        out.println("<div id='" + counter + "'>");
-                                                                        out.println("<span class=\"input-group-btn\"><input class='btn btn-round btn-warning' type='button' value='x' onClick='removeInput(" + counter + ");'></span>");
-                                                                        out.println("<input class='form-control' type='date' name'dom' value='" + date + "'>");
-                                                                        out.println("/div>");
-                                                                        counter++;
-                                                                    }
-                                                                }
-                                                            }
-                                                        %>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-
-
-                                    <br>
+                                        
                                     <fieldset>
                                         <b><u>Moving From</u></b><br><br>
                                         <div class="form-group">
@@ -566,6 +504,133 @@
                                             %>
                                         </div>
                                     </fieldset>
+                                        <br>
+                                        <fieldset>
+                                        <b><u>Operations Details</u></b><br><br>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Move Type: </label>
+                                            <div class="col-sm-6" style="padding-top: 7px;">
+                                                <%
+                                                    String[] tom = lead.getTom().split("\\|");
+
+                                                    for (String type : moveTypes) {
+                                                        boolean present = false;
+                                                        for (String tm : tom) {
+                                                            if (tm.equals(type)) {
+                                                                present = true;
+                                                            }
+                                                        }
+                                                        if (present) {
+                                                            out.println(" <label class=\"checkbox-inline\"><input type='checkbox' name='tom' value='" + type + "' checked>" + type + "</label>");
+                                                        } else {
+                                                            out.println("<label class=\"checkbox-inline\"><input type='checkbox' name='tom' value='" + type + "'>" + type + "</label>");
+                                                        }
+                                                    }
+                                                %>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Moving Calendar: </label>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewMovCal();">View Calendar</button>
+                                            </div>
+                                        </div>
+                                        <div id="operation">
+                                            <%
+                                                ArrayList<Job> jobs = lead.getJobs();
+                                                String jj = "";
+                                                String jRem = "";
+                                                String jStatus = "";
+                                                ArrayList<String> timeslots = new ArrayList<String>();
+                                                ArrayList<String> addressesFr = new ArrayList<String>();
+                                                ArrayList<String> addressesTo = new ArrayList<String>();
+                                                for (int i = 0; i < jobs.size(); i++) {
+                                                    Job job = jobs.get(i);
+                                                    String j = job.getDate();
+                                                    if (i == 0) {
+                                                        jj = j;
+                                                        jRem = job.getRemarks();
+                                                        jStatus = job.getStatus();
+                                                    }
+
+                                                    if (!j.equals(jj)) {
+                                                        out.println("<div>");
+                                                        out.println("<hr><table style='margin-left: 20%;'><col width='100'>");
+                                                        out.println("<tr><td ><b>Date :</b></td><td>" + jj + "</td></tr>");
+                                                        out.println("<tr><td ><b>Timeslot :</b></td><td><table>");
+                                                        for (int k = 0; k < timeslots.size(); k++) {
+                                                            out.println("<tr><td>" + timeslots.get(k) + "</td></tr>");
+                                                        }
+                                                        out.println("</table></td></tr>");
+                                                        out.println("<tr><td ><b>From :</b></td><td><table>");
+                                                        for (int k = 0; k < addressesFr.size(); k++) {
+                                                            out.println("<tr><td>" + addressesFr.get(k) + "</td></tr>");
+                                                        }
+                                                        out.println("</table></td></tr>");
+                                                        out.println("<tr><td ><b>To :</b></td><td><table>");
+                                                        for (int k = 0; k < addressesTo.size(); k++) {
+                                                            out.println("<tr><td>" + addressesTo.get(k) + "</td></tr>");
+                                                        }
+                                                        out.println("</table></td></tr>");
+                                                        out.println("<tr><td ><b>Remarks :</b></td><td>" + jRem + "</td></tr>");
+                                                        out.println("<tr><td ><b>Status :</b></td><td>" + jStatus + "</td></tr>");
+                                                        out.println("</table></div>");
+
+                                                        jj = j;
+                                                        jRem = job.getRemarks();
+                                                        jStatus = job.getStatus();
+                                                        timeslots = new ArrayList<String>();
+                                                        addressesFr = new ArrayList<String>();
+                                                        addressesTo = new ArrayList<String>();
+                                                    }
+
+                                                    if (!timeslots.contains(job.getTimeSlot())) {
+                                                        timeslots.add(job.getTimeSlot());
+                                                    }
+                                                    
+                                                    HashMap<String, String> addresses = job.getAddresses();
+                                                    for (Map.Entry<String, String> entry : addresses.entrySet()) {
+                                                        String key = entry.getKey();
+                                                        String value = entry.getValue();
+                                                        if(value.equals("from")){
+                                                            if (!addressesFr.contains(key)) {
+                                                                addressesFr.add(key);
+                                                            }
+                                                        }else{
+                                                            if (!addressesTo.contains(key)) {
+                                                                addressesTo.add(key);
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    if (i == jobs.size() - 1) {
+                                                        out.println("<div>");
+                                                        out.println("<hr><table style='margin-left: 20%;'><col width='100'>");
+                                                        out.println("<tr><td ><b>Date :</b></td><td>" + jj + "</td></tr>");
+                                                        out.println("<tr><td ><b>Timeslot :</b></td><td><table>");
+                                                        for (int k = 0; k < timeslots.size(); k++) {
+                                                            out.println("<tr><td>" + timeslots.get(k) + "</td></tr>");
+                                                        }
+                                                        out.println("</table></td></tr>");
+                                                        out.println("<tr><td ><b>From :</b></td><td><table>");
+                                                        for (int k = 0; k < addressesFr.size(); k++) {
+                                                            out.println("<tr><td>" + addressesFr.get(k) + "</td></tr>");
+                                                        }
+                                                        out.println("</table></td></tr>");
+                                                        out.println("<tr><td ><b>To :</b></td><td><table>");
+                                                        for (int k = 0; k < addressesTo.size(); k++) {
+                                                            out.println("<tr><td>" + addressesTo.get(k) + "</td></tr>");
+                                                        }
+                                                        out.println("</table></td></tr>");
+                                                        out.println("<tr><td ><b>Remarks :</b></td><td>" + jRem + "</td></tr>");
+                                                        out.println("<tr><td ><b>Status :</b></td><td>" + jStatus + "</td></tr>");
+                                                        out.println("</table></div>");
+                                                    }
+                                                }
+                                            %>
+                                        </div>
+                                    </fieldset>
+                                        
                                     </fieldset>
                                     <br>
                                     <fieldset>
@@ -588,7 +653,7 @@
                                                     String sName = "";
                                                     String sRem = "";
                                                     String sStatus = "";
-                                                    ArrayList<String> timeslots = new ArrayList<String>();
+                                                    timeslots = new ArrayList<String>();
                                                     ArrayList<String> addresses = new ArrayList<String>();
                                                     for (int i = 0; i < surveys.size(); i++) {
                                                         SiteSurvey survey = surveys.get(i);
