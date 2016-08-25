@@ -82,6 +82,12 @@
             <tr class="fc-week fc-last">
                 <%
                     for (int j = 1; j <= 7; j++) {
+                        String position = "";
+                        if(j > 5){
+                            position = "left";
+                        }else{
+                             position = "right";
+                        }
                         curDate = cnt - weekStartDay + 1;
                         if (cnt < weekStartDay || curDate > days) {
                 %>
@@ -142,8 +148,8 @@
                                         }
                             %>
                             <a id='takenImg'  title="<%=leadString%>">
-                   <!--<img data-toggle="tooltip" data-html="true" data-placement="right" src='Images/Red_Square.png' style='width:3%;height:1%;' title="<%=leadString%><br>-->
-                                <button class='<%=statusCol%>' data-toggle="tooltip" data-html="true" data-placement="right" title="
+                  
+                                <button class='<%=statusCol%>' data-toggle="tooltip" data-html="true" data-placement="<%=position%>" title="
                                         <table>
                                         <tr><td align='right' style='vertical-align: top; padding-right: 5px;'>Lead ID:</td><td align='left'><%=lead%></td></tr>
                                         <tr><td align='right' style='vertical-align: top; padding-right: 5px;'>Status:</td><td align='left'><%=status%></td></tr>
