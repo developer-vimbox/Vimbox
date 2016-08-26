@@ -72,7 +72,10 @@
     }
     .fc-view {
         position: relative;
+<<<<<<< HEAD
         overflow: visible;
+=======
+>>>>>>> origin/master
         width: 100%;
     }
     .fc-widget-header,
