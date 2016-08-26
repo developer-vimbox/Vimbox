@@ -6034,6 +6034,8 @@ button.close {
   margin-left: -3px;
 }
 .tooltip-inner {
+    
+  overflow:visible !important;
   max-width: 300px !important;
   width: 300px !important; 
   padding: 3px 8px;
