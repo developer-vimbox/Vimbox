@@ -61,6 +61,10 @@
     float: left;
     margin: 0 15px;
 }
+#header-nav-custom {
+    float: left;
+    margin: 0 15px;
+}
 #page-header .user-account-btn {
     float: left;
     margin: 23px 0 0;
@@ -112,6 +116,18 @@
 }
 #header-nav-right .header-btn,
 #header-nav-right .dropdown > a {
+    border: transparent solid 2px;
+    border-radius: 4px;
+    width: 45px;
+    height: 45px;
+    line-height: 43px;
+    display: block;
+    text-align: center;
+    position: relative;
+}
+
+#header-nav-custom .header-btn,
+#header-nav-custom .dropdown > a {
     border: transparent solid 2px;
     border-radius: 4px;
     width: 45px;
@@ -393,8 +409,17 @@ body #nav-toggle.collapsed span {
     margin-left: 260px;
     padding: 20px 30px;
 }
+#page-content-custom {
+    //margin-left: 260px;
+    padding: 10px 20px;
+}
 
 #page-content > .container {
+    margin: 0px;
+    padding: 0px;
+    max-width: 100%;
+}
+#page-content-custom > .container {
     margin: 0px;
     padding: 0px;
     max-width: 100%;

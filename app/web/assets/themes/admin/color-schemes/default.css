@@ -39,16 +39,33 @@ h1, h2, h3, h4, h5, h6,
 #header-nav-right .dropdown > a .glyph-icon {
     color: rgba(255, 255, 255, 0.8);
 }
+#header-nav-custom .header-btn .glyph-icon,
+#header-nav-custom .dropdown > a .glyph-icon {
+    color: rgba(255, 255, 255, 0.8);
+}
 #header-nav-right .header-btn:hover .glyph-icon,
 #header-nav-right .dropdown > a:hover .glyph-icon {
+    color: rgba(255, 255, 255, 0.95);
+}
+#header-nav-custom .header-btn:hover .glyph-icon,
+#header-nav-custom .dropdown > a:hover .glyph-icon {
     color: rgba(255, 255, 255, 0.95);
 }
 #header-nav-right .header-btn,
 #header-nav-right .dropdown > a {
     border-color: rgba(255, 255, 255, 0.2);
 }
+#header-nav-custom .header-btn,
+#header-nav-custom .dropdown > a {
+    border-color: rgba(255, 255, 255, 0.2);
+}
 #header-nav-right .header-btn:hover,
 #header-nav-right .dropdown > a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+#header-nav-custom .header-btn:hover,
+#header-nav-custom .dropdown > a:hover {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.25);
 }

@@ -3,7 +3,11 @@
 <script src="JS/CustomerFunctions.js"></script>
 <script src="JS/LeadFunctions.js"></script>
 <script src="JS/TicketFunctions.js"></script>
-
+<style>
+   .dropdown-submenu .dropdown-menu > li{
+        z-index: 10000;
+    }
+</style>
 <style>
     /* Loading Spinner */
     .spinner{margin:0;width:70px;height:18px;margin:-35px 0 0 -9px;position:absolute;top:50%;left:50%;text-align:center}.spinner > div{width:18px;height:18px;background-color:#333;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}.spinner .bounce1{-webkit-animation-delay:-.32s;animation-delay:-.32s}.spinner .bounce2{-webkit-animation-delay:-.16s;animation-delay:-.16s}@-webkit-keyframes bouncedelay{0%,80%,100%{-webkit-transform:scale(0.0)}40%{-webkit-transform:scale(1.0)}}@keyframes bouncedelay{0%,80%,100%{transform:scale(0.0);-webkit-transform:scale(0.0)}40%{transform:scale(1.0);-webkit-transform:scale(1.0)}}
@@ -33,11 +37,11 @@
 <script type="text/javascript" src="assets/widgets/tabs/tabs-responsive.js"></script>
 <script type="text/javascript">
     /* Responsive tabs */
-    $(document).ready(function() {
-    $(function () {
-        "use strict";
-        $('.nav-responsive').tabdrop();
-    });
+    $(document).ready(function () {
+        $(function () {
+            "use strict";
+            $('.nav-responsive').tabdrop();
+        });
     });
 </script>
 
@@ -274,7 +278,96 @@
                     <i class="glyph-icon icon-angle-left"></i>
                 </a>
             </div>
-            <div id="header-nav-left">
+            <div id="header-nav-custom" style="margin-top: 1%;">
+                <div class="dropdown">
+            <a href="#" data-toggle="dropdown" data-placement="bottom" class="popover-button-header tooltip-button" title="" data-original-title="Dashboard Quick Menu" aria-expanded="false">
+                <i class="glyph-icon icon-bars" style="text-align: center;font-size: 21px;"></i>
+            </a>
+            <div class="dropdown-menu float-left" style="display: none;">
+                <div class="box-sm">
+                    <ul id="sidebar-menu" class="sf-js-enabled sf-arrows">
+                    <li class="dropdown-submenu">
+                        <a href="#" data-toggle="dropdown" title="Human Resource" class="sf-with-ul">
+                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <span>Human Resource</span>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li> <a href="FullTimeEmployees.jsp" title="Full Time Employees"><span>Full Time Employees</span></a></li>
+                                <li> <a href="PartTimeEmployees.jsp" title="Part Time Employees"><span>Part Time Employees</span></a></li>
+                                <li> <a href="Payslips.jsp" title="Payslips"><span>Payslips</span></a></li>
+                                <li> <a href="TakeAttendance.jsp" title="Take Attendance">Take Attendance</a></li>
+                                <li> <a href="ViewAttendance.jsp" title="View Attendance">View Attendance</a></li>
+                                <li> <a href="LeaveMCs.jsp" title="Leave / MC">Leave / MC</a></li>
+                            </ul>
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a href="#" title="Sales" class="sf-with-ul">
+                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <span>Sales</span>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li> <a href="CreateLead.jsp" title="Create Lead"><span>Create Lead</span></a></li>
+                                <li> <a href="MyLeads.jsp" title="My Leads"><span>My Leads</span></a></li>
+                                <li> <a href="MySalesSites.jsp" title="My Sites"><span>My Sites</span></a></li>
+                            </ul>
+
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a href="#" title="Tickets" class="sf-with-ul">
+                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <span>Tickets</span>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="CreateTicket.jsp" title="Create Ticket"><span>Create Ticket</span></a></li>
+                                <li><a href="MyTickets.jsp" title="My Tickets"><span>My Tickets</span></a></li>
+                                <li><a href="TicketForum.jsp" title="TicketForum"><span>Ticket Forum</span></a></li>
+                            </ul>
+
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a href="#" title="Site Surveys" class="sf-with-ul">
+                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <span>Site Surveys</span>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
+                                <li><a href="MySiteSurveySchedules.jsp" title="My Schedule"><span>My Schedule</span></a></li>
+                            </ul>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+            </div>
+            <div id="header-nav-left" style="margin-left: 3%;">
+              
+<!--                <div class="menu-custom-btn-dropdown">
+                    <button class="dropbtn"><i class="glyph-icon icon-unlock-alt"></i></button>
+                    <div class="menu-custom-btn-dropdown-content">
+                        <a href="#">Link 1</a>
+                        <a href="#">Link 2</a>
+                        <a href="#">Link 3</a>
+                    </div>
+                </div>-->
+
+                <!--             <div class="menu-custom-btn dropdown">
+                                    <a href="#" title="Menu" class="menu clearfix" data-toggle="dropdown">
+                                    </a>
+                             </div>-->
+                <!--                    <div class="dropdown-menu float-right" style="left: 97px;">
+                                        <div class="box-sm" style="width: 250px;">  
+                                            <div class="pad5A button-pane button-pane-alt text-center">
+                                                <a href="ChangePassword.jsp" class="btn display-block font-normal btn-primary" style="margin-bottom: 5px">
+                                                    <i class="glyph-icon icon-unlock-alt"></i>
+                                                    Change Password
+                                                </a>
+                                                <a href="Logout.jsp" class="btn display-block font-normal btn-danger">
+                                                    <i class="glyph-icon icon-power-off"></i>
+                                                    Logout
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>-->
                 <div class="user-account-btn dropdown">
                     <a href="#" title="My Account" class="user-profile clearfix" data-toggle="dropdown">
                         <span><%=name%></span>
