@@ -8,7 +8,7 @@
     ArrayList<String[]> results = LeadPopulationDAO.getExistingVimboxMaterials(keyword);
 %>
 
-<table id="<%=address%>_<%=areaCounter%>_VimboxTable" valign="top" style="width:100%;table-layout: fixed;" border="1">
+<table class='table table-bordered' id="<%=address%>_<%=areaCounter%>_VimboxTable" valign="top" style="width:100%;table-layout: fixed;border-color: #dfe8f1;" border="1">
     <%
         if (results.size() > 0) {
             if(keyword.isEmpty() || "boxes".contains(keyword.toLowerCase())){

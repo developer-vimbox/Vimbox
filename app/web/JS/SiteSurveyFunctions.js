@@ -10,6 +10,8 @@ var totalUnits = [];
 var boxes = [];
 var manpower = [];
 
+
+
 function survey_setup(userId) {
     loadSurveys("", userId, '');
     
@@ -272,10 +274,10 @@ function confirmRemoveArea(salesDiv, address, areaCounter) {
     var status = document.getElementById("survey_error_status");
     var message = document.getElementById("survey_error_message");
 
-    status.innerHTML = "Delete Confirmation";
+    status.innerHTML = "<center><b>Delete Confirmation</b></center>";
     var table = "<table width='100%'>";
     table += "<tr><td colspan='2'>Are you sure that you want to remove this area survey?</td></tr>";
-    table += "<tr><td align='center'><button onclick=\"removeArea('" + address + "_area_" + areaCounter + "', '" + address + "_div_" + areaCounter + "', '" + salesDiv + "_" + address + "_" + areaCounter + "'); return false;\">Yes</button></td><td align='center'><button onclick=\"closeModal('survey_error_modal'); return false;\">No</button></td></tr>";
+    table += "<tr><td align='center'><button class='btn btn-default' onclick=\"removeArea('" + address + "_area_" + areaCounter + "', '" + address + "_div_" + areaCounter + "', '" + salesDiv + "_" + address + "_" + areaCounter + "'); return false;\">Yes</button></td><td align='center'><button class='btn btn-default' onclick=\"closeModal('survey_error_modal'); return false;\">No</button></td></tr>";
     table += "</table>";
     message.innerHTML = table;
     modal.style.display = "block";
@@ -299,13 +301,12 @@ function removeArea(tabId, divId, tableId) {
 }
 
 $(document).on('change keyup paste', '#siteArea_name', function () {
-    var parent = this.parentNode;
+    var parent = this.parentNode.parentNode.parentNode;
     var lbl = parent.getElementsByClassName("lblId")[0];
     var value = lbl.value;
     // Getting the lbl //
     var lblId = value.split("|")[0];
     document.getElementById(lblId).innerHTML = this.value;
-
     // Getting the salesDiv and address //
     var address = lblId.split("_")[0];
     var divId = value.split("|")[1];
@@ -406,7 +407,7 @@ function addNew(address, areaCounter, type) {
             }
         }
 
-        document.getElementById("itemName").innerHTML = "<input type='text' id='itemNameText'><input type='hidden' id='itemType' value='" + type + "'>";
+        document.getElementById("itemName").innerHTML = "<input class='form-control' type='text' id='itemNameText'><input type='hidden' id='itemType' value='" + type + "'>";
         modal.style.display = "block";
     }
 }
@@ -504,7 +505,7 @@ function addItem(tableId, salesDiv) {
         tr += "<td align='center'><input type='hidden' value='" + addChargesValue + "'>" + addCharges + "</td>";
         tr += "<td align='center'><input type='hidden' value='" + document.getElementById("itemQty").innerHTML + "'>" + document.getElementById("itemQty").innerHTML + "</td>";
         tr += "<td align='center'><input type='hidden' value='" + units + "'>" + units + "</td>";
-        tr += "<td align='center'><input type='button' value='x' onclick=\"deleteSiteItem(this, '" + tableId + "', '" + salesDiv + "')\"/></td>";
+        tr += "<td align='center'><input class='btn btn-default' type='button' value='x' onclick=\"deleteSiteItem(this, '" + tableId + "', '" + salesDiv + "')\"/></td>";
         tr += "</tr>"
         $(tr).prependTo("#" + tableId + " > tbody");
 
@@ -515,7 +516,7 @@ function addItem(tableId, salesDiv) {
             tr += "<td align='center'><input type='hidden' value='" + addChargesValue + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxAddCharges'>" + addCharges + "</td>";
             tr += "<td align='center'><input type='hidden' value='" + document.getElementById("itemQty").innerHTML + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxQuantity'>" + document.getElementById("itemQty").innerHTML + "</td>";
             tr += "<td align='center'><input type='hidden' value='" + units + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxUnits'>" + units + "</td>";
-            tr += "<td align='center'><input type='button' value='x' onclick=\"deleteSiteItem(this, '" + tableId + "', '" + salesDiv + "')\"/></td>";
+            tr += "<td align='center'><input class='btn btn-default' type='button' value='x' onclick=\"deleteSiteItem(this, '" + tableId + "', '" + salesDiv + "')\"/></td>";
             tr += "</tr>"
             $("#" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxItemTable").append(tr);
         } else {
@@ -525,7 +526,7 @@ function addItem(tableId, salesDiv) {
             tr += "<td align='center'><input type='hidden' value='" + addChargesValue + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_CustomerAddCharges'>" + addCharges + "</td>";
             tr += "<td align='center'><input type='hidden' value='" + document.getElementById("itemQty").innerHTML + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_CustomerQuantity'>" + document.getElementById("itemQty").innerHTML + "</td>";
             tr += "<td align='center'><input type='hidden' value='" + units + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_CustomerUnits'>" + units + "</td>";
-            tr += "<td align='center'><input type='button' value='x' onclick=\"deleteSiteItem(this, '" + tableId + "', '" + salesDiv + "')\"/></td>";
+            tr += "<td align='center'><input class='btn btn-default' type='button' value='x' onclick=\"deleteSiteItem(this, '" + tableId + "', '" + salesDiv + "')\"/></td>";
             tr += "</tr>"
             $("#" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_CustomerItemTable").append(tr);
         }
@@ -537,6 +538,7 @@ function addItem(tableId, salesDiv) {
         closeItemModal("item_details_modal");
     } else {
         document.getElementById("survey_error_status").innerHTML = "ERROR";
+       $('#survey_error_modal').appendTo("body");
         modal.style.display = "block";
     }
 }
@@ -938,10 +940,10 @@ function confirmComplete() {
     var status = document.getElementById("survey_error_status");
     var message = document.getElementById("survey_error_message");
 
-    status.innerHTML = "Complete Confirmation";
+    status.innerHTML = "<center><b>Complete Confirmation</b></center>";
     var table = "<table width='100%'>";
     table += "<tr><td colspan='2'>Are you sure that you want to complete this site survey?</td></tr>";
-    table += "<tr><td align='center'><button onclick='complete()'>YES</button></td><td align='center'><button onclick=\"closeModal('survey_error_modal'); return false;\">No</button></td></tr>";
+    table += "<tr><td align='center'><button class='btn btn-default' onclick='complete()'>YES</button></td><td align='center'><button class='btn btn-default' onclick=\"closeModal('survey_error_modal'); return false;\">No</button></td></tr>";
     table += "</table>";
     message.innerHTML = table;
     modal.style.display = "block";
