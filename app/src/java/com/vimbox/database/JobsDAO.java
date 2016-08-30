@@ -1,7 +1,6 @@
 package com.vimbox.database;
 
 import com.vimbox.operations.Job;
-import com.vimbox.sitesurvey.SiteSurvey;
 import com.vimbox.user.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,6 +19,8 @@ public class JobsDAO {
     private static final String GET_JOBS_BY_DATE = "SELECT * FROM operations_assigned WHERE start_datetime LIKE ?";
     private static final String CREATE_OPERATION_ASSIGNMENT = "INSERT INTO operations_assigned VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_JOBS_BY_LEAD_ID = "SELECT * FROM operations_assigned WHERE lead_id=?";
+    private static final String GET_JOBS_BY_OWNER_KEYWORD = "SELECT * FROM operations_assigned WHERE ss_owner=? AND (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?)";
+    private static final String CANCEL_JOB = "UPDATE operations_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
     
     public static void createOperationAssignment(int leadId, String owner, ArrayList<String> adds, ArrayList<String> addsTags, String date, ArrayList<String> times, String timeslot, String remarks, String status){
         Connection con = null;
@@ -126,7 +127,7 @@ public class JobsDAO {
                 String ss_owner = rs.getString("ss_owner");
                 User owner = UserDAO.getUserByNRIC(ss_owner);
 
-                results.add(new Job(leadId, owner, date_dom, addressMap, start, end, timeslot, remarks, status));
+                results.add(new Job(leadId, owner, date_dom, addressMap, start, end, remarks, timeslot, status));
             }
 
         } catch (SQLException se) {
@@ -182,7 +183,7 @@ public class JobsDAO {
                 String ss_owner = rs.getString("ss_owner");
                 User owner = UserDAO.getUserByNRIC(ss_owner);
 
-                results.add(new Job(leadId, owner, date_dom, addressMap, start, end, timeslot, remarks, status));
+                results.add(new Job(leadId, owner, date_dom, addressMap, start, end, remarks, timeslot, status));
             }
 
         } catch (SQLException se) {
@@ -236,7 +237,7 @@ public class JobsDAO {
                 String ss_owner = rs.getString("ss_owner");
                 User owner = UserDAO.getUserByNRIC(ss_owner);
 
-                results.add(new Job(leadId, owner, date_dom, addressMap, start, end, timeslot, remarks, status));
+                results.add(new Job(leadId, owner, date_dom, addressMap, start, end, remarks, timeslot, status));
             }
 
         } catch (SQLException se) {
@@ -245,5 +246,78 @@ public class JobsDAO {
             ConnectionManager.close(con, ps, rs);
         }
         return results;
+    }
+    
+    public static ArrayList<Job> getJobsByOwnerKeyword(String nric, String keyword) {
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        ArrayList<Job> results = new ArrayList<Job>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        User owner = UserDAO.getUserByNRIC(nric);
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_JOBS_BY_OWNER_KEYWORD);
+            ps.setString(1, nric);
+            ps.setString(2, "%" + keyword + "%");
+            ps.setString(3, "%" + keyword + "%");
+            ps.setString(4, "%" + keyword + "%");
+            ps.setString(5, "%" + keyword + "%");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int leadId = rs.getInt("lead_id");
+                java.sql.Date dom = rs.getDate("dom");
+                Date date_dom = new Date(dom.getTime());
+                
+                String address = rs.getString("address");
+                String addressTag = rs.getString("address_tag");
+                String[] addressArr = address.split("\\|");
+                String[] addressTagArr = addressTag.split("\\|");
+                HashMap<String, String> addressMap = new HashMap<String, String>();
+                for(int i=0; i<addressArr.length; i++){
+                    String addr = addressArr[i];
+                    String tag = addressTagArr[i];
+                    addressMap.put(addr, tag);
+                }
+
+                String tempStartString = rs.getString("start_datetime");
+                String datetimeString = tempStartString.substring(0, tempStartString.lastIndexOf("."));
+                DateTime start = dtf.parseDateTime(datetimeString);
+
+                tempStartString = rs.getString("end_datetime");
+                datetimeString = tempStartString.substring(0, tempStartString.lastIndexOf("."));
+                DateTime end = dtf.parseDateTime(datetimeString);
+
+                String remarks = rs.getString("remarks");
+                String timeslot = rs.getString("timeslot");
+                String status = rs.getString("status");
+
+                results.add(new Job(leadId, owner, date_dom, addressMap, start, end, remarks, timeslot, status));
+            }
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
+    }
+    
+    public static void cancelJob(int leadId, String date, String timeslot) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(CANCEL_JOB);
+            ps.setInt(1, leadId);
+            ps.setString(2, "%" + date + "%");
+            ps.setString(3, timeslot);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
     }
 }

@@ -201,7 +201,11 @@
                                     <%
                                                         out.println("</td>");
                                                     }else{
-                                                        out.println("<td class='tooltipp' data-state=''><input type='hidden' value='{" + timing + "}'>");
+                                                        out.println("<td class='tooltipp' data-state='' onclick='selectDOMSlot(this)'");
+                                                        if (timeslots.contains(timing)) {
+                                                            out.println("class='selected' data-state='selected'");
+                                                        }
+                                                        out.println("><input type='hidden' value='{" + timing + "}'>");
                                     %>
                                                         <table class='tooltiptextt' width="100%">
                                                             <tr>

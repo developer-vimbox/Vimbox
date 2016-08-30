@@ -59,7 +59,7 @@ public class Job {
         return remarks;
     }
 
-    public String getTimeslot() {
+    public String getTimeslots() {
         return timeslot;
     }
 

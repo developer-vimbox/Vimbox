@@ -922,6 +922,10 @@ function confirmCancel() {
 }
 
 function viewCal() {
+    var errorModal = document.getElementById("salesModal");
+    var errorStatus = document.getElementById("salesStatus");
+    var errorMessage = document.getElementById("salesMessage");
+    
     var modal = document.getElementById("cal_modal");
     $("#cal_content").load("SiteSurveyCalendar.jsp");
     var d = new Date();
@@ -931,6 +935,34 @@ function viewCal() {
     var n = m_names[d.getMonth()];
     $("#dMonth").html(n);
     $("#dYear").html(y);
+    var fromArray = document.getElementsByName("addressfrom");
+    var addressFrom = "";
+    for (i = 0; i < fromArray.length; i++) {
+        addressFrom += fromArray[i].value + "|";
+    }
+    var toArray = document.getElementsByName("addressto");
+    var addressTo = "";
+    for (i = 0; i < toArray.length; i++) {
+        addressTo += toArray[i].value + "|";
+    }
+    
+    $.getJSON("ValidateSiteSurveyDates", {addressFrom: addressFrom, addressTo: addressTo})
+    .done(function (data) {
+        if (data.status !== "SUCCESS") {
+            errorStatus.innerHTML = "WARNING";
+            errorMessage.innerHTML = data.message + "In order to select site survey timeslots<br>";
+            errorModal.style.display = "block";
+            domPass = false;
+        }else{
+            domPass = true;
+        } 
+    })
+    .fail(function (error) {
+        errorStatus.innerHTML = "ERROR";
+        errorMessage.innerHTML = error;
+        errorModal.style.display = "block";
+    });
+    
     var content = document.getElementById("ssCalTable");
     $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss"}, function (data) {
         content.innerHTML = data;
@@ -1066,15 +1098,18 @@ function viewDaySchedule(date) {
     }
     if (pending) {
         var siteSurveyor = $('#ssSelect').val();
-        var fromArray = document.getElementsByName("addressfrom");
         var addressFrom = "";
-        for (i = 0; i < fromArray.length; i++) {
-            addressFrom += fromArray[i].value + "|";
-        }
-        var toArray = document.getElementsByName("addressto");
         var addressTo = "";
-        for (i = 0; i < toArray.length; i++) {
-            addressTo += toArray[i].value + "|";
+        
+        if(domPass){
+            var fromArray = document.getElementsByName("addressfrom");
+            for (i = 0; i < fromArray.length; i++) {
+                addressFrom += fromArray[i].value + "|";
+            }
+            var toArray = document.getElementsByName("addressto");
+            for (i = 0; i < toArray.length; i++) {
+                addressTo += toArray[i].value + "|";
+            }
         }
 
         $.getJSON("ValidateSiteSurveyorDetails", {date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo})

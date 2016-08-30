@@ -174,8 +174,9 @@
                                     int dayOfMonth = start.getDayOfMonth();
                                     int surveyMonth = start.getMonthOfYear();
                                     int surveyYear = start.getYear();
+                                    String status = job.getStatus();
 
-                                    if ((dayOfMonth == curDate) && (iMonth == (surveyMonth - 1)) && (iYear == surveyYear)) {
+                                    if ((dayOfMonth == curDate) && (iMonth == (surveyMonth - 1)) && (iYear == surveyYear) && !status.equals("Cancelled")) {
                                         int lead = job.getLeadId();
                                         HashMap<String, String> addresses = job.getAddresses();
                                         ArrayList<String> from = new ArrayList<String>();
@@ -189,9 +190,8 @@
                                                 to.add(key);
                                             }
                                         }
-                                        String status = job.getStatus();
                                         String remarks = job.getRemarks();
-                                        String timeslot = job.getTimeslot();
+                                        String timeslot = job.getTimeslots();
                                         String statusCol = "";
                                         if (status.equals("Completed")) {
                                             statusCol = "btn-success";

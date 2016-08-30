@@ -60,7 +60,7 @@ public class EditLeadController extends HttpServlet {
                 for(String domTimeslot : domTimeslots){
                     if(domTimeslot.contains(domDate)){
                         String dts = domTimeslot.split("\\|")[1];
-                        String domStatus = domStatuses[i];
+                        String domStatus = domStatuses[i].split("\\|")[1];
                         if(domStatus.equals("Booking")){
                             boolean status = JobsDAO.checkJobTimeslot(domDate, dts);
                             if (status) {

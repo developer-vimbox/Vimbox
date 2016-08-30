@@ -1,19 +1,18 @@
-package com.vimbox.sitesurvey;
+package com.vimbox.operations;
 
 import com.google.gson.JsonObject;
-import com.vimbox.database.UserDAO;
-import com.vimbox.user.User;
+import com.vimbox.database.JobsDAO;
+import com.vimbox.database.SiteSurveyDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ValidateSiteSurveyorDetails", urlPatterns = {"/ValidateSiteSurveyorDetails"})
-public class ValidateSiteSurveyorDetails extends HttpServlet {
+@WebServlet(name = "CancelJobController", urlPatterns = {"/CancelJobController"})
+public class CancelJobController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,28 +29,14 @@ public class ValidateSiteSurveyorDetails extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache");
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
-
-        String errorMsg = "";
-        String siteSurveyor = request.getParameter("siteSurveyor");
         
-        ArrayList<User> users = new ArrayList<User>();
-        if (siteSurveyor.equals("allss")) {
-            users = UserDAO.getAllSurveyors();
-        } else {
-            User u = UserDAO.getUserByNRIC(siteSurveyor);
-            users.add(u);
-        }
-        if (users.isEmpty()) {
-            errorMsg += "No site surveyors found<br>";
-        }
-
-        if (errorMsg.isEmpty()) {
-            jsonOutput.addProperty("status", "SUCCESS");
-        } else {
-            jsonOutput.addProperty("status", "ERROR");
-            jsonOutput.addProperty("message", errorMsg);
-        }
-
+        int leadId = Integer.parseInt(request.getParameter("leadId"));
+        String date = request.getParameter("date");
+        String timeslot = request.getParameter("timeslot");
+        
+        JobsDAO.cancelJob(leadId, date, timeslot);
+        jsonOutput.addProperty("status", "SUCCESS");
+        jsonOutput.addProperty("message", "Job assignment cancelled!");
         jsonOut.println(jsonOutput);
     }
 

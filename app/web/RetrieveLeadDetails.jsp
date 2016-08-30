@@ -1,3 +1,4 @@
+<%@page import="com.vimbox.operations.Job"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="com.vimbox.sitesurvey.SiteSurvey"%>
 <%@page import="com.vimbox.sales.LeadDiv"%>
@@ -97,40 +98,6 @@
         </div>
     </div>
     <div class="form-group">
-        <label class ="col-sm-3 control-label">Move Type: </label>
-        <div class ="col-sm-8" style="padding-top: 7px;">
-            <%
-                String[] toms = lead.getTom().split("\\|");
-                for (int i = 0;
-                        i < toms.length;
-                        i++) {
-                    String tom = toms[i];
-                    out.println(tom);
-                    if (i < toms.length - 1) {
-                        out.println(", ");
-                    }
-                }
-            %>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class ="col-sm-3 control-label">Date of Move: </label>
-        <div class ="col-sm-8" style="padding-top: 7px;">
-            <%
-                String[] doms = lead.getDom().split("\\|");
-                for (int i = 0;
-                        i < doms.length;
-                        i++) {
-                    String dom = doms[i];
-                    out.println(dom);
-                    if (i < doms.length - 1) {
-                        out.println(", ");
-                    }
-                }
-            %>
-        </div>
-    </div>
-    <div class="form-group">
         <label class ="col-sm-3 control-label">Moving From: </label>
         <div class ="col-sm-8" style="padding-top: 7px;">
             <%
@@ -169,6 +136,173 @@
                 }
             %>
         </div>
+    </div>
+    <div class="form-group">
+        <label class ="col-sm-3 control-label">Move Type: </label>
+        <div class ="col-sm-8" style="padding-top: 7px;">
+            <%
+                String[] toms = lead.getTom().split("\\|");
+                for (int i = 0;
+                        i < toms.length;
+                        i++) {
+                    String tom = toms[i];
+                    out.println(tom);
+                    if (i < toms.length - 1) {
+                        out.println(", ");
+                    }
+                }
+            %>
+        </div>
+    </div>
+    <div class="form-horizontal" style="font-size: 14px;">
+        <div class="form-group">
+            <div class="col-sm-6">
+                <h4 class="mrg10A">Moving Details</h4>
+            </div>
+        </div>
+    <%
+            ArrayList<Job> jobs = lead.getJobs();
+            String jj = "";
+            String jLead = "";
+            String timeslot = "";
+            String jRem = "";
+            String jStatus = "";
+            ArrayList<String> addressesFr = new ArrayList<String>();
+            ArrayList<String> addressesTo = new ArrayList<String>();
+            for (int i = 0; i < jobs.size(); i++) {
+                Job job = jobs.get(i);
+                String nextLeadId = job.getLeadId() + "";
+                String nextTimeslot = job.getTimeslots();
+                String rem = job.getRemarks();
+                String j = job.getDate();
+                if (i == 0) {
+                    jj = j;
+                    jLead = nextLeadId;
+                    timeslot = nextTimeslot;
+                    jRem = rem;
+                    jStatus = job.getStatus();
+                }
+
+                if (!j.equals(jj) || !nextLeadId.equals(jLead)) {%>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">Date: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%=jj%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">Timeslot: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%=timeslot%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">From: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%
+                    for (String add : addressesFr) {
+                        out.println("<li>" + add + "</li>");
+                    }
+                %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">To: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%
+                    for (String add : addressesTo) {
+                        out.println("<li>" + add + "</li>");
+                    }
+                %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">Remarks: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%=jRem%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">Status: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%=jStatus%>
+            </div>
+        </div>
+
+        <%
+                jj = j;
+                jLead = nextLeadId;
+                timeslot = nextTimeslot;
+                jStatus = job.getStatus();
+                addressesFr = new ArrayList<String>();
+                addressesTo = new ArrayList<String>();
+            }
+
+            HashMap<String, String> addresses = job.getAddresses();
+            for (Map.Entry<String, String> entry : addresses.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if(value.equals("from")){
+                    if (!addressesFr.contains(key)) {
+                        addressesFr.add(key);
+                    }
+                }else{
+                    if (!addressesTo.contains(key)) {
+                        addressesTo.add(key);
+                    }
+                }
+            }
+            
+            if (i == jobs.size() - 1) {%>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">Date: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%=jj%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">Timeslot: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%=timeslot%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">From: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%
+                    for (String add : addressesFr) {
+                        out.println("<li>" + add + "</li>");
+                    }
+                %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">To: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%
+                    for (String add : addressesTo) {
+                        out.println("<li>" + add + "</li>");
+                    }
+                %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">Remarks: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%=jRem%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class ="col-sm-3 control-label">Status: </label>
+            <div class ="col-sm-8" style="padding-top: 7px;">
+                <%=jStatus%>
+            </div>
+        </div>
+        <%
+                }
+            }
+        %>
+
     </div>
 </div>
 <%
@@ -219,7 +353,7 @@
             String sName = "";
             String sRem = "";
             String sStatus = "";
-            ArrayList<String> timeslots = new ArrayList<String>();
+            String sTimeslot = "";
             ArrayList<String> addresses = new ArrayList<String>();
             for (int i = 0; i < surveys.size(); i++) {
                 SiteSurvey survey = surveys.get(i);
@@ -230,6 +364,7 @@
                     sName = survey.getSiteSurveyor().toString();
                     sRem = survey.getRemarks();
                     sStatus = survey.getStatus();
+                    sTimeslot = survey.getTimeSlots();
                 }
 
                 if (!s.equals(ss)) {%>
@@ -242,11 +377,7 @@
         <div class="form-group">
             <label class ="col-sm-3 control-label">Timeslot: </label>
             <div class ="col-sm-8" style="padding-top: 7px;">
-                <%
-                    for (int j = 0; j < timeslots.size(); j++) {
-                        out.println("<li>" + timeslots.get(j) + "</li>");
-                    }
-                %>
+                <%=sTimeslot%>
             </div>
         </div>
         <div class="form-group">
@@ -284,13 +415,10 @@
                 sName = survey.getSiteSurveyor().toString();
                 sRem = survey.getRemarks();
                 sStatus = survey.getStatus();
-                timeslots = new ArrayList<String>();
+                sTimeslot = survey.getTimeSlots();
                 addresses = new ArrayList<String>();
             }
 
-            if (!timeslots.contains(survey.getTimeSlot())) {
-                timeslots.add(survey.getTimeSlot());
-            }
             if (!addresses.contains(survey.getAddress())) {
                 addresses.add(survey.getAddress());
             }
@@ -304,11 +432,7 @@
         <div class="form-group">
             <label class ="col-sm-3 control-label">Timeslot: </label>
             <div class ="col-sm-8" style="padding-top: 7px;">
-                <%
-                    for (int j = 0; j < timeslots.size(); j++) {
-                        out.println("<li>" + timeslots.get(j) + "</li>");
-                    }
-                %>
+                <%=sTimeslot%>
             </div>
         </div>
         <div class="form-group">
