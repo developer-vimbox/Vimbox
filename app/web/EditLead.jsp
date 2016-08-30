@@ -458,13 +458,14 @@
                                         <div id="to">
                                             <%
                                                 ArrayList<String[]> addressTo = lead.getAddressTo();
-                                                int counter = 1;
                                                 for (String[] addTo : addressTo) {
                                                     String[] address = addTo[0].split("_");
                                                     String storeys = addTo[1];
                                                     String pushingDistance = addTo[2];
                                                     String stringDiv = "";
                                                     if (address.length > 1) {
+                                                        String salesDivId = lead.getSalesDivIdByAddress(address[0] + " #" + address[1] + "-" + address[2] + " S" + address[3]);
+                                                        int counter = Integer.parseInt(salesDivId.substring(5));
                                                         stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
                                                         stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
                                                         stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
@@ -498,7 +499,6 @@
                                                         stringDiv += "</div>"; //close div id tag
 
                                                         out.println(stringDiv);
-                                                        counter++;
                                                     }
                                                 }
                                             %>

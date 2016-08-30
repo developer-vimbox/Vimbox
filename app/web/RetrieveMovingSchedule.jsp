@@ -81,8 +81,10 @@
     String[] timings = new String[]{"0900 - 0930", "0930 - 1000", "1000 - 1030", "1030 - 1100", "1100 - 1130", "1130 - 1200", "1200 - 1230", "1230 - 1300", "1300 - 1330", "1330 - 1400", "1400 - 1430", "1430 - 1500", "1500 - 1530", "1530 - 1600", "1600 - 1630", "1630 - 1700", "1700 - 1730", "1730 - 1800"};
     ArrayList<String> addressesFrom = new ArrayList<String>();
     ArrayList<String> addressesTo = new ArrayList<String>();
-    String[] addressesFromArr = request.getParameter("addressFrom").split("\\|");
-    String[] addressesToArr = request.getParameter("addressTo").split("\\|");
+    String fr = request.getParameter("addressFrom");
+    String tot = request.getParameter("addressTo");
+    String[] addressesFromArr = fr.split("\\|");
+    String[] addressesToArr = tot.split("\\|");
 
     if (addressesFromArr.length > 1) {
         for (int i = 0; i < addressesFromArr.length; i += 4) {
@@ -130,7 +132,7 @@
                                     <%
                                         for (String timing : timings) {
                                             if (jobs.isEmpty()) {
-                                                if (!addressesFrom.isEmpty()) {
+                                                if (!fr.isEmpty() && !tot.isEmpty()) {
                                                     out.println("<td onclick='selectDOMSlot(this)'");
                                                     if (timeslots.contains(timing)) {
                                                         out.println("class='selected' data-state='selected'");
@@ -241,7 +243,7 @@
                                                         out.println("</td>");    
                                                     }
                                                 } else {
-                                                    if (!addressesFrom.isEmpty()) {
+                                                    if (!fr.isEmpty() && !tot.isEmpty()) {
                                                         out.println("<td onclick='selectDOMSlot(this)'");
                                                         if (timeslots.contains(timing)) {
                                                             out.println("class='selected' data-state='selected'");
@@ -264,7 +266,7 @@
         <td>
             <table width="100%">
                 <%
-                    if (!addressesFrom.isEmpty()) {
+                    if (!fr.isEmpty() && !tot.isEmpty()) {
                 %>
                 <tr>
                     <td>
