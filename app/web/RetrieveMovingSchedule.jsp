@@ -357,7 +357,7 @@
                                             <%
                                                 if (addToArray != null) {
                                                     for (int i = 0; i < addToArray.length; i++) {
-                                                        out.println("<tr><td>" + addToArray[i] + "<input type='hidden' name='move_addressTo' value='" + addToArray[i] + "'></td>");
+                                                        out.println("<tr><td>" + addToArray[i] + "<input type='hidden' name='move_addressTot' value='" + addToArray[i] + "'></td>");
                                                         out.println("<td><input type='button' value='x' class='form-control' onclick='deleteAddressRow(this)'/></td></tr>");
                                                     }
                                                 }

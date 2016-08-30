@@ -1167,7 +1167,7 @@ function assignDOM() {
     var date = $('#move_date').val();
     var timeslots = document.getElementsByName("move_timeslot");
     var addressesFr = document.getElementsByName("move_addressFrom");
-    var addressesTo = document.getElementsByName("move_addressTo");
+    var addressesTo = document.getElementsByName("move_addressTot");
     
     var remarks = $('#move_remarks').val();
 
@@ -1615,7 +1615,7 @@ function addMoveFrAddress(){
 function addMoveToAddress(){
     var address = $('#move_addressTo_select').val();
     if (address !== '') {
-        var tr = "<tr><td>" + address + "<input type='hidden' name='move_addressTo' value='" + address + "'></td>";
+        var tr = "<tr><td>" + address + "<input type='hidden' name='move_addressTot' value='" + address + "'></td>";
         tr += "<td><input type='button' value='x' onclick='deleteAddressRow(this)'/></td></tr>";
         $(tr).prependTo("#move_addressTo_table > tbody");
     }
