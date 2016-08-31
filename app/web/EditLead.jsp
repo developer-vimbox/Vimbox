@@ -882,7 +882,7 @@
                                                                     <tr>
                                                                         <td align="right">Name:</td>
                                                                         <td>
-                                                                            <input class='form-control' type="text" size="40" class="itemName" id="<%=divId%>_itemName" list="<%=divId%>_items" placeholder="Enter item">
+                                                                            <input class='form-control itemName' type="text" size="40" id="<%=divId%>_itemName" list="<%=divId%>_items" placeholder="Enter item">
 
                                                                             <datalist id="<%=divId%>_items">
                                                                                 <%                                            for (String[] item : existingItems) {

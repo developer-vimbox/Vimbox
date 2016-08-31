@@ -504,6 +504,7 @@ function addItem(divId) {
         $("#" + divId + "_itemUnit").val("");
         $("#" + divId + "_itemQty").val("");
         $("#" + divId + "_itemRemark").val("");
+        $("#" + divId + "_itemdimensions").val("");
         $("#" + divId + "_itemName").focus();
         update_services(divId);
     } else {
@@ -927,7 +928,9 @@ function viewCal() {
     var errorMessage = document.getElementById("salesMessage");
     
     var modal = document.getElementById("cal_modal");
-    $("#cal_content").load("SiteSurveyCalendar.jsp");
+    $.get("SiteSurveyCalendar.jsp",{}, function (data) {
+        document.getElementById("cal_content").innerHTML = data;
+    });
     var d = new Date();
     var m = d.getMonth();
     var y = d.getFullYear();
@@ -976,7 +979,9 @@ function viewMovCal(){
     var errorMessage = document.getElementById("salesMessage");
     
     var modal = document.getElementById("cal_modal");
-    $("#cal_content").load("MovingCalendar.jsp");
+    $.get("MovingCalendar.jsp",{}, function (data) {
+        document.getElementById("cal_content").innerHTML = data;
+    });
     var d = new Date();
     var m = d.getMonth();
     var y = d.getFullYear();
