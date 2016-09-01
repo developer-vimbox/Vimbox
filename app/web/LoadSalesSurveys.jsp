@@ -3,8 +3,7 @@
 <%@page import="com.vimbox.database.SiteSurveyDAO"%>
 <%
     String keyword = request.getParameter("keyword");
-    String nric = request.getParameter("nric");
-    ArrayList<SiteSurvey> surveys = SiteSurveyDAO.getSiteSurveysByOwnerKeyword(nric, keyword);
+    ArrayList<SiteSurvey> surveys = SiteSurveyDAO.getSiteSurveysByKeyword(keyword);
     
     if (!keyword.isEmpty()) {
         if (surveys.size() > 0) {

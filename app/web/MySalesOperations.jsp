@@ -10,7 +10,7 @@
         <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
     </head>
     <%@include file="header.jsp"%>
-    <body onload="sales_operation_setup('<%=user.getNric()%>')">
+    <body onload="sales_operation_setup()">
         <div id="operation_error_modal" class="modal">
             <!-- Modal content -->
             <div class="message-modal-content">

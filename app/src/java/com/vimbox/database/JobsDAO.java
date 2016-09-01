@@ -19,7 +19,7 @@ public class JobsDAO {
     private static final String GET_JOBS_BY_DATE = "SELECT * FROM operations_assigned WHERE start_datetime LIKE ?";
     private static final String CREATE_OPERATION_ASSIGNMENT = "INSERT INTO operations_assigned VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_JOBS_BY_LEAD_ID = "SELECT * FROM operations_assigned WHERE lead_id=?";
-    private static final String GET_JOBS_BY_OWNER_KEYWORD = "SELECT * FROM operations_assigned WHERE ss_owner=? AND (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?)";
+    private static final String GET_JOBS_BY_OWNER_KEYWORD = "SELECT * FROM operations_assigned WHERE (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?)";
     private static final String CANCEL_JOB = "UPDATE operations_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
     
     public static void createOperationAssignment(int leadId, String owner, ArrayList<String> adds, ArrayList<String> addsTags, String date, ArrayList<String> times, String timeslot, String remarks, String status){
@@ -248,28 +248,27 @@ public class JobsDAO {
         return results;
     }
     
-    public static ArrayList<Job> getJobsByOwnerKeyword(String nric, String keyword) {
+    public static ArrayList<Job> getJobsByKeyword(String keyword) {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         ArrayList<Job> results = new ArrayList<Job>();
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        User owner = UserDAO.getUserByNRIC(nric);
+        
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_JOBS_BY_OWNER_KEYWORD);
-            ps.setString(1, nric);
+            ps.setString(1, "%" + keyword + "%");
             ps.setString(2, "%" + keyword + "%");
             ps.setString(3, "%" + keyword + "%");
             ps.setString(4, "%" + keyword + "%");
-            ps.setString(5, "%" + keyword + "%");
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 int leadId = rs.getInt("lead_id");
                 java.sql.Date dom = rs.getDate("dom");
                 Date date_dom = new Date(dom.getTime());
-                
+                User owner = UserDAO.getUserByNRIC(rs.getString("ss_owner"));
                 String address = rs.getString("address");
                 String addressTag = rs.getString("address_tag");
                 String[] addressArr = address.split("\\|");

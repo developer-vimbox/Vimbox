@@ -7,8 +7,7 @@
 <%@page import="com.vimbox.database.SiteSurveyDAO"%>
 <%
     String keyword = request.getParameter("keyword");
-    String nric = request.getParameter("nric");
-    ArrayList<Job> jobs = JobsDAO.getJobsByOwnerKeyword(nric, keyword);
+    ArrayList<Job> jobs = JobsDAO.getJobsByKeyword(keyword);
     
     if (!keyword.isEmpty()) {
         if (jobs.size() > 0) {

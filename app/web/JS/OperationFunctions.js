@@ -1,9 +1,9 @@
-function sales_operation_setup(nric) {
-    loadSalesOperations('', nric);
+function sales_operation_setup() {
+    loadSalesOperations('');
 }
 
-function loadSalesOperations(keyword, nric) {
-    $.get("LoadSalesOperations.jsp", {keyword: keyword, nric: nric}, function (data) {
+function loadSalesOperations(keyword) {
+    $.get("LoadSalesOperations.jsp", {keyword: keyword}, function (data) {
         document.getElementById("operations_table").innerHTML = data;
     });
 }

@@ -981,12 +981,12 @@ function complete() {
     });
 }
 
-function sales_survey_setup(nric) {
-    loadSalesSurveys('', nric);
+function sales_survey_setup() {
+    loadSalesSurveys('');
 }
 
-function loadSalesSurveys(keyword, nric) {
-    $.get("LoadSalesSurveys.jsp", {keyword: keyword, nric: nric}, function (data) {
+function loadSalesSurveys(keyword) {
+    $.get("LoadSalesSurveys.jsp", {keyword: keyword}, function (data) {
         document.getElementById("surveys_table").innerHTML = data;
     });
 }
