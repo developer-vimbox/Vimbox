@@ -42,7 +42,6 @@
     <body onload="edit_leadSetup()">
         <%@include file="header.jsp"%>
         <script src="http://malsup.github.com/jquery.form.js"></script> 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
         <script src="JS/jquery.hotkeys.js"></script>
         <script src="JS/ModalFunctions.js"></script>
         <script src="JS/LeadFunctions.js"></script>
