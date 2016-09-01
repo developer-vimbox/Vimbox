@@ -1150,7 +1150,11 @@ function viewDaySchedule(date) {
                             }
                         }
                         toggleCounter = 0;
-                        $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: $('#leadId').val(), date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
+                        var leadId = $('#leadId').val();
+                        if(leadId == null){
+                            leadId = 0;
+                        }
+                        $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: leadId, date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
                             document.getElementById("schedule_content").innerHTML = results;
                             document.getElementById("schedule_modal").style.display = "block";
                         });
@@ -1289,7 +1293,11 @@ function viewMoveDaySchedule(date) {
         }
     }
     
-    $.get("RetrieveMovingSchedule.jsp", {leadId: $('#leadId').val(), date: date, addressFrom: addressFrom, addressTo: addressTo, timeslots: timeslots, addressesFr: addressesFr, addressesTo: addressesTo, remarks: remarks}, function (results) {
+    var leadId = $('#leadId').val();
+    if(leadId == null){
+        leadId = 0;
+    }
+    $.get("RetrieveMovingSchedule.jsp", {leadId: leadId, date: date, addressFrom: addressFrom, addressTo: addressTo, timeslots: timeslots, addressesFr: addressesFr, addressesTo: addressesTo, remarks: remarks}, function (results) {
         document.getElementById("schedule_content").innerHTML = results;
         document.getElementById("schedule_modal").style.display = "block";
     });

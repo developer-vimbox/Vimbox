@@ -25,6 +25,7 @@ public class SiteSurveyDAO {
     private static final String CANCEL_SITE_SURVEY = "UPDATE sitesurvey_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
     private static final String DELETE_SITE_SURVEYS_BY_LEAD_ID = "DELETE FROM sitesurvey_assigned WHERE lead_id = ? AND status='Pending'";
     private static final String GET_SITE_SURVEYS_BY_USER_STARTDATE = "SELECT * FROM sitesurvey_assigned where ss_user = ? and date(start_datetime) = ? AND status != 'Cancelled' ORDER BY start_datetime";
+    private static final String GET_SITE_SURVEYS_BY_STARTDATE = "SELECT * FROM sitesurvey_assigned where date(start_datetime) = ? AND status != 'Cancelled' ORDER BY start_datetime";
     private static final String GET_ALL_NON_CANCELLED_SITE_SURVEYS = "SELECT * FROM sitesurvey_assigned where status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
     private static final String GET_NON_CANCELLED_SITE_SURVEYS_BY_USER = "SELECT * FROM vimbox.sitesurvey_assigned where ss_user = ? AND status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
 
@@ -444,7 +445,7 @@ public class SiteSurveyDAO {
         }
     }
 
-    public static ArrayList<SiteSurvey> getSiteSurveysByUserandSd(String owner, String date) {
+    public static ArrayList<SiteSurvey> getSiteSurveysByUserandSd(String ownerStr, String date) {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         ArrayList<SiteSurvey> results = new ArrayList<SiteSurvey>();
         Connection con = null;
@@ -452,12 +453,12 @@ public class SiteSurveyDAO {
         ResultSet rs = null;
 
         try {
-            owner = owner.trim();
-            User user = UserDAO.getUserByNRIC(owner);
+            ownerStr = ownerStr.trim();
+            User owner = UserDAO.getUserByNRIC(ownerStr);
             date = date.trim();
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_SITE_SURVEYS_BY_USER_STARTDATE);
-            ps.setString(1, owner);
+            ps.setString(1, ownerStr);
             ps.setString(2, date);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -474,11 +475,10 @@ public class SiteSurveyDAO {
                 DateTime end = dtf.parseDateTime(datetimeString);
 
                 String remarks = rs.getString("remarks");
-                String ss_owner = rs.getString("ss_owner");
-                User assignee = UserDAO.getUserByNRIC(ss_owner);
+                User assignee = UserDAO.getUserByNRIC(rs.getString("ss_user"));
                 String timeslot = rs.getString("timeslot");
                 String status = rs.getString("status");
-                results.add(new SiteSurvey(leadId, assignee, user, address, addressTag, start, end, timeslot, remarks, status));
+                results.add(new SiteSurvey(leadId, owner, assignee, address, addressTag, start, end, timeslot, remarks, status));
 
             }
 
@@ -531,6 +531,50 @@ public class SiteSurveyDAO {
                 User user = UserDAO.getUserByNRIC(ss_user);
 
                 results.add(new SiteSurvey(leadId, owner, user, address, addressTag, start, end, timeslot, remarks, status));
+
+            }
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
+    }
+    
+    public static ArrayList<SiteSurvey> getSiteSurveysBySd(String date) {
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        ArrayList<SiteSurvey> results = new ArrayList<SiteSurvey>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            date = date.trim();
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_SITE_SURVEYS_BY_STARTDATE);
+            ps.setString(1, date);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int leadId = rs.getInt("lead_id");
+                String address = rs.getString("address");
+                String addressTag = rs.getString("address_tag");
+
+                String tempStartString = rs.getString("start_datetime");
+                String datetimeString = tempStartString.substring(0, tempStartString.lastIndexOf("."));
+                DateTime start = dtf.parseDateTime(datetimeString);
+
+                tempStartString = rs.getString("end_datetime");
+                datetimeString = tempStartString.substring(0, tempStartString.lastIndexOf("."));
+                DateTime end = dtf.parseDateTime(datetimeString);
+
+                String remarks = rs.getString("remarks");
+                String ss_owner = rs.getString("ss_owner");
+                User owner = UserDAO.getUserByNRIC(ss_owner);
+                User assignee = UserDAO.getUserByNRIC(rs.getString("ss_user"));
+                String timeslot = rs.getString("timeslot");
+                String status = rs.getString("status");
+                results.add(new SiteSurvey(leadId, owner, assignee, address, addressTag, start, end, timeslot, remarks, status));
 
             }
 

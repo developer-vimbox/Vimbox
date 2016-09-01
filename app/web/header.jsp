@@ -296,6 +296,28 @@
                         </div>
                     </div>
                 </div>
+                <script src="JS/AdminFunctions.js"></script>
+                <button onclick="admViewCal()">View Site Survey Schedules</button>
+                <button onclick="admViewMovCal()">View Operation Schedules</button>
+                <div id="cal_modal" class="modal">
+                    <div class="modal-content" style="width: 90%;">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('cal_modal')">×</span>
+                            <br>
+                            <div id="cal_content"></div>
+                            <br>
+                            <div id="ssCalTable"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="schedule_modal" class="modal">
+                    <div class="modal-content" style="width: 95%;">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                            <div id="schedule_content"></div>
+                        </div>
+                    </div>
+        </div>
             </div>
             <style>                                  
                 .searchbar {
@@ -544,8 +566,32 @@
                             <ul>
                                 <li> <a href="CreateLead.jsp" title="Create Lead"><span>Create Lead</span></a></li>
                                 <li> <a href="MyLeads.jsp" title="My Leads"><span>My Leads</span></a></li>
-                                <li> <a href="MySalesSites.jsp" title="My Sites"><span>My Sites</span></a></li>
-                                <li> <a href="MySalesOperations.jsp" title="My Operations"><span>My Operations</span></a></li>
+                                <li> <a href="SalesSites.jsp" title="Sites"><span>Sites Surveys</span></a></li>
+                                <li> <a href="SalesOperations.jsp" title="Operations"><span>Operations</span></a></li>
+                            </ul>
+
+                        </div><!-- .sidebar-submenu -->
+                    </li>
+                    <li>
+                        <a href="#" title="Site Surveys">
+                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <span>Site Surveys</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
+                                <li><a href="MySiteSurveySchedules.jsp" title="My Schedule"><span>My Schedule</span></a></li>
+                            </ul>
+
+                        </div><!-- .sidebar-submenu -->
+                    </li>
+                    <li>
+                        <a href="#" title="Operations">
+                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <span>Operations</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
                             </ul>
 
                         </div><!-- .sidebar-submenu -->
@@ -565,16 +611,14 @@
                         </div><!-- .sidebar-submenu -->
                     </li>
                     <li>
-                        <a href="#" title="Site Surveys">
+                        <a href="#" title="Admin">
                             <i class="glyph-icon icon-linecons-diamond"></i>
-                            <span>Site Surveys</span>
+                            <span>Admin</span>
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
-                                <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
-                                <li><a href="MySiteSurveySchedules.jsp" title="My Schedule"><span>My Schedule</span></a></li>
+                                <li><a href="AdminLeads.jsp" title="View All Leads"><span>All Leads</span></a></li>
                             </ul>
-
                         </div><!-- .sidebar-submenu -->
                     </li>
                 </ul><!-- #sidebar-menu -->

@@ -71,7 +71,7 @@
                 out.println("<td align='center'>" + status + "</td>");
                 out.println("<td align='center'>");
                 if(status.equals("Pending")){
-                    out.println("<button class='btn btn-default' onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "', '" + nric + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "')\">Cancel</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -103,7 +103,7 @@
                 out.println("<td align='center'>" + status + "</td>");
                 out.println("<td align='center'>");
                 if(status.equals("Pending")){
-                    out.println("<button class='btn btn-default' onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "', '" + nric + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "')\">Cancel</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");

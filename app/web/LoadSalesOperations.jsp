@@ -75,7 +75,7 @@
                 out.println("<td align='center'>" + jStatus + "</td>");
                 out.println("<td align='center'>");
                 if(jStatus.equals("Booked")){
-                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "', '" + nric + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "')\">Cancel</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -121,7 +121,7 @@
                 out.println("<td align='center'>" + jStatus + "</td>");
                 out.println("<td align='center'>");
                 if(jStatus.equals("Booked")){
-                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "', '" + nric + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "')\">Cancel</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");

@@ -32,6 +32,7 @@ public class LeadDAO {
     private static final String CREATE_LEAD_REMARK = "INSERT INTO leadremark VALUES (?,?,?)";
     private static final String CREATE_LEAD_SALES_DIV = "INSERT INTO leadsalesdiv VALUES (?,?,?,?)";
     
+    private static final String GET_ALL_LEAD_INFO = "SELECT * FROM leadinfo ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_INFO = "SELECT * FROM leadinfo WHERE owner_user=? ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_ENQUIRY = "SELECT * FROM leadenquiry WHERE lead_id=?";
     private static final String GET_LEAD_INFO_BY_ID = "SELECT * FROM leadinfo WHERE lead_id=?";
@@ -108,6 +109,253 @@ public class LeadDAO {
         } finally {
             ConnectionManager.close(con, ps, null);
         }
+    }
+    
+    public static ArrayList<Lead> getAllLeads() {
+        ArrayList<Lead> results = new ArrayList<Lead>();
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ResultSet rs1 = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_ALL_LEAD_INFO);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                // Lead Info //
+                User user = UserDAO.getUserByNRIC(rs.getString("owner_user"));
+                int leadId = Integer.parseInt(rs.getString("lead_id"));
+                String type = rs.getString("type");
+                int custId = rs.getInt("customer_id");
+                Customer customer = CustomerDAO.getCustomerById(custId);
+                String tom = rs.getString("tom");
+                ArrayList<Job> jobs = JobsDAO.getJobsByLeadId(leadId);
+                String tempDateTimeString = rs.getString("datetime_of_creation");
+                String datetimeString = tempDateTimeString.substring(0, tempDateTimeString.lastIndexOf("."));
+                DateTime dt = formatter.parseDateTime(datetimeString);
+                String status = rs.getString("status");
+                String reason = rs.getString("reason");
+                String source = rs.getString("source");
+                String referral = rs.getString("referral");
+                
+                String enquiry = "";
+                ps = con.prepareStatement(GET_LEAD_ENQUIRY);
+                ps.setInt(1, leadId);
+                rs1 = ps.executeQuery();
+                if (rs1.next()) {
+                    enquiry = rs1.getString("enquiry");
+                }
+                
+                ArrayList<String[]> addressFrom = new ArrayList<String[]>();
+                ps = con.prepareStatement(GET_LEAD_MOVE_FROM);
+                ps.setInt(1, leadId);
+                rs1 = ps.executeQuery();
+                while(rs1.next()) {
+                    String address = rs1.getString("address");
+                    String storeys = rs1.getString("storeys");
+                    String pushing = rs1.getString("pushing");
+                    addressFrom.add(new String[]{address, storeys, pushing});
+                }
+
+                ArrayList<String[]> addressTo = new ArrayList<String[]>();
+                ps = con.prepareStatement(GET_LEAD_MOVE_TO);
+                ps.setInt(1, leadId);
+                rs1 = ps.executeQuery();
+                while(rs1.next()) {
+                    String address = rs1.getString("address");
+                    String storeys = rs1.getString("storeys");
+                    String pushing = rs1.getString("pushing");
+                    addressTo.add(new String[]{address, storeys, pushing});
+                }
+
+                // Get the salesDivs //
+                HashMap<String, String[]> salesDivs = new HashMap<String, String[]>();
+                ps = con.prepareStatement(GET_LEAD_SALES_DIV);
+                ps.setInt(1, leadId);
+                rs1 = ps.executeQuery();
+                while(rs1.next()){
+                    salesDivs.put(rs1.getString("sales_div"), new String[]{rs1.getString("survey_area"), rs1.getString("survey_area_name")});
+                }
+                
+                ArrayList<LeadDiv> leadDivs = new ArrayList<LeadDiv>();
+                for (Map.Entry<String, String[]> entry : salesDivs.entrySet()) {
+                    String salesDiv = entry.getKey();
+                    String[] survey = entry.getValue();
+                    
+                    String[] surveyAreas = survey[0].split("\\|");
+                    String[] surveyAreaNames = survey[1].split("\\|");
+                    
+                    ArrayList<LeadArea> leadAreas = new ArrayList<LeadArea>();
+                    for(int j=0; j<surveyAreas.length; j++){
+                        String leadAreaDiv = surveyAreas[j];
+                        String leadName = surveyAreas[j];
+                        // Customer Items //
+                        ArrayList<Item> customerItems = new ArrayList<Item>();
+                        ps = con.prepareStatement(GET_LEAD_CUST_ITEM);
+                        ps.setInt(1, leadId);
+                        ps.setString(2, salesDiv);
+                        ps.setString(3, leadAreaDiv);
+                        rs1 = ps.executeQuery();
+                        while(rs1.next()){
+                            String itemName = rs1.getString("itemname");
+                            String itemRemark = rs1.getString("itemremark");
+                            String itemCharge = rs1.getString("itemcharge");
+                            double charge;
+                            if (itemCharge.trim().isEmpty()) {
+                                charge = 0.0;
+                            } else {
+                                charge = Double.parseDouble(itemCharge);
+                            }
+                            String itemQty = rs1.getString("itemqty");
+                            double qty;
+                            if (itemQty.isEmpty()) {
+                                qty = 0;
+                            } else {
+                                qty = Double.parseDouble(itemQty);
+                            }
+                            String itemUnit = rs1.getString("itemunit");
+                            double unit;
+                            if (itemUnit.isEmpty()) {
+                                unit = 0;
+                            } else {
+                                unit = Double.parseDouble(itemUnit);
+                            }
+                            customerItems.add(new Item(itemName, itemRemark, charge, unit, qty));
+                        }
+
+                        // Vimbox Items //
+                        ArrayList<Item> vimboxItems = new ArrayList<Item>();
+                        ps = con.prepareStatement(GET_LEAD_VIMBOX_ITEM);
+                        ps.setInt(1, leadId);
+                        ps.setString(2, salesDiv);
+                        ps.setString(3, leadAreaDiv);
+                        rs1 = ps.executeQuery();
+                        while(rs1.next()){
+                            String itemName = rs1.getString("itemname");
+                            String itemRemark = rs1.getString("itemremark");
+                            String itemCharge = rs1.getString("itemcharge");
+                            double charge;
+                            if (itemCharge.isEmpty()) {
+                                charge = 0.0;
+                            } else {
+                                charge = Double.parseDouble(itemCharge);
+                            }
+                            String itemQty = rs1.getString("itemqty");
+                            double qty;
+                            if (itemQty.isEmpty()) {
+                                qty = 0;
+                            } else {
+                                qty = Double.parseDouble(itemQty);
+                            }
+                            String itemUnit = rs1.getString("itemunit");
+                            double unit;
+                            if (itemUnit.isEmpty()) {
+                                unit = 0;
+                            } else {
+                                unit = Double.parseDouble(itemUnit);
+                            }
+                            vimboxItems.add(new Item(itemName, itemRemark, charge, unit, qty));
+                        }
+
+                        // Vimbox Materials //
+                        ArrayList<Item> materials = new ArrayList<Item>();
+                        ps = con.prepareStatement(GET_LEAD_MATERIAL);
+                        ps.setInt(1, leadId);
+                        ps.setString(2, salesDiv);
+                        ps.setString(3, leadAreaDiv);
+                        rs1 = ps.executeQuery();
+                        while(rs1.next()){
+                            String itemName = rs1.getString("materialname");
+                            String itemCharge = rs1.getString("materialcharge");
+                            double charge;
+                            if (itemCharge.isEmpty()) {
+                                charge = 0.0;
+                            } else {
+                                charge = Double.parseDouble(itemCharge);
+                            }
+                            String itemQty = rs1.getString("materialqty");
+                            double qty;
+                            if (itemQty.isEmpty()) {
+                                qty = 0;
+                            } else {
+                                qty = Double.parseDouble(itemQty);
+                            }
+                            materials.add(new Item(itemName, "", charge, 0, qty));
+                        }
+                        leadAreas.add(new LeadArea(leadAreaDiv, leadName, customerItems, vimboxItems, materials));
+                    }
+                    
+                    // Services //
+                    ArrayList<String[]> services = new ArrayList<String[]>();
+                    ps = con.prepareStatement(GET_LEAD_SERVICE);
+                    ps.setInt(1, leadId);
+                    ps.setString(2, salesDiv);
+                    rs1 = ps.executeQuery();
+                    while(rs1.next()){
+                        String serviceName = rs1.getString("service");
+                        String serviceCharge = rs1.getString("charge");
+                        String[] svc = serviceName.split("_");
+                        String secSvc = "";
+                        for(int i=1; i<svc.length; i++){
+                            secSvc += (svc[i]);
+                            if(i < svc.length-1){
+                                secSvc += " ";
+                            }
+                        }
+                        String formula = LeadPopulationDAO.getServiceFormula(svc[0], secSvc);
+                        String serviceMp = rs1.getString("manpower");
+                        String serviceRm = rs1.getString("remarks");
+                        services.add(new String[]{serviceName,serviceCharge,formula,serviceMp,serviceRm});
+                    }
+                    
+                    // Other Charges // 
+                    HashMap<String,String> otherCharges = new HashMap<String,String>();
+                    ps = con.prepareStatement(GET_LEAD_OTHER);
+                    ps.setInt(1, leadId);
+                    ps.setString(2, salesDiv);
+                    rs1 = ps.executeQuery();
+                    while(rs1.next()){
+                        String serviceName = rs1.getString("other");
+                        String serviceCharge = rs1.getString("charge");
+                        otherCharges.put(serviceName,serviceCharge);
+                    }
+                    
+                    // Customer comments //
+                    ArrayList<String> comments = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_LEAD_COMMENT);
+                    ps.setInt(1, leadId);
+                    ps.setString(2, salesDiv);
+                    rs1 = ps.executeQuery();
+                    while(rs1.next()){
+                        String comment = rs1.getString("comment");
+                        comments.add(comment);
+                    }
+
+                    // Customer Remarks //
+                    ArrayList<String> remarks = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_LEAD_REMARK);
+                    ps.setInt(1, leadId);
+                    ps.setString(2, salesDiv);
+                    rs1 = ps.executeQuery();
+                    while(rs1.next()){
+                        String remark = rs1.getString("remark");
+                        remarks.add(remark);
+                    }
+                    
+                    leadDivs.add(new LeadDiv(salesDiv, leadAreas, services, otherCharges, comments, remarks));
+                }
+                
+                ArrayList<SiteSurvey> siteSurveys = SiteSurveyDAO.getSiteSurveysByLeadId(leadId);
+                results.add(new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, siteSurveys, dt, tom, jobs, addressFrom, addressTo, leadDivs));
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+            ConnectionManager.close(null, null, rs1);
+        }
+        return results;
     }
     
     public static ArrayList<Lead> getLeadsByOwnerUser(User user) {
