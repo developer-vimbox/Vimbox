@@ -34,7 +34,7 @@
                                         <div class="input-group bootstrap-touchspin">
                                             <input type="text" id="operation_search" placeholder="Enter Lead ID or Date (YYYY-MM-DD)" class="form-control" style="width: 400px;color:black;">
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="loadSalesOperations($('#operation_search').val(), '<%=user.getNric()%>')">Search</button>
+                                                <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="loadSalesOperations($('#operation_search').val())">Search</button>
                                             </span>
                                         </div>
                                     </div>

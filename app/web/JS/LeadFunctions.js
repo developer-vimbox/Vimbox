@@ -1019,7 +1019,7 @@ function viewMovCal(){
     });
     
     var content = document.getElementById("ssCalTable");
-    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m}, function (data) {
+    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt"}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
@@ -1043,11 +1043,12 @@ function changeMoveMonthYear(){
     var content = document.getElementById("ssCalTable");
     var iYear = document.getElementById('iYear').value;
     var iMonth = document.getElementById('iMonth').value;
+    var tt = document.getElementById('ttSelect').value;
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var n = m_names[iMonth];
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
-    $.get("MovingCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth}, function (data) {
+    $.get("MovingCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getTT: tt}, function (data) {
         content.innerHTML = data;
     });
 }
@@ -1116,73 +1117,71 @@ function viewDaySchedule(date) {
                 addressTo += toArray[i].value + "|";
             }
         }
+        
+        var div = document.getElementById(date);
+        var nric = "";
+        var timeslots = "";
+        var addresses = "";
+        if (div != null) {
+            nric = ($("#" + date + " input[name=siteSurvey_surveyor]").val().split("|"))[1];
+            var timeArray = $("#" + date + " input[name=siteSurvey_timeslot]");
+            for (var i = 0; i < timeArray.length; i++) {
+                if (timeArray[i].value.includes(date)) {
+                    timeslots += (timeArray[i].value.split("|"))[1] + "|";
+                }
+            }
 
-        $.getJSON("ValidateSiteSurveyorDetails", {date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo})
-                .done(function (data) {
-                    if (data.status === "SUCCESS") {
-                        var div = document.getElementById(date);
-                        var nric = "";
-                        var timeslots = "";
-                        var addresses = "";
-                        if (div != null) {
-                            nric = ($("#" + date + " input[name=siteSurvey_surveyor]").val().split("|"))[1];
-                            var timeArray = $("#" + date + " input[name=siteSurvey_timeslot]");
-                            for (var i = 0; i < timeArray.length; i++) {
-                                if (timeArray[i].value.includes(date)) {
-                                    timeslots += (timeArray[i].value.split("|"))[1] + "|";
-                                }
-                            }
+            var addressArray = $("#" + date + " input[name=siteSurvey_address]");
+            for (var i = 0; i < addressArray.length; i++) {
+                if (addressArray[i].value.includes(date)) {
+                    addresses += (addressArray[i].value.split("|"))[1] + "|";
+                }
+            }
 
-                            var addressArray = $("#" + date + " input[name=siteSurvey_address]");
-                            for (var i = 0; i < addressArray.length; i++) {
-                                if (addressArray[i].value.includes(date)) {
-                                    addresses += (addressArray[i].value.split("|"))[1] + "|";
-                                }
-                            }
-
-                            var remarksArray = $("#" + date + " input[name=siteSurvey_remarks]");
-                            var remarks = "";
-                            for (var i = 0; i < remarksArray.length; i++) {
-                                if (remarksArray[i].value.includes(date)) {
-                                    remarks = (remarksArray[i].value.split("|"))[1];
-                                    break;
-                                }
-                            }
-                        }
-                        toggleCounter = 0;
-                        var leadId = $('#leadId').val();
-                        if(leadId == null){
-                            leadId = 0;
-                        }
-                        $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: leadId, date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
-                            document.getElementById("schedule_content").innerHTML = results;
-                            document.getElementById("schedule_modal").style.display = "block";
-                        });
-                    } else {
-                        errorStatus.innerHTML = data.status;
-                        errorMessage.innerHTML = data.message;
-                        errorModal.style.display = "block";
-                    }
-                })
-                .fail(function (error) {
-                    errorStatus.innerHTML = "ERROR";
-                    errorMessage.innerHTML = error;
-                    errorModal.style.display = "block";
-                });
+            var remarksArray = $("#" + date + " input[name=siteSurvey_remarks]");
+            var remarks = "";
+            for (var i = 0; i < remarksArray.length; i++) {
+                if (remarksArray[i].value.includes(date)) {
+                    remarks = (remarksArray[i].value.split("|"))[1];
+                    break;
+                }
+            }
+        }
+        toggleCounter = 0;
+        var leadId = $('#leadId').val();
+        if(leadId == null){
+            leadId = 0;
+        }
+        $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: leadId, date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
+            document.getElementById("schedule_content").innerHTML = results;
+            document.getElementById("schedule_modal").style.display = "block";
+        });
     }
 }
 
 function assignDOM() {
     var date = $('#move_date').val();
-    var timeslots = document.getElementsByName("move_timeslot");
     var addressesFr = document.getElementsByName("move_addressFrom");
     var addressesTo = document.getElementsByName("move_addressTot");
+    var carplates = document.getElementsByName("move_carplates");
+    var trucks = document.getElementsByName("move_truck_name");
+    var timeslots = [];
     
     var remarks = $('#move_remarks').val();
 
     var errorMsg = "";
-    if (timeslots.length === 0) {
-        errorMsg += "Please choose a time slot<br>";
+    if (carplates.length === 0) {
+        errorMsg += "Please choose at least a truck<br>";
+    }else{
+        for (i = 0; i < carplates.length; i++) {
+            var ts = document.getElementsByName(carplates[i].value + "_move_timeslot");
+            var times = [];
+            for(j = 0; j < ts.length; j++){
+                times.push(ts[j].value);
+            }
+            timeslots.push({id: carplates[i].value, value: times});
+        }
+        
     }
     if (addressesFr.length === 0) {
         errorMsg += "Please choose an moving from address<br>";
@@ -1207,23 +1206,32 @@ function assignDOM() {
         stringDiv += "<div id='dom_" + date + "'>";
         stringDiv += "<span class='close' onClick=\"removeSiteSurvey('dom_" + date + "')\">x</span>";
         stringDiv += "<hr><table><col width='100'>";
-        stringDiv += "<tr><td align='right'><b>Date :</b></td><td><input type='hidden' name='move_date' value='" + date + "'>" + date + "</td></tr>";
-        stringDiv += "<tr><td align='right'><b>Timeslot :</b></td><td><table>";
-        for (i = 0; i < timeslots.length; i++) {
-            stringDiv += "<tr><td><input type='hidden' name='move_timeslots' value='" + date + "|" + timeslots[i].value + "'>" + timeslots[i].value + "</td></tr>";
+        stringDiv += "<tr><td><b>Date :</b></td><td><input type='hidden' name='move_date' value='" + date + "'>" + date + "</td></tr>";
+        stringDiv += "<tr><td colspan='2'><b>Truck(s) :</b></td></tr>";
+        stringDiv += "<tr><td colspan='2'><table>"; 
+        for (i = 0; i < carplates.length; i++) {
+            stringDiv += "<tr><td><input type='hidden' name='move_truck' value='" + date + "|" + carplates[i].value + "'>" + trucks[i].value + "</td>";
+            stringDiv += "<td><table>";
+            var timeslot = timeslots.find(function (obj) {
+                return obj.id === carplates[i].value;
+            });
+            for(j = 0; j < timeslot.value.length; j++){
+                stringDiv += "<tr><td><input type='hidden' name='" + carplates[i].value + "_move_timeslots' value='" + (timeslot.value)[j] + "'>" + (timeslot.value)[j] + "</td></tr>";
+            }
+            stringDiv += "</table></td></tr>";
         }
         stringDiv += "</table></td></tr>";
-        stringDiv += "<tr><td align='right'><b>From :</b></td><td><table>";
+        stringDiv += "<tr><td><b>From :</b></td><td><table>";
         for (i = 0; i < addressesFr.length; i++) {
             stringDiv += "<tr><td><input type='hidden' name='move_addressFr' value='" + date + "|" + addressesFr[i].value + "'>" + addressesFr[i].value + "</td></tr>";
         }
         stringDiv += "</table></td></tr>";
-        stringDiv += "<tr><td align='right'><b>To :</b></td><td><table>";
+        stringDiv += "<tr><td><b>To :</b></td><td><table>";
         for (i = 0; i < addressesTo.length; i++) {
             stringDiv += "<tr><td><input type='hidden' name='move_addressTo' value='" + date + "|" + addressesTo[i].value + "'>" + addressesTo[i].value + "</td></tr>";
         }
         stringDiv += "</table></td></tr>";
-        stringDiv += "<tr><td align='right'><b>Remarks :</b></td><td><input type='hidden' name='move_remarks' value='" + date + "|" + remarks + "'><input type='hidden' name='move_status' value='" + date + "|Booking'>" + remarks + "</td></tr>";
+        stringDiv += "<tr><td><b>Remarks :</b></td><td><input type='hidden' name='move_remarks' value='" + date + "|" + remarks + "'><input type='hidden' name='move_status' value='" + date + "|Booking'>" + remarks + "</td></tr>";
         stringDiv += "</table></div>";
         newdiv.innerHTML = stringDiv;
         document.getElementById("operation").appendChild(newdiv);
@@ -1243,16 +1251,30 @@ function assignDOM() {
 }
 
 function viewMoveDaySchedule(date) {
+    var errorModal = document.getElementById("salesModal");
+    var errorStatus = document.getElementById("salesStatus");
+    var errorMessage = document.getElementById("salesMessage");
     var div = document.getElementById("dom_" + date);
+    var truck = $('#ttSelect').val();
+    var errorMsg = "";
     var timeslots = "";
     var addressesFr = "";
     var addressesTo = "";
-
+    var carplates = "";
+    
     if (div != null) {
-        var timeArray = $("#dom_" + date + " input[name=move_timeslots]");
-        for (var i = 0; i < timeArray.length; i++) {
-            if (timeArray[i].value.includes(date)) {
-                timeslots += (timeArray[i].value.split("|"))[1] + "|";
+        var carplateArray = $("#dom_" + date + " input[name=move_truck]");
+        if(carplateArray.length > 1 && truck !== "alltt"){
+            errorMsg += "Unable to view day schedule for selected truck.<br>Please de-select truck to view schedule."
+        }
+        for (var i = 0; i < carplateArray.length; i++) {
+            if (carplateArray[i].value.includes(date)) {
+                var cp = (carplateArray[i].value.split("|"))[1];
+                carplates += cp + "|";
+                var timeArray = $("#dom_" + date + " input[name=" + cp + "_move_timeslots]");
+                for (var j = 0; j < timeArray.length; j++) {
+                    timeslots += cp + "_" + timeArray[j].value + "|";
+                }
             }
         }
 
@@ -1262,7 +1284,7 @@ function viewMoveDaySchedule(date) {
                 addressesFr += (addressFrArray[i].value.split("|"))[1] + "|";
             }
         }
-        
+
         var addressToArray = $("#dom_" + date + " input[name=move_addressTo]");
         for (var i = 0; i < addressToArray.length; i++) {
             if (addressToArray[i].value.includes(date)) {
@@ -1280,28 +1302,34 @@ function viewMoveDaySchedule(date) {
         }
     }
     
-    var addressFrom = "";
-    var addressTo = "";
-    if(domPass){
-        var fromArray = document.getElementsByName("addressfrom");
-        for (i = 0; i < fromArray.length; i++) {
-            addressFrom += fromArray[i].value + "|";
+    if(!errorMsg){
+        var addressFrom = "";
+        var addressTo = "";
+        if(domPass){
+            var fromArray = document.getElementsByName("addressfrom");
+            for (i = 0; i < fromArray.length; i++) {
+                addressFrom += fromArray[i].value + "|";
+            }
+            var toArray = document.getElementsByName("addressto");
+            for (i = 0; i < toArray.length; i++) {
+                addressTo += toArray[i].value + "|";
+            }
         }
-        var toArray = document.getElementsByName("addressto");
-        for (i = 0; i < toArray.length; i++) {
-            addressTo += toArray[i].value + "|";
+
+        var leadId = $('#leadId').val();
+        if(leadId == null){
+            leadId = 0;
         }
-    }
-    
-    var leadId = $('#leadId').val();
-    if(leadId == null){
-        leadId = 0;
-    }
-    $.get("RetrieveMovingSchedule.jsp", {leadId: leadId, date: date, addressFrom: addressFrom, addressTo: addressTo, timeslots: timeslots, addressesFr: addressesFr, addressesTo: addressesTo, remarks: remarks}, function (results) {
-        document.getElementById("schedule_content").innerHTML = results;
-        document.getElementById("schedule_modal").style.display = "block";
-    });
-                
+        
+        $.get("RetrieveMovingSchedule.jsp", {leadId: leadId, date: date, truck: truck, carplate: carplates, addressFrom: addressFrom, addressTo: addressTo, timeslots: timeslots, addressesFr: addressesFr, addressesTo: addressesTo, remarks: remarks}, function (results) {
+            document.getElementById("schedule_content").innerHTML = results;
+            document.getElementById("schedule_modal").style.display = "block";
+        });
+    }else{
+        errorStatus.innerHTML = "ERROR";
+        errorMessage.innerHTML = errorMsg;
+        errorModal.style.display = "block";
+    }          
 }
 
 function viewSchedule() {
@@ -1390,34 +1418,49 @@ function selectDOMSlot(e){
     var cellHtml = cell.html().trim();
 
     if (cellHtml) {
-        var cellTiming = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
-        var timetable = document.getElementById("move_timeslot_table");
+        var cellDetails = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
+        var cellArray = cellDetails.split("|");
+        var carplate = cellArray[0];
+        var truck = cellArray[1]
+        var cellTiming = cellArray[2];
         switch (state) {
             case '':
-                var tr = "<tr data-value='{" + cellTiming + "}'><td>" + cellTiming + "<input type='hidden' name='move_timeslot' value='" + cellTiming + "'></td>";
+                var tr = "<tr data-value='{" + carplate + "|" + truck + "|" + cellTiming + "}'><td>" + cellTiming + "<input type='hidden' name='" + carplate + "_move_timeslot' value='" + cellTiming + "'></td>";
                 tr += "<td><input type='button' value='x' class='form-control' onclick='deleteMoveTimeRow(this)'/></td></tr>";
                 var after = true;
-                loop1:
-                for (var i = 0, timerow; timerow = timetable.rows[i]; i++) {
-                    var tableCell = $(timerow).data('value');
-                    var tableTimeSlot = tableCell.substring(tableCell.indexOf("{") + 1, tableCell.lastIndexOf("}"));
-                    var num = cellTiming.localeCompare(tableTimeSlot);
-                    if (num === -1) {
-                        after = false;
+                var timetable = document.getElementById(carplate + "_timeslot_table");
+                if(timetable == null){
+                    var tableTr = "<tr id='" + carplate + "'>";
+                    tableTr += "<td><input type='hidden' name='move_carplates' value='" + carplate + "'><input type='hidden' name='move_truck_name' value='" + truck + "'><label name='truck_label'>" + truck + "</label></td>";
+                    tableTr += "<td><table id='" + carplate + "_timeslot_table'><tbody></tbody></table></td>";
+                    tableTr += "</tr>";
+                    $("#truck_assigned_table").append(tableTr);
+                    $("#" + carplate + "_timeslot_table > tbody").append(tr);
+                }else{
+                    loop1:
+                    for (var i = 0, timerow; timerow = timetable.rows[i]; i++) {
+                        var tableCell = $(timerow).data('value');
+                        var tableCellDetails = tableCell.substring(tableCell.indexOf("{") + 1, tableCell.lastIndexOf("}"));
+                        var tableCellArray = tableCellDetails.split("|");
+                        var tableTimeSlot = tableCellArray[2];
+                        var num = cellTiming.localeCompare(tableTimeSlot);
+                        if (num === -1) {
+                            after = false;
+                        }
+
+                        if (i === 0 && after === false) {
+                            $(tr).prependTo("#" + carplate + "_timeslot_table > tbody");
+                            break loop1;
+                        } else if (after === false) {
+                            $("#" + carplate + "_timeslot_table > tbody > tr").eq(i - 1).after(tr);
+                            break loop1;
+                        }
                     }
 
-                    if (i === 0 && after === false) {
-                        $(tr).prependTo("#move_timeslot_table > tbody");
-                        break loop1;
-                    } else if (after === false) {
-                        $('#move_timeslot_table > tbody > tr').eq(i - 1).after(tr);
-                        break loop1;
+
+                    if (after) {
+                        $("#" + carplate + "_timeslot_table > tbody").append(tr);
                     }
-                }
-
-
-                if (after) {
-                    $('#move_timeslot_table').append(tr);
                 }
                 
                 cell.addClass('selected');
@@ -1426,13 +1469,31 @@ function selectDOMSlot(e){
             case 'selected':
                 var table = document.getElementById("move_timeslot_table");
                 for (var i = 0, row; row = table.rows[i]; i++) {
-                    if ($(row).data('value').includes(cellTiming)) {
+                    if ($(row).data('value').includes(carplate + "|" + truck + "|" + cellTiming)) {
                         row.parentNode.removeChild(row);
                         break;
                     }
                 }
                 cell.removeClass('selected');
                 cell.data('state', '');
+                var empty = true;
+                var table = document.getElementById("moving_table");
+                for (var i = 0, row; row = table.rows[i]; i++) {
+                    for (var j = 0, col; col = row.cells[j]; j++) {
+                        var tableCell = $(col);
+                        var cellState = tableCell.data('state') || '';
+                        if (cellState === 'selected') {
+                            empty = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (empty) {
+                    $('#truck_carplate').val('');
+                    $('#truck').val('');
+                    document.getElementById("truck_label").innerHTML = "";
+                }
                 break;
             default:
                 break;
@@ -1583,6 +1644,7 @@ function deleteMoveTimeRow(btn){
     var row = btn.parentNode.parentNode;
     var value = $(row).data('value');
     row.parentNode.removeChild(row);
+    
     var table = document.getElementById("moving_table");
     for (var i = 0, row; row = table.rows[i]; i++) {
         for (var j = 0, col; col = row.cells[j]; j++) {
@@ -1595,6 +1657,27 @@ function deleteMoveTimeRow(btn){
                 tableCell.data('state', '');
             }
         }
+    }
+    
+    var valueDetails = value.substring(value.indexOf("{") + 1, value.lastIndexOf("}"));
+    var valueArray = valueDetails.split("|");
+    var carplate = valueArray[0];
+    var childNodes = document.getElementById(carplate + "_timeslot_table").childNodes;
+    var node;
+    for(i=0; i < childNodes.length; i++){
+        if(childNodes[i].nodeName === "TBODY"){
+            node = childNodes[i];
+        }
+    }
+    childNodes = node.childNodes;
+    var count = 0;
+    for(i=0; i < childNodes.length; i++){
+        if(childNodes[i].nodeName === "TR"){
+            count++;
+        }
+    }
+    if(count === 0){
+        $("#" + carplate).remove();
     }
 }
 

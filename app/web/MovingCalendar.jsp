@@ -1,3 +1,5 @@
+<%@page import="com.vimbox.operations.Truck"%>
+<%@page import="com.vimbox.database.TruckDAO"%>
 <%@ page  language="java" import="java.util.*,java.text.*"%>
 <%!
     public int nullIntconv(String inv) {
@@ -22,6 +24,8 @@
         iYear = iTYear;
         iMonth = iTMonth;
     }
+    
+    ArrayList<Truck> trucks = TruckDAO.getAllTrucks();
 %>
 <script src="JS/LeadFunctions.js"></script>
 <!-- Calendar -->
@@ -77,7 +81,19 @@
                         </select>
                     </td>
                     <td width="68%" align="center"><h2><label id="dMonth" style="padding-top: 8px;"><%=new SimpleDateFormat("MMMM").format(new Date(2008,iMonth,01))%></label> <label id="dYear"> <%=iYear%></label></h2></td>
-                    <td width="15%">&nbsp;</td>
+                    <td width="15%">
+                        <select class="form-control" id="ttSelect" name="ttSelect" onchange="changeMoveMonthYear()">
+                            <option value="alltt" selected="selected">-- All Trucks --</option>
+                            <%
+                                for (Truck truck : trucks) {
+                                    String carplate = truck.getCarplateNo();
+                            %>
+                            <option value="<%=carplate%>"><%=truck%></option>
+                            <%
+                                }
+                            %>
+                        </select>
+                    </td>
                 </tr>
             </table>
         </td>

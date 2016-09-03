@@ -2,7 +2,7 @@ package com.vimbox.sales;
 
 import com.google.gson.JsonObject;
 import com.vimbox.database.CustomerHistoryDAO;
-import com.vimbox.database.JobsDAO;
+import com.vimbox.database.JobDAO;
 import com.vimbox.database.LeadDAO;
 import com.vimbox.database.SiteSurveyDAO;
 import com.vimbox.user.User;
@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.TreeSet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,20 +50,27 @@ public class CreateLeadController extends HttpServlet {
                 
         // Validate the DOM selected //
         String[] domDates = request.getParameterValues("move_date");
-        String[] domTimeslots = request.getParameterValues("move_timeslots");
+        String[] domTrucks = request.getParameterValues("move_truck");
+        HashMap<String, ArrayList<String>> domTimeslots = new HashMap<String, ArrayList<String>>();
         String[] domAddressesFr = request.getParameterValues("move_addressFr");
         String[] domAddressesTo = request.getParameterValues("move_addressTo");
         String[] domRemarks = request.getParameterValues("move_remarks");
         String[] domStatuses = request.getParameterValues("move_status");
         if(domDates != null){
             for(String domDate : domDates){
-                for(String domTimeslot : domTimeslots){
-                    if(domTimeslot.contains(domDate)){
-                        String dts = domTimeslot.split("\\|")[1];
-                        boolean status = JobsDAO.checkJobTimeslot(domDate, dts);
-                        if (status) {
-                            errorMsg += "DOM booking on " + domDate + " " + dts + " is unavailable as there is an existing confirmed/booked move<br>";
+                for(String domTruck : domTrucks){
+                    if(domTruck.contains(domDate)){
+                        String truck = domTruck.split("\\|")[1];
+                        String[] truckTimeslots = request.getParameterValues(truck + "_move_timeslots");
+                        ArrayList<String> list = new ArrayList<String>();
+                        for(String timeslot : truckTimeslots){
+                            boolean status = JobDAO.checkJobTimeslot(domDate, truck, timeslot);
+                            if (status) {
+                                errorMsg += "DOM booking on " + domDate + " " + timeslot + " is unavailable for Truck " + truck + " as there is an existing confirmed/booked move<br>";
+                            }
+                            list.add(timeslot);
                         }
+                        domTimeslots.put(truck, list);
                     }
                 }
             }
@@ -129,15 +138,14 @@ public class CreateLeadController extends HttpServlet {
                 for (String domDate : domDates) {
                     String remark = "";
                     String stts = "";
-                    ArrayList<String> times = new ArrayList<String>();
+                    HashMap<String, ArrayList<String>> times = new HashMap<String, ArrayList<String>>();
                     ArrayList<String> adds = new ArrayList<String>();
                     ArrayList<String> addsTags = new ArrayList<String>();
 
-                    for(String domTimeslot : domTimeslots){
-                        if(domTimeslot.contains(domDate)){
-                            if (!times.contains(domTimeslot.split("\\|")[1])) {
-                                times.add(domTimeslot.split("\\|")[1]);
-                            }
+                    for(String domTruck : domTrucks){
+                        if(domTruck.contains(domDate)){
+                            String carplate = domTruck.split("\\|")[1];
+                            times.put(carplate, domTimeslots.get(carplate));
                         }
                     }
 
@@ -174,21 +182,31 @@ public class CreateLeadController extends HttpServlet {
                         }
                     }
 
-                    String timeslot = "";
+                    HashMap<String, String> timest = new HashMap<String, String>();
+                    
                     if (!times.isEmpty()) {
-                        timeslot = times.get(0);
-                        int count = ts.get(timeslot);
-                        for (int i = 1; i < times.size(); i++) {
-                            String tts = times.get(i);
-                            if (ts.get(tts) == count + 1) {
-                                timeslot = timeslot.substring(0, timeslot.lastIndexOf(" ")) + " " + tts.substring(tts.lastIndexOf(" ") + 1);
-                            } else {
-                                timeslot += "<br>" + tts;
+                        for (Map.Entry<String, ArrayList<String>> entry : times.entrySet()) {
+                            String cp = entry.getKey();
+                            ArrayList<String> list = entry.getValue();
+                            String timeslot = "";
+                            timeslot = list.get(0);
+                            int count = ts.get(timeslot);
+                            for (int i = 1; i < list.size(); i++) {
+                                String tts = list.get(i);
+                                if (ts.get(tts) == count + 1) {
+                                    timeslot = timeslot.substring(0, timeslot.lastIndexOf(" ")) + " " + tts.substring(tts.lastIndexOf(" ") + 1);
+                                } else {
+                                    timeslot += "<br>" + tts;
+                                }
+                                count = ts.get(tts);
                             }
-                            count = ts.get(tts);
+                            timest.put(cp, timeslot);
                         }
+                        
                     }
-                    JobsDAO.createOperationAssignment(leadId, owner.getNric(), adds, addsTags, domDate,times, timeslot, remark, stts);
+                    
+                    int jobId = new Random().nextInt(900000000) + 100000000;
+                    JobDAO.createOperationAssignment(leadId, jobId, owner.getNric(), adds, addsTags, domDate, times, timest, remark, stts);
                 }
             }
                 //----------------------------------------//

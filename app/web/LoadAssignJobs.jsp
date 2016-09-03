@@ -7,7 +7,7 @@
 <%@page import="com.vimbox.database.SiteSurveyDAO"%>
 <%
     String keyword = request.getParameter("keyword");
-    ArrayList<Job> jobs = JobDAO.getJobsByKeyword(keyword);
+    ArrayList<Job> jobs = JobDAO.getConfirmedJobsByKeyword(keyword);
     
     if (!keyword.isEmpty()) {
         if (jobs.size() > 0) {
@@ -23,20 +23,22 @@
     <col width="5%">
     <col width="5%">
     <col width="10%">
+    <col width="10%">
     <col width="25%">
     <col width="25%">
     <col width="10%">
-    <col width="10%">
-    <col width="10%">
+    <col width="5%">
+    <col width="5%">
     <thead>
     <tr>
         <th>Job ID</th>
         <th>Lead ID</th>
+        <th>Truck</th>
         <th>Date</th>
         <th>From</th>
         <th>To</th>
         <th>Time Slot</th>
-        <th>Status</th>
+        <th>View</th>
         <th>Action</th>
     </tr>
     </thead>
@@ -44,7 +46,7 @@
         String jobId = "";
         String leadId = ""; 
         String jj = "";
-        String jStatus = "";
+        String jTruck = "";
         String timeslot = "";
         ArrayList<String> addressesFr = new ArrayList<String>();
         ArrayList<String> addressesTo = new ArrayList<String>();
@@ -52,20 +54,22 @@
             Job job = jobs.get(i);
             String nextJobId = job.getJobId() + "";
             String nextLeadId = job.getLeadId() + "";
+            String nextTruck = job.getAssignedTruck() + "";
             String nextTimeslot = job.getTimeslots();
             String j = job.getDate();
             if (i == 0) {
                 jj = j;
                 leadId = nextLeadId;
                 jobId = nextJobId;
+                jTruck = nextTruck;
                 timeslot = nextTimeslot;
-                jStatus = job.getStatus();
             }
 
-            if (!j.equals(jj) || !nextLeadId.equals(leadId)) {
+            if (!j.equals(jj) || !nextLeadId.equals(leadId) || !nextTruck.equals(jTruck)) {
                 out.println("<tr>");
                 out.println("<td align='center'>" + jobId + "</td>");
                 out.println("<td align='center'>" + leadId + "</td>");
+                out.println("<td align='center'>" + jTruck + "</td>");
                 out.println("<td align='center'>" + jj + "</td>");
                 out.println("<td align='center'><ul>");
                 for(String add:addressesFr){
@@ -78,19 +82,15 @@
                 }
                 out.println("</ul></td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
-                out.println("<td align='center'>" + jStatus + "</td>");
-                out.println("<td align='center'>");
-                if(jStatus.equals("Booked")){
-                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "')\">Cancel</button>");
-                }
-                out.println("</td>");
+                out.println("<td align='center'><button class='btn btn-default' onclick=\"viewLead('" + leadId + "')\">VS</button></td>");
+                out.println("<td align='center'><button class='btn btn-default' onclick=\"assignJobModal('" + jobId + "')\">Assign</button></td>");
                 out.println("</tr>");
                 
                 jj = j;
                 leadId = nextLeadId;
                 jobId = nextJobId;
+                jTruck = nextTruck;
                 timeslot = nextTimeslot;
-                jStatus = job.getStatus();
                 addressesFr = new ArrayList<String>();
                 addressesTo = new ArrayList<String>();
             }
@@ -114,6 +114,7 @@
                 out.println("<tr>");
                 out.println("<td align='center'>" + jobId + "</td>");
                 out.println("<td align='center'>" + leadId + "</td>");
+                out.println("<td align='center'>" + jTruck + "</td>");
                 out.println("<td align='center'>" + jj + "</td>");
                 out.println("<td align='center'><ul>");
                 for(String add:addressesFr){
@@ -126,14 +127,12 @@
                 }
                 out.println("</ul></td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
-                out.println("<td align='center'>" + jStatus + "</td>");
-                out.println("<td align='center'>");
-                if(jStatus.equals("Booked")){
-                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "')\">Cancel</button>");
-                }
+                out.println("<td align='center'><button class='btn btn-default' onclick=\"viewLead('" + leadId + "')\">VS</button></td>");
+                out.println("<td align='center'><button class='btn btn-default' onclick=\"assignJobModal('" + jobId + "')\">Assign</button></td>");
                 out.println("</td>");
                 out.println("</tr>");
             }
         }
     %>
 </table>
+

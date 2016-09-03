@@ -164,13 +164,14 @@
             ArrayList<Job> jobs = lead.getJobs();
             String jj = "";
             String jLead = "";
-            String timeslot = "";
             String jRem = "";
             String jStatus = "";
+            HashMap<String, String> timeslot = new HashMap<String, String>();
             ArrayList<String> addressesFr = new ArrayList<String>();
             ArrayList<String> addressesTo = new ArrayList<String>();
             for (int i = 0; i < jobs.size(); i++) {
                 Job job = jobs.get(i);
+                String truck = job.getAssignedTruck() + "";
                 String nextLeadId = job.getLeadId() + "";
                 String nextTimeslot = job.getTimeslots();
                 String rem = job.getRemarks();
@@ -178,7 +179,7 @@
                 if (i == 0) {
                     jj = j;
                     jLead = nextLeadId;
-                    timeslot = nextTimeslot;
+                    timeslot.put(truck, nextTimeslot);
                     jRem = rem;
                     jStatus = job.getStatus();
                 }
@@ -232,12 +233,14 @@
         <%
                 jj = j;
                 jLead = nextLeadId;
-                timeslot = nextTimeslot;
+                timeslot = new HashMap<String, String>();
+                timeslot.put(truck, nextTimeslot);
                 jStatus = job.getStatus();
                 addressesFr = new ArrayList<String>();
                 addressesTo = new ArrayList<String>();
             }
-
+                
+            timeslot.put(truck, nextTimeslot);
             HashMap<String, String> addresses = job.getAddresses();
             for (Map.Entry<String, String> entry : addresses.entrySet()) {
                 String key = entry.getKey();
@@ -262,9 +265,16 @@
         </div>
         <div class="form-group">
             <label class ="col-sm-3 control-label">Timeslot: </label>
-            <div class ="col-sm-8" style="padding-top: 7px;">
-                <%=timeslot%>
-            </div>
+            <table>
+                <%
+                    for (Map.Entry<String, String> entry : timeslot.entrySet()) {
+                        String cp = entry.getKey();
+                        String ts = entry.getValue();
+                        out.println("<tr><td>" + cp + "</td>");
+                        out.println("<td>" + ts + "</td></tr>");
+                    }
+                %>
+            </table>
         </div>
         <div class="form-group">
             <label class ="col-sm-3 control-label">From: </label>

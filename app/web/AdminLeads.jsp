@@ -1,8 +1,3 @@
-<%@page import="com.vimbox.util.Converter"%>
-<%@page import="com.vimbox.customer.Customer"%>
-<%@page import="com.vimbox.database.LeadDAO"%>
-<%@page import="com.vimbox.sales.Lead"%>
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -67,32 +62,8 @@
             }
         </style>
     </head>
-    <body>
+    <body onload="admLeads_setup()">
         <%@include file="header.jsp"%>
-
-        <!-- The Modal -->
-        <div id="commentModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content" style="width: 450px;">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('commentModal')">×</span>
-                    <center><h2>Follow Up Comment</h2></center>
-                </div>
-                <div class="modal-body">
-                    <div id="comment-content"></div>
-                </div>
-            </div>
-        </div>
-        <div id="lead_error_modal" class="modal">
-            <div class="error-modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('lead_error_modal')">×</span>
-                    <div id="lead_error_status"></div>
-                    <hr>
-                    <div id="lead_error_message"></div>
-                </div>
-            </div>
-        </div>
         <!-- The Modal -->
         <div id="viewLeadModal" class="modal">
             <div class="modal-content" style="width: 80%;">
@@ -102,17 +73,6 @@
                 </div>
                 <div class="modal-body">
                     <div id="leadContent"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- The Modal -->
-        <div id="viewCommentsModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('viewCommentsModal')">×</span>
-                    <div id="commentsContent"></div> 
                 </div>
             </div>
         </div>
@@ -138,62 +98,22 @@
                         <div class="panel-body">
                             <div class="form-horizontal">
                                 <div class="form-group">
-                                    <%            ArrayList<Lead> myLeads = LeadDAO.getAllLeads();
-                                    %>
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Type</th>
-                                                <th>Cust Name</th>
-                                                <th>Cust Contact</th>
-                                                <th>Cust Email</th>
-                                                <th>Status</th>
-                                                <th>Date</th>
-                                                <th>View</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <%
-                                                for (Lead lead : myLeads) {
-                                                    out.println("<tr>");
-                                                    out.println("<td align='center'>" + lead.getId() + "</td>");
-                                                    out.println("<td align='center'>" + lead.getType() + "</td>");
-
-                                                    Customer customer = lead.getCustomer();
-                                                    if (customer != null) {
-                                                        out.println("<td align='center'>" + customer.toString() + "</td>");
-                                                        out.println("<td align='center'>" + customer.getContact() + "</td>");
-                                                        out.println("<td align='center'>" + customer.getEmail() + "</td>");
-                                                    } else {
-                                                        out.println("<td align='center'></td>");
-                                                        out.println("<td align='center'></td>");
-                                                        out.println("<td align='center'></td>");
-                                                    }
-
-                                                    out.println("<td align='center'>" + lead.getStatus() + "</td>");
-                                                    out.println("<td align='center'>" + Converter.convertDate(lead.getDt()) + "</td>");
-                                            %>
-                                        <td>
-                                            <button class="btn btn-default" onclick="viewLead('<%=lead.getId()%>')">VS</button>
-
-                                            <button class="btn btn-default" onclick="viewFollowups('<%=lead.getId()%>')">VF</button>
-
-                                        </td>
-                                        <%
-                                            }
-                                        %>
-                                        </tbody>
-                                    </table>  
-
+                                    <div class="col-sm-4">
+                                        <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                            <input type="text" id="adm_lead_search" placeholder="Search Leads" class="form-control" style="width: 400px;color:black;">
+                                            
+                                                <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="admLeads_search($('#adm_lead_search').val())">Search</button>
+                                            
+                                        </div>
+                                    </div>
                                 </div>
+                                <br>
+                                <div id="admLeadsTable"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </body>
 </html>

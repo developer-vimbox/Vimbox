@@ -540,12 +540,13 @@
                                                 String jj = "";
                                                 String jRem = "";
                                                 String jStatus = "";
-                                                ArrayList<String> timeslots = new ArrayList<String>();
+                                                HashMap<String, ArrayList<String>> timeslots = new HashMap<String, ArrayList<String>>();
                                                 ArrayList<String> addressesFr = new ArrayList<String>();
                                                 ArrayList<String> addressesTo = new ArrayList<String>();
                                                 for (int i = 0; i < jobs.size(); i++) {
                                                     Job job = jobs.get(i);
                                                     String j = job.getDate();
+                                                    String jTruck = job.getAssignedTruck().toString();
                                                     if (i == 0) {
                                                         jj = j;
                                                         jRem = job.getRemarks();
@@ -556,9 +557,17 @@
                                                         out.println("<div>");
                                                         out.println("<hr><table style='margin-left: 20%;'><col width='100'>");
                                                         out.println("<tr><td ><b>Date :</b></td><td>" + jj + "</td></tr>");
-                                                        out.println("<tr><td ><b>Timeslot :</b></td><td><table>");
-                                                        for (int k = 0; k < timeslots.size(); k++) {
-                                                            out.println("<tr><td>" + timeslots.get(k) + "</td></tr>");
+                                                        out.println("<tr><td colspan='2'><b>Truck(s) :</b></td></tr>");
+                                                        out.println("<tr><td colspan='2'><table>"); 
+                                                        for (Map.Entry<String, ArrayList<String>> entry : timeslots.entrySet()) {
+                                                            String cp = entry.getKey();
+                                                            ArrayList<String> list = entry.getValue();
+                                                            out.println("<tr><td>" + cp + "</td>");
+                                                            out.println("<td><table>");
+                                                            for(int k = 0; k < list.size(); k++){
+                                                                out.println("<tr><td>" + list.get(k) + "</td></tr>");
+                                                            }
+                                                            out.println("</table></td></tr>");
                                                         }
                                                         out.println("</table></td></tr>");
                                                         out.println("<tr><td ><b>From :</b></td><td><table>");
@@ -578,13 +587,20 @@
                                                         jj = j;
                                                         jRem = job.getRemarks();
                                                         jStatus = job.getStatus();
-                                                        timeslots = new ArrayList<String>();
+                                                        timeslots = new HashMap<String, ArrayList<String>>();
                                                         addressesFr = new ArrayList<String>();
                                                         addressesTo = new ArrayList<String>();
                                                     }
-
-                                                    if (!timeslots.contains(job.getTimeSlot())) {
-                                                        timeslots.add(job.getTimeSlot());
+                                                    
+                                                    ArrayList<String> slots = timeslots.get(jTruck);
+                                                    if(slots == null){
+                                                        slots = new ArrayList<String>();
+                                                        slots.add(job.getTimeSlot());
+                                                        timeslots.put(jTruck, slots);
+                                                    }else{
+                                                        if (!slots.contains(job.getTimeSlot())) {
+                                                            slots.add(job.getTimeSlot());
+                                                        }
                                                     }
                                                     
                                                     HashMap<String, String> addresses = job.getAddresses();
@@ -606,9 +622,17 @@
                                                         out.println("<div>");
                                                         out.println("<hr><table style='margin-left: 20%;'><col width='100'>");
                                                         out.println("<tr><td ><b>Date :</b></td><td>" + jj + "</td></tr>");
-                                                        out.println("<tr><td ><b>Timeslot :</b></td><td><table>");
-                                                        for (int k = 0; k < timeslots.size(); k++) {
-                                                            out.println("<tr><td>" + timeslots.get(k) + "</td></tr>");
+                                                        out.println("<tr><td colspan='2'><b>Truck(s) :</b></td></tr>");
+                                                        out.println("<tr><td colspan='2'><table>"); 
+                                                        for (Map.Entry<String, ArrayList<String>> entry : timeslots.entrySet()) {
+                                                            String cp = entry.getKey();
+                                                            ArrayList<String> list = entry.getValue();
+                                                            out.println("<tr><td>" + cp + "</td>");
+                                                            out.println("<td><table>");
+                                                            for(int k = 0; k < list.size(); k++){
+                                                                out.println("<tr><td>" + list.get(k) + "</td></tr>");
+                                                            }
+                                                            out.println("</table></td></tr>");
                                                         }
                                                         out.println("</table></td></tr>");
                                                         out.println("<tr><td ><b>From :</b></td><td><table>");
@@ -652,7 +676,7 @@
                                                     String sName = "";
                                                     String sRem = "";
                                                     String sStatus = "";
-                                                    timeslots = new ArrayList<String>();
+                                                    ArrayList<String> tsts = new ArrayList<String>();
                                                     ArrayList<String> addresses = new ArrayList<String>();
                                                     for (int i = 0; i < surveys.size(); i++) {
                                                         SiteSurvey survey = surveys.get(i);
@@ -689,8 +713,8 @@
                                                         <label class="col-sm-3 control-label">Time Slot: </label>
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
-                                                                for (int j = 0; j < timeslots.size(); j++) {
-                                                                out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) +"<br>");
+                                                                for (int j = 0; j < tsts.size(); j++) {
+                                                                out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + tsts.get(j) + "'>" + tsts.get(j) +"<br>");
                                                             }
                                                             %>
                                                         </div>
@@ -736,12 +760,12 @@
                                                             sName = survey.getSiteSurveyor().toString();
                                                             sRem = survey.getRemarks();
                                                             sStatus = survey.getStatus();
-                                                            timeslots = new ArrayList<String>();
+                                                            tsts = new ArrayList<String>();
                                                             addresses = new ArrayList<String>();
                                                         }
 
-                                                        if (!timeslots.contains(survey.getTimeSlot())) {
-                                                            timeslots.add(survey.getTimeSlot());
+                                                        if (!tsts.contains(survey.getTimeSlot())) {
+                                                            tsts.add(survey.getTimeSlot());
                                                         }
                                                         if (!addresses.contains(survey.getAddress())) {
                                                             addresses.add(survey.getAddress());
@@ -775,8 +799,8 @@
                                                         <label class="col-sm-3 control-label">Time Slot: </label>
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
-                                                                for (int j = 0; j < timeslots.size(); j++) {
-                                                                out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) +"<br>");
+                                                                for (int j = 0; j < tsts.size(); j++) {
+                                                                out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + tsts.get(j) + "'>" + tsts.get(j) +"<br>");
                                                             }
                                                             %>
                                                         </div>

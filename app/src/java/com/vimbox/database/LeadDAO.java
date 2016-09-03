@@ -32,7 +32,7 @@ public class LeadDAO {
     private static final String CREATE_LEAD_REMARK = "INSERT INTO leadremark VALUES (?,?,?)";
     private static final String CREATE_LEAD_SALES_DIV = "INSERT INTO leadsalesdiv VALUES (?,?,?,?)";
     
-    private static final String GET_ALL_LEAD_INFO = "SELECT * FROM leadinfo ORDER BY datetime_of_creation DESC";
+    private static final String GET_ALL_LEAD_INFO_BY_KEYWORD = "SELECT * FROM (SELECT  * FROM leadinfo ldi left outer join customers cust USING (customer_id)) joined, users urs WHERE joined.owner_user = urs.nric AND (CONCAT(joined.last_name, ' ', joined.first_name) LIKE ? OR CONCAT(urs.last_name, ' ', urs.first_name) LIKE ? OR contact LIKE ? OR email LIKE ? OR lead_id LIKE ? OR status LIKE ? OR datetime_of_creation LIKE ?)  ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_INFO = "SELECT * FROM leadinfo WHERE owner_user=? ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_ENQUIRY = "SELECT * FROM leadenquiry WHERE lead_id=?";
     private static final String GET_LEAD_INFO_BY_ID = "SELECT * FROM leadinfo WHERE lead_id=?";
@@ -111,7 +111,7 @@ public class LeadDAO {
         }
     }
     
-    public static ArrayList<Lead> getAllLeads() {
+    public static ArrayList<Lead> getAllLeadsByKeyword(String keyword) {
         ArrayList<Lead> results = new ArrayList<Lead>();
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         Connection con = null;
@@ -120,7 +120,15 @@ public class LeadDAO {
         ResultSet rs1 = null;
         try {
             con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_ALL_LEAD_INFO);
+            ps = con.prepareStatement(GET_ALL_LEAD_INFO_BY_KEYWORD);
+            ps.setString(1, "%" + keyword + "%");
+            ps.setString(2, "%" + keyword + "%");
+            ps.setString(3, "%" + keyword + "%");
+            ps.setString(4, "%" + keyword + "%");
+            ps.setString(5, "%" + keyword + "%");
+            ps.setString(6, "%" + keyword + "%");
+            ps.setString(7, "%" + keyword + "%");
+            
             rs = ps.executeQuery();
             while (rs.next()) {
                 // Lead Info //
@@ -130,7 +138,7 @@ public class LeadDAO {
                 int custId = rs.getInt("customer_id");
                 Customer customer = CustomerDAO.getCustomerById(custId);
                 String tom = rs.getString("tom");
-                ArrayList<Job> jobs = JobsDAO.getJobsByLeadId(leadId);
+                ArrayList<Job> jobs = JobDAO.getJobsByLeadId(leadId);
                 String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0, tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
@@ -377,7 +385,7 @@ public class LeadDAO {
                 int custId = rs.getInt("customer_id");
                 Customer customer = CustomerDAO.getCustomerById(custId);
                 String tom = rs.getString("tom");
-                ArrayList<Job> jobs = JobsDAO.getJobsByLeadId(leadId);
+                ArrayList<Job> jobs = JobDAO.getJobsByLeadId(leadId);
                 String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0, tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);
@@ -624,7 +632,7 @@ public class LeadDAO {
                 int custId = rs.getInt("customer_id");
                 Customer customer = CustomerDAO.getCustomerById(custId);
                 String tom = rs.getString("tom");
-                ArrayList<Job> jobs = JobsDAO.getJobsByLeadId(leadId);
+                ArrayList<Job> jobs = JobDAO.getJobsByLeadId(leadId);
                 String tempDateTimeString = rs.getString("datetime_of_creation");
                 String datetimeString = tempDateTimeString.substring(0, tempDateTimeString.lastIndexOf("."));
                 DateTime dt = formatter.parseDateTime(datetimeString);

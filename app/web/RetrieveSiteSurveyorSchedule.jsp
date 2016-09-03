@@ -153,6 +153,9 @@
                                             if (surveys.isEmpty()) {
                                                 if (!addresses.isEmpty()) {
                                                     out.println("<td onclick='selectSlot(this)'");
+                                                    if (siteSurveyor.getNric().equals(nric) && timeslots.contains(timing)) {
+                                                        out.println("class='selected' data-state='selected'");
+                                                    }
                                                     out.println("><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'></td>");
                                                 } else {
                                                     out.println("<td></td>");

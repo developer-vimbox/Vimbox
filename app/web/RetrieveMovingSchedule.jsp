@@ -1,6 +1,8 @@
+<%@page import="com.vimbox.operations.Truck"%>
+<%@page import="com.vimbox.database.TruckDAO"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="com.vimbox.database.JobsDAO"%>
+<%@page import="com.vimbox.database.JobDAO"%>
 <%@page import="com.vimbox.operations.Job"%>
 <%@page import="com.vimbox.sitesurvey.SiteSurvey"%>
 <%@page import="com.vimbox.database.SiteSurveyDAO"%>
@@ -76,7 +78,15 @@
 <%
     DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
     String dateString = request.getParameter("date");
-    ArrayList<Job> jobs = JobsDAO.getJobsByDate(dateString);
+    
+    String truucks = request.getParameter("truck");
+    ArrayList<Truck> trucks = new ArrayList<Truck>();
+    if (truucks.equals("alltt")) {
+        trucks = TruckDAO.getAllTrucks();
+    } else {
+        trucks.add(TruckDAO.getTruckByCarplate(truucks));
+    }
+    
     
     String[] timings = new String[]{"0900 - 0930", "0930 - 1000", "1000 - 1030", "1030 - 1100", "1100 - 1130", "1130 - 1200", "1200 - 1230", "1230 - 1300", "1300 - 1330", "1330 - 1400", "1400 - 1430", "1430 - 1500", "1500 - 1530", "1530 - 1600", "1600 - 1630", "1630 - 1700", "1700 - 1730", "1730 - 1800"};
     ArrayList<String> addressesFrom = new ArrayList<String>();
@@ -98,17 +108,36 @@
     }
 
     String leadId = request.getParameter("leadId");
+    String carplates = request.getParameter("carplate");
     String timeslots = request.getParameter("timeslots");
     String selectedAddsFrom = request.getParameter("addressesFr");
     String selectedAddsTo = request.getParameter("addressesTo");
     String remarks = request.getParameter("remarks");
+    
+    ArrayList<String> selecteds = new ArrayList<String>();
+    String[] carplatesArray = carplates.split("\\|");
+    for(String cp : carplatesArray){
+        if(!cp.isEmpty())selecteds.add(cp);
+    }
+    
     String[] addFrArray = null;
     String[] addToArray = null;
-    String[] timeslotArray = null;
-    if (!selectedAddsFrom.isEmpty()) {
+    HashMap<String, ArrayList<String>> timeslotHM = null;
+    if (!selecteds.isEmpty()) {
         addFrArray = selectedAddsFrom.split("\\|");
         addToArray = selectedAddsTo.split("\\|");
-        timeslotArray = timeslots.split("\\|");
+        timeslotHM = new HashMap<String, ArrayList<String>>();
+        String[] timeslotArray = timeslots.split("\\|");
+        for(String cp : selecteds){
+            ArrayList<String> list = new ArrayList<String>();
+            for(String tsa: timeslotArray){
+                if(tsa.contains(cp)){
+                    list.add(tsa.split("_")[1]);
+                }
+            }
+            timeslotHM.put(cp, list);
+        }
+        
     }
 %>
 
@@ -122,22 +151,29 @@
                         <div id="tableForm">
                             <table width="100%" class="table table-bordered" id="moving_table">
                                 <tr>
+                                    <th></th>
                                     <%
                                         for (String timing : timings) {
                                             out.println("<th>" + timing + "</th>");
                                         }
                                     %>
                                 </tr>
-                                <tr height="50">
+                                <%
+                                    for (Truck truck : trucks) {
+                                        ArrayList<Job> jobs = JobDAO.getJobsByTruckDate(truck.getCarplateNo(), dateString);
+                                %>
+                                <tr>
+                                    <td><%=truck%></td>
                                     <%
                                         for (String timing : timings) {
                                             if (jobs.isEmpty()) {
                                                 if (!fr.isEmpty() && !tot.isEmpty()) {
                                                     out.println("<td onclick='selectDOMSlot(this)'");
-                                                    if (timeslots.contains(timing)) {
+                                                    
+                                                    if (selecteds.contains(truck.getCarplateNo()) && timeslots.contains(truck.getCarplateNo() + "_" + timing)) {
                                                         out.println("class='selected' data-state='selected'");
                                                     }
-                                                    out.println("><input type='hidden' value='{" + timing + "}'></td>");
+                                                    out.println("><input type='hidden' value='{" + truck.getCarplateNo() + "|" + truck.toString() + "|" + timing + "}'></td>");
                                                 } else {
                                                     out.println("<td></td>");
                                                 }
@@ -168,7 +204,7 @@
                                                     }
                                                     
                                                     if(status.equals("Confirmed")) {
-                                                        out.println("<td class='occupied tooltipp' data-state='occupied'><input type='hidden' value='{" + timing + "}'>");
+                                                        out.println("<td class='occupied tooltipp' data-state='occupied'><input type='hidden' value='{" + truck.getCarplateNo() + "|" + truck.toString() + "|" + timing + "}'>");
                                     %>
                                                         <table class='tooltiptextt' width="100%">
                                                             <tr>
@@ -204,10 +240,10 @@
                                                         out.println("</td>");
                                                     }else{
                                                         out.println("<td class='tooltipp' data-state='' onclick='selectDOMSlot(this)'");
-                                                        if (timeslots.contains(timing)) {
+                                                        if (selecteds.contains(truck.getCarplateNo()) && timeslots.contains(truck.getCarplateNo() + "_" + timing)) {
                                                             out.println("class='selected' data-state='selected'");
                                                         }
-                                                        out.println("><input type='hidden' value='{" + timing + "}'>");
+                                                        out.println("><input type='hidden' value='{" + truck.getCarplateNo() + "|" + truck.toString() + "|" + timing + "}'>");
                                     %>
                                                         <table class='tooltiptextt' width="100%">
                                                             <tr>
@@ -245,10 +281,10 @@
                                                 } else {
                                                     if (!fr.isEmpty() && !tot.isEmpty()) {
                                                         out.println("<td onclick='selectDOMSlot(this)'");
-                                                        if (timeslots.contains(timing)) {
+                                                        if (selecteds.contains(truck.getCarplateNo()) && timeslots.contains(truck.getCarplateNo() + "_" + timing)) {
                                                             out.println("class='selected' data-state='selected'");
                                                         }
-                                                        out.println("><input type='hidden' value='{" + timing + "}'></td>");
+                                                        out.println("><input type='hidden' value='{" + truck.getCarplateNo() + "|" + truck.toString() + "|" + timing + "}'></td>");
                                                     } else {
                                                         out.println("<td></td>");
                                                     }
@@ -257,6 +293,9 @@
                                         }
                                 %>
                                 </tr>
+                                <%
+                                    }
+                                %>
                             </table>
                         </div>
                     </td>
@@ -316,21 +355,43 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">Time Slot: </label>
-                                <div class="col-sm-6">
-                                    <table id="move_timeslot_table">
-                                        <tbody>
-                                            <%
-                                                if (timeslotArray != null) {
-                                                    for (int i = 0; i < timeslotArray.length; i++) {
-                                                        out.println("<tr data-value='{" + timeslotArray[i] + "}'><td>" + timeslotArray[i] + "<input type='hidden' name='move_timeslot' value='" + timeslotArray[i] + "'></td>");
-                                                        out.println("<td><input type='button' value='x' class='form-control' onclick='deleteSurveyRow(this)'/></td></tr>");
-                                                    }
-                                                }
-                                            %>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <label class="col-sm-4 control-label">Truck(s) assigned: </label>
+                                <table id="truck_assigned_table" width="100%">
+                                    <tbody>
+                                        <%
+                                            for(String cp : selecteds){
+                                                Truck truck = TruckDAO.getTruckByCarplate(cp);
+                                        %>
+                                        <tr id="<%=cp%>">
+                                            <td>
+                                                <input type="hidden" name="move_carplates" value="<%=cp%>">
+                                                <input type="hidden" name="move_truck_name" value="<%=truck%>">
+                                                <label name="truck_label"><%=truck%></label>
+                                            </td>
+                                            <td>
+                                                <table id="<%=cp%>_timeslot_table">
+                                                    <tbody>
+                                                        <%
+                                                            ArrayList<String> list = timeslotHM.get(cp);
+                                                            for (int i = 0; i < list.size(); i++) {
+                                                                String li = list.get(i);
+                                                        %>
+                                                        <tr data-value='{<%=cp%>|<%=truck%>|<%=li%>}'>
+                                                            <td><%=li%><input type='hidden' name='<%=cp%>_move_timeslot' value='<%=li%>'></td>
+                                                            <td><input type='button' value='x' class='form-control' onclick='deleteMoveTimeRow(this)'/></td>
+                                                        </tr>
+                                                        <%
+                                                            }
+                                                        %>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">From: </label>

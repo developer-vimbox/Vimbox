@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 26, 2016 at 04:17 AM
+-- Generation Time: Sep 03, 2016 at 03:43 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -242,7 +242,9 @@ CREATE TABLE IF NOT EXISTS `lead_followups` (
 
 CREATE TABLE IF NOT EXISTS `operations_assigned` (
   `lead_id` int(10) NOT NULL,
+  `job_id` int(10) NOT NULL,
   `ss_owner` varchar(10) NOT NULL,
+  `carplate_no` varchar(255) NOT NULL,
   `address_tag` varchar(50) NOT NULL,
   `address` varchar(255) NOT NULL,
   `dom` date NOT NULL,
@@ -251,7 +253,21 @@ CREATE TABLE IF NOT EXISTS `operations_assigned` (
   `timeslot` varchar(255) NOT NULL,
   `remarks` varchar(255) NOT NULL,
   `status` varchar(20) NOT NULL,
-  PRIMARY KEY (`lead_id`,`dom`,`start_datetime`)
+  PRIMARY KEY (`lead_id`,`carplate_no`,`dom`,`start_datetime`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `operations_attendance`
+--
+
+CREATE TABLE IF NOT EXISTS `operations_attendance` (
+  `job_id` int(10) NOT NULL,
+  `supervisor` varchar(20) NOT NULL,
+  `assigned` varchar(255) NOT NULL,
+  `pt_movers` varchar(255) NOT NULL,
+  PRIMARY KEY (`job_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -276,6 +292,16 @@ CREATE TABLE IF NOT EXISTS `payslips` (
   `employer_cpf` double NOT NULL,
   PRIMARY KEY (`payslip_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `payslips`
+--
+
+INSERT INTO `payslips` (`payslip_id`, `nric`, `payment_mode`, `start_date`, `end_date`, `payment_date`, `basic`, `allowance`, `deduction`, `overtime_hr`, `overtime`, `additional`, `employer_cpf`) VALUES
+(21003844, 'S9887362K', 'Cheque', '2016-08-01', '2016-08-31', '2016-08-31', 3000, 0, 600, 0, 0, 0, 510),
+(22530242, 'S9289374H', 'Cheque', '2016-08-01', '2016-08-31', '2016-08-31', 3000, 0, 600, 0, 0, 0, 510),
+(72599972, '1234567', 'Cheque', '2016-08-01', '2016-08-31', '2016-08-31', 1234, 0, 315.36, 0, 0, 100, 209.78),
+(88547686, 'S9344895B', 'Cheque', '2016-08-01', '2016-08-31', '2016-08-31', 6000, 0, 1200, 0, 0, 0, 1020);
 
 -- --------------------------------------------------------
 
@@ -303,6 +329,13 @@ CREATE TABLE IF NOT EXISTS `payslips_apbd` (
   PRIMARY KEY (`payslip_id`,`description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `payslips_apbd`
+--
+
+INSERT INTO `payslips_apbd` (`payslip_id`, `description`, `breakdown`) VALUES
+(72599972, 'trfswd', 100);
+
 -- --------------------------------------------------------
 
 --
@@ -315,6 +348,17 @@ CREATE TABLE IF NOT EXISTS `payslips_dbd` (
   `breakdown` double NOT NULL,
   PRIMARY KEY (`payslip_id`,`description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `payslips_dbd`
+--
+
+INSERT INTO `payslips_dbd` (`payslip_id`, `description`, `breakdown`) VALUES
+(21003844, 'Employee''s CPF Deduction', 600),
+(22530242, 'Employee''s CPF Deduction', 600),
+(72599972, 'Absent - 1 day(s)', 68.56),
+(72599972, 'Employee''s CPF Deduction', 246.8),
+(88547686, 'Employee''s CPF Deduction', 1200);
 
 -- --------------------------------------------------------
 
@@ -650,6 +694,26 @@ CREATE TABLE IF NOT EXISTS `ticket_comments` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `trucks`
+--
+
+CREATE TABLE IF NOT EXISTS `trucks` (
+  `carplate_no` varchar(10) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  PRIMARY KEY (`carplate_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `trucks`
+--
+
+INSERT INTO `trucks` (`carplate_no`, `name`) VALUES
+('SFX6729B', 'Truck 2'),
+('SGX4526F', 'Truck 1');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -713,6 +777,16 @@ CREATE TABLE IF NOT EXISTS `users_attendance_record` (
   `duration` int(11) NOT NULL,
   PRIMARY KEY (`nric`,`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users_attendance_record`
+--
+
+INSERT INTO `users_attendance_record` (`nric`, `date`, `status`, `duration`) VALUES
+('1234567', '2016-08-30', 'Absent', 0),
+('S9289374H', '2016-08-30', 'Present', 0),
+('S9344895B', '2016-08-30', 'Present', 0),
+('S9887362K', '2016-08-30', 'Present', 0);
 
 -- --------------------------------------------------------
 

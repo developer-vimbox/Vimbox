@@ -1,5 +1,6 @@
+<%@page import="com.vimbox.operations.Truck"%>
 <%@page import="com.vimbox.operations.Job"%>
-<%@page import="com.vimbox.database.JobsDAO"%>
+<%@page import="com.vimbox.database.JobDAO"%>
 <%@page import="org.joda.time.format.DateTimeFormat"%>
 <%@page import="org.joda.time.format.DateTimeFormatter"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -26,7 +27,8 @@
 <%
     int iYear = Integer.parseInt(request.getParameter("getYear"));
     int iMonth = Integer.parseInt(request.getParameter("getMonth"));
-
+    String ttCarplate = request.getParameter("getTT");
+    
     Calendar ca = new GregorianCalendar();
     int iTDate = ca.get(Calendar.DATE);
     int iTYear = ca.get(Calendar.YEAR);
@@ -49,7 +51,7 @@
     DateTime dt = new DateTime();
     DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd");
 
-    ArrayList<Job> jobs = JobsDAO.getAllJobs();
+    ArrayList<Job> jobs = JobDAO.getJobsByTruck(ttCarplate);
 %>
 
 <style type="text/css">
@@ -178,6 +180,7 @@
 
                                     if ((dayOfMonth == curDate) && (iMonth == (surveyMonth - 1)) && (iYear == surveyYear) && !status.equals("Cancelled")) {
                                         int lead = job.getLeadId();
+                                        Truck truck = job.getAssignedTruck();
                                         HashMap<String, String> addresses = job.getAddresses();
                                         ArrayList<String> from = new ArrayList<String>();
                                         ArrayList<String> to = new ArrayList<String>();
@@ -205,6 +208,12 @@
                                         <tr>
                                             <td align="right" style="vertical-align: top; padding-right: 5px; width: 30%;">Lead ID:</td>
                                             <td align="left"><%=lead%></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" style="vertical-align: top; padding-right: 5px;">Truck:</td>
+                                            <td align="left">
+                                                <%=truck%>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td align="right" style="vertical-align: top; padding-right: 5px;">Time:</td>
@@ -265,6 +274,6 @@
 <br>
 <div>
     Status:
-    <label class="btn btn-warning">Pending</label>
-    <label class="btn btn-success">Completed</label>
+    <label class="btn btn-warning">Booked</label>
+    <label class="btn btn-success">Confirmed</label>
 </div>

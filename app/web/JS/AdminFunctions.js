@@ -32,10 +32,20 @@ function admViewMovCal(){
     $("#dYear").html(y); 
     
     var content = document.getElementById("ssCalTable");
-    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m}, function (data) {
+    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt"}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
+}
+
+function admLeads_setup(){
+    admLeads_search('');
+}
+
+function admLeads_search(keyword){
+    $.get("LoadAdminLeads.jsp", {keyword: keyword}, function (data) {
+        document.getElementById("admLeadsTable").innerHTML = data;
+    });
 }
 
 

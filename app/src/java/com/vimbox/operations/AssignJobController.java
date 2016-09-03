@@ -1,8 +1,7 @@
 package com.vimbox.operations;
 
 import com.google.gson.JsonObject;
-import com.vimbox.database.JobDAO;
-import com.vimbox.database.SiteSurveyDAO;
+import com.vimbox.database.JobsAttendanceDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -11,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CancelJobController", urlPatterns = {"/CancelJobController"})
-public class CancelJobController extends HttpServlet {
+@WebServlet(name = "AssignJobController", urlPatterns = {"/AssignJobController"})
+public class AssignJobController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,13 +29,13 @@ public class CancelJobController extends HttpServlet {
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
         
-        int leadId = Integer.parseInt(request.getParameter("leadId"));
-        String date = request.getParameter("date");
-        String timeslot = request.getParameter("timeslot");
+        int jobId = Integer.parseInt(request.getParameter("jobId"));
+        String supervisor = request.getParameter("supervisor");
+        String assigned = request.getParameter("assigned");
         
-        JobDAO.cancelJob(leadId, date, timeslot);
+        JobsAttendanceDAO.assignJobAttendance(jobId, supervisor, assigned);
         jsonOutput.addProperty("status", "SUCCESS");
-        jsonOutput.addProperty("message", "Job assignment cancelled!");
+        jsonOutput.addProperty("message", "Job assigned!");
         jsonOut.println(jsonOutput);
     }
 

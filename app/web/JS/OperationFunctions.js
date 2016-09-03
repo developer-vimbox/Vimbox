@@ -1,3 +1,54 @@
+function assign_jobs_setup() {
+    loadAssignJobs('');
+}
+
+function loadAssignJobs(keyword) {
+    $.get("LoadAssignJobs.jsp", {keyword: keyword}, function (data) {
+        document.getElementById("jobs_table").innerHTML = data;
+    });
+}
+
+function assignJobModal(jobId){
+    $.get("LoadAssignJobModal.jsp", {jobId: jobId}, function (data) {
+        document.getElementById("assignJobContent").innerHTML = data;
+        document.getElementById("assignJobModal").style.display = "block";
+    });
+}
+
+function assignJob(){
+    var modal = document.getElementById("job_error_modal");
+    var status = document.getElementById("job_error_status");
+    var message = document.getElementById("job_error_message");
+    
+    var jobId = document.getElementById("jobId").value;
+    var supervisor = document.getElementsByName("supervisor")[0].value;
+    var assigned_users = "";
+    $(document.getElementsByName("otherFTMovers")).each(function () {
+        var activeElement = this;
+        var tagname = activeElement.tagName;
+        var divId = activeElement.id;
+        while (tagname !== 'DIV' || (divId !== "additionalAssigned" && divId !== "dynamicInput")) {
+            activeElement = activeElement.parentNode;
+            tagname = activeElement.tagName;
+            divId = activeElement.id;
+        }
+        
+        if (divId !== "additionalAssigned") {
+            assigned_users += ($(this).val() + "|");
+        }
+    });
+    
+    $.get("AssignJobController", {jobId: jobId, supervisor: supervisor, assigned: assigned_users}, function (data) {
+        status.innerHTML = data.status;
+        message.innerHTML = data.message;
+        modal.style.display = "block";
+        setTimeout(function () {
+            modal.style.display = "none";
+            document.getElementById("assignJobModal").style.display = "none";
+        }, 500);
+    });
+}
+
 function sales_operation_setup() {
     loadSalesOperations('');
 }
