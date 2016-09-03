@@ -117,10 +117,10 @@ public class SaveSiteSurveyController extends HttpServlet {
                 String[] custItemCharges = request.getParameterValues(salesDiv + "_" + ss + "_CustomerAddCharges");
                 String[] custItemQtys = request.getParameterValues(salesDiv + "_" + ss + "_CustomerQuantity");
                 String[] custItemUnits = request.getParameterValues(salesDiv + "_" + ss + "_CustomerUnits");
-                for (String custCh : custItemCharges) {
-                    System.out.println(custCh);
-                }
-                if (custItemNames != null) {
+                if (custItemCharges != null && custItemNames != null && custItemRemarks != null && custItemQtys != null && custItemUnits != null) {
+                    for (String custCh : custItemCharges) {
+                        System.out.println(custCh);
+                    }
                     // Enter into leadcustitem database //
                     LeadDAO.createSiteLeadCustItem(leadId, sD, ss, custItemNames, custItemRemarks, custItemCharges, custItemQtys, custItemUnits);
                     //----------------------------------//
@@ -133,8 +133,8 @@ public class SaveSiteSurveyController extends HttpServlet {
                 String[] vimboxItemCharges = request.getParameterValues(salesDiv + "_" + ss + "_VimboxAddCharges");
                 String[] vimboxItemQtys = request.getParameterValues(salesDiv + "_" + ss + "_VimboxQuantity");
                 String[] vimboxItemUnits = request.getParameterValues(salesDiv + "_" + ss + "_VimboxUnits");
-
-                if (vimboxItemNames != null) {
+                
+                if (vimboxItemNames != null &&  vimboxItemRemarks != null && vimboxItemCharges != null && vimboxItemQtys != null && vimboxItemUnits != null) {
                     // Enter into leadvimboxitem database //
                     LeadDAO.createSiteLeadVimboxItem(leadId, sD, ss, vimboxItemNames, vimboxItemRemarks, vimboxItemCharges, vimboxItemQtys, vimboxItemUnits);
                     //----------------------------------//
@@ -143,36 +143,40 @@ public class SaveSiteSurveyController extends HttpServlet {
             }
 
             String surveyAreasDBString = "";
-            for (int i = 0; i < surveyAreasDBs.size(); i++) {
-                String surveyAreasDB = surveyAreasDBs.get(i);
-                surveyAreasDBString += surveyAreasDB;
-                if (i < surveyAreasDBs.size() - 1) {
-                    surveyAreasDBString += "|";
+            if (surveyAreasDBs != null && surveyAreaNamesDBs != null) {
+                for (int i = 0; i < surveyAreasDBs.size(); i++) {
+                    String surveyAreasDB = surveyAreasDBs.get(i);
+                    surveyAreasDBString += surveyAreasDB;
+                    if (i < surveyAreasDBs.size() - 1) {
+                        surveyAreasDBString += "|";
+                    }
                 }
-            }
 
-            String surveyAreasNamesDBString = "";
-            for (int i = 0; i < surveyAreaNamesDBs.size(); i++) {
-                String surveyAreaNamesDB = surveyAreaNamesDBs.get(i);
-                surveyAreasNamesDBString += surveyAreaNamesDB;
-                if (i < surveyAreaNamesDBs.size() - 1) {
-                    surveyAreasNamesDBString += "|";
+                String surveyAreasNamesDBString = "";
+                for (int i = 0; i < surveyAreaNamesDBs.size(); i++) {
+                    String surveyAreaNamesDB = surveyAreaNamesDBs.get(i);
+                    surveyAreasNamesDBString += surveyAreaNamesDB;
+                    if (i < surveyAreaNamesDBs.size() - 1) {
+                        surveyAreasNamesDBString += "|";
+                    }
                 }
-            }
 
-            LeadDAO.updateLeadSalesDiv(leadId, sD, surveyAreasDBString, surveyAreasNamesDBString);
+                LeadDAO.updateLeadSalesDiv(leadId, sD, surveyAreasDBString, surveyAreasNamesDBString);
+            }
         }
 
         jsonOutput.addProperty("status", "SUCCESS");
         String message = "";
         String completed = request.getParameter("complete");
-        if (completed.equals("yes")) {
-            SiteSurveyDAO.completeSiteSurvey(leadId, date, timeslot);
-            jsonOutput.addProperty("completed", "YES");
-            message = "Survey completed!";
-        } else {
-            jsonOutput.addProperty("completed", "NO");
-            message = "Survey saved!";
+        if (completed != null) {
+            if (completed.equals("yes")) {
+                SiteSurveyDAO.completeSiteSurvey(leadId, date, timeslot);
+                jsonOutput.addProperty("completed", "YES");
+                message = "Survey completed!";
+            } else {
+                jsonOutput.addProperty("completed", "NO");
+                message = "Survey saved!";
+            }
         }
 
         jsonOutput.addProperty("message", message);

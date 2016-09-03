@@ -34,6 +34,7 @@
                 </div>
             </div>
         </div>
+        
 
         <div id="item_details_modal" class="modal">
             <!-- Modal content -->
@@ -251,10 +252,15 @@
                                                                     <td><%=lead.getId()%></td>
                                                                 </tr>
                                                             </table>
-                                                            <input class='btn btn-default' type="submit" value="SAVE">
+                                                            <input class='btn btn-default' type="submit" value="SAVE" style="float: right;">
                                                             <br><br>
-                                                            <h2>FROM</h2>
-                                                            <%
+															<ul class="nav-responsive nav nav-tabs">
+																<li class="active"><a href="#from" data-toggle="tab">FROM</a></li>
+																<li ><a href="#to" data-toggle="tab">TO</a></li>
+															</ul>
+															<div class="tab-content">
+																<div id="from" class="tab-pane active">
+																	 <%
                                                                 for (String address : addressesFrom) {
                                                                     String addressTab = addressTabs.get(address);
                                                                     String[] addrDetails = lead.getStoreysPushingDFrom(address);
@@ -602,9 +608,10 @@
                                                                     out.println("</fieldset>");
                                                                 }
                                                             %>
-                                                            <br>
-                                                            <h2>TO</h2>
-                                                            <%
+																</div>
+																
+																<div id='to' class="tab-pane">
+																	<%
                                                                 for (String address : addressesTo) {
                                                                     out.println("<fieldset>");
                                                                     out.println("<legend><b>" + address + "</b></legend>");
@@ -950,6 +957,11 @@
                                                                     out.println("</fieldset>");
                                                                 }
                                                             %>
+																</div>
+															
+															</div>
+                                                           
+                                                            
                                                         </div>
 
                                                         <%

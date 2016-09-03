@@ -16,7 +16,7 @@ public class SiteSurveyDAO {
     private static final String GET_SITE_SURVEYS_BY_USER_DATE = "SELECT * FROM sitesurvey_assigned WHERE ss_user=? AND start_datetime LIKE ? AND lead_id != ? AND status != 'Cancelled' ORDER BY start_datetime";
     private static final String GET_NC_SITE_SURVEYS_BY_USER_KEYWORD = "SELECT * FROM sitesurvey_assigned WHERE ss_user=? AND (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?) AND status!='Completed' AND status!='Cancelled'";
     private static final String GET_C_SITE_SURVEYS_BY_USER_KEYWORD = "SELECT * FROM sitesurvey_assigned WHERE ss_user=? AND (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?) AND status='Completed'";
-    private static final String GET_SITE_SURVEYS_BY_OWNER_KEYWORD = "SELECT * FROM sitesurvey_assigned WHERE (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?)";
+    private static final String GET_SITE_SURVEYS_BY_OWNER_KEYWORD = "SELECT * FROM sitesurvey_assigned WHERE ss_owner=? AND (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?)";
     private static final String CREATE_SITE_SURVEY_ASSIGNMENT = "INSERT INTO sitesurvey_assigned VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_SITE_SURVEYS_BY_LEAD_ID = "SELECT * FROM sitesurvey_assigned WHERE lead_id = ?";
     private static final String GET_SITE_SURVEYS_BY_LEAD_DATE_TIMESLOT = "SELECT * FROM sitesurvey_assigned WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
@@ -233,6 +233,54 @@ public class SiteSurveyDAO {
         }
         return results;
     }
+    
+       public static SiteSurvey  getSiteSurveysByLeadIdStartDateTimeslot(int leadId, String date, String timeslot) {
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        SiteSurvey results = null;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_SITE_SURVEYS_BY_LEAD_DATE_TIMESLOT);
+            ps.setInt(1, leadId);
+            ps.setString(2, "%" + date + "%");
+            ps.setString(3, timeslot);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User owner = UserDAO.getUserByNRIC(rs.getString("ss_owner"));
+                String userId = rs.getString("ss_user");
+                User user = UserDAO.getUserByNRIC(userId);
+
+                String address = rs.getString("address");
+                String addressTag = rs.getString("address_tag");
+               
+
+                String tempStartString = rs.getString("start_datetime");
+                String datetimeString = tempStartString.substring(0, tempStartString.lastIndexOf("."));
+                DateTime start = dtf.parseDateTime(datetimeString);
+
+                tempStartString = rs.getString("end_datetime");
+                datetimeString = tempStartString.substring(0, tempStartString.lastIndexOf("."));
+                DateTime end = dtf.parseDateTime(datetimeString);
+
+                String remarks = rs.getString("remarks");
+                String status = rs.getString("status");
+
+              
+                    results = new SiteSurvey(leadId, owner, user, address, addressTag, start, end, timeslot, remarks, status);
+               
+
+            }
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
+    }
 
     public static ArrayList<SiteSurvey> getNonCompletedSiteSurveysByUserKeyword(String nric, String keyword) {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
@@ -340,32 +388,31 @@ public class SiteSurveyDAO {
         return results;
     }
 
-    public static ArrayList<SiteSurvey> getSiteSurveysByKeyword(String keyword) {
+    public static ArrayList<SiteSurvey> getSiteSurveysByOwnerKeyword(String nric, String keyword) {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         ArrayList<SiteSurvey> results = new ArrayList<SiteSurvey>();
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+        User owner = UserDAO.getUserByNRIC(nric);
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_SITE_SURVEYS_BY_OWNER_KEYWORD);
-            ps.setString(1, "%" + keyword + "%");
+            ps.setString(1, nric);
             ps.setString(2, "%" + keyword + "%");
             ps.setString(3, "%" + keyword + "%");
             ps.setString(4, "%" + keyword + "%");
+            ps.setString(5, "%" + keyword + "%");
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 int leadId = Integer.parseInt(rs.getString("lead_id"));
                 User user = UserDAO.getUserByNRIC(rs.getString("ss_user"));
-                User owner = UserDAO.getUserByNRIC(rs.getString("ss_owner"));
                 String address = rs.getString("address");
                 String addressTag = rs.getString("address_tag");
                 String[] addrArray = address.split("\\|");
                 String[] tagArray = addressTag.split("\\|");
 
-                
                 String tempStartString = rs.getString("start_datetime");
                 String datetimeString = tempStartString.substring(0, tempStartString.lastIndexOf("."));
                 DateTime start = dtf.parseDateTime(datetimeString);

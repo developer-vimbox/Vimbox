@@ -981,12 +981,12 @@ function complete() {
     });
 }
 
-function sales_survey_setup() {
-    loadSalesSurveys('');
+function sales_survey_setup(nric) {
+    loadSalesSurveys('', nric);
 }
 
-function loadSalesSurveys(keyword) {
-    $.get("LoadSalesSurveys.jsp", {keyword: keyword}, function (data) {
+function loadSalesSurveys(keyword, nric) {
+    $.get("LoadSalesSurveys.jsp", {keyword: keyword, nric: nric}, function (data) {
         document.getElementById("surveys_table").innerHTML = data;
     });
 }
@@ -1106,4 +1106,34 @@ function changeMonthAndYear() {
     $.get("LoadMySurveyMonthlySchedule.jsp", {getYear: iYear, getMonth: iMonth}, function (data) {
         content.innerHTML = data;
     });
+}
+function viewSurvey(leadId, date, timeslot) {
+    var modal = document.getElementById("view_survey_modal");
+    var content = document.getElementById("view_survey_message");
+    $.get("RetrieveSurveyDetails.jsp", {getLid: leadId, getStartTime:date, getTimeSlot: timeslot}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
+}
+
+function openSurvey(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+    $('#' + cityName).scrollView();
 }
