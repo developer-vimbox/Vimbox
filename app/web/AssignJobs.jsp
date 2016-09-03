@@ -11,17 +11,6 @@
     </head>
     <%@include file="header.jsp"%>
     <body onload="assign_jobs_setup()">
-        <div id="job_error_modal" class="modal">
-            <!-- Modal content -->
-            <div class="message-modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('job_error_modal')">×</span>
-                    <div id="job_error_status"></div>
-                    <hr>
-                    <div id="job_error_message"></div>
-                </div>
-            </div>
-        </div> 
         <div id="viewLeadModal" class="modal">
             <div class="modal-content" style="width: 80%;">
                 <div class="modal-header">
@@ -44,6 +33,17 @@
                 </div>
             </div>
         </div>
+        <div id="job_error_modal" class="modal">
+            <!-- Modal content -->
+            <div class="message-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('job_error_modal')">×</span>
+                    <div id="job_error_status"></div>
+                    <hr>
+                    <div id="job_error_message"></div>
+                </div>
+            </div>
+        </div> 
         <div id="page-content-wrapper">
             <div id="page-content">
                 <div class="container">
