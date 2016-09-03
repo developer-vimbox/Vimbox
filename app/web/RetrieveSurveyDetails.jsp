@@ -225,7 +225,7 @@
                                                                         }
                                                                     %>
                                                                     <%}
-                                                                     } else {%>
+                                                                    } else {%>
                                                                     <tr>
                                                                         <th>Item</th>
                                                                         <th>Remarks</th>
@@ -266,10 +266,10 @@
                                                                     <col width="10%">
                                                                     <col width="10%">
                                                                     <col width="10%">
-                                                                                   <%
-                                                                        if (surveyArea != null && surveyArea.size() > 0) {
-                                                                            for (LeadArea leadarea : surveyArea) {
-                                                                                String leadname = leadarea.getLeadName();%>
+                                                                    <%
+                                                                                       if (surveyArea != null && surveyArea.size() > 0) {
+                                                                                           for (LeadArea leadarea : surveyArea) {
+                                                                                               String leadname = leadarea.getLeadName();%>
                                                                     <tr>
                                                                         <th colspan="5"><center><b><%=leadname%></b></center></th>
                                                                     </tr>
@@ -297,7 +297,7 @@
                                                                         }
                                                                     %>
                                                                     <%}
-                                                                     } else {%>
+                                                                    } else {%>
                                                                     <tr>
                                                                         <th>Item</th>
                                                                         <th>Remarks</th>
@@ -306,27 +306,28 @@
                                                                         <th>Units</th>
                                                                     </tr> 
                                                                     <%
-                                                                        ArrayList<Item> vimboxItems = leadDiv.getVimboxItems();
-                                                                        for (Item item : vimboxItems) {
-                                                                            String tr = "<tr><td>" + item.getName() + "</td>";
-                                                                            tr += "<td>&nbsp;</td>";
-                                                                            tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
-                                                                            tr += "<td align='center'>" + item.getUnits() + "</td>";
-                                                                            tr += "<td align='center'>" + item.getUnits() + "</td>";
-                                                                            out.println(tr);
-                                                                        }
+                                                                            ArrayList<Item> vimboxItems = leadDiv.getVimboxItems();
+                                                                            for (Item item : vimboxItems) {
+                                                                                String tr = "<tr><td>" + item.getName() + "</td>";
+                                                                                tr += "<td>&nbsp;</td>";
+                                                                                tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+                                                                                tr += "<td align='center'>" + item.getUnits() + "</td>";
+                                                                                tr += "<td align='center'>" + item.getUnits() + "</td>";
+                                                                                out.println(tr);
+                                                                            }
 
-                                                                        ArrayList<Item> materials = leadDiv.getMaterials();
-                                                                        for (Item item : materials) {
-                                                                            String tr = "<tr><td>" + item.getName() + "</td>";
-                                                                            tr += "<td>&nbsp;</td>";
-                                                                            tr += "<td align='center'>" + item.getCharges() + "</td>";
-                                                                            tr += "<td align='center'>" + item.getUnits() + "</td>";
-                                                                            tr += "<td align='center'>&nbsp;</td>";
-                                                                            out.println(tr);
+                                                                            ArrayList<Item> materials = leadDiv.getMaterials();
+                                                                            for (Item item : materials) {
+                                                                                String tr = "<tr><td>" + item.getName() + "</td>";
+                                                                                tr += "<td>&nbsp;</td>";
+                                                                                tr += "<td align='center'>" + item.getCharges() + "</td>";
+                                                                                tr += "<td align='center'>" + item.getUnits() + "</td>";
+                                                                                tr += "<td align='center'>&nbsp;</td>";
+                                                                                out.println(tr);
+                                                                            }
                                                                         }
                                                                     %>
-                                                                   
+
                                                                 </table>
                                                             </div>
                                                         </td>
