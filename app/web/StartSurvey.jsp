@@ -38,12 +38,12 @@
 
         <div id="item_details_modal" class="modal">
             <!-- Modal content -->
-            <div class="item-details-modal-content">
+            <div class="item-details-modal-content" style="width: 50%;height: auto;">
                 <div class="modal-body" style="height:100%">
                     <span class="close" onclick="closeItemModal('item_details_modal')">×</span>
                     <input type="hidden" id="itemTableId">
                     <input type="hidden" id="itemSalesDiv">
-                    <table style='width:100%;height:95%;border-color: #dfe8f1;' border="1" id='item_details_table'>
+                    <table class="table table-bordered" style='width:100%;height:70%;border-color: #dfe8f1;' border="1" id='item_details_table'>
                         <tr height="10%">
                             <td colspan="3">Item : <label id="itemName"></label></td>
                         </tr>
@@ -75,7 +75,7 @@
                         </tr>
                         <tr height="50%">
                             <td colspan="3">
-                                <table style='width:100%;height:100%;border-color: #dfe8f1;' border="1">
+                                <table class="table table-bordered" style='width:100%;height:100%;border-color: #dfe8f1;' border="1">
                                     <%                                                                    String[] numpad = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", " ", "0", "<"};
                                         for (int i = 0; i < numpad.length; i += 3) {
                                             out.println("<tr>");
@@ -149,7 +149,6 @@
             <div id="page-content-custom">
                 <div class="container">
                     <div id="page-title">
-                        <h2 style="margin-top: 2%;">My Sites</h2> <br/>
                         <div class="panel">
                             <div class="panel-body">
                                 <div class="form-horizontal">
@@ -158,8 +157,8 @@
                                         <table style="width:100%;height:100%;">
                                             <col width="250">
                                             <tr>
-                                                <td>
-                                                    <table style="width:100%;height:100%;border-color: #dfe8f1;" border="1" >
+                                                <td style="padding-top: 10px;">
+                                                    <table class="table table-bordered" style="width:100%;height:100%;;" border="1" >
                                                         <tr height="10%">
                                                             <td>
                                                                 <input type="hidden" id="complete_status" name="complete" value="no">
@@ -168,10 +167,10 @@
                                                             </td>
                                                         </tr>
                                                         <tr height="10%">
-                                                            <td align='center' class="selected" id="siteInfo_tab" onclick='displaySiteInfo()'>Site Info</td>
+                                                            <td align='center' class="selected" id="siteInfo_tab" onclick='displaySiteInfo()'><center style="color: black;">Site Info</center></td>
                                                         </tr>
                                                         <tr height="10%">
-                                                            <td align="center">FROM</td>
+                                                            <td><center>FROM</center></td>
                                                         </tr>
                                                         <tr>
                                                             <td valign='top'>
@@ -179,15 +178,15 @@
                                                                     int counter = 1;
                                                                     HashMap<String, String> addressTabs = new HashMap<String, String>();
                                                                     for (String address : addressesFrom) {
-                                                                        out.println("<table style='border-color: #dfe8f1;' border='1' id='addressTab" + counter + "' width='100%'>");
+                                                                        out.println("<table class='table table-bordered' border='1' id='addressTab" + counter + "' width='100%'>");
                                                                         addressTabs.put(address, "addressTab" + counter);
                                                                         LeadDiv sD = lead.getSalesDivByAddress(address);
                                                                         String salesDiv = sD.getSalesDiv().split("\\|")[0];
                                                                         out.println("<tr class='survey_address_tab' onclick='expandAddressTab(this)'>");
-                                                                        out.println("<td>" + address + "<input type='hidden' name='salesDiv' value='" + salesDiv + "|" + address + "'></td>");
+                                                                        out.println("<td><center>" + address + "<input type='hidden' name='salesDiv' value='" + salesDiv + "|" + address + "'></center></td>");
                                                                         out.println("</tr>");
                                                                         out.println("<tr>");
-                                                                        out.println("<td align='center' onclick=\"addArea('addressTab" + counter + "', '" + salesDiv + "')\">Add New Area</td>");
+                                                                        out.println("<td onclick=\"addArea('addressTab" + counter + "', '" + salesDiv + "')\"><center>Add New Area</center></td>");
                                                                         out.println("</tr>");
                                                                         ArrayList<LeadArea> leadAreas = sD.getLeadAreas();
                                                                         for (LeadArea leadArea : leadAreas) {
@@ -197,7 +196,7 @@
                                                                                 String leadName = leadArea.getLeadName();
                                                                                 String aT = leadAreaDiv[0];
                                                                                 String areaCounter = leadAreaDiv[1];
-                                                                                out.println("<tr id='" + aT + "_area_" + areaCounter + "' onclick=\"displaySiteDiv(this, '" + aT + "_div_" + areaCounter + "')\" class='survey_area_tab'><td align='center'><input type='hidden' name='survey_area' value='" + salesDiv + "|" + aT + "_" + areaCounter + "'><label id='" + aT + "_lbl_" + areaCounter + "'>" + leadName + "</label></td></tr>");
+                                                                                out.println("<tr id='" + aT + "_area_" + areaCounter + "' onclick=\"displaySiteDiv(this, '" + aT + "_div_" + areaCounter + "')\" class='survey_area_tab'><td><center><input type='hidden' name='survey_area' value='" + salesDiv + "|" + aT + "_" + areaCounter + "'><label id='" + aT + "_lbl_" + areaCounter + "'>" + leadName + "</label></center></td></tr>");
                                                                             }
                                                                         }
                                                                         out.println("</table>");
@@ -207,21 +206,21 @@
                                                             </td>
                                                         </tr>
                                                         <tr height="10%">
-                                                            <td align="center">TO</td>
+                                                            <td><center>TO</center></td>
                                                         </tr>
                                                         <tr>
                                                             <td valign='top'>
                                                                 <%
                                                                     for (String address : addressesTo) {
-                                                                        out.println("<table style='border-color: #dfe8f1;' border='1' id='addressTab" + counter + "' width='100%'>");
+                                                                        out.println("<table class='table table-bordered' border='1' id='addressTab" + counter + "' width='100%'>");
                                                                         addressTabs.put(address, "addressTab" + counter);
                                                                         LeadDiv sD = lead.getSalesDivByAddress(address);
                                                                         String salesDiv = sD.getSalesDiv().split("\\|")[0];
                                                                         out.println("<tr class='survey_address_tab' onclick='expandAddressTab(this)'>");
-                                                                        out.println("<td>" + address + "<input type='hidden' name='salesDiv' value='" + salesDiv + "|" + address + "'></td>");
+                                                                        out.println("<td><center>" + address + "<input type='hidden' name='salesDiv' value='" + salesDiv + "|" + address + "'></center></td>");
                                                                         out.println("</tr>");
                                                                         out.println("<tr>");
-                                                                        out.println("<td align='center' onclick=\"addArea('addressTab" + counter + "', '" + salesDiv + "')\">Add New Area</td>");
+                                                                        out.println("<td onclick=\"addArea('addressTab" + counter + "', '" + salesDiv + "')\"><center>Add New Area</center></td>");
                                                                         out.println("</tr>");
                                                                         ArrayList<LeadArea> leadAreas = sD.getLeadAreas();
                                                                         for (LeadArea leadArea : leadAreas) {
@@ -231,7 +230,7 @@
                                                                                 String leadName = leadArea.getLeadName();
                                                                                 String aT = leadAreaDiv[0];
                                                                                 String areaCounter = leadAreaDiv[1];
-                                                                                out.println("<tr id='" + aT + "_area_" + areaCounter + "' onclick=\"displaySiteDiv(this, '" + aT + "_div_" + areaCounter + "')\" class='survey_area_tab'><td align='center'><input type='hidden' name='survey_area' value='" + salesDiv + "|" + aT + "_" + areaCounter + "'><label id='" + aT + "_lbl_" + areaCounter + "'>" + leadName + "</label></td></tr>");
+                                                                                out.println("<tr id='" + aT + "_area_" + areaCounter + "' onclick=\"displaySiteDiv(this, '" + aT + "_div_" + areaCounter + "')\" class='survey_area_tab'><td><center><input type='hidden' name='survey_area' value='" + salesDiv + "|" + aT + "_" + areaCounter + "'><label id='" + aT + "_lbl_" + areaCounter + "'>" + leadName + "</label></center></td></tr>");
                                                                             }
                                                                         }
                                                                         out.println("</table>");
@@ -248,7 +247,7 @@
                                                             <table width='100%'>
                                                                 <col width='165'>
                                                                 <tr>
-                                                                    <td align='right'><b>Lead ID :</b></td>
+                                                                    <td align='right' style="width: 40%;"><b>Lead ID :</b></td>
                                                                     <td><%=lead.getId()%></td>
                                                                 </tr>
                                                             </table>
@@ -978,7 +977,7 @@
                                                                         String areaCounter = leadAreaDiv[1];
                                                                         out.println("<div id='" + aT + "_div_" + areaCounter + "' class='survey_area_div' style='display:none'>");
                                                         %>
-                                                        <table style='width:100%;height:100%;border-color: #dfe8f1;' border="1">
+                                                        <table class='table table-bordered' style='width:100%;height:100%;border-color: #dfe8f1;' border="1">
                                                             <col width="33%">
                                                             <col width="33%">
                                                             <tr height="20">
@@ -1019,9 +1018,9 @@
                                                                         <tr>
 
                                                                             <td style="height: 30px;" colspan="2" width="50%" align="center" class="selected" onclick="showTableDiv(this, '<%=aT%>', '<%=areaCounter%>', 'ItemsDiv');
-                                                                                    return false;"><b>CUSTOMER</b></td>
+                                                                                    return false;"><b style='color:black'>CUSTOMER</b></td>
                                                                             <td style="height: 30px;" align="center" onclick="showTableDiv(this, '<%=aT%>', '<%=areaCounter%>', 'VimboxDiv');
-                                                                                    return false;"><b>VIMBOX</b></td>
+                                                                                    return false;"><b style='color:black'>VIMBOX</b></td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td colspan="3" height="690">
@@ -1045,8 +1044,8 @@
                                                                             <col width="10%">
                                                                             <col width="10%">
                                                                             <col width="5%">
-                                                                            <tr style="background-color:DarkOrange" height="10%">
-                                                                                <td align="center" colspan="6"><center><b><u style="color: white;">Customer Item List</u></b></center></td>
+                                                                            <tr style="background-color:#F5BCA9" height="10%">
+                                                                                <td align="center" colspan="6"><center><b><u style="color: black;">Customer Item List</u></b></center></td>
                                                                             </tr>
                                                                             <tr height="10%">
                                                                                 <td align="center"><b>Item</b></td>
@@ -1095,8 +1094,8 @@
                                                                                     </table>
                                                                                 </td>
                                                                             </tr>
-                                                                            <tr style="background-color:CornflowerBlue" height="10%">
-                                                                                <td align="center" colspan="6"><center><b><u style="color: white;">Vimbox Item List</u></b></center></td>
+                                                                            <tr style="background-color:#CEE3F6" height="10%">
+                                                                                <td align="center" colspan="6"><center><b><u style="color: black;">Vimbox Item List</u></b></center></td>
                                                                             </tr>
                                                                             <tr height="10%">
                                                                                 <td align="center"><b>Item</b></td>

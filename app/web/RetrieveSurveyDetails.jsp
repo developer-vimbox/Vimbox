@@ -215,6 +215,7 @@
                                                                             tr += "<td>" + item.getRemark() + "</td>";
                                                                             if (item.getCharges() > 0) {
                                                                                 tr += "<td align='center'>" + item.getCharges() + "</td>";
+                                                                                sum += item.getCharges();
                                                                             } else {
                                                                                 tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                                                                             }
@@ -239,6 +240,7 @@
                                                                                 tr += "<td>" + item.getRemark() + "</td>";
                                                                                 if (item.getCharges() > 0) {
                                                                                     tr += "<td align='center'>" + item.getCharges() + "</td>";
+                                                                                    sum += item.getCharges();
                                                                                 } else {
                                                                                     tr += "<td align='center'>&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                                                                                 }

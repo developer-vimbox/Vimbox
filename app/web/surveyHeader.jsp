@@ -309,6 +309,27 @@
                                 <li> <a href="CreateLead.jsp" title="Create Lead"><span>Create Lead</span></a></li>
                                 <li> <a href="MyLeads.jsp" title="My Leads"><span>My Leads</span></a></li>
                                 <li> <a href="MySalesSites.jsp" title="My Sites"><span>My Sites</span></a></li>
+                                <li> <a href="SalesOperations.jsp" title="Operations"><span>Operations</span></a></li>
+                            </ul>
+
+                    </li>
+                      <li class="dropdown-submenu">
+                        <a href="#" title="Site Surveys" class="sf-with-ul">
+                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <span>Site Surveys</span>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
+                                <li><a href="MySiteSurveySchedules.jsp" title="My Schedule"><span>My Schedule</span></a></li>
+                            </ul>
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a href="#" title="Operations" class="sf-with-ul">
+                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <span>Operations</span>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="AssignJobs.jsp" title="Assign Jobs"><span>Assign Jobs</span></a></li>
                             </ul>
 
                     </li>
@@ -324,16 +345,17 @@
                             </ul>
 
                     </li>
-                    <li class="dropdown-submenu">
-                        <a href="#" title="Site Surveys" class="sf-with-ul">
+                      <li class="dropdown-submenu">
+                        <a href="#" title="Admin" class="sf-with-ul">
                             <i class="glyph-icon icon-linecons-diamond"></i>
-                            <span>Site Surveys</span>
+                            <span>Admin</span>
                         </a>
                             <ul class="dropdown-menu">
-                                <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
-                                <li><a href="MySiteSurveySchedules.jsp" title="My Schedule"><span>My Schedule</span></a></li>
+                                <li><a href="AdminLeads.jsp" title="View All Leads"><span>All Leads</span></a></li>
                             </ul>
+
                     </li>
+                  
                 </ul>
                 </div>
             </div>

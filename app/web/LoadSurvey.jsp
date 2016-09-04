@@ -3,7 +3,7 @@
     String areaCounter = request.getParameter("areaCounter");
     String salesDiv = request.getParameter("fullAddr");
 %>
-<table style='width:100%;height:100%;border-color: #dfe8f1;' border="1">
+<table style='width:100%;height:100%;' class='table table-bordered' border="1">
     <col width="33%">
     <col width="33%">
     <tr height="20">
@@ -43,9 +43,9 @@
                 </tr>
                 <tr>
                     <td style="height: 30px;" colspan="2" width="50%" align="center" class="selected" onclick="showTableDiv(this, '<%=address%>', '<%=areaCounter%>', 'ItemsDiv');
-                            return false;"><b>CUSTOMER</b></td>
+                            return false;"><b style='color:black'>CUSTOMER</b></td>
                     <td style="height: 30px;" align="center" onclick="showTableDiv(this, '<%=address%>', '<%=areaCounter%>', 'VimboxDiv');
-                            return false;"><b>VIMBOX</b></td>
+                            return false;"><b style='color:black'>VIMBOX</b></td>
                 </tr>
                 <tr>
                     <td colspan="3" height="690">
@@ -69,8 +69,8 @@
                     <col width="10%">
                     <col width="10%">
                     <col width="5%">
-                    <tr style="background-color:DarkOrange" height="10%">
-                        <td align="center" colspan="6"><center><b><u style="color: white;">Customer Item List</u></b></center></td>
+                    <tr style="background-color:#F5BCA9" height="10%">
+                        <td align="center" colspan="6"><center><b><u style="color: black;">Customer Item List</u></b></center></td>
                     </tr>
                     <tr height="10%">
                         <td align="center"><b>Item</b></td>
@@ -93,8 +93,8 @@
                             </table>
                         </td>
                     </tr>
-                    <tr style="background-color:CornflowerBlue" height="10%">
-                        <td align="center" colspan="6"><center><b><u style="color: white;">Vimbox Item List</u></b></center></td>
+                    <tr style="background-color:#CEE3F6" height="10%">
+                        <td align="center" colspan="6"><center><b><u style="color: black;">Vimbox Item List</u></b></center></td>
                     </tr>
                     <tr height="10%">
                         <td align="center"><b>Item</b></td>

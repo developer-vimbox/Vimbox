@@ -205,7 +205,7 @@ function addArea(address, fullAddr) {
         $(allAreas.item(i)).removeClass('selected');
     }
 
-    var tr = "<tr id='" + address + "_area_" + areaCounter + "' onclick=\"displaySiteDiv(this, '" + address + "_div_" + areaCounter + "')\" class='survey_area_tab selected'><td align='center'><input type='hidden' name='survey_area' value='" + fullAddr + "|" + address + "_" + areaCounter + "'><label id='" + address + "_lbl_" + areaCounter + "'>Area</label></td></tr>";
+    var tr = "<tr id='" + address + "_area_" + areaCounter + "' onclick=\"displaySiteDiv(this, '" + address + "_div_" + areaCounter + "')\" class='survey_area_tab selected'><td><center><input type='hidden' name='survey_area' value='" + fullAddr + "|" + address + "_" + areaCounter + "'><label id='" + address + "_lbl_" + areaCounter + "'>Area</label></center></td></tr>";
     $("#" + address).append(tr);
 
     var div = document.createElement('div');
@@ -225,8 +225,8 @@ function addArea(address, fullAddr) {
 
 function addAreaTable(divId, address, areaCounter) {
     var col = "<col width='20%'><col width='45%'><col width='10%'><col width='10%'><col width='10%'><col width='5%'>"
-    var newCustTable = "<tr><td><table id='" + divId + "_" + address + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + address + "_CustomerItemTableLbl'>Area</label></tr></table></td></tr>";
-    var newVimboxTable = "<tr><td><table id='" + divId + "_" + address + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + address + "_VimboxItemTableLbl'>Area</label></tr></table></td></tr>";
+    var newCustTable = "<tr><td><table class='table table-bordered'  id='" + divId + "_" + address + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + address + "_CustomerItemTableLbl'>Area</label></tr></table></td></tr>";
+    var newVimboxTable = "<tr><td><table class='table table-bordered' id='" + divId + "_" + address + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + address + "_VimboxItemTableLbl'>Area</label></tr></table></td></tr>";
 
     $("#" + divId + "_CustomerItemTable").append(newCustTable);
     $("#" + divId + "_VimboxItemTable").append(newVimboxTable);
