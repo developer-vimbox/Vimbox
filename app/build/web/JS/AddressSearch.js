@@ -218,6 +218,7 @@ function searchAddressFrom() {
                 counter++;
                 calculateDetourCharge();
             });
+    $('#postalfrom').val('');
 }
 
 function searchAddressTo() {
@@ -436,6 +437,7 @@ function searchAddressTo() {
                 counter++;
                 calculateDetourCharge();
             });
+    $('#postalto').val('');
 }
 
 function calculateDetourCharge() {

@@ -1205,34 +1205,35 @@ function assignDOM() {
         var stringDiv = "";
         stringDiv += "<div id='dom_" + date + "'>";
         stringDiv += "<span class='close' onClick=\"removeSiteSurvey('dom_" + date + "')\">x</span>";
-        stringDiv += "<hr><table><col width='100'>";
-        stringDiv += "<tr><td><b>Date :</b></td><td><input type='hidden' name='move_date' value='" + date + "'>" + date + "</td></tr>";
-        stringDiv += "<tr><td colspan='2'><b>Truck(s) :</b></td></tr>";
-        stringDiv += "<tr><td colspan='2'><table>"; 
+        stringDiv += "<hr><div class='form-horizontal'>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Date of Move: </label><div class='col-sm-4' style='padding-top: 7px;'>";
+        stringDiv += "<input type='hidden' name='move_date' value='" + date + "'>" + date + "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Truck(s): </label><div class='col-sm-3' style='padding-top: 7px;'>"; 
         for (i = 0; i < carplates.length; i++) {
-            stringDiv += "<tr><td><input type='hidden' name='move_truck' value='" + date + "|" + carplates[i].value + "'>" + trucks[i].value + "</td>";
-            stringDiv += "<td><table>";
+            stringDiv += "<div><div class='col-sm-7' style='padding-left: 0px;'><input type='hidden' name='move_truck' value='" + date + "|" + carplates[i].value + "'>" + trucks[i].value + "</div>";
             var timeslot = timeslots.find(function (obj) {
                 return obj.id === carplates[i].value;
             });
+            stringDiv += "<div class='col-sm-5'>"
             for(j = 0; j < timeslot.value.length; j++){
-                stringDiv += "<tr><td><input type='hidden' name='" + carplates[i].value + "_move_timeslots' value='" + (timeslot.value)[j] + "'>" + (timeslot.value)[j] + "</td></tr>";
+                stringDiv += "<input type='hidden' name='" + carplates[i].value + "_move_timeslots' value='" + (timeslot.value)[j] + "'>" + (timeslot.value)[j] + "<br>";
             }
-            stringDiv += "</table></td></tr>";
+            stringDiv += "</div></div><br>";
         }
-        stringDiv += "</table></td></tr>";
-        stringDiv += "<tr><td><b>From :</b></td><td><table>";
+        stringDiv += "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>From: </label><div class='col-sm-5' style='padding-top: 7px;'>";
         for (i = 0; i < addressesFr.length; i++) {
-            stringDiv += "<tr><td><input type='hidden' name='move_addressFr' value='" + date + "|" + addressesFr[i].value + "'>" + addressesFr[i].value + "</td></tr>";
+            stringDiv += "<input type='hidden' name='move_addressFr' value='" + date + "|" + addressesFr[i].value + "'>" + addressesFr[i].value + "<br>";
         }
-        stringDiv += "</table></td></tr>";
-        stringDiv += "<tr><td><b>To :</b></td><td><table>";
+        stringDiv += "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>To: </label><div class='col-sm-5' style='padding-top: 7px;'>";
         for (i = 0; i < addressesTo.length; i++) {
-            stringDiv += "<tr><td><input type='hidden' name='move_addressTo' value='" + date + "|" + addressesTo[i].value + "'>" + addressesTo[i].value + "</td></tr>";
+            stringDiv += "<input type='hidden' name='move_addressTo' value='" + date + "|" + addressesTo[i].value + "'>" + addressesTo[i].value + "<br>";
         }
-        stringDiv += "</table></td></tr>";
-        stringDiv += "<tr><td><b>Remarks :</b></td><td><input type='hidden' name='move_remarks' value='" + date + "|" + remarks + "'><input type='hidden' name='move_status' value='" + date + "|Booking'>" + remarks + "</td></tr>";
-        stringDiv += "</table></div>";
+        stringDiv += "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Remarks: </label><div class='col-sm-4' style='padding-top: 7px;'>";
+        stringDiv += "<input type='hidden' name='move_remarks' value='" + date + "|" + remarks + "'><input type='hidden' name='move_status' value='" + date + "|Booking'>" + remarks + "</div></div>";
+        stringDiv += "</div></div>";
         newdiv.innerHTML = stringDiv;
         document.getElementById("operation").appendChild(newdiv);
 
@@ -1425,12 +1426,12 @@ function selectDOMSlot(e){
         var cellTiming = cellArray[2];
         switch (state) {
             case '':
-                var tr = "<tr data-value='{" + carplate + "|" + truck + "|" + cellTiming + "}'><td>" + cellTiming + "<input type='hidden' name='" + carplate + "_move_timeslot' value='" + cellTiming + "'></td>";
-                tr += "<td><input type='button' value='x' class='form-control' onclick='deleteMoveTimeRow(this)'/></td></tr>";
+                var tr = "<tr data-value='{" + carplate + "|" + truck + "|" + cellTiming + "}'><td><input type='hidden' name='" + carplate + "_move_timeslot' value='" + cellTiming + "'>";
+                tr += "<div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + cellTiming + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteMoveTimeRow(this)'/></span></div></td></tr>";
                 var after = true;
                 var timetable = document.getElementById(carplate + "_timeslot_table");
                 if(timetable == null){
-                    var tableTr = "<tr id='" + carplate + "'>";
+                    var tableTr = "<tr style='border-bottom: 1pt solid #dfe8f1;' id='" + carplate + "'>";   
                     tableTr += "<td><input type='hidden' name='move_carplates' value='" + carplate + "'><input type='hidden' name='move_truck_name' value='" + truck + "'><label name='truck_label'>" + truck + "</label></td>";
                     tableTr += "<td><table id='" + carplate + "_timeslot_table'><tbody></tbody></table></td>";
                     tableTr += "</tr>";
@@ -1701,8 +1702,8 @@ function addAddress() {
 function addMoveFrAddress(){
     var address = $('#move_addressFrom_select').val();
     if (address !== '') {
-        var tr = "<tr><td>" + address + "<input type='hidden' name='move_addressFrom' value='" + address + "'></td>";
-        tr += "<td><input type='button' value='x' onclick='deleteAddressRow(this)'/></td></tr>";
+        var tr = "<tr><td><input type='hidden' name='move_addressFrom' value='" + address + "'>";
+        tr += "<div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + address + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteAddressRow(this)'/></span></div></td></tr>";
         $(tr).prependTo("#move_addressFrom_table > tbody");
     }
     $('#move_addressFrom_select').val('');
@@ -1711,8 +1712,8 @@ function addMoveFrAddress(){
 function addMoveToAddress(){
     var address = $('#move_addressTo_select').val();
     if (address !== '') {
-        var tr = "<tr><td>" + address + "<input type='hidden' name='move_addressTot' value='" + address + "'></td>";
-        tr += "<td><input type='button' value='x' onclick='deleteAddressRow(this)'/></td></tr>";
+        var tr = "<tr><td><input type='hidden' name='move_addressTot' value='" + address + "'>";
+        tr += "<div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + address + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteAddressRow(this)'/></span></div></td></tr>";
         $(tr).prependTo("#move_addressTo_table > tbody");
     }
     $('#move_addressTo_select').val('');

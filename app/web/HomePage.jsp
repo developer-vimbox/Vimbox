@@ -9,6 +9,13 @@
         <script src="JS/LeadFunctions.js"></script>
         <script src="JS/TicketFunctions.js"></script>
         <script src="JS/ModalFunctions.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("body").tooltip({
+                    selector: '[data-toggle=tooltip]'
+                });
+            });
+        </script>
     </head>
     <body>
         <%@include file="header.jsp"%>

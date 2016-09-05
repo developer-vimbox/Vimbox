@@ -34,13 +34,12 @@
 <script type="text/javascript">
     /* Responsive tabs */
     $(document).ready(function() {
-    $(function () {
+        $(function () {
         "use strict";
         $('.nav-responsive').tabdrop();
     });
     });
 </script>
-
 <!-- Favicons -->
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/images/icons/apple-touch-icon-144-precomposed.png">
@@ -230,7 +229,7 @@
 <link rel="stylesheet" type="text/css" href="assets/helpers/admin-responsive.css">
 
 <!-- JS Core -->
-
+<script src="JS/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="assets/js-core/jquery-core.js"></script>
 <script type="text/javascript" src="assets/js-core/jquery-ui-core.js"></script>
 <script type="text/javascript" src="assets/js-core/jquery-ui-widget.js"></script>
@@ -425,9 +424,9 @@
                 </div>
 
                 <div class="dropdown" id="notifications-btn">
-                    <a data-toggle="dropdown" href="#" title="">
+                    <a data-toggle="dropdown" href="#">
                         <span class="small-badge bg-yellow"></span>
-                        <i class="glyph-icon icon-linecons-megaphone"></i>
+                        <i class="glyph-icon icon-linecons-megaphone" title data-original-title="test" data-toggle="tooltip" data-placement="bottom"></i>
                     </a>
                     <div class="dropdown-menu box-md float-right">
 
