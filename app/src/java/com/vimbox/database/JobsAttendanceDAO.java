@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class JobsAttendanceDAO {
     private static final String GET_JOB_ATTENDANCE_BY_ID = "SELECT * FROM operations_attendance WHERE job_id=?";
     private static final String CREATE_JOB_ATTENDANCE = "INSERT INTO operations_attendance VALUES (?,?,?,?)";
-    private static final String UPDATE_JOB_ATTENDANCE = "UPDATE operations_attendance SET supervisor=?, assigned=? WHERE job_id=?";
+    private static final String UPDATE_JOB_ATTENDANCE = "UPDATE operations_attendance SET supervisor=? WHERE job_id=?";
     
     public static boolean checkJobAttendanceExist(int jobId){
         Connection con = null;
@@ -36,7 +36,7 @@ public class JobsAttendanceDAO {
         return false;
     }
     
-    public static void assignJobAttendance(int jobId, String supervisor, String assigned){
+    public static void assignJobAttendance(int jobId, String supervisor){
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -44,13 +44,12 @@ public class JobsAttendanceDAO {
             if(checkJobAttendanceExist(jobId)){
                 ps = con.prepareStatement(UPDATE_JOB_ATTENDANCE);
                 ps.setString(1, supervisor);
-                ps.setString(2, assigned);
-                ps.setInt(3, jobId);
+                ps.setInt(2, jobId);
             }else{
                 ps = con.prepareStatement(CREATE_JOB_ATTENDANCE);
                 ps.setInt(1, jobId);
                 ps.setString(2, supervisor);
-                ps.setString(3, assigned);
+                ps.setString(3, "");
                 ps.setString(4, "");
             }
             ps.executeUpdate();
