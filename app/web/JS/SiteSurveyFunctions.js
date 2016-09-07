@@ -14,9 +14,9 @@ var manpower = [];
 
 function survey_setup(userId) {
     loadSurveys("", userId, '');
-    
+
 }
-function survey_setup_completed(userId){
+function survey_setup_completed(userId) {
     loadSurveys("", userId, 'Completed');
 }
 
@@ -538,7 +538,7 @@ function addItem(tableId, salesDiv) {
         closeItemModal("item_details_modal");
     } else {
         document.getElementById("survey_error_status").innerHTML = "ERROR";
-       $('#survey_error_modal').appendTo("body");
+        $('#survey_error_modal').appendTo("body");
         modal.style.display = "block";
     }
 }
@@ -1064,20 +1064,20 @@ function showWeeklySch(selopt) {
             });
         });
     } else if (opt == 'month') {
-    var modal = document.getElementById("cal_modal");
-    $("#cal_content").load("MyScheduleCalendar.jsp");
-    var d = new Date();
-    var m = d.getMonth();
-    var y = d.getFullYear();
-    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var n = m_names[d.getMonth()]; 
-    $("#dMonth").html(n);
-    $("#dYear").html(y);
-    var content = document.getElementById("ssCalTable");
-    $.get("LoadMySurveyMonthlySchedule.jsp", {getYear: y, getMonth: m}, function (data) {
-        content.innerHTML = data;
-    });
-    modal.style.display = "block";
+        var modal = document.getElementById("cal_modal");
+        $("#cal_content").load("MyScheduleCalendar.jsp");
+        var d = new Date();
+        var m = d.getMonth();
+        var y = d.getFullYear();
+        var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var n = m_names[d.getMonth()];
+        $("#dMonth").html(n);
+        $("#dYear").html(y);
+        var content = document.getElementById("ssCalTable");
+        $.get("LoadMySurveyMonthlySchedule.jsp", {getYear: y, getMonth: m}, function (data) {
+            content.innerHTML = data;
+        });
+        modal.style.display = "block";
     } else {
         var chdate = document.getElementById("seldate");
         var chdatelbl = document.getElementById("seldatelbl");
@@ -1100,7 +1100,7 @@ function changeMonthAndYear() {
     var iYear = document.getElementById('iYear').value;
     var iMonth = document.getElementById('iMonth').value;
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var n = m_names[iMonth]; 
+    var n = m_names[iMonth];
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
     $.get("LoadMySurveyMonthlySchedule.jsp", {getYear: iYear, getMonth: iMonth}, function (data) {
@@ -1110,7 +1110,7 @@ function changeMonthAndYear() {
 function viewSurvey(leadId, date, timeslot) {
     var modal = document.getElementById("view_survey_modal");
     var content = document.getElementById("view_survey_message");
-    $.get("RetrieveSurveyDetails.jsp", {getLid: leadId, getStartTime:date, getTimeSlot: timeslot}, function (data) {
+    $.get("RetrieveSurveyDetails.jsp", {getLid: leadId, getStartTime: date, getTimeSlot: timeslot}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
@@ -1136,4 +1136,31 @@ function openSurvey(evt, cityName) {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
     $('#' + cityName).scrollView();
+}
+function showSiteInfoTable(id, divId) {
+    var field = document.getElementById(id.id);
+    var parent = field.parentNode;
+    var fieldSet = parent.getElementsByTagName("fieldset");
+    if (fieldSet !== null) {
+        for (var i = 0; i < fieldSet.length; i++) {
+            if (id.id === fieldSet[i].id) {
+                var tempfield = document.getElementById(fieldSet[i].id).firstElementChild.firstElementChild;
+                if (tempfield != null) {
+                    tempfield.style.visibility = 'visible';
+                }
+            } else {
+                var tempfield = document.getElementById(fieldSet[i].id).firstElementChild.firstElementChild;
+                if (tempfield != null) {
+                    tempfield.style.visibility = 'hidden';
+                }
+            }
+        }
+    }
+}
+function showSiteInfoTables(id, divId, address, leadId) {
+    var content = document.getElementById("fromContent");
+    $.get("LoadSiteInfoTable.jsp", {getField: id.id, getDivId: divId.id, getAdd: address, leadId: leadId}, function (data) {
+        content.innerHTML = data;
+    });
+
 }
