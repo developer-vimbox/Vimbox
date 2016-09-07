@@ -1,3 +1,7 @@
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="com.vimbox.hr.LeaveMC"%>
+<%@page import="com.vimbox.database.UserLeaveDAO"%>
 <%@page import="com.vimbox.sitesurvey.SiteSurvey"%>
 <%@page import="com.vimbox.database.SiteSurveyDAO"%>
 <%@page import="java.util.ArrayList"%>
@@ -74,6 +78,8 @@
     String dateString = request.getParameter("date");
     DateTime date = dtf.parseDateTime(dateString);
     String siteSurveyorr = request.getParameter("siteSurveyor");
+    HashMap<String, LeaveMC> leaveMCs = UserLeaveDAO.getLeaveMCRecordByDate(date);
+    
     ArrayList<User> siteSurveyors = new ArrayList<User>();
     if (siteSurveyorr.equals("allss")) {
         siteSurveyors = UserDAO.getAllSurveyors();
@@ -151,14 +157,24 @@
                                     <%
                                         for (String timing : timings) {
                                             if (surveys.isEmpty()) {
-                                                if (!addresses.isEmpty()) {
-                                                    out.println("<td onclick='selectSlot(this)'");
-                                                    if (siteSurveyor.getNric().equals(nric) && timeslots.contains(timing)) {
-                                                        out.println("class='selected' data-state='selected'");
+                                                boolean isLMC = false;
+                                                LeaveMC leaveMc = leaveMCs.get(siteSurveyor.getNric());
+                                                if(leaveMc != null){
+                                                    isLMC = leaveMc.checkTimeslot(timing);
+                                                }
+                                                if(isLMC){
+                                                    out.println("<td style='background-color:grey'></td>");
+                                                }else{
+                                                    if (!addresses.isEmpty()) {
+                                                        out.println("<td onclick='selectSlot(this)'");
+                                                        if (siteSurveyor.getNric().equals(nric) && timeslots.contains(timing)) {
+                                                            out.println("class='selected' data-state='selected'");
+                                                        }
+                                                        out.println("><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'></td>");
+
+                                                    } else {
+                                                        out.println("<td></td>");
                                                     }
-                                                    out.println("><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'></td>");
-                                                } else {
-                                                    out.println("<td></td>");
                                                 }
                                             } else {
                                                 boolean taken = false;
@@ -198,14 +214,24 @@
                                 <%
                                                 out.println("</td>");
                                             } else {
-                                                if (!addresses.isEmpty()) {
-                                                    out.println("<td onclick='selectSlot(this)'");
-                                                    if (siteSurveyor.getNric().equals(nric) && timeslots.contains(timing) && !status.equals("Cancelled")) {
-                                                        out.println("class='selected' data-state='selected'");
+                                                boolean isLMC = false;
+                                                LeaveMC leaveMc = leaveMCs.get(siteSurveyor.getNric());
+                                                if(leaveMc != null){
+                                                    isLMC = leaveMc.checkTimeslot(timing);
+                                                }
+                                                if(isLMC){
+                                                    out.println("<td style='background-color:grey'></td>");
+                                                }else{
+                                                    if (!addresses.isEmpty()) {
+                                                        out.println("<td onclick='selectSlot(this)'");
+                                                        if (siteSurveyor.getNric().equals(nric) && timeslots.contains(timing)) {
+                                                            out.println("class='selected' data-state='selected'");
+                                                        }
+                                                        out.println("><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'></td>");
+
+                                                    } else {
+                                                        out.println("<td></td>");
                                                     }
-                                                    out.println("><input type='hidden' value='{" + siteSurveyor.getNric() + "|" + siteSurveyor.toString() + "|" + timing + "}'></td>");
-                                                } else {
-                                                    out.println("<td></td>");
                                                 }
                                             }
                                         }
