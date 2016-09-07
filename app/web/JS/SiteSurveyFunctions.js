@@ -649,6 +649,7 @@ function closeItemModal(modalName) {
 
 function selectService(divId) {
     var modal = document.getElementById(divId + "_serviceModal");
+     $(divId + "_serviceModal").appendTo("body");
     modal.style.display = "block";
 }
 
@@ -656,7 +657,6 @@ function selectServiceSlot(e, divId) {
     var frml = formula.find(function (obj) {
         return obj.id === divId;
     });
-
     var cell = $(e);
     var state = cell.data('state') || '';
     var cellHtml = cell.html().trim();
@@ -672,11 +672,12 @@ function selectServiceSlot(e, divId) {
                 if (pri === "Manpower") {
                     $("#" + divId + "_manpowerId").val(id);
                     var modal = document.getElementById(divId + "_manpowerModal");
+                    $(divId + "_manpowerModal").appendTo("body");
                     modal.style.display = "block";
                 }
                 (frml.value)[divId + "_" + id] = serviceArray[1];
                 var tr = "<tr id='" + divId + "_" + id + "'><td>";
-                tr += "<table class='serviceTable' width='100%'>"
+                tr += "<table class='table table-bordered serviceTable' width='100%'>"
                 tr += "<tr height='10%'><td>" + pri + " - " + sec + "<input type='hidden' name='" + divId + "_serviceName' value='" + id + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='" + divId + "_serviceCharge'></td></tr>";
                 tr += "<tr>" + generateBreakdown(divId + "_" + id, divId) + "</tr></table></td></tr>";
                 $("#" + divId + "_servicesTable").append(tr);
@@ -1138,12 +1139,12 @@ function openSurvey(evt, cityName) {
     $('#' + cityName).scrollView();
 }
 function showSiteInfoTable(id, divId) {
-    var field = document.getElementById(id.id);
+    var field = document.getElementById(id);
     var parent = field.parentNode;
     var fieldSet = parent.getElementsByTagName("fieldset");
     if (fieldSet !== null) {
         for (var i = 0; i < fieldSet.length; i++) {
-            if (id.id === fieldSet[i].id) {
+            if (id === fieldSet[i].id) {
                 var tempfield = document.getElementById(fieldSet[i].id).firstElementChild.firstElementChild;
                 if (tempfield != null) {
                     tempfield.style.visibility = 'visible';
@@ -1157,10 +1158,27 @@ function showSiteInfoTable(id, divId) {
         }
     }
 }
-function showSiteInfoTables(id, divId, address, leadId) {
-    var content = document.getElementById("fromContent");
-    $.get("LoadSiteInfoTable.jsp", {getField: id.id, getDivId: divId.id, getAdd: address, leadId: leadId}, function (data) {
+function showSiteInfoTables(id, divId, address, leadId, fromto) {
+    var content = "";
+    if(fromto == 'from'){
+        content = document.getElementById("fromContent");
+        content.style.display = 'block';
+        var to = document.getElementById("toContent");
+        to.style.display = 'none';
+    }else if(fromto == 'to'){
+        content = document.getElementById("toContent");
+        content.style.display = 'block';
+        var from = document.getElementById("fromContent");
+        from.style.display = 'none';
+    } 
+    $.get("LoadSiteInfoTable.jsp", {getField: id, getDivId: divId, getAdd: address, leadId: leadId}, function (data) {
         content.innerHTML = data;
     });
 
+}
+function displaytodefault(){
+     $("#toonload").trigger('click');
+}
+function displayfromdefault(){
+     $("#fromonload").trigger('click');
 }

@@ -9,37 +9,36 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.vimbox.database.SiteSurveyDAO"%>
 <%@include file="LoadServices.jsp"%>
-<script src="JS/SiteSurveyFunctions.js"></script>
-<script src="JS/ModalFunctions.js"></script>
 <%    String fieldId = request.getParameter("getField");
     String divId = request.getParameter("getDivId");
-    String address = request.getParameter("address");
+    String address = request.getParameter("getAdd");
     String leadId = request.getParameter("leadId");
     Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
+    String col = "<col width='20%'><col width='45%'><col width='10%'><col width='10%'><col width='10%'><col width='5%'>";
 %>
 
 <%
     String[] addrDetails = lead.getStoreysPushingDFrom(address);
     LeadDiv leadDiv = lead.getSalesDivByAddress(address);
-    out.println("<fieldset id='" + divId + "'>");
+    out.println("<fieldset id='" + fieldId + "'>");
 
     out.println("<div id='" + divId + "' class='tab-pane active' >");
-    out.println("<table width='100%' border='1'' id='table_" + divId + " >");
+    out.println("<table class='table table-bordered' width='100%' border='1'' id='table_" + divId + " >");
 
     out.println("<col width='50%'>");
 
     out.println("<tr>");
     out.println("<td valign='top'>");
     out.println("<input type='hidden' name='" + divId + "' value='" + address + "'>");
-    out.println("<table width='100%' border='1'>");
+    out.println("<table class='table table-bordered' width='100%' border='1'>");
     out.println("<col width='20%'>");
     out.println("<col width='45%'>");
     out.println("<col width='10%'>");
     out.println("<col width='10%'>");
     out.println("<col width='5%'>");
 
-    out.println("<tr height='10%' style='background-color:DarkOrange'>");
-    out.println("<td align='center' colspan='6'><b>CUSTOMER<b></td>");
+    out.println("<tr height='10%' style='background-color:#F5BCA9'>");
+    out.println("<td align='center' colspan='6'><b><center style='color: #3e4855;'>CUSTOMER</center><b></td>");
     out.println("</tr>");
 
     out.println("<tr>");
@@ -54,7 +53,7 @@
     out.println("<tr>");
     out.println("<td valign='top' height='150' colspan='6'>");%>
 <div style="overflow:auto;height:100%;">
-    <table id="<%=divId%>_CustomerItemTable" valign="top" width="100%">
+    <table class='table table-bordered' id="<%=divId%>_CustomerItemTable" valign="top" width="100%">
         <tbody>
             <%
                 ArrayList<LeadArea> areas = leadDiv.getLeadAreas();
@@ -66,7 +65,7 @@
                         String aT = leadAreaDiv[0];
                         String areaCounter = leadAreaDiv[1];
 
-                        out.println("<tr><td><table id='" + divId + "_" + aT + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + aT + "_CustomerItemTableLbl'>" + leadName + "</label></tr>");
+                        out.println("<tr><td><table class='table table-bordered' id='" + divId + "_" + aT + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + aT + "_CustomerItemTableLbl'>" + leadName + "</label></tr>");
 
                         ArrayList<Item> customerItems = leadArea.getCustomerItems();
                         int trCounter = 1;
@@ -102,8 +101,8 @@
     out.println("</td>");
     out.println("</tr>");
 
-    out.println("<tr height='10%' style='background-color:CornflowerBlue'>");
-    out.println("<td align='center' colspan='6'><b>VIMBOX<b></td>");
+    out.println("<tr height='10%' style='background-color:#CEE3F6'>");
+    out.println("<td align='center' colspan='6'><b><center style='color: #3e4855;'>VIMBOX</center><b></td>");
     out.println("</tr>");
 
     out.println("<tr>");
@@ -119,7 +118,7 @@
     out.println("<td valign='top' height='150' colspan='6'>");
 %>
 <div style="overflow:auto;height:100%;">
-    <table id="<%=divId%>_VimboxItemTable" valign="top" width="100%">
+    <table class='table table-bordered' id="<%=divId%>_VimboxItemTable" valign="top" width="100%">
         <tbody>
             <%
                 for (LeadArea leadArea : areas) {
@@ -130,7 +129,7 @@
                         String aT = leadAreaDiv[0];
                         String areaCounter = leadAreaDiv[1];
 
-                        out.println("<tr><td><table id='" + divId + "_" + aT + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + aT + "_VimboxItemTableLbl'>" + leadName + "</label></tr>");
+                        out.println("<tr><td><table class='table table-bordered' id='" + divId + "_" + aT + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + aT + "_VimboxItemTableLbl'>" + leadName + "</label></tr>");
 
                         int trCounter = 1;
                         ArrayList<Item> vimboxItems = new ArrayList<Item>();
@@ -174,11 +173,11 @@
     out.println("</td>");
 
     out.println("<td valign='top'>");
-    out.println("<table width='100%' border='1'>");
+    out.println("<table class='table table-bordered' width='100%' border='1'>");
     out.println("<col width='50%'");
     out.println("<tr>");
     out.println("<td align='right'><b>Storeys :</b></td>");
-    out.println("<td><input type='text' name='" + divId + "_storeys' size='5' value='");
+    out.println("<td><input class='form-control' type='text' name='" + divId + "_storeys' size='5' value='");
     if (addrDetails != null) {
         out.println(addrDetails[0]);
     }
@@ -186,52 +185,53 @@
 
     out.println("<tr>");
     out.println("<td align='right'><b>Pushing Distance :</b></td>");
-    out.println("<td><input type='text' name='" + divId + "_distance' size='5' value='");
+    
+    out.println("<td><div class='input-group'><input class='form-control' type='text' name='" + divId + "_distance' size='5' value='");
     if (addrDetails != null) {
         out.println(addrDetails[1]);
     }
-    out.println("'> m</td>");
+    out.println("'> <span class='input-group-addon'>M</span></div></td>");
     out.println("</tr>");
 
-    out.println("<tr style='background-color:DarkCyan;'>");
-    out.println("<td align='center' colspan='2'><b>CHARGES</b></td>");
+    out.println("<tr style='background-color:#A9F5D0;'>");
+    out.println("<td align='center' colspan='2'><center style='color: #3e4855;'><b>CHARGES</b></center></td>");
     out.println("</tr>");
 
     HashMap<String, String> otherCharges = leadDiv.getOtherCharges();
     out.println("<tr>");
     out.println("<td align='right'><b>Storey Charges :</b></td>");
-    out.println("<td>$ <input type='number' name='" + divId + "_storeyCharge' step='0.01' min='0' value='" + otherCharges.get("storeyCharge") + "'></td>");
+    out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>  <input class='form-control' type='number' name='" + divId + "_storeyCharge' step='0.01' min='0' value='" + otherCharges.get("storeyCharge") + "'></div></td>");
     out.println("</tr>");
 
     out.println("<tr>");
     out.println("<td align='right'><b>Pushing Charges :</b></td>");
-    out.println("<td>$ <input type='number' name='" + divId + "_pushCharge' step='0.01' min='0' value='" + otherCharges.get("pushCharge") + "'></td>");
+    out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>  <input class='form-control' type='number' name='" + divId + "_pushCharge' step='0.01' min='0' value='" + otherCharges.get("pushCharge") + "'></div></td>");
     out.println("</tr>");
 
     out.println("<tr>");
     out.println("<td align='right'><b>Detour Charges :</b></td>");
-    out.println("<td>$ <input type='number' name='" + divId + "_detourCharge' step='0.01' min='0' value='" + otherCharges.get("detourCharge") + "'></td>");
+    out.println("<td><div class='input-group'><span class='input-group-addon'>$</span> <input class='form-control' type='number' name='" + divId + "_detourCharge' step='0.01' min='0' value='" + otherCharges.get("detourCharge") + "'></div></td>");
     out.println("</tr>");
 
     out.println("<tr>");
     out.println("<td align='right'><b>Material Charges :</b></td>");
-    out.println("<td>$ <input type='number' id='" + divId + "_materialCharge' name='" + divId + "_materialCharge' step='0.01' min='0' value='" + otherCharges.get("materialCharge") + "'></td>");
+    out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>  <input class='form-control' type='number' id='" + divId + "_materialCharge' name='" + divId + "_materialCharge' step='0.01' min='0' value='" + otherCharges.get("materialCharge") + "'></div></td>");
     out.println("</tr>");
 
     out.println("<tr>");
     out.println("<td align='right'><b>Discount :</b></td>");
-    out.println("<td>$ <input type='number' name='" + divId + "_discount' step='0.01' min='0' value='" + otherCharges.get("discount") + "'></td>");
+    out.println("<td><div class='input-group'><span class='input-group-addon'>$</span> <input class='form-control' type='number' name='" + divId + "_discount' step='0.01' min='0' value='" + otherCharges.get("discount") + "'></div></td>");
     out.println("</tr>");
 
     out.println("<tr>");
-    out.println("<td colspan='2'><button onclick=\"selectService('" + divId + "');return false;\" style='width:100%;'>SERVICES</button></td>");
+    out.println("<td colspan='2'><button class='btn btn-default' onclick=\"selectService('" + divId + "');return false;\" style='width:100%;'>SERVICES</button></td>");
     out.println("</td></tr>");
 
     out.println("<tr>");
     out.println("<td colspan='2' valign='top' height='100'>");
 %>
 <div style="overflow:auto;height:100%;">
-    <table class="servicesTable" id="<%=divId%>_servicesTable" valign="top" width="100%">
+    <table class='table table-bordered' class="servicesTable" id="<%=divId%>_servicesTable" valign="top" width="100%">
         <tbody>
             <%
                 ArrayList<String[]> services = leadDiv.getServices();
@@ -259,8 +259,8 @@
 <%
     out.println("</td>");
 
-    out.println("<tr style='height:10%;background-color:Plum;'>");
-    out.println("<td align='center' colspan='2'><b>COMMENTS</b></td>");
+    out.println("<tr style='height:10%;background-color:#F6CEE3;'>");
+    out.println("<td align='center' colspan='2'><center style='color: #3e4855;'><b>COMMENTS</b></center></td>");
     out.println("</tr>");
 
     ArrayList<String> comments = leadDiv.getComments();
@@ -269,7 +269,7 @@
         comment += c + " ";
     }
     out.println("<tr height='71'>");
-    out.println("<td colspan='2'><input name='" + divId + "_comments' style='width:99%;height:100%' value='" + comment + "'></td>");
+    out.println("<td colspan='2'><input class='form-control' name='" + divId + "_comments' style='width:99%;height:100%' value='" + comment + "'></td>");
     out.println("</tr>");
 
     out.println("</table>");
@@ -282,7 +282,7 @@
     <div class="service-content">
         <div class="service-body">
             <span class="close" onclick="closeModal('<%=divId%>_serviceModal')">×</span>
-            <table width="100%" border="1" style="table-layout: fixed;" id="<%=divId%>_serviceTable">
+            <table class='table table-bordered' width="100%" border="1" style="table-layout: fixed;" id="<%=divId%>_serviceTable">
                 <%
                     for (int i = 0; i < serviceTable.length; i++) {
                         out.println("<tr>");
@@ -293,7 +293,7 @@
                             } else {
                                 // Table Data //
                                 String[] serviceChargeArray = serviceTable[i][j].split(",");
-                                out.println("<td bgcolor='#6698FF' align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\"");
+                                out.println("<td align='center' onclick=\"selectServiceSlot(this, '" + divId + "')\"");
                                 if (serviceTable[0][j].equals("Manpower")) {
                                     out.println("id='" + divId + (serviceTable[0][j] + "_" + serviceChargeArray[0]).replaceAll(" ", "_") + "_service'");
                                 }
@@ -335,7 +335,7 @@
         <div class="modal-body">
             <h3>Manpower Request</h3><hr>
             <input type="hidden" id="<%=divId%>_manpowerId">
-            <table width="100%">
+            <table class='table' width="100%">
                 <tr>
                     <td align="right">Additional Manpower :</td>
                     <td><input type="number" id="<%=divId%>_additionalManpower"></td>
