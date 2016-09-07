@@ -239,7 +239,7 @@
                                     <%
                                                         out.println("</td>");
                                                     }else{
-                                                        out.println("<td class='tooltipp' data-state='' onclick='selectDOMSlot(this)'");
+                                                        out.println("<td class='tooltipp' data-state='' bgcolor='orange' onclick='selectDOMSlot(this)'");
                                                         if (selecteds.contains(truck.getCarplateNo()) && timeslots.contains(truck.getCarplateNo() + "_" + timing)) {
                                                             out.println("class='selected' data-state='selected'");
                                                         }
@@ -302,7 +302,10 @@
                 </tr>
             </table>
         </td>
+    </tr>
+    <tr>
         <td>
+           
             <table width="100%">
                 <%
                     if (!fr.isEmpty() && !tot.isEmpty()) {
@@ -312,7 +315,7 @@
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">From: </label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="input-group">
                                         <select id="move_addressFrom_select" class="form-control">
                                             <option value="">--Select--</option>
@@ -323,7 +326,7 @@
                                             %>
                                         </select>
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default" onclick="addMoveFrAddress();
+                                            <button class="btn btn-round btn-primary" onclick="addMoveFrAddress();
                                                     return false;">+</button>
                                         </span>
                                     </div>
@@ -331,7 +334,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">To: </label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="input-group">
                                         <select id="move_addressTo_select" class="form-control">
                                             <option value="">--Select--</option>
@@ -342,7 +345,7 @@
                                             %>
                                         </select>
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default" onclick="addMoveToAddress();
+                                            <button class="btn btn-round btn-primary" onclick="addMoveToAddress();
                                                     return false;">+</button>
                                         </span>
                                     </div>
@@ -350,12 +353,14 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Date: </label>
-                                <div class="col-sm-6">
-                                    <%=dateString%><input type="hidden" id="move_date" value="<%=dateString%>">
+                                <div class="col-sm-4">
+                                    <span class="form-control"><%=dateString%></span>
+                                    <input type="hidden" id="move_date" value="<%=dateString%>">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Truck(s) assigned: </label>
+                                <div class="col-sm-4">
                                 <table id="truck_assigned_table" width="100%">
                                     <tbody>
                                         <%
@@ -393,16 +398,17 @@
                                     </tbody>
                                 </table>
                             </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">From: </label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <table id="move_addressFrom_table">
                                         <tbody>
                                             <%
                                                 if (addFrArray != null) {
                                                     for (int i = 0; i < addFrArray.length; i++) {
-                                                        out.println("<tr><td>" + addFrArray[i] + "<input type='hidden' name='move_addressFrom' value='" + addFrArray[i] + "'></td>");
-                                                        out.println("<td><input type='button' value='x' class='form-control' onclick='deleteAddressRow(this)'/></td></tr>");
+                                                        out.println("<tr><td><input type='hidden' name='move_addressFrom' value='" + addFrArray[i] + "'>");
+                                                        out.println("<div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + addFrArray[i] + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteAddressRow(this)'/></span></div></td></tr>");
                                                     }
                                                 }
                                             %>
@@ -412,14 +418,15 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">To: </label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <table id="move_addressTo_table">
                                         <tbody>
                                             <%
                                                 if (addToArray != null) {
                                                     for (int i = 0; i < addToArray.length; i++) {
-                                                        out.println("<tr><td>" + addToArray[i] + "<input type='hidden' name='move_addressTot' value='" + addToArray[i] + "'></td>");
-                                                        out.println("<td><input type='button' value='x' class='form-control' onclick='deleteAddressRow(this)'/></td></tr>");
+                                                        out.println("<tr><td><input type='hidden' name='move_addressTot' value='" + addToArray[i] + "'>");
+                                                        out.println("<div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + addToArray[i] + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteAddressRow(this)'/></span></div></td></tr>");
+                                                    
                                                     }
                                                 }
                                             %>
@@ -429,18 +436,21 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Remarks: </label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                         <textarea class="form-control" id="move_remarks"><%if (remarks != null) {
                                             out.println(remarks);
                                         }%></textarea>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> </label>
+                                <div class="col-sm-4 text-center">
+                                        <button class="btn btn-primary" onclick="assignDOM();
+                            return false;">Select Timeslot</button>
+                                </div>
+                            </div>
                         </div>
                     </td>
-                </tr>
-                <tr>
-                    <td align="center" colspan="2"><button style="width:100%" onclick="assignDOM();
-                            return false;">Select Timeslot!</button></td>
                 </tr>
                 <%
                     }

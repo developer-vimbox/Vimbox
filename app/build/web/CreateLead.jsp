@@ -8,6 +8,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create new lead</title>
+    </head>
+    <body>
+        <%@include file="header.jsp"%>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        
+        <script src="JS/jquery.hotkeys.js"></script>
+        <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
+        <script src="JS/AddressSearch.js"></script>
         <style>
 
             table.salesTable td {
@@ -32,18 +41,10 @@
                 width:100%;
                 height:100%;
             }
+            .table{
+                color: #4b5056;
+            }
         </style>
-    </head>
-    <body onload="create_leadSetup()">
-        <%@include file="header.jsp"%>
-        <script src="http://malsup.github.com/jquery.form.js"></script> 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
-        <script src="JS/jquery.hotkeys.js"></script>
-        <script src="JS/ModalFunctions.js"></script>
-        <script src="JS/LeadFunctions.js"></script>
-        <script src="JS/AddressSearch.js"></script>
-        <script src="JS/CustomerFunctions.js"></script>
-
         <div id="cal_modal" class="modal">
             <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">
@@ -219,32 +220,6 @@
                                 <br>
                                 <fieldset>
                                     <legend>Moving Information</legend>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Move Type: </label>
-                                        <div class="col-sm-6" style="padding-top: 7px;">
-                                            <%                                                for (String type : moveTypes) {
-                                                    out.println("<input class='checkbox-inline' type='checkbox' name='tom' value='" + type + "'>" + type);
-                                                }
-                                            %>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Date Of Move: </label>
-                                        <div class="col-sm-5">
-                                            <div id="dynamicDom">
-                                                <div class="input-group">
-                                                    <span class="input-group-btn">
-                                                        <input class="btn btn-round btn-primary" type="button" value="+" onClick="addDom('dynamicDom');">
-                                                    </span>
-                                                    <div id="1">
-                                                        <input class='form-control' type='date' name='dom'/>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
                                     <fieldset>
                                         <b><u>Moving From</u></b><br><br>
                                         <div class="form-group">
@@ -278,6 +253,26 @@
                                         <div id="to">
                                         </div>
                                     </fieldset>
+                                    <br>
+                                    <fieldset>
+                                        <b><u>Operations Details</u></b><br><br>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Move Type: </label>
+                                            <div class="col-sm-6" style="padding-top: 7px;">
+                                                <%                                                for (String type : moveTypes) {
+                                                        out.println("<input class='checkbox-inline' type='checkbox' name='tom' value='" + type + "'>" + type);
+                                                    }
+                                                %>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Moving Calendar: </label>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewMovCal();">View Calendar</button>
+                                            </div>
+                                        </div>
+                                        <div id="operation"></div>
+                                    </fieldset>
                                 </fieldset>
                                 <br>
                                 <fieldset>
@@ -291,25 +286,6 @@
                                                 <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewCal();">View Calendar</button>
                                             </div>
                                         </div>
-                                        <!--
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Survey Date: </label>
-                                            <div class="col-sm-4">
-                                                <input class="form-control" type="date" id="sitesurvey_date">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Surveyor: </label>
-                                            <div class="col-sm-4">
-                                                <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                                    <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
-                                                    <span class="input-group-btn"> 
-                                                        <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        -->
                                         <div id="survey"></div>
                                     </fieldset>
                                     <br>
@@ -366,78 +342,6 @@
                                         </div>
                                     </div>
                                 </fieldset>
-                                <!--                                <fieldset>
-                                                                    <legend>Lead Information</legend>
-                                                                    <div class="form-group">
-                                                                        <label class="col-sm-3 control-label">Lead Type: </label>
-                                                                        <div class="col-sm-6">
-                                                                            <div id="leadInfo">
-                                <%
-                                    //for (String type : types) {
-                                    //  out.println("<input class='checkbox-inline' type='checkbox' name='leadType' value='" + type + "'>" + type);
-                                    // }
-%>
-                                                                                            </div>
-                                                                
-                                                                                        </div>
-                                                                                    </div>
-                                                                
-                                                                                    <div id="Enquiry" style="display:none">
-                                                                                        <br>
-                                                                                        <fieldset>
-                                                                                            <b><u>Enquiry Details</u></b><br><br>
-                                                                                            <table>
-                                                                                                <col width="100">
-                                                                                                <tr>
-                                                                                                    <td align="right"><b>Remarks :</b></td>
-                                                                                                    <td>
-                                                                                                        <textarea class='form-control' name="enquiry" cols="75" rows="6" autocomplete="off"></textarea>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            </table>
-                                                                                        </fieldset>
-                                                                                    </div>
-                                                                
-                                                                                    <div id="Sales" style="display:none">
-                                                                                        <br>
-                                                                                        <fieldset>
-                                                                                            <b><u>Site Survey Details</u></b><br><br>
-                                                                                            <div class="form-group">
-                                                                                                <label class="col-sm-3 control-label">Survey Date: </label>
-                                                                                                <div class="col-sm-4">
-                                                                                                    <input class='form-control' type="date" id="sitesurvey_date">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="form-group">
-                                                                                                <label class="col-sm-3 control-label">Surveyor: </label>
-                                                                                                <div class="col-sm-4">
-                                                                                                    <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                                                                                        <input type="text" id="employee_search" placeholder="Enter site surveyor name" class="form-control" style="width: 400px;color:black;">
-                                                                                                        <span class="input-group-btn"> 
-                                                                                                            <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="viewSchedule();">View Schedule</button>
-                                                                                                        </span>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div id="schedule_modal" class="modal">
-                                                                                                <div class="survey-modal-content">
-                                                                                                    <div class="modal-body">
-                                                                                                        <span class="close" onclick="closeModal('schedule_modal')">×</span>
-                                                                                                        <div id="schedule_content"></div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div id="survey"></div>
-                                                                                        </fieldset>
-                                                                                        <br>
-                                                                                        <fieldset>
-                                                                                            <b><u>Sales Details</u></b><hr>
-                                                                                            <ul class="tab" id="sales_list">
-                                                                                            </ul>
-                                                                                            <div id="sales_container"></div>
-                                                                                        </fieldset>
-                                                                                    </div>
-                                                                                </fieldset>-->
                                 <br>
                                 <table>
                                     <tr>

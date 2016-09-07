@@ -2,7 +2,10 @@ var counter = 2;
 function addInput(divName) {
     var original = document.getElementById('additionalAssigned');
     var clone = original.cloneNode(true);
-    clone.id = "additionalAssigned" + ++counter;
+    while (document.getElementById("additionalAssigned" + counter) != null) {
+        counter++;
+    }
+    clone.id = "additionalAssigned" + counter;
     document.getElementById(divName).appendChild(clone);
 }
 
@@ -16,7 +19,6 @@ function submitTicket() {
     var assigned_users = "";
     $(document.getElementsByName("assigned")).each(function () {
         var activeElement = this;
-        console.log(this);
         var tagname = activeElement.tagName;
         var divId = activeElement.id;
         while (tagname !== 'DIV' || (divId !== "additionalAssigned" && divId !== "dynamicInput")) {

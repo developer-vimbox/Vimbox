@@ -9,6 +9,8 @@ var boxes = [];
 var manpower = [];
 var domCounter = 2;
 
+var domPass = true;
+
 function initSalesDiv(divId) {
     boxes.push({id: divId, value: 0});
     totalUnits.push({id: divId, value: 0});
@@ -38,18 +40,6 @@ function openSales(evt, cityName) {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
     $('#' + cityName).scrollView();
-}
-
-function addDom(divName) {
-    var newdiv = document.createElement('div');
-    var stringDiv = "";
-    stringDiv += '<div class="input-group">';
-    stringDiv += "<span class='input-group-btn'><input class='btn btn-round btn-warning' type='button' value='x' onClick='removeDom(" + domCounter + ");'></span>";
-    stringDiv += "<div id='" + domCounter + "'><input class='form-control' type='date' name='dom'/></div>";
-    stringDiv += "</div>";
-    newdiv.innerHTML = stringDiv;
-    document.getElementById(divName).appendChild(newdiv);
-    domCounter++;
 }
 
 function addFollowup(leadId) {
@@ -115,19 +105,6 @@ function viewLeadsHistory(custId) {
 }
 
 //------------------------- LeadType Functions---------------------------//
-function  checkLeadInformation() {
-    var el = document.getElementById('leadInfo');
-    var tops = el.getElementsByTagName('input');
-    for (var i = 0, len = tops.length; i < len; i++) {
-        if (tops[i].type === 'checkbox') {
-            tops[i].onclick = showDiv;
-            if (tops[i].checked) {
-                tops[i].click();
-                tops[i].click();
-            }
-        }
-    }
-}
 
 function showDiv(e) {
     var divId = this.value.replace(" ", "");
@@ -241,11 +218,6 @@ function edit_leadSetup() {
         document.getElementById(divId + "_totalUnits").innerHTML = "Total Units : " + totalUnit.value;
         update_services(divId);
     });
-    checkLeadInformation();
-}
-
-function create_leadSetup() {
-    checkLeadInformation();
 }
 
 function showfield(name, e) {
@@ -532,6 +504,7 @@ function addItem(divId) {
         $("#" + divId + "_itemUnit").val("");
         $("#" + divId + "_itemQty").val("");
         $("#" + divId + "_itemRemark").val("");
+        $("#" + divId + "_itemdimensions").val("");
         $("#" + divId + "_itemName").focus();
         update_services(divId);
     } else {
@@ -950,8 +923,14 @@ function confirmCancel() {
 }
 
 function viewCal() {
+    var errorModal = document.getElementById("salesModal");
+    var errorStatus = document.getElementById("salesStatus");
+    var errorMessage = document.getElementById("salesMessage");
+    
     var modal = document.getElementById("cal_modal");
-    $("#cal_content").load("SiteSurveyCalendar.jsp");
+    $.get("SiteSurveyCalendar.jsp",{}, function (data) {
+        document.getElementById("cal_content").innerHTML = data;
+    });
     var d = new Date();
     var m = d.getMonth();
     var y = d.getFullYear();
@@ -959,8 +938,88 @@ function viewCal() {
     var n = m_names[d.getMonth()];
     $("#dMonth").html(n);
     $("#dYear").html(y);
+    var fromArray = document.getElementsByName("addressfrom");
+    var addressFrom = "";
+    for (i = 0; i < fromArray.length; i++) {
+        addressFrom += fromArray[i].value + "|";
+    }
+    var toArray = document.getElementsByName("addressto");
+    var addressTo = "";
+    for (i = 0; i < toArray.length; i++) {
+        addressTo += toArray[i].value + "|";
+    }
+    
+    $.getJSON("ValidateSiteSurveyDates", {addressFrom: addressFrom, addressTo: addressTo})
+    .done(function (data) {
+        if (data.status !== "SUCCESS") {
+            errorStatus.innerHTML = "WARNING";
+            errorMessage.innerHTML = data.message + "In order to select site survey timeslots<br>";
+            errorModal.style.display = "block";
+            domPass = false;
+        }else{
+            domPass = true;
+        } 
+    })
+    .fail(function (error) {
+        errorStatus.innerHTML = "ERROR";
+        errorMessage.innerHTML = error;
+        errorModal.style.display = "block";
+    });
+    
     var content = document.getElementById("ssCalTable");
     $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss"}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
+}
+
+function viewMovCal(){
+    var errorModal = document.getElementById("salesModal");
+    var errorStatus = document.getElementById("salesStatus");
+    var errorMessage = document.getElementById("salesMessage");
+    
+    var modal = document.getElementById("cal_modal");
+    $.get("MovingCalendar.jsp",{}, function (data) {
+        document.getElementById("cal_content").innerHTML = data;
+    });
+    var d = new Date();
+    var m = d.getMonth();
+    var y = d.getFullYear();
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[d.getMonth()];
+    $("#dMonth").html(n);
+    $("#dYear").html(y); 
+    
+    var fromArray = document.getElementsByName("addressfrom");
+    var addressFrom = "";
+    for (i = 0; i < fromArray.length; i++) {
+        addressFrom += fromArray[i].value + "|";
+    }
+    var toArray = document.getElementsByName("addressto");
+    var addressTo = "";
+    for (i = 0; i < toArray.length; i++) {
+        addressTo += toArray[i].value + "|";
+    }
+    
+    $.getJSON("ValidateMovingDates", {addressFrom: addressFrom, addressTo: addressTo})
+    .done(function (data) {
+        if (data.status !== "SUCCESS") {
+            errorStatus.innerHTML = "WARNING";
+            errorMessage.innerHTML = data.message + "In order to select dom timeslots<br>";
+            errorModal.style.display = "block";
+            domPass = false;
+        }else{
+            domPass = true;
+        } 
+    })
+    .fail(function (error) {
+        errorStatus.innerHTML = "ERROR";
+        errorMessage.innerHTML = error;
+        errorModal.style.display = "block";
+    });
+    
+    var content = document.getElementById("ssCalTable");
+    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt"}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
@@ -976,6 +1035,20 @@ function changeMonthYear() {
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
     $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss}, function (data) {
+        content.innerHTML = data;
+    });
+}
+
+function changeMoveMonthYear(){
+    var content = document.getElementById("ssCalTable");
+    var iYear = document.getElementById('iYear').value;
+    var iMonth = document.getElementById('iMonth').value;
+    var tt = document.getElementById('ttSelect').value;
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[iMonth];
+    $("#dMonth").html(n);
+    $("#dYear").html(iYear);
+    $.get("MovingCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getTT: tt}, function (data) {
         content.innerHTML = data;
     });
 }
@@ -1031,66 +1104,233 @@ function viewDaySchedule(date) {
     }
     if (pending) {
         var siteSurveyor = $('#ssSelect').val();
-        var fromArray = document.getElementsByName("addressfrom");
         var addressFrom = "";
-        for (i = 0; i < fromArray.length; i++) {
-            addressFrom += fromArray[i].value + "|";
-        }
-        var toArray = document.getElementsByName("addressto");
         var addressTo = "";
-        for (i = 0; i < toArray.length; i++) {
-            addressTo += toArray[i].value + "|";
+        
+        if(domPass){
+            var fromArray = document.getElementsByName("addressfrom");
+            for (i = 0; i < fromArray.length; i++) {
+                addressFrom += fromArray[i].value + "|";
+            }
+            var toArray = document.getElementsByName("addressto");
+            for (i = 0; i < toArray.length; i++) {
+                addressTo += toArray[i].value + "|";
+            }
+        }
+        
+        var div = document.getElementById(date);
+        var nric = "";
+        var timeslots = "";
+        var addresses = "";
+        if (div != null) {
+            nric = ($("#" + date + " input[name=siteSurvey_surveyor]").val().split("|"))[1];
+            var timeArray = $("#" + date + " input[name=siteSurvey_timeslot]");
+            for (var i = 0; i < timeArray.length; i++) {
+                if (timeArray[i].value.includes(date)) {
+                    timeslots += (timeArray[i].value.split("|"))[1] + "|";
+                }
+            }
+
+            var addressArray = $("#" + date + " input[name=siteSurvey_address]");
+            for (var i = 0; i < addressArray.length; i++) {
+                if (addressArray[i].value.includes(date)) {
+                    addresses += (addressArray[i].value.split("|"))[1] + "|";
+                }
+            }
+
+            var remarksArray = $("#" + date + " input[name=siteSurvey_remarks]");
+            var remarks = "";
+            for (var i = 0; i < remarksArray.length; i++) {
+                if (remarksArray[i].value.includes(date)) {
+                    remarks = (remarksArray[i].value.split("|"))[1];
+                    break;
+                }
+            }
+        }
+        toggleCounter = 0;
+        var leadId = $('#leadId').val();
+        if(leadId == null){
+            leadId = 0;
+        }
+        $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: leadId, date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
+            document.getElementById("schedule_content").innerHTML = results;
+            document.getElementById("schedule_modal").style.display = "block";
+        });
+    }
+}
+
+function assignDOM() {
+    var date = $('#move_date').val();
+    var addressesFr = document.getElementsByName("move_addressFrom");
+    var addressesTo = document.getElementsByName("move_addressTot");
+    var carplates = document.getElementsByName("move_carplates");
+    var trucks = document.getElementsByName("move_truck_name");
+    var timeslots = [];
+    
+    var remarks = $('#move_remarks').val();
+
+    var errorMsg = "";
+    if (carplates.length === 0) {
+        errorMsg += "Please choose at least a truck<br>";
+    }else{
+        for (i = 0; i < carplates.length; i++) {
+            var ts = document.getElementsByName(carplates[i].value + "_move_timeslot");
+            var times = [];
+            for(j = 0; j < ts.length; j++){
+                times.push(ts[j].value);
+            }
+            timeslots.push({id: carplates[i].value, value: times});
+        }
+        
+    }
+    if (addressesFr.length === 0) {
+        errorMsg += "Please choose an moving from address<br>";
+    }
+    if (addressesTo.length === 0) {
+        errorMsg += "Please choose an moving to address<br>";
+    }
+    
+    
+    var modal = document.getElementById("salesModal");
+    var status = document.getElementById("salesStatus");
+    var message = document.getElementById("salesMessage");
+    
+    if(!errorMsg){                           
+        var elem = document.getElementById("dom_" + date);
+        if (elem != null) {
+            elem.parentNode.removeChild(elem);
         }
 
-        $.getJSON("ValidateSiteSurveyorDetails", {date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo})
-                .done(function (data) {
-                    if (data.status === "SUCCESS") {
-                        var div = document.getElementById(date);
-                        var nric = "";
-                        var timeslots = "";
-                        var addresses = "";
-                        if (div != null) {
-                            nric = ($("#" + date + " input[name=siteSurvey_surveyor]").val().split("|"))[1];
-                            var timeArray = $("#" + date + " input[name=siteSurvey_timeslot]");
-                            for (var i = 0; i < timeArray.length; i++) {
-                                if (timeArray[i].value.includes(date)) {
-                                    timeslots += (timeArray[i].value.split("|"))[1] + "|";
-                                }
-                            }
+        var newdiv = document.createElement('div');
+        var stringDiv = "";
+        stringDiv += "<div id='dom_" + date + "'>";
+        stringDiv += "<span class='close' onClick=\"removeSiteSurvey('dom_" + date + "')\">x</span>";
+        stringDiv += "<hr><div class='form-horizontal'>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Date of Move: </label><div class='col-sm-4' style='padding-top: 7px;'>";
+        stringDiv += "<input type='hidden' name='move_date' value='" + date + "'>" + date + "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Truck(s): </label><div class='col-sm-3' style='padding-top: 7px;'>"; 
+        for (i = 0; i < carplates.length; i++) {
+            stringDiv += "<div><div class='col-sm-7' style='padding-left: 0px;'><input type='hidden' name='move_truck' value='" + date + "|" + carplates[i].value + "'>" + trucks[i].value + "</div>";
+            var timeslot = timeslots.find(function (obj) {
+                return obj.id === carplates[i].value;
+            });
+            stringDiv += "<div class='col-sm-5'>"
+            for(j = 0; j < timeslot.value.length; j++){
+                stringDiv += "<input type='hidden' name='" + carplates[i].value + "_move_timeslots' value='" + (timeslot.value)[j] + "'>" + (timeslot.value)[j] + "<br>";
+            }
+            stringDiv += "</div></div><br>";
+        }
+        stringDiv += "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>From: </label><div class='col-sm-5' style='padding-top: 7px;'>";
+        for (i = 0; i < addressesFr.length; i++) {
+            stringDiv += "<input type='hidden' name='move_addressFr' value='" + date + "|" + addressesFr[i].value + "'>" + addressesFr[i].value + "<br>";
+        }
+        stringDiv += "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>To: </label><div class='col-sm-5' style='padding-top: 7px;'>";
+        for (i = 0; i < addressesTo.length; i++) {
+            stringDiv += "<input type='hidden' name='move_addressTo' value='" + date + "|" + addressesTo[i].value + "'>" + addressesTo[i].value + "<br>";
+        }
+        stringDiv += "</div></div>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Remarks: </label><div class='col-sm-4' style='padding-top: 7px;'>";
+        stringDiv += "<input type='hidden' name='move_remarks' value='" + date + "|" + remarks + "'><input type='hidden' name='move_status' value='" + date + "|Booking'>" + remarks + "</div></div>";
+        stringDiv += "</div></div>";
+        newdiv.innerHTML = stringDiv;
+        document.getElementById("operation").appendChild(newdiv);
 
-                            var addressArray = $("#" + date + " input[name=siteSurvey_address]");
-                            for (var i = 0; i < addressArray.length; i++) {
-                                if (addressArray[i].value.includes(date)) {
-                                    addresses += (addressArray[i].value.split("|"))[1] + "|";
-                                }
-                            }
-
-                            var remarksArray = $("#" + date + " input[name=siteSurvey_remarks]");
-                            var remarks = "";
-                            for (var i = 0; i < remarksArray.length; i++) {
-                                if (remarksArray[i].value.includes(date)) {
-                                    remarks = (remarksArray[i].value.split("|"))[1];
-                                    break;
-                                }
-                            }
-                        }
-                        toggleCounter = 0;
-                        $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: $('#leadId').val(), date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
-                            document.getElementById("schedule_content").innerHTML = results;
-                            document.getElementById("schedule_modal").style.display = "block";
-                        });
-                    } else {
-                        errorStatus.innerHTML = data.status;
-                        errorMessage.innerHTML = data.message;
-                        errorModal.style.display = "block";
-                    }
-                })
-                .fail(function (error) {
-                    errorStatus.innerHTML = "ERROR";
-                    errorMessage.innerHTML = error;
-                    errorModal.style.display = "block";
-                });
+        status.innerHTML = "SUCCESS";
+        message.innerHTML = "Date of Move selected!";
+        modal.style.display = "block";
+        document.getElementById("schedule_modal").style.display = "none";
+        setTimeout(function () {
+            modal.style.display = "none";
+        }, 1000);
+    }else{
+        status.innerHTML = "ERROR";
+        message.innerHTML = errorMsg;
+        modal.style.display = "block";
     }
+}
+
+function viewMoveDaySchedule(date) {
+    var errorModal = document.getElementById("salesModal");
+    var errorStatus = document.getElementById("salesStatus");
+    var errorMessage = document.getElementById("salesMessage");
+    var div = document.getElementById("dom_" + date);
+    var truck = $('#ttSelect').val();
+    var errorMsg = "";
+    var timeslots = "";
+    var addressesFr = "";
+    var addressesTo = "";
+    var carplates = "";
+    
+    if (div != null) {
+        var carplateArray = $("#dom_" + date + " input[name=move_truck]");
+        if(carplateArray.length > 1 && truck !== "alltt"){
+            errorMsg += "Unable to view day schedule for selected truck.<br>Please de-select truck to view schedule."
+        }
+        for (var i = 0; i < carplateArray.length; i++) {
+            if (carplateArray[i].value.includes(date)) {
+                var cp = (carplateArray[i].value.split("|"))[1];
+                carplates += cp + "|";
+                var timeArray = $("#dom_" + date + " input[name=" + cp + "_move_timeslots]");
+                for (var j = 0; j < timeArray.length; j++) {
+                    timeslots += cp + "_" + timeArray[j].value + "|";
+                }
+            }
+        }
+
+        var addressFrArray = $("#dom_" + date + " input[name=move_addressFr]");
+        for (var i = 0; i < addressFrArray.length; i++) {
+            if (addressFrArray[i].value.includes(date)) {
+                addressesFr += (addressFrArray[i].value.split("|"))[1] + "|";
+            }
+        }
+
+        var addressToArray = $("#dom_" + date + " input[name=move_addressTo]");
+        for (var i = 0; i < addressToArray.length; i++) {
+            if (addressToArray[i].value.includes(date)) {
+                addressesTo += (addressToArray[i].value.split("|"))[1] + "|";
+            }
+        }
+
+        var remarksArray = $("#dom_" + date + " input[name=move_remarks]");
+        var remarks = "";
+        for (var i = 0; i < remarksArray.length; i++) {
+            if (remarksArray[i].value.includes(date)) {
+                remarks = (remarksArray[i].value.split("|"))[1];
+                break;
+            }
+        }
+    }
+    
+    if(!errorMsg){
+        var addressFrom = "";
+        var addressTo = "";
+        if(domPass){
+            var fromArray = document.getElementsByName("addressfrom");
+            for (i = 0; i < fromArray.length; i++) {
+                addressFrom += fromArray[i].value + "|";
+            }
+            var toArray = document.getElementsByName("addressto");
+            for (i = 0; i < toArray.length; i++) {
+                addressTo += toArray[i].value + "|";
+            }
+        }
+
+        var leadId = $('#leadId').val();
+        if(leadId == null){
+            leadId = 0;
+        }
+        
+        $.get("RetrieveMovingSchedule.jsp", {leadId: leadId, date: date, truck: truck, carplate: carplates, addressFrom: addressFrom, addressTo: addressTo, timeslots: timeslots, addressesFr: addressesFr, addressesTo: addressesTo, remarks: remarks}, function (results) {
+            document.getElementById("schedule_content").innerHTML = results;
+            document.getElementById("schedule_modal").style.display = "block";
+        });
+    }else{
+        errorStatus.innerHTML = "ERROR";
+        errorMessage.innerHTML = errorMsg;
+        errorModal.style.display = "block";
+    }          
 }
 
 function viewSchedule() {
@@ -1170,6 +1410,95 @@ function viewSchedule() {
                     errorMessage.innerHTML = error;
                     errorModal.style.display = "block";
                 });
+    }
+}
+
+function selectDOMSlot(e){
+    var cell = $(e);
+    var state = cell.data('state') || '';
+    var cellHtml = cell.html().trim();
+
+    if (cellHtml) {
+        var cellDetails = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
+        var cellArray = cellDetails.split("|");
+        var carplate = cellArray[0];
+        var truck = cellArray[1]
+        var cellTiming = cellArray[2];
+        switch (state) {
+            case '':
+                var tr = "<tr data-value='{" + carplate + "|" + truck + "|" + cellTiming + "}'><td><input type='hidden' name='" + carplate + "_move_timeslot' value='" + cellTiming + "'>";
+                tr += "<div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + cellTiming + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteMoveTimeRow(this)'/></span></div></td></tr>";
+                var after = true;
+                var timetable = document.getElementById(carplate + "_timeslot_table");
+                if(timetable == null){
+                    var tableTr = "<tr style='border-bottom: 1pt solid #dfe8f1;' id='" + carplate + "'>";   
+                    tableTr += "<td><input type='hidden' name='move_carplates' value='" + carplate + "'><input type='hidden' name='move_truck_name' value='" + truck + "'><label name='truck_label'>" + truck + "</label></td>";
+                    tableTr += "<td><table id='" + carplate + "_timeslot_table'><tbody></tbody></table></td>";
+                    tableTr += "</tr>";
+                    $("#truck_assigned_table").append(tableTr);
+                    $("#" + carplate + "_timeslot_table > tbody").append(tr);
+                }else{
+                    loop1:
+                    for (var i = 0, timerow; timerow = timetable.rows[i]; i++) {
+                        var tableCell = $(timerow).data('value');
+                        var tableCellDetails = tableCell.substring(tableCell.indexOf("{") + 1, tableCell.lastIndexOf("}"));
+                        var tableCellArray = tableCellDetails.split("|");
+                        var tableTimeSlot = tableCellArray[2];
+                        var num = cellTiming.localeCompare(tableTimeSlot);
+                        if (num === -1) {
+                            after = false;
+                        }
+
+                        if (i === 0 && after === false) {
+                            $(tr).prependTo("#" + carplate + "_timeslot_table > tbody");
+                            break loop1;
+                        } else if (after === false) {
+                            $("#" + carplate + "_timeslot_table > tbody > tr").eq(i - 1).after(tr);
+                            break loop1;
+                        }
+                    }
+
+
+                    if (after) {
+                        $("#" + carplate + "_timeslot_table > tbody").append(tr);
+                    }
+                }
+                
+                cell.addClass('selected');
+                cell.data('state', 'selected');
+                break;
+            case 'selected':
+                var table = document.getElementById("move_timeslot_table");
+                for (var i = 0, row; row = table.rows[i]; i++) {
+                    if ($(row).data('value').includes(carplate + "|" + truck + "|" + cellTiming)) {
+                        row.parentNode.removeChild(row);
+                        break;
+                    }
+                }
+                cell.removeClass('selected');
+                cell.data('state', '');
+                var empty = true;
+                var table = document.getElementById("moving_table");
+                for (var i = 0, row; row = table.rows[i]; i++) {
+                    for (var j = 0, col; col = row.cells[j]; j++) {
+                        var tableCell = $(col);
+                        var cellState = tableCell.data('state') || '';
+                        if (cellState === 'selected') {
+                            empty = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (empty) {
+                    $('#truck_carplate').val('');
+                    $('#truck').val('');
+                    document.getElementById("truck_label").innerHTML = "";
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -1312,6 +1641,47 @@ function deleteSurveyRow(btn) {
     }
 }
 
+function deleteMoveTimeRow(btn){
+    var row = btn.parentNode.parentNode;
+    var value = $(row).data('value');
+    row.parentNode.removeChild(row);
+    
+    var table = document.getElementById("moving_table");
+    for (var i = 0, row; row = table.rows[i]; i++) {
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            //iterate through columns
+            //columns would be accessed using the "col" variable assigned in the for loop
+            var tableCell = $(col);
+            var tableCellHtml = tableCell.html().trim();
+            if (tableCellHtml.includes(value)) {
+                tableCell.removeClass('selected');
+                tableCell.data('state', '');
+            }
+        }
+    }
+    
+    var valueDetails = value.substring(value.indexOf("{") + 1, value.lastIndexOf("}"));
+    var valueArray = valueDetails.split("|");
+    var carplate = valueArray[0];
+    var childNodes = document.getElementById(carplate + "_timeslot_table").childNodes;
+    var node;
+    for(i=0; i < childNodes.length; i++){
+        if(childNodes[i].nodeName === "TBODY"){
+            node = childNodes[i];
+        }
+    }
+    childNodes = node.childNodes;
+    var count = 0;
+    for(i=0; i < childNodes.length; i++){
+        if(childNodes[i].nodeName === "TR"){
+            count++;
+        }
+    }
+    if(count === 0){
+        $("#" + carplate).remove();
+    }
+}
+
 function deleteAddressRow(btn) {
     var row = btn.parentNode.parentNode;
     row.parentNode.removeChild(row);
@@ -1327,6 +1697,26 @@ function addAddress() {
         $(tr).prependTo("#address_table > tbody");
     }
     $('#address_select').val('');
+}
+
+function addMoveFrAddress(){
+    var address = $('#move_addressFrom_select').val();
+    if (address !== '') {
+        var tr = "<tr><td><input type='hidden' name='move_addressFrom' value='" + address + "'>";
+        tr += "<div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + address + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteAddressRow(this)'/></span></div></td></tr>";
+        $(tr).prependTo("#move_addressFrom_table > tbody");
+    }
+    $('#move_addressFrom_select').val('');
+}
+
+function addMoveToAddress(){
+    var address = $('#move_addressTo_select').val();
+    if (address !== '') {
+        var tr = "<tr><td><input type='hidden' name='move_addressTot' value='" + address + "'>";
+        tr += "<div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + address + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteAddressRow(this)'/></span></div></td></tr>";
+        $(tr).prependTo("#move_addressTo_table > tbody");
+    }
+    $('#move_addressTo_select').val('');
 }
 
 function assignSiteSurveyor() {

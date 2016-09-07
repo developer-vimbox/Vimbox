@@ -1,3 +1,5 @@
+<%@page import="java.util.Map"%>
+<%@page import="com.vimbox.operations.Job"%>
 <%@page import="com.vimbox.sales.LeadDiv"%>
 <%@page import="com.vimbox.sitesurvey.SiteSurvey"%>
 <%@page import="com.vimbox.sales.Lead"%>
@@ -12,6 +14,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Edit Lead</title>
+
+    </head>
+    <body onload="edit_leadSetup()">
+        <%@include file="header.jsp"%>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        <script src="JS/jquery.hotkeys.js"></script>
+        <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
+        <script src="JS/AddressSearch.js"></script>
+        <script src="JS/CustomerFunctions.js"></script>
         <style>
             table.salesTable td {
                 padding: 5px;
@@ -35,17 +47,10 @@
                 width:100%;
                 height:100%;
             }
+            .table{
+                color: #4b5056;
+            }
         </style>
-    </head>
-    <body onload="edit_leadSetup()">
-        <%@include file="header.jsp"%>
-        <script src="http://malsup.github.com/jquery.form.js"></script> 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlr3mj-08qPnSvod0WtYbmE0NrulFq0RE&libraries=places"></script>
-        <script src="JS/jquery.hotkeys.js"></script>
-        <script src="JS/ModalFunctions.js"></script>
-        <script src="JS/LeadFunctions.js"></script>
-        <script src="JS/AddressSearch.js"></script>
-        <script src="JS/CustomerFunctions.js"></script>
         <!-- The Modal -->
         <div id="cal_modal" class="modal">
             <div class="modal-content" style="width: 90%;">
@@ -374,198 +379,349 @@
                                     <br>
                                     <fieldset>
                                         <legend>Moving Information</legend>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Move Type: </label>
-                                            <div class="col-sm-6" style="padding-top: 7px;">
-                                                <%
-                                                    String[] tom = lead.getTom().split("\\|");
 
-                                                    for (String type : moveTypes) {
-                                                        boolean present = false;
-                                                        for (String tm : tom) {
-                                                            if (tm.equals(type)) {
-                                                                present = true;
-                                                            }
-                                                        }
-                                                        if (present) {
-                                                            out.println(" <label class=\"checkbox-inline\"><input type='checkbox' name='tom' value='" + type + "' checked>" + type + "</label>");
-                                                        } else {
-                                                            out.println("<label class=\"checkbox-inline\"><input type='checkbox' name='tom' value='" + type + "'>" + type + "</label>");
+                                        <fieldset>
+                                            <b><u>Moving From</u></b><br><br>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">S </label>
+                                                <div class="col-sm-4">
+                                                    <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                        <input type="text" id="postalfrom" placeholder="Enter Postal Code" class="form-control" style="width: 400px;color:black;">
+                                                        <span class="input-group-btn"> 
+                                                            <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="searchAddressFrom()">Search address from</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="from">
+                                                <%
+                                                    ArrayList<String[]> addressFrom = lead.getAddressFrom();
+                                                    for (String[] addFrom : addressFrom) {
+                                                        String[] address = addFrom[0].split("_");
+                                                        String storeys = addFrom[1];
+                                                        String pushingDistance = addFrom[2];
+                                                        String stringDiv = "";
+                                                        if (address.length > 1) {
+                                                            String salesDivId = lead.getSalesDivIdByAddress(address[0] + " #" + address[1] + "-" + address[2] + " S" + address[3]);
+                                                            int counter = Integer.parseInt(salesDivId.substring(5));
+                                                            stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='" + salesDivId + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
+                                                            stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+                                                            stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+                                                            stringDiv += "<div class ='col-sm-4'>";
+                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='30' value='" + address[0] + "'>";
+                                                            stringDiv += "</div>"; //close col-sm-4
+                                                            stringDiv += "<div class ='col-sm-6'>";
+                                                            stringDiv += "<div class='input-group'>";
+                                                            stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='2' value='" + address[1] + "'>";
+                                                            stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='3' value='" + address[2] + "'>";
+                                                            stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='5' value='" + address[3] + "'>";
+                                                            stringDiv += " </div>";// close input group
+                                                            stringDiv += "</div>";//close col-sm-6
+                                                            stringDiv += "</div>"; //close form-group row
+                                                            stringDiv += "</div></div>"; // col-sm-8, form group
+                                                            stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+                                                            stringDiv += "<div class ='col-sm-4'>";
+                                                            stringDiv += "<input class='form-control' type='text' name='storeysfrom' size='5' value='" + storeys + "'>";
+                                                            stringDiv += "</div>"; //close col-sm-4
+                                                            stringDiv += "</div>"; //close form group
+                                                            stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+                                                            stringDiv += "<div class ='col-sm-4'>";
+                                                            stringDiv += "<div class='input-group'>";
+                                                            stringDiv += "<input class='form-control' type='text' name='distancefrom' size='5' value='" + pushingDistance + "'>";
+                                                            stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+                                                            stringDiv += "</div></div>"; //close input group, col-sm-4
+                                                            stringDiv += "</div>"; //close form group
+                                                            stringDiv += "</div>"; //close div id tag
+
+                                                            out.println(stringDiv);
+                                                            counter++;
                                                         }
                                                     }
                                                 %>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">Date Of Move: </label>
-                                            <div class="col-sm-5">
-                                                <div id="dynamicDom">
-                                                    <div class="input-group">
-                                                        <span class="input-group-btn">
-                                                            <input class="btn btn-round btn-primary" type="button" value="+" onclick="addDom('dynamicDom');">
+
+                                        </fieldset>
+                                        <br>
+                                        <fieldset>
+                                            <b><u>Moving To</u></b><br><br>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">S </label>
+                                                <div class="col-sm-4">
+                                                    <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                        <input type="text" id="postalto" placeholder="Enter Postal Code" class="form-control" style="width: 400px;color:black;">
+                                                        <span class="input-group-btn"> 
+                                                            <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="searchAddressTo()">Search address to</button>
                                                         </span>
-                                                        <div id="1">
-                                                            <%
-                                                                String dom = lead.getDom();
-                                                                if (dom.isEmpty()) {
-                                                            %>
-                                                            <input class="form-control" type="date" name="dom">
-                                                        </div>
-                                                        <%
-                                                            } else {
-                                                                int counter = 2;
-                                                                String[] dates = dom.split("\\|");
-                                                                for (int i = 0; i < dates.length; i++) {
-                                                                    String date = dates[i];
-                                                                    if (i == 0) {
-                                                                        out.println("<input class='form-control' type='date' name'dom' value='" + date + "'>");
-//                                                                    out.println("<input class='btn btn-round btn-primary' type='button' value='+' onClick=\"addDom('dynamicDom');\"></div>");
-                                                                    } else {
-                                                                        out.println("<div id='" + counter + "'>");
-                                                                        out.println("<span class=\"input-group-btn\"><input class='btn btn-round btn-warning' type='button' value='x' onClick='removeInput(" + counter + ");'></span>");
-                                                                        out.println("<input class='form-control' type='date' name'dom' value='" + date + "'>");
-                                                                        out.println("/div>");
-                                                                        counter++;
-                                                                    }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="to">
+                                                <%
+                                                    ArrayList<String[]> addressTo = lead.getAddressTo();
+                                                    for (String[] addTo : addressTo) {
+                                                        String[] address = addTo[0].split("_");
+                                                        String storeys = addTo[1];
+                                                        String pushingDistance = addTo[2];
+                                                        String stringDiv = "";
+                                                        if (address.length > 1) {
+                                                            String salesDivId = lead.getSalesDivIdByAddress(address[0] + " #" + address[1] + "-" + address[2] + " S" + address[3]);
+                                                            int counter = Integer.parseInt(salesDivId.substring(5));
+                                                            stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
+                                                            stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+                                                            stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+                                                            stringDiv += "<div class ='col-sm-4'>";
+                                                            stringDiv += "<input class='form-control addressFromInput' type='text' name='addressto' size='30' value='" + address[0] + "'>";
+                                                            stringDiv += "</div>"; //close col-sm-4
+                                                            stringDiv += "<div class ='col-sm-6'>";
+                                                            stringDiv += "<div class='input-group'>";
+                                                            stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+                                                            stringDiv += "<input class='form-control addressFromInput' type='text' name='addressto' size='2' value='" + address[1] + "''>";
+                                                            stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressto' size='3' value='" + address[2] + "'>";
+                                                            stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressto' size='5' value='" + address[3] + "'>";
+                                                            stringDiv += " </div>";// close input group
+                                                            stringDiv += "</div>";//close col-sm-6
+                                                            stringDiv += "</div>"; //close form-group row
+                                                            stringDiv += "</div></div>"; // col-sm-8, form group
+                                                            stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+                                                            stringDiv += "<div class ='col-sm-4'>";
+                                                            stringDiv += "<input class='form-control' type='text' name='storeysto' size='5' value='" + storeys + "'>";
+                                                            stringDiv += "</div>"; //close col-sm-4
+                                                            stringDiv += "</div>"; //close form group
+                                                            stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+                                                            stringDiv += "<div class ='col-sm-4'>";
+                                                            stringDiv += "<div class='input-group'>";
+                                                            stringDiv += "<input class='form-control' type='text' name='distanceto' size='5' value='" + pushingDistance + "'>";
+                                                            stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+                                                            stringDiv += "</div></div>"; //close input group, col-sm-4
+                                                            stringDiv += "</div>"; //close form group
+                                                            stringDiv += "</div>"; //close div id tag
+
+                                                            out.println(stringDiv);
+                                                        }
+                                                    }
+                                                %>
+                                            </div>
+                                        </fieldset>
+                                        <br>
+                                        <fieldset>
+                                            <b><u>Operations Details</u></b><br><br>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Move Type: </label>
+                                                <div class="col-sm-6" style="padding-top: 7px;">
+                                                    <%
+                                                        String[] tom = lead.getTom().split("\\|");
+
+                                                        for (String type : moveTypes) {
+                                                            boolean present = false;
+                                                            for (String tm : tom) {
+                                                                if (tm.equals(type)) {
+                                                                    present = true;
                                                                 }
                                                             }
-                                                        %>
+                                                            if (present) {
+                                                                out.println(" <label class=\"checkbox-inline\"><input type='checkbox' name='tom' value='" + type + "' checked>" + type + "</label>");
+                                                            } else {
+                                                                out.println("<label class=\"checkbox-inline\"><input type='checkbox' name='tom' value='" + type + "'>" + type + "</label>");
+                                                            }
+                                                        }
+                                                    %>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Moving Calendar: </label>
+                                                <div class="col-sm-4">
+                                                    <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewMovCal();">View Calendar</button>
+                                                </div>
+                                            </div>
+                                            <div id="operation">
+                                                <%
+                                                    ArrayList<Job> jobs = lead.getJobs();
+                                                    String jj = "";
+                                                    String jRem = "";
+                                                    String jStatus = "";
+                                                    HashMap<String, ArrayList<String>> timeslots = new HashMap<String, ArrayList<String>>();
+                                                    ArrayList<String> addressesFr = new ArrayList<String>();
+                                                    ArrayList<String> addressesTo = new ArrayList<String>();
+                                                    for (int i = 0; i < jobs.size(); i++) {
+                                                        Job job = jobs.get(i);
+                                                        String j = job.getDate();
+                                                        String jTruck = job.getAssignedTruck().toString();
+                                                        if (i == 0) {
+                                                            jj = j;
+                                                            jRem = job.getRemarks();
+                                                            jStatus = job.getStatus();
+                                                        }
+
+                                                        if (!j.equals(jj)) {
+                                                            
+                                                %>
+                                                <hr>
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Date of Move: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%=jj%>
+                                                        </div>
                                                     </div>
-
+                                                    <div class="form-group">
+                                                       <label class="col-sm-3 control-label">Truck(s): </label>
+                                                        <div class="col-sm-3" style="padding-top: 7px;">
+                                                            <%
+                                                            for (Map.Entry<String, ArrayList<String>> entry : timeslots.entrySet()) {
+                                                                String cp = entry.getKey();
+                                                                ArrayList<String> list = entry.getValue();
+                                                                out.println("<div><div class='col-sm-7' style='padding-left: 0px;'>" + cp + "</div>");
+                                                                out.println("<div class='col-sm-5'>");
+                                                                for (int k = 0; k < list.size(); k++) {
+                                                                    out.println(list.get(k) + "<br>");
+                                                                }
+                                                                out.println("</div></div><br>");
+                                                            }
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">From: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                            for (int k = 0; k < addressesFr.size(); k++) {
+                                                                out.println(addressesFr.get(k) + "<br>");
+                                                            }
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">To: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                            for (int k = 0; k < addressesTo.size(); k++) {
+                                                                out.println(addressesTo.get(k) + "<br>");
+                                                            }
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Remarks: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%=jRem%>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Status: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%=jStatus%>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
+                                                <%
 
+                                                            jj = j;
+                                                            jRem = job.getRemarks();
+                                                            jStatus = job.getStatus();
+                                                            timeslots = new HashMap<String, ArrayList<String>>();
+                                                            addressesFr = new ArrayList<String>();
+                                                            addressesTo = new ArrayList<String>();
+                                                        }
 
-                                    <br>
-                                    <fieldset>
-                                        <b><u>Moving From</u></b><br><br>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">S </label>
-                                            <div class="col-sm-4">
-                                                <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                                    <input type="text" id="postalfrom" placeholder="Enter Postal Code" class="form-control" style="width: 400px;color:black;">
-                                                    <span class="input-group-btn"> 
-                                                        <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="searchAddressFrom()">Search address from</button>
-                                                    </span>
+                                                        ArrayList<String> slots = timeslots.get(jTruck);
+                                                        if (slots == null) {
+                                                            slots = new ArrayList<String>();
+                                                            slots.add(job.getTimeSlot());
+                                                            timeslots.put(jTruck, slots);
+                                                        } else {
+                                                            if (!slots.contains(job.getTimeSlot())) {
+                                                                slots.add(job.getTimeSlot());
+                                                            }
+                                                        }
+
+                                                        HashMap<String, String> addresses = job.getAddresses();
+                                                        for (Map.Entry<String, String> entry : addresses.entrySet()) {
+                                                            String key = entry.getKey();
+                                                            String value = entry.getValue();
+                                                            if (value.equals("from")) {
+                                                                if (!addressesFr.contains(key)) {
+                                                                    addressesFr.add(key);
+                                                                }
+                                                            } else {
+                                                                if (!addressesTo.contains(key)) {
+                                                                    addressesTo.add(key);
+                                                                }
+                                                            }
+                                                        }
+
+                                                        if (i == jobs.size() - 1) {
+                                                %>
+                                                <hr>
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Date of Move: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%=jj%>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                       <label class="col-sm-3 control-label">Truck(s): </label>
+                                                        <div class="col-sm-3" style="padding-top: 7px;">
+                                                            <%
+                                                            for (Map.Entry<String, ArrayList<String>> entry : timeslots.entrySet()) {
+                                                                String cp = entry.getKey();
+                                                                ArrayList<String> list = entry.getValue();
+                                                                out.println("<div><div class='col-sm-7' style='padding-left: 0px;'>" + cp + "</div>");
+                                                                out.println("<div class='col-sm-5'>");
+                                                                for (int k = 0; k < list.size(); k++) {
+                                                                    out.println(list.get(k) + "<br>");
+                                                                }
+                                                                out.println("</div></div><br>");
+                                                            }
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">From: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                            for (int k = 0; k < addressesFr.size(); k++) {
+                                                                out.println(addressesFr.get(k) + "<br>");
+                                                            }
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">To: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%
+                                                            for (int k = 0; k < addressesTo.size(); k++) {
+                                                                out.println(addressesTo.get(k) + "<br>");
+                                                            }
+                                                            %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Remarks: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%=jRem%>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label">Status: </label>
+                                                        <div class="col-sm-4" style="padding-top: 7px;">
+                                                            <%=jStatus%>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div id="from">
-                                            <%
-                                                ArrayList<String[]> addressFrom = lead.getAddressFrom();
-                                                for (String[] addFrom : addressFrom) {
-                                                    String[] address = addFrom[0].split("_");
-                                                    String storeys = addFrom[1];
-                                                    String pushingDistance = addFrom[2];
-                                                    String stringDiv = "";
-                                                    if (address.length > 1) {
-                                                        String salesDivId = lead.getSalesDivIdByAddress(address[0] + " #" + address[1] + "-" + address[2] + " S" + address[3]);
-                                                        int counter = Integer.parseInt(salesDivId.substring(5));
-                                                        stringDiv += "<div class='address-box' id='from" + counter + "'><input type='hidden' id='tagId' value='" + salesDivId + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
-                                                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
-                                                        stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
-                                                        stringDiv += "<div class ='col-sm-4'>";
-                                                        stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='30' value='" + address[0] + "'>";
-                                                        stringDiv += "</div>"; //close col-sm-4
-                                                        stringDiv += "<div class ='col-sm-6'>";
-                                                        stringDiv += "<div class='input-group'>";
-                                                        stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                                                        stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='2' value='" + address[1] + "'>";
-                                                        stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                                                        stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='3' value='" + address[2] + "'>";
-                                                        stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                                                        stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='5' value='" + address[3] + "'>";
-                                                        stringDiv += " </div>";// close input group
-                                                        stringDiv += "</div>";//close col-sm-6
-                                                        stringDiv += "</div>"; //close form-group row
-                                                        stringDiv += "</div></div>"; // col-sm-8, form group
-                                                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
-                                                        stringDiv += "<div class ='col-sm-4'>";
-                                                        stringDiv += "<input class='form-control' type='text' name='storeysfrom' size='5' value='" + storeys + "'>";
-                                                        stringDiv += "</div>"; //close col-sm-4
-                                                        stringDiv += "</div>"; //close form group
-                                                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
-                                                        stringDiv += "<div class ='col-sm-4'>";
-                                                        stringDiv += "<div class='input-group'>";
-                                                        stringDiv += "<input class='form-control' type='text' name='distancefrom' size='5' value='" + pushingDistance + "'>";
-                                                        stringDiv += "<span class='input-group-addon bg-black'>M</span>";
-                                                        stringDiv += "</div></div>"; //close input group, col-sm-4
-                                                        stringDiv += "</div>"; //close form group
-                                                        stringDiv += "</div>"; //close div id tag
-
-                                                        out.println(stringDiv);
-                                                        counter++;
+                                                
+                                                <%
+                                                        }
                                                     }
-                                                }
-                                            %>
-                                        </div>
-
-                                    </fieldset>
-                                    <br>
-                                    <fieldset>
-                                        <b><u>Moving To</u></b><br><br>
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label">S </label>
-                                            <div class="col-sm-4">
-                                                <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                                    <input type="text" id="postalto" placeholder="Enter Postal Code" class="form-control" style="width: 400px;color:black;">
-                                                    <span class="input-group-btn"> 
-                                                        <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="searchAddressTo()">Search address to</button>
-                                                    </span>
-                                                </div>
+                                                %>
                                             </div>
-                                        </div>
-                                        <div id="to">
-                                            <%
-                                                ArrayList<String[]> addressTo = lead.getAddressTo();
-                                                int counter = 1;
-                                                for (String[] addTo : addressTo) {
-                                                    String[] address = addTo[0].split("_");
-                                                    String storeys = addTo[1];
-                                                    String pushingDistance = addTo[2];
-                                                    String stringDiv = "";
-                                                    if (address.length > 1) {
-                                                        stringDiv += "<div class='address-box' id='to" + counter + "'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
-                                                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
-                                                        stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
-                                                        stringDiv += "<div class ='col-sm-4'>";
-                                                        stringDiv += "<input class='form-control addressFromInput' type='text' name='addressto' size='30' value='" + address[0] + "'>";
-                                                        stringDiv += "</div>"; //close col-sm-4
-                                                        stringDiv += "<div class ='col-sm-6'>";
-                                                        stringDiv += "<div class='input-group'>";
-                                                        stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                                                        stringDiv += "<input class='form-control addressFromInput' type='text' name='addressto' size='2' value='" + address[1] + "''>";
-                                                        stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                                                        stringDiv += "<input type='text' class='form-control addressFromInput' name='addressto' size='3' value='" + address[2] + "'>";
-                                                        stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                                                        stringDiv += "<input type='text' class='form-control addressFromInput' name='addressto' size='5' value='" + address[3] + "'>";
-                                                        stringDiv += " </div>";// close input group
-                                                        stringDiv += "</div>";//close col-sm-6
-                                                        stringDiv += "</div>"; //close form-group row
-                                                        stringDiv += "</div></div>"; // col-sm-8, form group
-                                                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
-                                                        stringDiv += "<div class ='col-sm-4'>";
-                                                        stringDiv += "<input class='form-control' type='text' name='storeysto' size='5' value='" + storeys + "'>";
-                                                        stringDiv += "</div>"; //close col-sm-4
-                                                        stringDiv += "</div>"; //close form group
-                                                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
-                                                        stringDiv += "<div class ='col-sm-4'>";
-                                                        stringDiv += "<div class='input-group'>";
-                                                        stringDiv += "<input class='form-control' type='text' name='distanceto' size='5' value='" + pushingDistance + "'>";
-                                                        stringDiv += "<span class='input-group-addon bg-black'>M</span>";
-                                                        stringDiv += "</div></div>"; //close input group, col-sm-4
-                                                        stringDiv += "</div>"; //close form group
-                                                        stringDiv += "</div>"; //close div id tag
+                                        </fieldset>
 
-                                                        out.println(stringDiv);
-                                                        counter++;
-                                                    }
-                                                }
-                                            %>
-                                        </div>
-                                    </fieldset>
                                     </fieldset>
                                     <br>
                                     <fieldset>
@@ -588,7 +744,7 @@
                                                     String sName = "";
                                                     String sRem = "";
                                                     String sStatus = "";
-                                                    ArrayList<String> timeslots = new ArrayList<String>();
+                                                    ArrayList<String> tsts = new ArrayList<String>();
                                                     ArrayList<String> addresses = new ArrayList<String>();
                                                     for (int i = 0; i < surveys.size(); i++) {
                                                         SiteSurvey survey = surveys.get(i);
@@ -610,8 +766,8 @@
                                                             if (sStatus.equals("Pending")) {
                                                                 out.println("<span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
                                                             }
-                                                        %>
-                                                         <hr>
+                                                %>
+                                                <hr>
                                                 <div class="form-horizontal">
                                                     <div class="form-group">
                                                         <label class="col-sm-3 control-label">Date: </label>
@@ -625,9 +781,9 @@
                                                         <label class="col-sm-3 control-label">Time Slot: </label>
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
-                                                                for (int j = 0; j < timeslots.size(); j++) {
-                                                                out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) +"<br>");
-                                                            }
+                                                                for (int j = 0; j < tsts.size(); j++) {
+                                                                    out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + tsts.get(j) + "'>" + tsts.get(j) + "<br>");
+                                                                }
                                                             %>
                                                         </div>
                                                     </div>
@@ -636,8 +792,8 @@
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
                                                                 for (int j = 0; j < addresses.size(); j++) {
-                                                                out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "<br>");
-                                                            }
+                                                                    out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "<br>");
+                                                                }
                                                             %>
                                                         </div>
                                                     </div>
@@ -666,36 +822,36 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                        <%
-                                                            ss = s;
-                                                            sId = survey.getSiteSurveyor().getNric();
-                                                            sName = survey.getSiteSurveyor().toString();
-                                                            sRem = survey.getRemarks();
-                                                            sStatus = survey.getStatus();
-                                                            timeslots = new ArrayList<String>();
-                                                            addresses = new ArrayList<String>();
-                                                        }
+                                                <%
+                                                        ss = s;
+                                                        sId = survey.getSiteSurveyor().getNric();
+                                                        sName = survey.getSiteSurveyor().toString();
+                                                        sRem = survey.getRemarks();
+                                                        sStatus = survey.getStatus();
+                                                        tsts = new ArrayList<String>();
+                                                        addresses = new ArrayList<String>();
+                                                    }
 
-                                                        if (!timeslots.contains(survey.getTimeSlot())) {
-                                                            timeslots.add(survey.getTimeSlot());
+                                                    if (!tsts.contains(survey.getTimeSlot())) {
+                                                        tsts.add(survey.getTimeSlot());
+                                                    }
+                                                    if (!addresses.contains(survey.getAddress())) {
+                                                        addresses.add(survey.getAddress());
+                                                    }
+                                                    if (i == surveys.size() - 1) {
+                                                        if (!sStatus.equals("Cancelled")) {
+                                                            out.println("<div id='" + ss + "'>");
+                                                        } else {
+                                                            out.println("<div>");
                                                         }
-                                                        if (!addresses.contains(survey.getAddress())) {
-                                                            addresses.add(survey.getAddress());
+                                                        if (sStatus.equals("Pending")) {
+                                                            out.println("<span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
+                                                            out.println("<input type='hidden' name='surveyStatus' value='yes'>");
+                                                        } else if (sStatus.equals("Cancelled")) {
+                                                            out.println("<input type='hidden' name='surveyStatus' value='yes'>");
+                                                        } else {
+                                                            out.println("<input type='hidden' name='surveyStatus' value='no'>");
                                                         }
-                                                        if (i == surveys.size() - 1) {
-                                                            if (!sStatus.equals("Cancelled")) {
-                                                                out.println("<div id='" + ss + "'>");
-                                                            } else {
-                                                                out.println("<div>");
-                                                            }
-                                                            if (sStatus.equals("Pending")) {
-                                                                out.println("<span class='close' onClick=\"removeSiteSurvey('" + ss + "');\">×</span>");
-                                                                out.println("<input type='hidden' name='surveyStatus' value='yes'>");
-                                                            } else if (sStatus.equals("Cancelled")) {
-                                                                out.println("<input type='hidden' name='surveyStatus' value='yes'>");
-                                                            } else {
-                                                                out.println("<input type='hidden' name='surveyStatus' value='no'>");
-                                                            }
                                                 %>
                                                 <hr>
                                                 <div class="form-horizontal">
@@ -711,9 +867,9 @@
                                                         <label class="col-sm-3 control-label">Time Slot: </label>
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
-                                                                for (int j = 0; j < timeslots.size(); j++) {
-                                                                out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + timeslots.get(j) + "'>" + timeslots.get(j) +"<br>");
-                                                            }
+                                                                for (int j = 0; j < tsts.size(); j++) {
+                                                                    out.println("<input type='hidden' name='siteSurvey_timeslot' value='" + ss + "|" + tsts.get(j) + "'>" + tsts.get(j) + "<br>");
+                                                                }
                                                             %>
                                                         </div>
                                                     </div>
@@ -722,8 +878,8 @@
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
                                                                 for (int j = 0; j < addresses.size(); j++) {
-                                                                out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "<br>");
-                                                            }
+                                                                    out.println("<tr><td><input type='hidden' name='siteSurvey_address' value='" + ss + "|" + addresses.get(j) + "'>" + addresses.get(j) + "<br>");
+                                                                }
                                                             %>
                                                         </div>
                                                     </div>
@@ -817,7 +973,7 @@
                                                                     <tr>
                                                                         <td align="right">Name:</td>
                                                                         <td>
-                                                                            <input class='form-control' type="text" size="40" class="itemName" id="<%=divId%>_itemName" list="<%=divId%>_items" placeholder="Enter item">
+                                                                            <input class='form-control itemName' type="text" size="40" id="<%=divId%>_itemName" list="<%=divId%>_items" placeholder="Enter item">
 
                                                                             <datalist id="<%=divId%>_items">
                                                                                 <%                                            for (String[] item : existingItems) {
@@ -1023,7 +1179,7 @@
                                                     </table>
                                                     </td>
                                                     <td style="width:70%;">
-                                                        <table class="table table-bordered vimboxSystemTable">
+                                                        <table class="table vimboxSystemTable" style="padding-top: 2px;">
                                                             <tr style="height:50%">
                                                                 <td>
                                                                     <table class='table table-bordered' border="1"><thead>
@@ -1183,8 +1339,8 @@
                                                                     <td>
                                                                         <table class='table' width="100%">
                                                                             <tr>
-                                                                                <td align="left">Storey Charges:</td>
-                                                                                <td align="right">
+                                                                                <td align="left" style="width: 40%;">Storey Charges:</td>
+                                                                                <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <input class='form-control storeyCharge' type="number" step="0.01" min="0" id="<%=divId%>_storeyCharge" name="<%=divId%>_storeyCharge" value="<%=others.get("storeyCharge")%>">
@@ -1197,8 +1353,8 @@
                                                                     <td>
                                                                         <table class='table' width="100%">
                                                                             <tr>
-                                                                                <td align="left">Pushing Charges:</td>
-                                                                                <td align="right">
+                                                                                <td align="left" style="width: 40%;">Pushing Charges:</td>
+                                                                                <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <input class='form-control pushCharge'  type="number" step="0.01" min="0" id="<%=divId%>_pushCharge"  name="<%=divId%>_pushCharge" value="<%=others.get("pushCharge")%>">
@@ -1212,8 +1368,8 @@
                                                                     <td>
                                                                         <table class='table' width="100%">
                                                                             <tr>
-                                                                                <td align="left">Detour Charges:</td>
-                                                                                <td align="right">
+                                                                                <td align="left" style="width: 40%;">Detour Charges:</td>
+                                                                                <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <input class='form-control detourCharge' type="number" step="0.01" min="0" id="<%=divId%>_detourCharge"  name="<%=divId%>_detourCharge" value="<%=others.get("detourCharge")%>">
@@ -1227,8 +1383,8 @@
                                                                     <td>
                                                                         <table class='table' width="100%">
                                                                             <tr>
-                                                                                <td align="left">Material Charges:</td>
-                                                                                <td align="right">
+                                                                                <td align="left" style="width: 40%;">Material Charges:</td>
+                                                                                <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <input class='form-control materialCharge' type="number" step="0.01" min="0" id="<%=divId%>_materialCharge"  name="<%=divId%>_materialCharge" value="<%=others.get("materialCharge")%>">
@@ -1242,8 +1398,8 @@
                                                                     <td>
                                                                         <table class='table' width="100%">
                                                                             <tr>
-                                                                                <td align="left">Additional Markup:</td>
-                                                                                <td align="right">
+                                                                                <td align="left" style="width: 40%;">Additional Markup:</td>
+                                                                                <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <input class='form-control markup' type="number" step="0.01" min="0" id="<%=divId%>_markup"  name="<%=divId%>_markup" value="<%=others.get("markup")%>">
@@ -1257,8 +1413,8 @@
                                                                     <td>
                                                                         <table class='table' width="100%">
                                                                             <tr>
-                                                                                <td align="left">Discount:</td>
-                                                                                <td align="right">
+                                                                                <td align="left" style="width: 40%;">Discount:</td>
+                                                                                <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <input  class='form-control discount' type="number" step="0.01" min="0" id="<%=divId%>_discount"  name="<%=divId%>_discount" value="<%=others.get("discount")%>">

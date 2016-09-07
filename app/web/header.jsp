@@ -33,14 +33,13 @@
 <script type="text/javascript" src="assets/widgets/tabs/tabs-responsive.js"></script>
 <script type="text/javascript">
     /* Responsive tabs */
-    $(document).ready(function() {
-    $(function () {
-        "use strict";
-        $('.nav-responsive').tabdrop();
-    });
+    $(document).ready(function () {
+        $(function () {
+            "use strict";
+            $('.nav-responsive').tabdrop();
+        });
     });
 </script>
-
 <!-- Favicons -->
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/images/icons/apple-touch-icon-144-precomposed.png">
@@ -230,7 +229,7 @@
 <link rel="stylesheet" type="text/css" href="assets/helpers/admin-responsive.css">
 
 <!-- JS Core -->
-
+<script src="JS/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="assets/js-core/jquery-core.js"></script>
 <script type="text/javascript" src="assets/js-core/jquery-ui-core.js"></script>
 <script type="text/javascript" src="assets/js-core/jquery-ui-widget.js"></script>
@@ -259,6 +258,8 @@
     <%            String name = user.getFirst_name() + " " + user.getLast_name();
         String designation = user.getDesignation();
     %>
+
+    
     <div id="page-wrapper">
         <div id="page-header" class="bg-gradient-9">
             <div id="mobile-navigation">
@@ -296,28 +297,8 @@
                         </div>
                     </div>
                 </div>
-                <script src="JS/AdminFunctions.js"></script>
-                <button onclick="admViewCal()">View Site Survey Schedules</button>
-                <button onclick="admViewMovCal()">View Operation Schedules</button>
-                <div id="cal_modal" class="modal">
-                    <div class="modal-content" style="width: 90%;">
-                        <div class="modal-body">
-                            <span class="close" onclick="closeModal('cal_modal')">×</span>
-                            <br>
-                            <div id="cal_content"></div>
-                            <br>
-                            <div id="ssCalTable"></div>
-                        </div>
-                    </div>
-                </div>
-                <div id="schedule_modal" class="modal">
-                    <div class="modal-content" style="width: 95%;">
-                        <div class="modal-body">
-                            <span class="close" onclick="closeModal('schedule_modal')">×</span>
-                            <div id="schedule_content"></div>
-                        </div>
-                    </div>
-        </div>
+
+                
             </div>
             <style>                                  
                 .searchbar {
@@ -349,6 +330,46 @@
             </style>
 
             <div id="header-nav-right">
+                <script src="JS/AdminFunctions.js"></script>
+                <style type="text/css">
+        .htooltip {
+            position: relative;
+            z-index: 999;
+        }
+
+        .htooltip .htooltiptext {
+            visibility: hidden;
+            width: 180px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            top: 115%;
+            left: -147%;
+        }
+
+        .htooltip .htooltiptext::after {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent black transparent;
+        }
+
+        .htooltip:hover .htooltiptext {
+            visibility: visible;
+            display: block;
+            z-index: 1;
+        }
+    </style>
+                
+                
                 <div class="dropdown">
                     <input type="text" id="customer_search_header" class="searchbar" placeholder="Search Customer">
                     <button class="btn btn-round btn-primary" onclick='customerSearchHeader("crm")' data-toggle="modal" data-target=".bs-example-modal-lg" style=" margin-right: 10px">
@@ -423,11 +444,42 @@
 
                     </div>
                 </div>
-
+                <div class="htooltip dropdown">
+                    <a onclick="admViewCal()"><i class="glyph-icon icon-calendar-o"></i></a>
+                    <span class='htooltiptext'>
+                        View Site Survey Schedule
+                    </span>
+                </div>
+                <div class="htooltip dropdown">
+                    <a onclick="admViewMovCal()"><i class="glyph-icon icon-calendar"></i></a>
+                    <span class='htooltiptext'>
+                        View Operation Schedules
+                    </span>
+                </div>
+               
+                <div id="cal_modal" class="modal">
+                    <div class="modal-content" style="width: 90%;">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('cal_modal')">×</span>
+                            <br>
+                            <div id="cal_content"></div>
+                            <br>
+                            <div id="ssCalTable"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="schedule_modal" class="modal">
+                    <div class="modal-content" style="width: 95%;">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                            <div id="schedule_content"></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="dropdown" id="notifications-btn">
-                    <a data-toggle="dropdown" href="#" title="">
+                    <a data-toggle="dropdown" href="#">
                         <span class="small-badge bg-yellow"></span>
-                        <i class="glyph-icon icon-linecons-megaphone"></i>
+                        <i class="glyph-icon icon-linecons-megaphone" title data-original-title="test" data-toggle="tooltip" data-placement="bottom"></i>
                     </a>
                     <div class="dropdown-menu box-md float-right">
 

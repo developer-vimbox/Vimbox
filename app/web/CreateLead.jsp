@@ -8,6 +8,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create new lead</title>
+    </head>
+    <body>
+        <%@include file="header.jsp"%>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        
+        <script src="JS/jquery.hotkeys.js"></script>
+        <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/LeadFunctions.js"></script>
+        <script src="JS/AddressSearch.js"></script>
         <style>
 
             table.salesTable td {
@@ -32,18 +41,10 @@
                 width:100%;
                 height:100%;
             }
+            .table{
+                color: #4b5056;
+            }
         </style>
-    </head>
-    <body>
-        <%@include file="header.jsp"%>
-        <script src="http://malsup.github.com/jquery.form.js"></script> 
-        
-        <script src="JS/jquery.hotkeys.js"></script>
-        <script src="JS/ModalFunctions.js"></script>
-        <script src="JS/LeadFunctions.js"></script>
-        <script src="JS/AddressSearch.js"></script>
-        <script src="JS/CustomerFunctions.js"></script>
-
         <div id="cal_modal" class="modal">
             <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">

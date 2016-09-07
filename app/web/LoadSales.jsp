@@ -325,7 +325,7 @@
             </table>
         </td>
         <td style="width:70%;">
-            <table class="table table-bordered vimboxSystemTable">
+            <table class="table vimboxSystemTable" style="padding-top: 2px;">
                 <tr style="height:50%;" >
                     <td>
                         <table class='table table-bordered' border="1">
@@ -424,8 +424,8 @@
                                 <td>
                                     <table class='table' width="100%">
                                         <tr>
-                                            <td align="left">Storey Charges:</td>
-                                            <td align="right">
+                                            <td align="left" style="width: 40%;">Storey Charges:</td>
+                                            <td align="right" style="width: 60%;">
                                                 <div class="input-group">
                             <span class="input-group-addon">$</span>
                             <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_storeyCharge" class="storeyCharge" name="<%=divId%>_storeyCharge" value="0.00">
@@ -439,8 +439,8 @@
                                 <td>
                                     <table class='table' width="100%">
                                         <tr>
-                                            <td align="left">Pushing Charges:</td>
-                                            <td align="right">
+                                            <td align="left" style="width: 40%;">Pushing Charges:</td>
+                                            <td align="right" style="width: 60%;">
                                                  <div class="input-group">
                             <span class="input-group-addon">$</span>
                             <input class='form-control'  type="number" step="0.01" min="0" id="<%=divId%>_pushCharge" class="pushCharge" name="<%=divId%>_pushCharge" value="0.00">
@@ -453,8 +453,8 @@
                                 <td>
                                     <table class='table' width="100%">
                                         <tr>
-                                            <td align="left">Detour Charges:</td>
-                                            <td align="right">
+                                            <td align="left" style="width: 40%;">Detour Charges:</td>
+                                            <td align="right" style="width: 60%;">
                                                   <div class="input-group">
                             <span class="input-group-addon">$</span>
                             <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_detourCharge" class="detourCharge" name="<%=divId%>_detourCharge" value="0.00">
@@ -468,8 +468,8 @@
                                 <td>
                                     <table class='table' width="100%">
                                         <tr>
-                                            <td align="left">Material Charges:</td>
-                                            <td align="right">
+                                            <td align="left" style="width: 40%;">Material Charges:</td>
+                                            <td align="right" style="width: 60%;">
                                                    <div class="input-group">
                             <span class="input-group-addon">$</span>
                             <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_materialCharge" class="materialCharge" name="<%=divId%>_materialCharge" value="0.00">
@@ -483,8 +483,8 @@
                                 <td>
                                     <table class='table' width="100%">
                                         <tr>
-                                            <td align="left">Additional Markup:</td>
-                                            <td align="right">
+                                            <td align="left" style="width: 40%;">Additional Markup:</td>
+                                            <td align="right" style="width: 60%;">
                                                  <div class="input-group">
                             <span class="input-group-addon">$</span>
                             <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_markup" class="markup" name="<%=divId%>_markup" value="0.00">
@@ -497,8 +497,8 @@
                                 <td>
                                     <table class='table' width="100%">
                                         <tr>
-                                            <td align="left">Discount:</td>
-                                            <td align="right">
+                                            <td align="left" style="width: 40%;">Discount:</td>
+                                            <td align="right" style="width: 60%;">
                                                     <div class="input-group">
                             <span class="input-group-addon">$</span>
                             <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_discount" class="discount" name="<%=divId%>_discount" value="0.00">

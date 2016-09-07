@@ -31,9 +31,8 @@ public class AssignJobController extends HttpServlet {
         
         int jobId = Integer.parseInt(request.getParameter("jobId"));
         String supervisor = request.getParameter("supervisor");
-        String assigned = request.getParameter("assigned");
         
-        JobsAttendanceDAO.assignJobAttendance(jobId, supervisor, assigned);
+        JobsAttendanceDAO.assignJobAttendance(jobId, supervisor);
         jsonOutput.addProperty("status", "SUCCESS");
         jsonOutput.addProperty("message", "Job assigned!");
         jsonOut.println(jsonOutput);
