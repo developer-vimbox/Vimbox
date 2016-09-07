@@ -479,7 +479,7 @@
                 <div class="dropdown" id="notifications-btn">
                     <a data-toggle="dropdown" href="#">
                         <span class="small-badge bg-yellow"></span>
-                        <i class="glyph-icon icon-linecons-megaphone" title data-original-title="test" data-toggle="tooltip" data-placement="bottom"></i>
+                        <i class="glyph-icon icon-linecons-megaphone"></i>
                     </a>
                     <div class="dropdown-menu box-md float-right">
 
@@ -595,7 +595,7 @@
                 <ul id="sidebar-menu">
                     <li>
                         <a href="#" title="Human Resource">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <i class="glyph-icon icon-group"></i>
                             <span>Human Resource</span>
                         </a>
                         <div class="sidebar-submenu">
@@ -611,7 +611,7 @@
                     </li>
                     <li>
                         <a href="#" title="Sales">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <i class="glyph-icon icon-dollar"></i>
                             <span>Sales</span>
                         </a>
                         <div class="sidebar-submenu">
@@ -626,7 +626,7 @@
                     </li>
                     <li>
                         <a href="#" title="Site Surveys">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <i class="glyph-icon icon-building-o"></i>
                             <span>Site Surveys</span>
                         </a>
                         <div class="sidebar-submenu">
@@ -639,7 +639,7 @@
                     </li>
                     <li>
                         <a href="#" title="Operations">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <i class="glyph-icon icon-truck"></i>
                             <span>Operations</span>
                         </a>
                         <div class="sidebar-submenu">
@@ -651,7 +651,7 @@
                     </li>
                     <li>
                         <a href="#" title="Tickets">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <i class="glyph-icon icon-ticket"></i>
                             <span>Tickets</span>
                         </a>
                         <div class="sidebar-submenu">
@@ -665,7 +665,7 @@
                     </li>
                     <li>
                         <a href="#" title="Admin">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
+                            <i class="glyph-icon icon-user"></i>
                             <span>Admin</span>
                         </a>
                         <div class="sidebar-submenu">
