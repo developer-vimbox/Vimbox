@@ -27,7 +27,25 @@ public class JobDAO {
     private static final String CANCEL_JOB = "UPDATE operations_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
     private static final String GET_ALL_NON_CANCELLED_JOBS = "SELECT * FROM operations_assigned where status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
     private static final String GET_NON_CANCELLED_JOBS_BY_TRUCK = "SELECT * FROM operations_assigned where carplate_no = ? AND status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
-
+    private static final String UPDATE_JOB_SUPERVISOR = "UPDATE operations_assigned SET supervisor=? WHERE job_id=?";
+    
+    public static void assignJobAttendance(ArrayList<Integer> jobIds, String supervisor){
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(UPDATE_JOB_SUPERVISOR);
+            for(int jobId : jobIds){
+                ps.setString(1, supervisor);
+                ps.setInt(2, jobId);
+                ps.executeUpdate();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
     
     public static void createOperationAssignment(int leadId, int jobId, String owner, ArrayList<String> adds, ArrayList<String> addsTags, String date, HashMap<String,ArrayList<String>> times, HashMap<String,String> timeslot, String remarks, String status){
         Connection con = null;

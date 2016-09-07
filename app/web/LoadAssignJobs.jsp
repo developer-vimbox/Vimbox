@@ -18,7 +18,7 @@
         out.println("<br><br>");
     }
 %>
-
+<button class='btn btn-default' onclick="assignJobModal()">Assign Supervisor</button>
 <table class="table table-bordered" width="100%">
     <col width="5%">
     <col width="5%">
@@ -31,22 +31,22 @@
     <col width="5%">
     <thead>
     <tr>
+        <th><input type='checkbox' onclick="selectAllJobs()"></th>
         <th>Job ID</th>
         <th>Lead ID</th>
-        <th>Truck</th>
+        <th>Truck(s)</th>
         <th>Date</th>
         <th>From</th>
         <th>To</th>
         <th>Time Slot</th>
         <th>View</th>
-        <th>Action</th>
     </tr>
     </thead>
     <%
         String jobId = "";
         String leadId = ""; 
         String jj = "";
-        String jTruck = "";
+        ArrayList<String> jTruck = new ArrayList<String>();
         String timeslot = "";
         ArrayList<String> addressesFr = new ArrayList<String>();
         ArrayList<String> addressesTo = new ArrayList<String>();
@@ -61,15 +61,19 @@
                 jj = j;
                 leadId = nextLeadId;
                 jobId = nextJobId;
-                jTruck = nextTruck;
                 timeslot = nextTimeslot;
             }
 
-            if (!j.equals(jj) || !nextLeadId.equals(leadId) || !nextTruck.equals(jTruck)) {
+            if (!j.equals(jj) || !nextLeadId.equals(leadId)) {
                 out.println("<tr>");
+                out.println("<td align='center'><input type='checkbox' name='selectedJobs' value='" + jobId + "'></td>");
                 out.println("<td align='center'>" + jobId + "</td>");
                 out.println("<td align='center'>" + leadId + "</td>");
-                out.println("<td align='center'>" + jTruck + "</td>");
+                out.println("<td align='center'><ul>");
+                for(String truck:jTruck){
+                    out.println("<li>" + truck + "</li>");
+                }
+                out.println("</ul></td>");
                 out.println("<td align='center'>" + jj + "</td>");
                 out.println("<td align='center'><ul>");
                 for(String add:addressesFr){
@@ -83,18 +87,21 @@
                 out.println("</ul></td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
                 out.println("<td align='center'><button class='btn btn-default' onclick=\"viewLead('" + leadId + "')\">VS</button></td>");
-                out.println("<td align='center'><button class='btn btn-default' onclick=\"assignJobModal('" + jobId + "')\">Assign</button></td>");
                 out.println("</tr>");
                 
                 jj = j;
                 leadId = nextLeadId;
                 jobId = nextJobId;
-                jTruck = nextTruck;
+                jTruck = new ArrayList<String>();
                 timeslot = nextTimeslot;
                 addressesFr = new ArrayList<String>();
                 addressesTo = new ArrayList<String>();
             }
 
+            if(!jTruck.contains(nextTruck)){
+                jTruck.add(nextTruck);
+            }
+            
             HashMap<String, String> addresses = job.getAddresses();
             for (Map.Entry<String, String> entry : addresses.entrySet()) {
                 String key = entry.getKey();
@@ -112,9 +119,14 @@
 
             if (i == jobs.size() - 1) {
                 out.println("<tr>");
+                out.println("<td align='center'><input type='checkbox' name='selectedJobs' value='" + jobId + "'></td>");
                 out.println("<td align='center'>" + jobId + "</td>");
                 out.println("<td align='center'>" + leadId + "</td>");
-                out.println("<td align='center'>" + jTruck + "</td>");
+                out.println("<td align='center'><ul>");
+                for(String truck:jTruck){
+                    out.println("<li>" + truck + "</li>");
+                }
+                out.println("</ul></td>");
                 out.println("<td align='center'>" + jj + "</td>");
                 out.println("<td align='center'><ul>");
                 for(String add:addressesFr){
@@ -128,8 +140,6 @@
                 out.println("</ul></td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
                 out.println("<td align='center'><button class='btn btn-default' onclick=\"viewLead('" + leadId + "')\">VS</button></td>");
-                out.println("<td align='center'><button class='btn btn-default' onclick=\"assignJobModal('" + jobId + "')\">Assign</button></td>");
-                out.println("</td>");
                 out.println("</tr>");
             }
         }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2016 at 03:43 PM
+-- Generation Time: Sep 07, 2016 at 11:12 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -58,6 +58,14 @@ CREATE TABLE IF NOT EXISTS `customers_history` (
   PRIMARY KEY (`customer_id`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `customers_history`
+--
+
+INSERT INTO `customers_history` (`customer_id`, `id`) VALUES
+(1, 263562593),
+(1, 850286188);
+
 -- --------------------------------------------------------
 
 --
@@ -99,6 +107,14 @@ CREATE TABLE IF NOT EXISTS `leadenquiry` (
   PRIMARY KEY (`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `leadenquiry`
+--
+
+INSERT INTO `leadenquiry` (`lead_id`, `enquiry`) VALUES
+(263562593, 'SELECT'),
+(850286188, 'SELECT');
+
 -- --------------------------------------------------------
 
 --
@@ -118,6 +134,14 @@ CREATE TABLE IF NOT EXISTS `leadinfo` (
   `referral` varchar(200) NOT NULL,
   PRIMARY KEY (`owner_user`,`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadinfo`
+--
+
+INSERT INTO `leadinfo` (`owner_user`, `lead_id`, `type`, `customer_id`, `tom`, `datetime_of_creation`, `status`, `reason`, `source`, `referral`) VALUES
+('S9344895B', 263562593, 'Sales', 1, '', '2016-09-07 16:00:08', 'Pending', '', 'Call', 'Friend'),
+('S9344895B', 850286188, 'Sales', 1, '', '2016-09-07 16:24:11', 'Pending', '', 'Call', 'Friend');
 
 -- --------------------------------------------------------
 
@@ -150,6 +174,16 @@ CREATE TABLE IF NOT EXISTS `leadmove` (
   PRIMARY KEY (`lead_id`,`sales_div`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `leadmove`
+--
+
+INSERT INTO `leadmove` (`lead_id`, `sales_div`, `type`, `address`, `storeys`, `pushing`) VALUES
+(263562593, 'sales1|39 Cambridge Rd #1-1 S210039', 'from', '39 Cambridge Rd_1_1_210039', ' ', ' '),
+(263562593, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'to', '864 Yishun Ave 4, Block 864_1_1_760864', ' ', ' '),
+(850286188, 'sales1|39 Cambridge Rd #1-1 S210039', 'from', '39 Cambridge Rd_1_1_210039', ' ', ' '),
+(850286188, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'to', '864 Yishun Ave 4, Block 864_1_1_760864', ' ', ' ');
+
 -- --------------------------------------------------------
 
 --
@@ -162,6 +196,36 @@ CREATE TABLE IF NOT EXISTS `leadother` (
   `other` varchar(100) NOT NULL,
   `charge` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadother`
+--
+
+INSERT INTO `leadother` (`lead_id`, `sales_div`, `other`, `charge`) VALUES
+(263562593, 'sales1|39 Cambridge Rd #1-1 S210039', 'storeyCharge', '0.00'),
+(263562593, 'sales1|39 Cambridge Rd #1-1 S210039', 'pushCharge', '0.00'),
+(263562593, 'sales1|39 Cambridge Rd #1-1 S210039', 'detourCharge', '0.00'),
+(263562593, 'sales1|39 Cambridge Rd #1-1 S210039', 'materialCharge', '0.00'),
+(263562593, 'sales1|39 Cambridge Rd #1-1 S210039', 'markup', '0.00'),
+(263562593, 'sales1|39 Cambridge Rd #1-1 S210039', 'discount', '0.00'),
+(263562593, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'storeyCharge', '0.00'),
+(263562593, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'pushCharge', '0.00'),
+(263562593, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'detourCharge', '0.00'),
+(263562593, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'materialCharge', '0.00'),
+(263562593, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'markup', '0.00'),
+(263562593, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'discount', '0.00'),
+(850286188, 'sales1|39 Cambridge Rd #1-1 S210039', 'storeyCharge', '0.00'),
+(850286188, 'sales1|39 Cambridge Rd #1-1 S210039', 'pushCharge', '0.00'),
+(850286188, 'sales1|39 Cambridge Rd #1-1 S210039', 'detourCharge', '0.00'),
+(850286188, 'sales1|39 Cambridge Rd #1-1 S210039', 'materialCharge', '0.00'),
+(850286188, 'sales1|39 Cambridge Rd #1-1 S210039', 'markup', '0.00'),
+(850286188, 'sales1|39 Cambridge Rd #1-1 S210039', 'discount', '0.00'),
+(850286188, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'storeyCharge', '0.00'),
+(850286188, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'pushCharge', '0.00'),
+(850286188, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'detourCharge', '0.00'),
+(850286188, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'materialCharge', '0.00'),
+(850286188, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'markup', '0.00'),
+(850286188, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', 'discount', '0.00');
 
 -- --------------------------------------------------------
 
@@ -188,6 +252,16 @@ CREATE TABLE IF NOT EXISTS `leadsalesdiv` (
   `survey_area_name` varchar(255) NOT NULL,
   PRIMARY KEY (`lead_id`,`sales_div`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadsalesdiv`
+--
+
+INSERT INTO `leadsalesdiv` (`lead_id`, `sales_div`, `survey_area`, `survey_area_name`) VALUES
+(263562593, 'sales1|39 Cambridge Rd #1-1 S210039', '', ''),
+(263562593, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', '', ''),
+(850286188, 'sales1|39 Cambridge Rd #1-1 S210039', '', ''),
+(850286188, 'sales2|864 Yishun Ave 4, Block 864 #1-1 S760864', '', '');
 
 -- --------------------------------------------------------
 
@@ -244,6 +318,7 @@ CREATE TABLE IF NOT EXISTS `operations_assigned` (
   `lead_id` int(10) NOT NULL,
   `job_id` int(10) NOT NULL,
   `ss_owner` varchar(10) NOT NULL,
+  `supervisor` varchar(20) NOT NULL,
   `carplate_no` varchar(255) NOT NULL,
   `address_tag` varchar(50) NOT NULL,
   `address` varchar(255) NOT NULL,
@@ -256,6 +331,18 @@ CREATE TABLE IF NOT EXISTS `operations_assigned` (
   PRIMARY KEY (`lead_id`,`carplate_no`,`dom`,`start_datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `operations_assigned`
+--
+
+INSERT INTO `operations_assigned` (`lead_id`, `job_id`, `ss_owner`, `supervisor`, `carplate_no`, `address_tag`, `address`, `dom`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
+(263562593, 572643837, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-15', '2016-09-15 12:30:00', '2016-09-15 13:00:00', '1230 - 1330', '', 'Confirmed'),
+(263562593, 572643837, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-15', '2016-09-15 13:00:00', '2016-09-15 13:30:00', '1230 - 1330', '', 'Confirmed'),
+(850286188, 393811762, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1300 - 1400', '', 'Confirmed'),
+(850286188, 393811762, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:30:00', '2016-09-16 14:00:00', '1300 - 1400', '', 'Confirmed'),
+(850286188, 393811762, 'S9344895B', '', 'SGX4526F', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1300 - 1400', '', 'Confirmed'),
+(850286188, 393811762, 'S9344895B', '', 'SGX4526F', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:30:00', '2016-09-16 14:00:00', '1300 - 1400', '', 'Confirmed');
+
 -- --------------------------------------------------------
 
 --
@@ -266,9 +353,17 @@ CREATE TABLE IF NOT EXISTS `operations_attendance` (
   `job_id` int(10) NOT NULL,
   `supervisor` varchar(20) NOT NULL,
   `assigned` varchar(255) NOT NULL,
-  `pt_movers` varchar(255) NOT NULL,
+  `timeslot` varchar(100) NOT NULL,
   PRIMARY KEY (`job_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `operations_attendance`
+--
+
+INSERT INTO `operations_attendance` (`job_id`, `supervisor`, `assigned`, `timeslot`) VALUES
+(393811762, '1234567', '', ''),
+(572643837, '1234567', '', '');
 
 -- --------------------------------------------------------
 

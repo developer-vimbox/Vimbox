@@ -2,6 +2,13 @@ function assign_jobs_setup() {
     loadAssignJobs('');
 }
 
+function selectAllJobs(){
+    var checkboxes = document.getElementsByName('selectedJobs');
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = source.checked;
+    }
+}
+
 function loadAssignJobs(keyword) {
     $.get("LoadAssignJobs.jsp", {keyword: keyword}, function (data) {
         document.getElementById("jobs_table").innerHTML = data;

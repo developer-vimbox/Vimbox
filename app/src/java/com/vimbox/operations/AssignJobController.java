@@ -1,7 +1,7 @@
 package com.vimbox.operations;
 
 import com.google.gson.JsonObject;
-import com.vimbox.database.JobsAttendanceDAO;
+import com.vimbox.database.JobDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -32,7 +32,7 @@ public class AssignJobController extends HttpServlet {
         int jobId = Integer.parseInt(request.getParameter("jobId"));
         String supervisor = request.getParameter("supervisor");
         
-        JobsAttendanceDAO.assignJobAttendance(jobId, supervisor);
+        JobDAO.assignJobAttendance(jobId, supervisor);
         jsonOutput.addProperty("status", "SUCCESS");
         jsonOutput.addProperty("message", "Job assigned!");
         jsonOut.println(jsonOutput);
