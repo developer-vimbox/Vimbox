@@ -12,7 +12,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.TreeSet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -204,9 +203,7 @@ public class CreateLeadController extends HttpServlet {
                         }
                         
                     }
-                    
-                    int jobId = new Random().nextInt(900000000) + 100000000;
-                    JobDAO.createOperationAssignment(leadId, jobId, owner.getNric(), adds, addsTags, domDate, times, timest, remark, stts);
+                    JobDAO.createOperationAssignment(leadId, owner.getNric(), adds, addsTags, domDate, times, timest, remark, stts);
                 }
             }
                 //----------------------------------------//
