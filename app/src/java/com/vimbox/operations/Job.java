@@ -2,7 +2,6 @@ package com.vimbox.operations;
 
 import com.vimbox.user.User;
 import com.vimbox.util.Converter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import org.joda.time.DateTime;
@@ -10,8 +9,8 @@ import org.joda.time.LocalDateTime;
 
 public class Job {
     private int leadId;
-    private int jobId;
     private User owner;
+    private User supervisor;
     private Truck assignedTruck;
     private Date dom;
     // address, address tag //
@@ -22,9 +21,9 @@ public class Job {
     private String timeslot;
     private String status;
 
-    public Job(int leadId, int jobId, User owner, Truck assignedTruck, Date dom, HashMap<String, String> addresses, DateTime start, DateTime end, String remarks, String timeslot, String status) {
+    public Job(int leadId, User owner, User supervisor, Truck assignedTruck, Date dom, HashMap<String, String> addresses, DateTime start, DateTime end, String remarks, String timeslot, String status) {
         this.leadId = leadId;
-        this.jobId = jobId;
+        this.supervisor = supervisor;
         this.owner = owner;
         this.assignedTruck = assignedTruck;
         this.dom = dom;
@@ -40,8 +39,8 @@ public class Job {
         return leadId;
     }
 
-    public int getJobId() {
-        return jobId;
+    public User getSupervisor() {
+        return supervisor;
     }
 
     public User getOwner() {

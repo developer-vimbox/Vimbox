@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 07, 2016 at 11:12 AM
+-- Generation Time: Sep 07, 2016 at 12:11 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -316,7 +316,6 @@ CREATE TABLE IF NOT EXISTS `lead_followups` (
 
 CREATE TABLE IF NOT EXISTS `operations_assigned` (
   `lead_id` int(10) NOT NULL,
-  `job_id` int(10) NOT NULL,
   `ss_owner` varchar(10) NOT NULL,
   `supervisor` varchar(20) NOT NULL,
   `carplate_no` varchar(255) NOT NULL,
@@ -335,13 +334,13 @@ CREATE TABLE IF NOT EXISTS `operations_assigned` (
 -- Dumping data for table `operations_assigned`
 --
 
-INSERT INTO `operations_assigned` (`lead_id`, `job_id`, `ss_owner`, `supervisor`, `carplate_no`, `address_tag`, `address`, `dom`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
-(263562593, 572643837, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-15', '2016-09-15 12:30:00', '2016-09-15 13:00:00', '1230 - 1330', '', 'Confirmed'),
-(263562593, 572643837, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-15', '2016-09-15 13:00:00', '2016-09-15 13:30:00', '1230 - 1330', '', 'Confirmed'),
-(850286188, 393811762, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1300 - 1400', '', 'Confirmed'),
-(850286188, 393811762, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:30:00', '2016-09-16 14:00:00', '1300 - 1400', '', 'Confirmed'),
-(850286188, 393811762, 'S9344895B', '', 'SGX4526F', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1300 - 1400', '', 'Confirmed'),
-(850286188, 393811762, 'S9344895B', '', 'SGX4526F', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:30:00', '2016-09-16 14:00:00', '1300 - 1400', '', 'Confirmed');
+INSERT INTO `operations_assigned` (`lead_id`, `ss_owner`, `supervisor`, `carplate_no`, `address_tag`, `address`, `dom`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
+(263562593, 'S9344895B', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-15', '2016-09-15 12:30:00', '2016-09-15 13:00:00', '1230 - 1330', '', 'Confirmed'),
+(263562593, 'S9344895B', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-15', '2016-09-15 13:00:00', '2016-09-15 13:30:00', '1230 - 1330', '', 'Confirmed'),
+(850286188, 'S9344895B', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1300 - 1400', '', 'Confirmed'),
+(850286188, 'S9344895B', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:30:00', '2016-09-16 14:00:00', '1300 - 1400', '', 'Confirmed'),
+(850286188, 'S9344895B', '1234567', 'SGX4526F', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1300 - 1400', '', 'Confirmed'),
+(850286188, 'S9344895B', '1234567', 'SGX4526F', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #1-1 S760864|', '2016-09-16', '2016-09-16 13:30:00', '2016-09-16 14:00:00', '1300 - 1400', '', 'Confirmed');
 
 -- --------------------------------------------------------
 

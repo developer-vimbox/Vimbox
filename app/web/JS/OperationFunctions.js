@@ -2,7 +2,7 @@ function assign_jobs_setup() {
     loadAssignJobs('');
 }
 
-function selectAllJobs(){
+function selectAllJobs(source){
     var checkboxes = document.getElementsByName('selectedJobs');
     for(var i=0, n=checkboxes.length;i<n;i++) {
       checkboxes[i].checked = source.checked;
@@ -15,11 +15,29 @@ function loadAssignJobs(keyword) {
     });
 }
 
-function assignJobModal(jobId){
-    $.get("LoadAssignJobModal.jsp", {jobId: jobId}, function (data) {
-        document.getElementById("assignJobContent").innerHTML = data;
-        document.getElementById("assignJobModal").style.display = "block";
-    });
+function assignJobModal(){
+    var modal = document.getElementById("job_error_modal");
+    var status = document.getElementById("job_error_status");
+    var message = document.getElementById("job_error_message");
+    
+    var leadIds = "";
+    var leadIdsArray = $("input[name=selectedJobs]");
+    for (var i = 0; i < leadIdsArray.length; i++) {
+        if(leadIdsArray[i].checked){
+            leadIds += leadIdsArray[i].value + "|";
+        }
+    }
+    
+    if(!leadIds){
+        status.innerHTML = "ERROR";
+        message.innerHTML = "Please select at least one job";
+        modal.style.display = "block";
+    }else{
+        $.get("LoadAssignJobModal.jsp", {leadIds: leadIds}, function (data) {
+            document.getElementById("assignJobContent").innerHTML = data;
+            document.getElementById("assignJobModal").style.display = "block";
+        });
+    }
 }
 
 function assignJob(){
@@ -27,28 +45,14 @@ function assignJob(){
     var status = document.getElementById("job_error_status");
     var message = document.getElementById("job_error_message");
     
-    var jobId = document.getElementById("jobId").value;
+    var leadIds = document.getElementById("leadIds").value;
     var supervisor = document.getElementsByName("supervisor")[0].value;
-    var assigned_users = "";
-    $(document.getElementsByName("otherFTMovers")).each(function () {
-        var activeElement = this;
-        var tagname = activeElement.tagName;
-        var divId = activeElement.id;
-        while (tagname !== 'DIV' || (divId !== "additionalAssigned" && divId !== "dynamicInput")) {
-            activeElement = activeElement.parentNode;
-            tagname = activeElement.tagName;
-            divId = activeElement.id;
-        }
-        
-        if (divId !== "additionalAssigned") {
-            assigned_users += ($(this).val() + "|");
-        }
-    });
     
-    $.get("AssignJobController", {jobId: jobId, supervisor: supervisor, assigned: assigned_users}, function (data) {
+    $.get("AssignJobController", {leadIds: leadIds, supervisor: supervisor}, function (data) {
         status.innerHTML = data.status;
         message.innerHTML = data.message;
         modal.style.display = "block";
+        loadAssignJobs('');
         setTimeout(function () {
             modal.style.display = "none";
             document.getElementById("assignJobModal").style.display = "none";
