@@ -1,3 +1,4 @@
+<%@page import="com.vimbox.user.User"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="com.vimbox.database.JobDAO"%>
@@ -18,58 +19,67 @@
         out.println("<br><br>");
     }
 %>
-
+<button class='btn btn-default' onclick="assignJobModal()">Assign Supervisor</button><br><br>
 <table class="table table-bordered" width="100%">
     <col width="5%">
-    <col width="5%">
     <col width="10%">
     <col width="10%">
-    <col width="25%">
-    <col width="25%">
     <col width="10%">
-    <col width="5%">
+    <col width="10%">
+    <col width="20%">
+    <col width="20%">
+    <col width="10%">
     <col width="5%">
     <thead>
     <tr>
-        <th>Job ID</th>
+        <th><input type='checkbox' onclick="selectAllJobs(this)"></th>
         <th>Lead ID</th>
-        <th>Truck</th>
+        <th>Truck(s)</th>
+        <th>Supervisor</th>
         <th>Date</th>
         <th>From</th>
         <th>To</th>
         <th>Time Slot</th>
         <th>View</th>
-        <th>Action</th>
     </tr>
     </thead>
     <%
-        String jobId = "";
         String leadId = ""; 
         String jj = "";
-        String jTruck = "";
+        ArrayList<String> jTruck = new ArrayList<String>();
         String timeslot = "";
+        String supervisor = "";
         ArrayList<String> addressesFr = new ArrayList<String>();
         ArrayList<String> addressesTo = new ArrayList<String>();
         for (int i = 0; i < jobs.size(); i++) {
             Job job = jobs.get(i);
-            String nextJobId = job.getJobId() + "";
             String nextLeadId = job.getLeadId() + "";
             String nextTruck = job.getAssignedTruck() + "";
             String nextTimeslot = job.getTimeslots();
+            String nextSupervisor = "";
+            User sup = job.getSupervisor();
+            if(sup != null){
+                nextSupervisor = sup.toString();
+            }
+            
             String j = job.getDate();
             if (i == 0) {
                 jj = j;
                 leadId = nextLeadId;
-                jobId = nextJobId;
-                jTruck = nextTruck;
+                supervisor = nextSupervisor;
                 timeslot = nextTimeslot;
             }
 
-            if (!j.equals(jj) || !nextLeadId.equals(leadId) || !nextTruck.equals(jTruck)) {
+            if (!j.equals(jj) || !nextLeadId.equals(leadId)) {
                 out.println("<tr>");
-                out.println("<td align='center'>" + jobId + "</td>");
+                out.println("<td align='center'><input type='checkbox' name='selectedJobs' value='" + leadId + "'></td>");
                 out.println("<td align='center'>" + leadId + "</td>");
-                out.println("<td align='center'>" + jTruck + "</td>");
+                out.println("<td align='center'><ul>");
+                for(String truck:jTruck){
+                    out.println("<li>" + truck + "</li>");
+                }
+                out.println("<td align='center'>" + supervisor + "</td>");
+                out.println("</ul></td>");
                 out.println("<td align='center'>" + jj + "</td>");
                 out.println("<td align='center'><ul>");
                 for(String add:addressesFr){
@@ -83,18 +93,21 @@
                 out.println("</ul></td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
                 out.println("<td align='center'><button class='btn btn-default' onclick=\"viewLead('" + leadId + "')\">VS</button></td>");
-                out.println("<td align='center'><button class='btn btn-default' onclick=\"assignJobModal('" + jobId + "')\">Assign</button></td>");
                 out.println("</tr>");
                 
                 jj = j;
                 leadId = nextLeadId;
-                jobId = nextJobId;
-                jTruck = nextTruck;
+                supervisor = nextSupervisor;
+                jTruck = new ArrayList<String>();
                 timeslot = nextTimeslot;
                 addressesFr = new ArrayList<String>();
                 addressesTo = new ArrayList<String>();
             }
 
+            if(!jTruck.contains(nextTruck)){
+                jTruck.add(nextTruck);
+            }
+            
             HashMap<String, String> addresses = job.getAddresses();
             for (Map.Entry<String, String> entry : addresses.entrySet()) {
                 String key = entry.getKey();
@@ -112,9 +125,14 @@
 
             if (i == jobs.size() - 1) {
                 out.println("<tr>");
-                out.println("<td align='center'>" + jobId + "</td>");
+                out.println("<td align='center'><input type='checkbox' name='selectedJobs' value='" + leadId + "'></td>");
                 out.println("<td align='center'>" + leadId + "</td>");
-                out.println("<td align='center'>" + jTruck + "</td>");
+                out.println("<td align='center'><ul>");
+                for(String truck:jTruck){
+                    out.println("<li>" + truck + "</li>");
+                }
+                out.println("</ul></td>");
+                out.println("<td align='center'>" + supervisor + "</td>");
                 out.println("<td align='center'>" + jj + "</td>");
                 out.println("<td align='center'><ul>");
                 for(String add:addressesFr){
@@ -128,8 +146,6 @@
                 out.println("</ul></td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
                 out.println("<td align='center'><button class='btn btn-default' onclick=\"viewLead('" + leadId + "')\">VS</button></td>");
-                out.println("<td align='center'><button class='btn btn-default' onclick=\"assignJobModal('" + jobId + "')\">Assign</button></td>");
-                out.println("</td>");
                 out.println("</tr>");
             }
         }

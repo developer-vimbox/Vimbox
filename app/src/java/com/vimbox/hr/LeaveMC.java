@@ -42,4 +42,15 @@ public class LeaveMC {
     public String getImgPath() {
         return imgPath;
     }
+    
+    public boolean checkTimeslot(String timeslot){
+        int tsStart = Integer.parseInt(timeslot.substring(0,timeslot.indexOf(" ")));
+        int start = Integer.parseInt(timeString.substring(0,timeString.indexOf(" ")));
+        int end = Integer.parseInt(timeString.substring(timeString.lastIndexOf(" ") + 1));
+        if(tsStart >= start && tsStart < end){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

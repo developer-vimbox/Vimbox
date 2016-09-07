@@ -60,7 +60,7 @@
                                     </select>
                                 </td>
                                 <td width="1%"><label class="control-label"></label></td>
-                                <td width="9%">
+                                <td width="10%">
                                     <select class="form-control" id="iMonth" name="iMonth" onchange="changeMonthAndYear()">
                                         <%
                                             for (int im = 0; im <= 11; im++) {

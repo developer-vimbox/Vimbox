@@ -27,9 +27,27 @@ public class JobDAO {
     private static final String CANCEL_JOB = "UPDATE operations_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
     private static final String GET_ALL_NON_CANCELLED_JOBS = "SELECT * FROM operations_assigned where status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
     private static final String GET_NON_CANCELLED_JOBS_BY_TRUCK = "SELECT * FROM operations_assigned where carplate_no = ? AND status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
-
+    private static final String UPDATE_JOB_SUPERVISOR = "UPDATE operations_assigned SET supervisor=? WHERE lead_id=?";
     
-    public static void createOperationAssignment(int leadId, int jobId, String owner, ArrayList<String> adds, ArrayList<String> addsTags, String date, HashMap<String,ArrayList<String>> times, HashMap<String,String> timeslot, String remarks, String status){
+    public static void assignJobAttendance(ArrayList<Integer> leadIds, String supervisor){
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(UPDATE_JOB_SUPERVISOR);
+            for(int leadId : leadIds){
+                ps.setString(1, supervisor);
+                ps.setInt(2, leadId);
+                ps.executeUpdate();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void createOperationAssignment(int leadId, String owner, ArrayList<String> adds, ArrayList<String> addsTags, String date, HashMap<String,ArrayList<String>> times, HashMap<String,String> timeslot, String remarks, String status){
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -53,8 +71,8 @@ public class JobDAO {
 
                     ps = con.prepareStatement(CREATE_OPERATION_ASSIGNMENT);
                     ps.setInt(1, leadId);
-                    ps.setInt(2, jobId);
-                    ps.setString(3, owner);
+                    ps.setString(2, owner);
+                    ps.setString(3, "");
                     ps.setString(4, cp);
                     ps.setString(5, addressTags);
                     ps.setString(6, address);
@@ -103,7 +121,7 @@ public class JobDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Truck assignedTruck = TruckDAO.getTruckByCarplate(carplate);
+        
         try {
             con = ConnectionManager.getConnection();
             if(carplate.equals("alltt")) {
@@ -117,7 +135,6 @@ public class JobDAO {
             
             while (rs.next()) {
                 int leadId = rs.getInt("lead_id");
-                int jobId = rs.getInt("job_id");
                 java.sql.Date dom = rs.getDate("dom");
                 Date date_dom = new Date(dom.getTime());
                 
@@ -147,8 +164,10 @@ public class JobDAO {
                 String ss_owner = rs.getString("ss_owner");
                 User owner = UserDAO.getUserByNRIC(ss_owner);
                 String cp = rs.getString("carplate_no");
+                Truck assignedTruck = TruckDAO.getTruckByCarplate(cp);
+                User supervisor = UserDAO.getUserByNRIC(rs.getString("supervisor"));
                 
-                results.add(new Job(leadId, jobId, owner, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
+                results.add(new Job(leadId, owner, supervisor, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
             }
 
         } catch (SQLException se) {
@@ -175,7 +194,6 @@ public class JobDAO {
             
             while (rs.next()) {
                 int leadId = rs.getInt("lead_id");
-                int jobId = rs.getInt("job_id");
                 java.sql.Date dom = rs.getDate("dom");
                 Date date_dom = new Date(dom.getTime());
                 
@@ -206,8 +224,9 @@ public class JobDAO {
                 User owner = UserDAO.getUserByNRIC(ss_owner);
                 String carplate = rs.getString("carplate_no");
                 Truck assignedTruck = TruckDAO.getTruckByCarplate(carplate);
+                User supervisor = UserDAO.getUserByNRIC(rs.getString("supervisor"));
                 
-                results.add(new Job(leadId, jobId, owner, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
+                results.add(new Job(leadId, owner, supervisor, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
             }
 
         } catch (SQLException se) {
@@ -235,7 +254,6 @@ public class JobDAO {
                 java.sql.Date dom = rs.getDate("dom");
                 Date date_dom = new Date(dom.getTime());
                 
-                int jobId = rs.getInt("job_id");
                 String address = rs.getString("address");
                 String addressTag = rs.getString("address_tag");
                 String[] addressArr = address.split("\\|");
@@ -265,7 +283,9 @@ public class JobDAO {
                 String carplate = rs.getString("carplate_no");
                 Truck assignedTruck = TruckDAO.getTruckByCarplate(carplate);
                 
-                results.add(new Job(leadId, jobId, owner, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
+                User supervisor = UserDAO.getUserByNRIC(rs.getString("supervisor"));
+                
+                results.add(new Job(leadId, owner, supervisor, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
             }
 
         } catch (SQLException se) {
@@ -294,7 +314,6 @@ public class JobDAO {
 
             while (rs.next()) {
                 int leadId = rs.getInt("lead_id");
-                int jobId = rs.getInt("job_id");
                 java.sql.Date dom = rs.getDate("dom");
                 Date date_dom = new Date(dom.getTime());
                 User owner = UserDAO.getUserByNRIC(rs.getString("ss_owner"));
@@ -324,7 +343,9 @@ public class JobDAO {
                 String carplate = rs.getString("carplate_no");
                 Truck assignedTruck = TruckDAO.getTruckByCarplate(carplate);
                 
-                results.add(new Job(leadId, jobId, owner, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
+                User supervisor = UserDAO.getUserByNRIC(rs.getString("supervisor"));
+                
+                results.add(new Job(leadId, owner, supervisor, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
             }
 
         } catch (SQLException se) {
@@ -353,7 +374,6 @@ public class JobDAO {
 
             while (rs.next()) {
                 int leadId = rs.getInt("lead_id");
-                int jobId = rs.getInt("job_id");
                 java.sql.Date dom = rs.getDate("dom");
                 Date date_dom = new Date(dom.getTime());
                 User owner = UserDAO.getUserByNRIC(rs.getString("ss_owner"));
@@ -382,8 +402,9 @@ public class JobDAO {
 
                 String carplate = rs.getString("carplate_no");
                 Truck assignedTruck = TruckDAO.getTruckByCarplate(carplate);
+                User supervisor = UserDAO.getUserByNRIC(rs.getString("supervisor"));
                 
-                results.add(new Job(leadId, jobId, owner, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
+                results.add(new Job(leadId, owner, supervisor, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
             }
 
         } catch (SQLException se) {
@@ -410,7 +431,6 @@ public class JobDAO {
 
             while (rs.next()) {
                 int leadId = rs.getInt("lead_id");
-                int jobId = rs.getInt("job_id");
                 java.sql.Date dom = rs.getDate("dom");
                 Date date_dom = new Date(dom.getTime());
                 
@@ -439,8 +459,9 @@ public class JobDAO {
 
                 String ss_owner = rs.getString("ss_owner");
                 User owner = UserDAO.getUserByNRIC(ss_owner);
+                User supervisor = UserDAO.getUserByNRIC(rs.getString("supervisor"));
                 
-                results.add(new Job(leadId, jobId, owner, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
+                results.add(new Job(leadId, owner, supervisor, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));
             }
 
         } catch (SQLException se) {

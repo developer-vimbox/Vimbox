@@ -63,7 +63,7 @@
 <div class="fc-view fc-view-month fc-grid">
     <table width="100%" cellspacing="0" class="fc-border-separate">
         <thead>
-            <tr class="fc-first fc-last">
+            <tr class="fc-first fc-last" bgcolor="#f9fafe" style="font-size: 14px;">
                 <th style="width: 14.2%" class="fc-day-header fc-sun fc-widget-header fc-first">Sun</th>
                 <th style="width: 14.2%" class="fc-day-header fc-mon fc-widget-header">Mon</th>
                 <th style="width: 14.2%" class="fc-day-header fc-tue fc-widget-header">Tue</th>
