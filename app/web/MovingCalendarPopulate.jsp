@@ -197,7 +197,7 @@
                                         String remarks = job.getRemarks();
                                         String timeslot = job.getTimeslots();
                                         String statusCol = "";
-                                        if (status.equals("Completed")) {
+                                        if (status.equals("Confirmed")) {
                                             statusCol = "btn-success";
                                         } else {
                                             statusCol = "btn-warning";

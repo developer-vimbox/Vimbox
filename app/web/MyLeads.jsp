@@ -12,63 +12,10 @@
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script src="JS/ModalFunctions.js"></script>
         <script src="JS/LeadFunctions.js"></script>
-        <style>
-            /* Style the list */
-            ul.tab {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                border: 1px solid #ccc;
-                background-color: #f1f1f1;
-            }
-
-            /* Float the list items side by side */
-            ul.tab li {float: left;}
-
-            /* Style the links inside the list items */
-            ul.tab li a {
-                display: inline-block;
-                color: black;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                transition: 0.3s;
-                font-size: 17px;
-            }
-
-            /* Change background color of links on hover */
-            ul.tab li a:hover {background-color: #ddd;}
-
-            /* Create an active/current tablink class */
-            ul.tab li a:focus, .active {background-color: #ccc;}
-
-            /* Style the tab content */
-            .tabcontent {
-                display: none;
-                padding: 6px 12px;
-                border: 1px solid #ccc;
-                border-top: none;
-            }
-
-            .tabcontent {
-                -webkit-animation: fadeEffect 1s;
-                animation: fadeEffect 1s; /* Fading effect takes 1 second */
-            }
-
-            @-webkit-keyframes fadeEffect {
-                from {opacity: 0;}
-                to {opacity: 1;}
-            }
-
-            @keyframes fadeEffect {
-                from {opacity: 0;}
-                to {opacity: 1;}
-            }
-        </style>
     </head>
-    <body>
-        <%@include file="header.jsp"%>
+    <%@include file="header.jsp"%>
+    <body onload="my_leads_setup('<%=user.getNric()%>')">
+        
 
         <!-- The Modal -->
         <div id="commentModal" class="modal">
@@ -128,9 +75,36 @@
             </div>
         </div>
         <div id="page-content-wrapper">
+            <div id="page-content" style="min-height: 545px;">
+                <div class="container">
+                    <!-- Tocify -->
 
-            <div id="page-content">
-                <div class="container" style="width: 100%;">
+                    <!--<link rel="stylesheet" type="text/css" href="assets/widgets/tocify/tocify.css">-->
+                    <script type="text/javascript" src="assets/widgets/sticky/sticky.js"></script>
+                    <script type="text/javascript" src="assets/widgets/tocify/tocify.js"></script>
+
+                    <script type="text/javascript">
+                        $(function () {
+                            var toc = $("#tocify-menu").tocify({context: ".toc-tocify", showEffect: "fadeIn", extendPage: false, selectors: "h2, h3, h4"});
+                        });
+                        jQuery(document).ready(function ($) {
+
+                            /* Sticky bars */
+
+                            $(function () {
+                                "use strict";
+
+                                $('.sticky-nav').hcSticky({
+                                    top: 50,
+                                    innerTop: 50,
+                                    stickTo: 'document'
+                                });
+
+                            });
+
+                        });
+                    </script>
+
                     <div id="page-title">
                         <h2>My Leads</h2> <br>
                     </div>
@@ -139,71 +113,27 @@
                             <div class="form-horizontal">
                                 <div class="form-group">
                                     <div class="col-sm-4">
-                                        <button class="btn btn-default" onclick="location.href = 'CreateLead.jsp';">Add New</button>
-                                        <br><br>
+                                        <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                            <input type="text" id="lead_search" placeholder="Enter search details" class="form-control" style="width: 400px;color:black;">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="load_leads($('#lead_search').val(), '<%=user.getNric()%>', $('.tab-pane.active').attr('id'))">Search</button>
+                                                <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="location.href = 'CreateLead.jsp';">Add New</button>
+                                            </span>
+                                        </div>
                                     </div>
-                                    <%            ArrayList<Lead> myLeads = LeadDAO.getLeadsByOwnerUser(user);
-                                    %>
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Type</th>
-                                                <th>Cust Name</th>
-                                                <th>Cust Contact</th>
-                                                <th>Cust Email</th>
-                                                <th>Status</th>
-                                                <th>Date</th>
-                                                <th>Action</th>
-                                                <th>View</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <%
-                                                for (Lead lead : myLeads) {
-                                                    String url = "window.location.href='EditLead.jsp?lId=" + lead.getId() + "'";
-                                                    out.println("<tr>");
-                                                    out.println("<td align='center'>" + lead.getId() + "</td>");
-                                                    out.println("<td align='center'>" + lead.getType() + "</td>");
+                                </div>
+                            </div>
 
-                                                    Customer customer = lead.getCustomer();
-                                                    if (customer != null) {
-                                                        out.println("<td align='center'>" + customer.toString() + "</td>");
-                                                        out.println("<td align='center'>" + customer.getContact() + "</td>");
-                                                        out.println("<td align='center'>" + customer.getEmail() + "</td>");
-                                                    } else {
-                                                        out.println("<td align='center'></td>");
-                                                        out.println("<td align='center'></td>");
-                                                        out.println("<td align='center'></td>");
-                                                    }
-
-                                                    out.println("<td align='center'>" + lead.getStatus() + "</td>");
-                                                    out.println("<td align='center'>" + Converter.convertDate(lead.getDt()) + "</td>");
-                                            %>
-                                        <td>
-                                            <%
-                                                if (!lead.getStatus().equals("Rejected") || ! !lead.getStatus().equals("Confirmed")) {
-                                            %>
-
-                                            <input class="btn btn-default" type='button' value='Edit' onclick="<%=url%>">
-                                            <button class="btn btn-default" onclick="addFollowup('<%=lead.getId()%>')">Follow-Up</button>
-
-                                            <%
-                                                }
-                                            %>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-default" onclick="viewLead('<%=lead.getId()%>')">VS</button>
-
-                                            <button class="btn btn-default" onclick="viewFollowups('<%=lead.getId()%>')">VF</button>
-
-                                        </td>
-                                        <%
-                                            }
-                                        %>
-                                        </tbody>
-                                    </table>  
-
+                            <div class="example-box-wrapper">
+                                <ul class="nav-responsive nav nav-tabs">
+                                    <li class="active"><a href="#Pending" data-toggle="tab">Pending</a></li>
+                                    <li><a href="#Confirmed" data-toggle="tab">Confirmed</a></li>
+                                    <li><a href="#Rejected" data-toggle="tab">Rejected</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="Pending" class="tab-pane active"></div>
+                                    <div id="Confirmed" class="tab-pane"></div>
+                                    <div id="Rejected" class="tab-pane"></div>
                                 </div>
                             </div>
                         </div>
@@ -211,7 +141,5 @@
                 </div>
             </div>
         </div>
-
-
     </body>
 </html>

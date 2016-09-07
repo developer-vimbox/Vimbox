@@ -2144,3 +2144,15 @@ function invalidDate() {
         modal.style.display = "none";
     }, 1300);
 }
+
+function my_leads_setup(nric){
+    load_leads('', nric, "Pending");
+    load_leads('', nric, "Confirmed");
+    load_leads('', nric, "Rejected");
+}
+
+function load_leads(keyword, nric, type){
+    $.get("LoadMyLeads.jsp", {keyword: keyword, nric: nric, type: type}, function (data) {
+        document.getElementById(type).innerHTML = data;
+    });
+}
