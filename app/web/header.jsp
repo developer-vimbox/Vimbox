@@ -645,6 +645,7 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <li><a href="AssignJobs.jsp" title="Assign Jobs"><span>Assign Jobs</span></a></li>
+                                <li><a href="SupervisorJobs.jsp" title="Supervisor Jobs"><span>Supervisor Jobs</span></a></li>
                             </ul>
 
                         </div><!-- .sidebar-submenu -->
