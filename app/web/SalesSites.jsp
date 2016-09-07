@@ -22,30 +22,42 @@
                 </div>
             </div>
         </div> 
-         <div id="page-content-wrapper">
+        <div id="page-content-wrapper">
             <div id="page-content">
                 <div class="container">
                     <div id="page-title">
-                        <h2>My Sites</h2> <br/>
-                        <div class="panel">
-                            <div class="panel-body">
-                                 <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    <div class="input-group bootstrap-touchspin">
-                                                         <input type="text" id="survey_search" placeholder="Enter Lead ID or Date (YYYY-MM-DD)" class="form-control" style="width: 400px;color:black;">
-                                                        <span class="input-group-btn">
-                                                            <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="loadSalesSurveys($('#survey_search').val())">Search</button>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                 </div>
-        <br><br>
-        <div id="surveys_table"></div>
+                        <h2>All Surveys</h2> <br>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                            <input type="text" id="survey_search" placeholder="Enter survey details" class="form-control" style="width: 400px;color:black;">
+                                            <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="loadSalesSurveys($('#survey_search').val(), $('.tab-pane.active').attr('id'))">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="example-box-wrapper">
+                                <ul class="nav-responsive nav nav-tabs">
+                                    <li class="active"><a href="#Pending" data-toggle="tab">Pending</a></li>
+                                    <li><a href="#Ongoing" data-toggle="tab">Ongoing</a></li>
+                                    <li><a href="#Completed" data-toggle="tab">Completed</a></li>
+                                    <li><a href="#Cancelled" data-toggle="tab">Canceled</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="Pending" class="tab-pane active"></div>
+                                    <div id="Ongoing" class="tab-pane"></div>
+                                    <div id="Completed" class="tab-pane"></div>
+                                    <div id="Cancelled" class="tab-pane"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
              </div>
+         </div>
     </body>
 </html>

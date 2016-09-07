@@ -982,13 +982,16 @@ function complete() {
     });
 }
 
-function sales_survey_setup(nric) {
-    loadSalesSurveys('', nric);
+function sales_survey_setup() {
+    loadSalesSurveys('','Pending');
+    loadSalesSurveys('','Ongoing');
+    loadSalesSurveys('','Completed');
+    loadSalesSurveys('','Cancelled');
 }
 
-function loadSalesSurveys(keyword, nric) {
-    $.get("LoadSalesSurveys.jsp", {keyword: keyword, nric: nric}, function (data) {
-        document.getElementById("surveys_table").innerHTML = data;
+function loadSalesSurveys(keyword, type) {
+    $.get("LoadSalesSurveys.jsp", {keyword: keyword, type: type}, function (data) {
+        document.getElementById(type).innerHTML = data;
     });
 }
 

@@ -7,7 +7,8 @@
 <%@page import="com.vimbox.database.SiteSurveyDAO"%>
 <%
     String keyword = request.getParameter("keyword");
-    ArrayList<Job> jobs = JobDAO.getJobsByKeyword(keyword);
+    String type = request.getParameter("type");
+    ArrayList<Job> jobs = JobDAO.getJobsByKeyword(keyword, type);
     
     if (!keyword.isEmpty()) {
         if (jobs.size() > 0) {
@@ -20,8 +21,7 @@
 %>
 
 <table class="table table-bordered" width="100%">
-    <col width="5%">
-    <col width="5%">
+    <col width="10%">
     <col width="10%">
     <col width="25%">
     <col width="25%">
@@ -30,7 +30,6 @@
     <col width="10%">
     <thead>
     <tr>
-        <th>Job ID</th>
         <th>Lead ID</th>
         <th>Date</th>
         <th>From</th>
@@ -41,7 +40,6 @@
     </tr>
     </thead>
     <%
-        String jobId = "";
         String leadId = ""; 
         String jj = "";
         String jStatus = "";
@@ -50,21 +48,18 @@
         ArrayList<String> addressesTo = new ArrayList<String>();
         for (int i = 0; i < jobs.size(); i++) {
             Job job = jobs.get(i);
-            String nextJobId = job.getJobId() + "";
             String nextLeadId = job.getLeadId() + "";
             String nextTimeslot = job.getTimeslots();
             String j = job.getDate();
             if (i == 0) {
                 jj = j;
                 leadId = nextLeadId;
-                jobId = nextJobId;
                 timeslot = nextTimeslot;
                 jStatus = job.getStatus();
             }
 
             if (!j.equals(jj) || !nextLeadId.equals(leadId)) {
                 out.println("<tr>");
-                out.println("<td align='center'>" + jobId + "</td>");
                 out.println("<td align='center'>" + leadId + "</td>");
                 out.println("<td align='center'>" + jj + "</td>");
                 out.println("<td align='center'><ul>");
@@ -81,14 +76,20 @@
                 out.println("<td align='center'>" + jStatus + "</td>");
                 out.println("<td align='center'>");
                 if(jStatus.equals("Booked")){
-                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
+                }else if(jStatus.equals("Confirmed")){
+                    // DIFFERENT CANCELLATION
+                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
+                    // CHANGE OF DATES
+                }else{
+                    // INVOICE
+                    out.println("<button class='btn btn-default'>Invoice</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
                 
                 jj = j;
                 leadId = nextLeadId;
-                jobId = nextJobId;
                 timeslot = nextTimeslot;
                 jStatus = job.getStatus();
                 addressesFr = new ArrayList<String>();
@@ -112,7 +113,6 @@
 
             if (i == jobs.size() - 1) {
                 out.println("<tr>");
-                out.println("<td align='center'>" + jobId + "</td>");
                 out.println("<td align='center'>" + leadId + "</td>");
                 out.println("<td align='center'>" + jj + "</td>");
                 out.println("<td align='center'><ul>");
@@ -129,7 +129,14 @@
                 out.println("<td align='center'>" + jStatus + "</td>");
                 out.println("<td align='center'>");
                 if(jStatus.equals("Booked")){
-                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
+                }else if(jStatus.equals("Confirmed")){
+                    // DIFFERENT CANCELLATION
+                    out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
+                    // CHANGE OF DATES
+                }else{
+                    // INVOICE
+                    out.println("<button class='btn btn-default'>Invoice</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");

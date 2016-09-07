@@ -15,9 +15,28 @@
     </head>
     <%@include file="header.jsp"%>
     <body onload="my_leads_setup('<%=user.getNric()%>')">
-        
-
         <!-- The Modal -->
+        <div id="cancelLeadModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('cancelLeadModal')">×</span>
+                    <h3>Lead Cancellation</h3>
+                    <input type="hidden" id="uId" value="<%=user.getNric()%>">
+                    <table>
+                        <tr>
+                            <td>Lead ID :</td>
+                            <td><label id="leadIdLbl"></label><input type="hidden" name="lId" id="lId" /></td>
+                        </tr>
+                        <tr>
+                            <td>Reason :</td>
+                            <td><textarea id="reason" name="reason" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea></td>
+                        </tr>  
+                    </table>
+                    <button onclick="confirmCancel()">Reject Lead</button>
+                </div>
+            </div>
+        </div>
         <div id="commentModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content" style="width: 450px;">
@@ -77,34 +96,6 @@
         <div id="page-content-wrapper">
             <div id="page-content" style="min-height: 545px;">
                 <div class="container">
-                    <!-- Tocify -->
-
-                    <!--<link rel="stylesheet" type="text/css" href="assets/widgets/tocify/tocify.css">-->
-                    <script type="text/javascript" src="assets/widgets/sticky/sticky.js"></script>
-                    <script type="text/javascript" src="assets/widgets/tocify/tocify.js"></script>
-
-                    <script type="text/javascript">
-                        $(function () {
-                            var toc = $("#tocify-menu").tocify({context: ".toc-tocify", showEffect: "fadeIn", extendPage: false, selectors: "h2, h3, h4"});
-                        });
-                        jQuery(document).ready(function ($) {
-
-                            /* Sticky bars */
-
-                            $(function () {
-                                "use strict";
-
-                                $('.sticky-nav').hcSticky({
-                                    top: 50,
-                                    innerTop: 50,
-                                    stickTo: 'document'
-                                });
-
-                            });
-
-                        });
-                    </script>
-
                     <div id="page-title">
                         <h2>My Leads</h2> <br>
                     </div>

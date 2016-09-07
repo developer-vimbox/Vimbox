@@ -61,24 +61,38 @@ function assignJob(){
 }
 
 function sales_operation_setup() {
-    loadSalesOperations('');
+    loadSalesOperations('', 'Booked');
+    loadSalesOperations('', 'Confirmed');
+    loadSalesOperations('', 'Cancelled');
 }
 
-function loadSalesOperations(keyword) {
-    $.get("LoadSalesOperations.jsp", {keyword: keyword}, function (data) {
-        document.getElementById("operations_table").innerHTML = data;
+function loadSalesOperations(keyword, type) {
+    $.get("LoadSalesOperations.jsp", {keyword: keyword, type: type}, function (data) {
+        document.getElementById(type).innerHTML = data;
     });
 }
 
-function confirmJobCancel(leadId, date, timeslot) {
+function confirmJobCancel(leadId, date, timeslot, status) {
     var modal = document.getElementById("operation_error_modal");
     var status = document.getElementById("operation_error_status");
     var message = document.getElementById("operation_error_message");
 
+    var displayMsg = "";
+    if(status === 'Booked'){
+        displayMsg = "Are you sure that you want to cancel this job assignment?";
+    }else{
+        displayMsg = "There will be no refund for any cancellation done within 7 days from confirmation.<br>Are you sure that you want to cancel this job assignment?";
+    }
     status.innerHTML = "Cancel Confirmation";
     var table = "<table width='100%'>";
-    table += "<tr><td colspan='2'>Are you sure that you want to cancel this job assignment?</td></tr>";
-    table += "<tr><td align='center'><button onclick=\"jobCancel('" + leadId + "','" + date + "','" + timeslot + "')\">YES</button></td><td align='center'><button onclick=\"closeModal('operation_error_modal'); return false;\">No</button></td></tr>";
+    table += "<tr><td colspan='2'>" + displayMsg + "</td></tr>";
+    table += "<tr><td align='center'>";
+    if(status === 'Booked'){
+        table += "<button onclick=\"jobCancel('" + leadId + "','" + date + "','" + timeslot + "')\">YES</button>";
+    }else{
+        table += "<button onclick=\"jobCancel('" + leadId + "','" + date + "','" + timeslot + "')\">YES</button>";
+    }
+    table += "</td><td align='center'><button onclick=\"closeModal('operation_error_modal'); return false;\">No</button></td></tr>";
     table += "</table>";
     message.innerHTML = table;
     modal.style.display = "block";
@@ -91,7 +105,7 @@ function jobCancel(leadId, date, timeslot) {
     $.get("CancelJobController", {leadId: leadId, date: date, timeslot: timeslot}, function (data) {
         status.innerHTML = data.status;
         message.innerHTML = data.message;
-        loadSalesOperations('');
+        sales_operation_setup();
         setTimeout(function () {
             modal.style.display = "none";
         }, 500);

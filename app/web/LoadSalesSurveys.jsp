@@ -3,7 +3,8 @@
 <%@page import="com.vimbox.database.SiteSurveyDAO"%>
 <%
     String keyword = request.getParameter("keyword");
-    ArrayList<SiteSurvey> surveys = SiteSurveyDAO.getSiteSurveysByKeyword(keyword);
+    String type = request.getParameter("type");
+    ArrayList<SiteSurvey> surveys = SiteSurveyDAO.getSiteSurveysByKeyword(keyword, type);
     
     if (!keyword.isEmpty()) {
         if (surveys.size() > 0) {
@@ -17,9 +18,8 @@
 
 <table class="table table-bordered" width="100%">
     <col width="10%">
-    <col width="10%">
+    <col width="20%">
     <col width="40%">
-    <col width="10%">
     <col width="10%">
     <col width="10%">
     <col width="10%">
@@ -30,7 +30,6 @@
         <th>Address</th>
         <th>Date</th>
         <th>Time Slot</th>
-        <th>Status</th>
         <th>Action</th>
     </tr>
     </thead>
@@ -68,7 +67,6 @@
                 out.println("</ul></td>");
                 out.println("<td align='center'>" + date + "</td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
-                out.println("<td align='center'>" + status + "</td>");
                 out.println("<td align='center'>");
                 if(status.equals("Pending")){
                     out.println("<button class='btn btn-default' onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "')\">Cancel</button>");
@@ -100,7 +98,6 @@
                 out.println("</ul></td>");
                 out.println("<td align='center'>" + date + "</td>");
                 out.println("<td align='center'>" + timeslot + "</td>");
-                out.println("<td align='center'>" + status + "</td>");
                 out.println("<td align='center'>");
                 if(status.equals("Pending")){
                     out.println("<button class='btn btn-default' onclick=\"confirmCancel('" + leadId + "', '" + date + "', '" + timeslot + "')\">Cancel</button>");

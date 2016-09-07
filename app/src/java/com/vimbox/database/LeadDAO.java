@@ -1309,6 +1309,7 @@ public class LeadDAO {
             ps.setString(2, reason);
             ps.setInt(3, leadId);
             ps.executeUpdate();
+            SiteSurveyDAO.cancelLeadSiteSurvey(leadId);
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {

@@ -22,6 +22,14 @@
     }
 %>
 <table class="table table-hover">
+    <col width="10%">
+    <col width="5%">  
+    <col width="17%">
+    <col width="10%">
+    <col width="5%">
+    <col width="10%">
+    <col width="23%">
+    <col width="20%">
     <thead>
         <tr>
             <th>#</th>
@@ -29,7 +37,7 @@
             <th>Cust Name</th>
             <th>Cust Contact</th>
             <th>Status</th>
-            <th>Date</th>
+            <th>Date Created</th>
             <th>Action</th>
             <th>View</th>
         </tr>
@@ -61,7 +69,8 @@
 
         <input class="btn btn-default" type='button' value='Edit' onclick="<%=url%>">
         <button class="btn btn-default" onclick="addFollowup('<%=lead.getId()%>')">Follow-Up</button>
-
+        <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
+        <button class="btn btn-default">Confirm</button>
         <%
             }
         %>
@@ -70,7 +79,29 @@
         <button class="btn btn-default" onclick="viewLead('<%=lead.getId()%>')">VS</button>
 
         <button class="btn btn-default" onclick="viewFollowups('<%=lead.getId()%>')">VF</button>
-
+        <%
+            if (lead.getStatus().equals("Rejected")) {
+        %>
+        <button class="btn btn-default" onclick="viewCancelReason()">VR</button>
+        <div id="viewReasonModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('viewReasonModal')">×</span>
+                    <center><h2>Rejected Reason for Lead <%=lead.getId()%></h2></center>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>Reason :</td>
+                            <td><textarea id="reason" name="reason" cols="75" rows="6" disabled><%=lead.getReason()%></textarea></td>
+                        </tr>  
+                    </table>
+                </div>
+            </div>
+        </div>
+        <%
+            }
+        %>
     </td>
     <%
         }

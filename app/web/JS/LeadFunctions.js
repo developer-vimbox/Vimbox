@@ -918,7 +918,7 @@ function confirmCancel() {
     var status = document.getElementById("lead_error_status");
     var message = document.getElementById("lead_error_message");
     status.innerHTML = "<b>Cancel Confirmation</b>";
-    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Cancel this lead record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"cancelLeadForm()\">Yes</button></td><td align='center'><button onclick=\"closeModal('lead_error_modal')\">No</button></td></tr></table>";
+    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Cancel this lead record? All pending site surveys of this lead will be cancelled as well. Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"cancelLeadForm()\">Yes</button></td><td align='center'><button onclick=\"closeModal('lead_error_modal')\">No</button></td></tr></table>";
     modal.style.display = "block";
 }
 
@@ -1067,7 +1067,9 @@ function cancelLeadForm() {
 
                 if (data.status === "SUCCESS") {
                     setTimeout(function () {
-                        window.location.href = "MyLeads.jsp";
+                        my_leads_setup($('#uId').val());
+                        document.getElementById("cancelLeadModal").style.display = "none";
+                        modal.style.display = "none";
                     }, 500);
                 }
 
@@ -1084,6 +1086,10 @@ function cancelLead(leadId) {
     $('#lId').val(leadId);
     document.getElementById('leadIdLbl').innerHTML = leadId;
     modal.style.display = "block";
+}
+
+function viewCancelReason(){
+    document.getElementById("viewReasonModal").style.display = "block";
 }
 
 function viewDaySchedule(date) {
