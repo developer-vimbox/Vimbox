@@ -121,7 +121,7 @@ public class JobDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Truck assignedTruck = TruckDAO.getTruckByCarplate(carplate);
+        
         try {
             con = ConnectionManager.getConnection();
             if(carplate.equals("alltt")) {
@@ -164,7 +164,7 @@ public class JobDAO {
                 String ss_owner = rs.getString("ss_owner");
                 User owner = UserDAO.getUserByNRIC(ss_owner);
                 String cp = rs.getString("carplate_no");
-                
+                Truck assignedTruck = TruckDAO.getTruckByCarplate(cp);
                 User supervisor = UserDAO.getUserByNRIC(rs.getString("supervisor"));
                 
                 results.add(new Job(leadId, owner, supervisor, assignedTruck, date_dom, addressMap, start, end, remarks, timeslot, status));

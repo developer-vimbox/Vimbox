@@ -171,16 +171,17 @@
                         </div>
                         <input type="hidden" id="selectedDate" value=<%=strDate%>>
                         <div class="fc-day-content">
-                            <%   for (Job job : jobs) {
+                            <%   
+                                ArrayList<String> trucks = new ArrayList<String>();
+                                for (Job job : jobs) {
                                     DateTime start = job.getStart();
                                     int dayOfMonth = start.getDayOfMonth();
                                     int surveyMonth = start.getMonthOfYear();
                                     int surveyYear = start.getYear();
                                     String status = job.getStatus();
-
-                                    if ((dayOfMonth == curDate) && (iMonth == (surveyMonth - 1)) && (iYear == surveyYear) && !status.equals("Cancelled")) {
+                                    
+                                    if ((dayOfMonth == curDate) && (iMonth == (surveyMonth - 1)) && (iYear == surveyYear)) {
                                         int lead = job.getLeadId();
-                                        Truck truck = job.getAssignedTruck();
                                         HashMap<String, String> addresses = job.getAddresses();
                                         ArrayList<String> from = new ArrayList<String>();
                                         ArrayList<String> to = new ArrayList<String>();
@@ -208,12 +209,6 @@
                                         <tr>
                                             <td align="right" style="vertical-align: top; padding-right: 5px; width: 30%;">Lead ID:</td>
                                             <td align="left"><%=lead%></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right" style="vertical-align: top; padding-right: 5px;">Truck:</td>
-                                            <td align="left">
-                                                <%=truck%>
-                                            </td>
                                         </tr>
                                         <tr>
                                             <td align="right" style="vertical-align: top; padding-right: 5px;">Time:</td>
