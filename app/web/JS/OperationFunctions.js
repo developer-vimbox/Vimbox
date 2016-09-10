@@ -205,3 +205,17 @@ function assignMovers() {
                 loadBody('Full');
             });
 }
+
+$(document).on('change', '.attendance_radio', function(){
+    
+    var value = $(this).val();
+    var name = $(this).attr('name');
+    var nric = (name.split("_"))[1];
+    if(value === 'Late'){
+        document.getElementById("late_" + nric + "_h").disabled = false;
+        document.getElementById("late_" + nric + "_m").disabled = false;
+    }else{
+        document.getElementById("late_" + nric + "_h").disabled = true;
+        document.getElementById("late_" + nric + "_m").disabled = true;
+    }
+});

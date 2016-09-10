@@ -1,5 +1,6 @@
 package com.vimbox.database;
 
+import com.vimbox.operations.MoversAttendance;
 import com.vimbox.user.Account;
 import com.vimbox.user.Bank;
 import com.vimbox.user.Contact;
@@ -80,12 +81,8 @@ public class OperationsDAO {
             rs = ps.executeQuery();
             while(rs.next()){
                 String mover = rs.getString("assigned_mover");
-                System.out.println(mover);
                 User u = UserDAO.getUserByNRIC(mover);
                 movers.add(u);   
-            }
-            for (User a : movers) {
-                System.out.println(a.toString());
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -110,5 +107,33 @@ public class OperationsDAO {
         } finally {
             ConnectionManager.close(con, ps, null);
         }
+    }
+    
+    public static ArrayList<MoversAttendance> getMoverAttendance(String supervisor, String dom){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<MoversAttendance> movers = new ArrayList<MoversAttendance>();
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_MOVERS_BY_SUP_AND_DOM);
+            ps.setString(1,dom);
+            ps.setString(2,supervisor);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                String mover = rs.getString("assigned_mover");
+                User m = UserDAO.getUserByNRIC(mover);
+                String sup = rs.getString("supervisor");
+                String date = rs.getString("dom");
+                String status = rs.getString("status");
+                int duration = rs.getInt("duration");
+                movers.add(new MoversAttendance(sup, m, date, status, duration));  
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return movers;
     }
 }
