@@ -1,12 +1,15 @@
+<%@page import="com.vimbox.operations.Job"%>
+<%@page import="com.vimbox.database.JobDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page  language="java" import="java.util.*,java.text.*"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Supervisor Jobs</title>
+        <title>Supervisor Jobs Assigned</title>
+        <script src="JS/OperationFunctions.js"></script>
     </head>
-    <body>
+    <body onload="loadSupervisorCal()">
         <%@include file="header.jsp"%>
         <%!
             public int nullIntconv(String inv) {
@@ -19,8 +22,9 @@
                 return conv;
             }
         %>
-        <%            int iYear = nullIntconv(request.getParameter("iYear"));
-            int iMonth = nullIntconv(request.getParameter("iMonth"));
+        <%            
+            int iYear = nullIntconv(request.getParameter("sYear"));
+            int iMonth = nullIntconv(request.getParameter("sMonth"));
 
             Calendar ca = new GregorianCalendar();
             int iTYear = ca.get(Calendar.YEAR);
@@ -31,17 +35,17 @@
                 iMonth = iTMonth;
             }
 
-
+            //ArrayList<Job> jobs = JobDAO.getJobsBySupervisor(user.getNric());
         %>
 
         <div id="page-content-wrapper">
             <div id="page-content">
                 <div class="container">
                     <div id="page-title">
-                        <h2>Supervisor Jobs</h2> <br>
+                        <h2>Supervisor Jobs Assigned</h2> <br>
                         <div class="panel">
                             <div class="panel-body">
-                                <script src="JS/LeadFunctions.js"></script>
+                                
                                 <!-- Calendar -->
 
                                 <script type="text/javascript" src="assets/widgets/interactions-ui/resizable.js"></script>
@@ -59,8 +63,9 @@
                                         <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                 <tr>
                                                     <td width="7%">
-                                                        <select class="form-control" id="iYear" name="iYear" onchange="changeMonthYear()">
-                                                            <%                                            for (int iy = iTYear - 5; iy <= iTYear + 5; iy++) {
+                                                        <select class="form-control" id="sYear" name="sYear" onchange="changeSupervisorMonthYear()">
+                                                            <%                                            
+                                                                for (int iy = iTYear - 5; iy <= iTYear + 5; iy++) {
                                                                     if (iy == iYear) {
                                                             %>
                                                             <option value="<%=iy%>" selected="selected"><%=iy%></option>
@@ -76,7 +81,7 @@
                                                     </td>
                                                     <td width="1%"><label class="control-label"></label></td>
                                                     <td width="10%">
-                                                        <select class="form-control" id="iMonth" name="iMonth" onchange="changeMonthYear()">
+                                                        <select class="form-control" id="sMonth" name="sMonth" onchange="changeSupervisorMonthYear()">
                                                             <%
                                                                 for (int im = 0; im <= 11; im++) {
                                                                     if (im == iMonth) {
@@ -98,6 +103,9 @@
                                             </table></td>
                                     </tr>
                                 </table>
+                                <br>
+                                <div id="supervisorCalendar"></div>
+                               
                             </div>
                         </div>
                     </div>

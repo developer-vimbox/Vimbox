@@ -2162,3 +2162,12 @@ function load_leads(keyword, nric, type){
         document.getElementById(type).innerHTML = data;
     });
 }
+
+function viewSalesPortion(leadId) {
+    var modal = document.getElementById("viewLeadModal");
+    var content = document.getElementById("leadContent");
+    $.get("RetrieveSalesPortion.jsp", {getLid: leadId}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
+}

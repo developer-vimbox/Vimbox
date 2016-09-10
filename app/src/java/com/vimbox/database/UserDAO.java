@@ -47,6 +47,7 @@ public class UserDAO {
     private static final String UPDATE_USER_MC = "UPDATE users_leave SET used_mc=? WHERE nric=?";
     private static final String GET_ALL_SURVEYORS = "SELECT * FROM users where designation = 'Surveyor'";
     private static final String GET_ALL_FULL_TIME_MOVERS = "SELECT * FROM users where type='Full' AND designation = 'Mover'";
+    private static final String GET_MOVERS_BY_TYPE = "SELECT * FROM users WHERE designation = ? AND TYPE = ?";
 
     public static boolean checkNric(String nric){
         Connection con = null;
@@ -1049,6 +1050,95 @@ public class UserDAO {
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_ALL_FULL_TIME_MOVERS);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String nric = rs.getString("nric");
+                String first_name = rs.getString("first_name");
+                String last_name = rs.getString("last_name");
+                DateTime date_joined = new DateTime(rs.getDate("date_joined"));
+                String mailing_address = rs.getString("mailing_address");
+                String registered_address = rs.getString("registered_address");
+                String department = rs.getString("department");
+                String designation = rs.getString("designation");
+                int salary = rs.getInt("salary");
+                String type = rs.getString("type");
+                ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+
+                double leave = 0;
+                double used_leave = 0;
+                int mc = 0;
+                int used_mc = 0;
+                ps = con.prepareStatement(GET_USER_LEAVEMC_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    leave = rsInner.getDouble("leave");
+                    mc = rsInner.getInt("mc");
+                    used_leave = rsInner.getDouble("used_leave");
+                    used_mc = rsInner.getInt("used_mc");
+                }
+
+                Account account = null;
+                ps = con.prepareStatement(GET_USER_ACCOUNT_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    account = new Account(rsInner.getString("username"), rsInner.getString("password"));
+                }
+
+                Contact contact = null;
+                ps = con.prepareStatement(GET_USER_CONTACT_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    contact = new Contact(rsInner.getInt("phone_no"), rsInner.getInt("fax_no"), rsInner.getInt("home_no"));
+                }
+
+                Emergency emergency = null;
+                ps = con.prepareStatement(GET_USER_EMERGENCY_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    emergency = new Emergency(rsInner.getString("name"), rsInner.getString("relationship"), rsInner.getInt("contact_no"), rsInner.getInt("office_no"));
+                }
+
+                Bank bank = null;
+                ps = con.prepareStatement(GET_USER_BANK_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
+                }
+
+                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank));
+            }
+
+            if (rsInner != null) {
+                rsInner.close();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return users;
+    }
+    
+    public static ArrayList<User> getMoversByType(String mType) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ResultSet rsInner = null;
+        ArrayList<User> users = new ArrayList<User>();
+        String des = "Part-Time Mover";
+        if(mType.equals("Full")) {
+            des = "Mover";
+        }
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_MOVERS_BY_TYPE);
+            ps.setString(1, des);
+            ps.setString(2, mType);
             rs = ps.executeQuery();
             while (rs.next()) {
                 String nric = rs.getString("nric");

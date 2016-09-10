@@ -111,3 +111,97 @@ function jobCancel(leadId, date, timeslot) {
         }, 500);
     });
 }
+
+function changeSupervisorMonthYear() {
+    var content = document.getElementById("supervisorCalendar");
+    var iYear = document.getElementById('sYear').value;
+    var iMonth = document.getElementById('sMonth').value;
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[iMonth];
+    $("#dMonth").html(n);
+    $("#dYear").html(iYear);
+    $.get("SupervisorJobsCalendar.jsp", {getYear: iYear, getMonth: iMonth}, function (data) {
+        content.innerHTML = data;
+    });
+}
+
+function loadSupervisorCal() {
+    var content = document.getElementById("supervisorCalendar");
+    var d = new Date();
+    var m = d.getMonth();
+    var y = d.getFullYear();
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[d.getMonth()];
+    $("#dMonth").html(n);
+    $("#dYear").html(y);
+
+    $.get("SupervisorJobsCalendar.jsp", {getYear: y, getMonth: m}, function (data) {
+        content.innerHTML = data;
+    });
+}
+
+function loadMovers(empType) {
+    var content = document.getElementById("movers");
+    var dom = document.getElementById('dom').value;
+    $.get("RetrieveMovers.jsp", {getDOM: dom, getEmpType: empType}, function (data) {
+        content.innerHTML = data;
+    });
+    content.style.display = "block";
+}
+
+function removeMover(ic) {
+    var supervisor = $('#supervisor').val();
+    var dom = $('#dom').val();
+    $.getJSON("RemoveMoverController", {supervisor: supervisor, mover: ic, dom: dom})
+            .done(function (data) {
+               document.getElementById("full-time").checked = true;
+                loadBody('Full');
+            })
+            .fail(function (error) {
+                document.getElementById("full-time").checked = true;
+                loadBody('Full');
+            });
+}
+
+function loadBody(empType) {
+    loadMovers(empType);
+    
+    var dom = document.getElementById('dom').value;
+    var supervisor = document.getElementById('supervisor').value;
+    var table = document.getElementById("movers_table");
+    $.get("LoadAssignedMovers.jsp", {getDOM: dom, getSupervisor: supervisor}, function (data) {
+        table.innerHTML = data;
+    });
+    table.style.display = "block";
+}
+
+function assignMovers() {
+    var supervisor = $('#supervisor').val();
+    var mover = $('#selected_mover').val();
+    var dom = $('#dom').val();
+
+    var errorModal = document.getElementById("error_modal");
+    var errorStatus = document.getElementById("error_status");
+    var errorMessage = document.getElementById("error_message");
+    $.getJSON("AssignMoverController", {supervisor: supervisor, mover: mover, dom: dom})
+            .done(function (data) {
+                var status = data.status;
+                var errorMsg = data.message;
+                
+                errorStatus.innerHTML = status;
+                errorMessage.innerHTML = errorMsg;
+                errorModal.style.display = "block";
+                setTimeout(function () {
+                    errorModal.style.display = "none";
+                }, 1000);
+                document.getElementById("full-time").checked = true;
+                loadBody('Full');
+            })
+            .fail(function (error) {
+                errorStatus.innerHTML = "ERROR";
+                errorMessage.innerHTML = error;
+                errorModal.style.display = "block";
+                document.getElementById("full-time").checked = true;
+                loadBody('Full');
+            });
+}
