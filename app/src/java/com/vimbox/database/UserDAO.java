@@ -215,13 +215,15 @@ public class UserDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        Account account = null;
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_USER_ACCOUNT_BY_NRIC);
             ps.setString(1, nric);
             rs = ps.executeQuery();
             if (rs.next()) {
-                Account account = new Account(rs.getString("username"), rs.getString("password"));
+                account = new Account(rs.getString("username"), rs.getString("password"));
+            }
                 ps = con.prepareStatement(GET_USER_BY_NRIC);
                 ps.setString(1, nric);
                 rs = ps.executeQuery();
@@ -276,7 +278,7 @@ public class UserDAO {
                     }
 
                     user = new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank);
-                }
+                
             }
         } catch (SQLException se) {
             se.printStackTrace();
