@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author NYuSheng
  */
-@WebServlet(name = "PayslipPDFGenerator", urlPatterns = {"/payslip_pdf.pdf"})
+@WebServlet(name = "PayslipPDFGenerator", urlPatterns = {"/payslips/*"})
 public class PayslipPDFGenerator extends HttpServlet {
     private BaseColor tHeaderColor = new BaseColor(0, 0, 0);
     /**

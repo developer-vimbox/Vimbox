@@ -21,7 +21,27 @@ public class LeadPopulationDAO {
     private static final String GET_SECONDARY_SERVICES = "SELECT secondary_service FROM system_services where primary_service=?";
     private static final String GET_SECONDARY_SERVICE_FORMULA = "SELECT formula FROM system_services WHERE primary_service=? AND secondary_service=?";
     private static final String GET_SECONDARY_SERVICE_DESCRIPTION = "SELECT system_services FROM services WHERE primary_service=? AND secondary_service=?";
-
+    private static final String GET_DEPOSIT_PERCENTAGE = "SELECT * FROM system_percentage WHERE name='Deposit'";
+    
+    public static double getDepositPercentage(){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_DEPOSIT_PERCENTAGE);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("percentage");
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return 0;
+    }
+    
     public static ArrayList<String> getEnquiries() {
         ArrayList<String> results = new ArrayList<String>();
         Connection con = null;

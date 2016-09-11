@@ -17,6 +17,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class JobDAO {
     
+    private static final String CHECK_BOOKED_JOB_EXIST = "SELECT * FROM operations_assigned WHERE lead_id=? AND status != 'Cancelled'";
     private static final String CHECK_JOB_EXIST = "SELECT * FROM operations_assigned WHERE start_datetime LIKE ? AND carplate_no = ?";
     private static final String GET_JOBS_BY_DATE = "SELECT * FROM operations_assigned WHERE start_datetime LIKE ?";
     private static final String CREATE_OPERATION_ASSIGNMENT = "INSERT INTO operations_assigned VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -25,9 +26,30 @@ public class JobDAO {
     private static final String GET_CONFIRMED_JOBS_BY_KEYWORD = "SELECT * FROM operations_assigned WHERE (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?) AND status = 'Confirmed' ORDER BY DATE(start_datetime) DESC, carplate_no";
     private static final String GET_JOBS_BY_TRUCK_DATE = "SELECT * FROM operations_assigned WHERE carplate_no=? AND start_datetime LIKE ? AND status != 'Cancelled' ORDER BY start_datetime";
     private static final String CANCEL_JOB = "UPDATE operations_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
+    private static final String CANCEL_SALES_JOB = "UPDATE operations_assigned SET status='Cancelled' WHERE lead_id = ?";
     private static final String GET_ALL_NON_CANCELLED_JOBS = "SELECT * FROM operations_assigned where status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
     private static final String GET_NON_CANCELLED_JOBS_BY_TRUCK = "SELECT * FROM operations_assigned where carplate_no = ? AND status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
     private static final String UPDATE_JOB_SUPERVISOR = "UPDATE operations_assigned SET supervisor=? WHERE lead_id=?";
+    
+    public static boolean checkBookedJobsByLeadId(int leadId){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(CHECK_BOOKED_JOB_EXIST);
+            ps.setInt(1, leadId);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return false;
+    }
     
     public static void assignJobAttendance(ArrayList<Integer> leadIds, String supervisor){
         Connection con = null;
@@ -482,6 +504,21 @@ public class JobDAO {
             ps.setInt(1, leadId);
             ps.setString(2, "%" + date + "%");
             ps.setString(3, timeslot);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void cancelSalesJob(int leadId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(CANCEL_SALES_JOB);
+            ps.setInt(1, leadId);
             ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();

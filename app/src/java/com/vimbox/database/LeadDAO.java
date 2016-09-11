@@ -31,6 +31,7 @@ public class LeadDAO {
     private static final String CREATE_LEAD_COMMENT = "INSERT INTO leadcomment VALUES (?,?,?)";
     private static final String CREATE_LEAD_REMARK = "INSERT INTO leadremark VALUES (?,?,?)";
     private static final String CREATE_LEAD_SALES_DIV = "INSERT INTO leadsalesdiv VALUES (?,?,?,?)";
+    private static final String CREATE_LEAD_CONFIRMATION = "INSERT INTO leadconfirmation VALUES (?,?,?,?,?)";
     
     private static final String GET_ALL_LEAD_INFO_BY_KEYWORD = "SELECT * FROM (SELECT  * FROM leadinfo ldi left outer join customers cust USING (customer_id)) joined, users urs WHERE joined.owner_user = urs.nric AND (CONCAT(joined.last_name, ' ', joined.first_name) LIKE ? OR CONCAT(urs.last_name, ' ', urs.first_name) LIKE ? OR contact LIKE ? OR email LIKE ? OR lead_id LIKE ? OR status LIKE ? OR datetime_of_creation LIKE ?)  ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_INFO_USER = "SELECT * FROM leadinfo left outer join customers USING (customer_id) WHERE (CONCAT(last_name, ' ', first_name) LIKE ? OR type LIKE ? OR contact LIKE ? OR lead_id LIKE ? OR datetime_of_creation LIKE ?) AND owner_user=? AND status=? ORDER BY datetime_of_creation DESC";
@@ -46,6 +47,7 @@ public class LeadDAO {
     private static final String GET_LEAD_COMMENT = "SELECT * FROM leadcomment WHERE lead_id=? AND sales_div=?";
     private static final String GET_LEAD_REMARK = "SELECT * FROM leadremark WHERE lead_id=? AND sales_div=?";
     private static final String GET_LEAD_SALES_DIV = "SELECT * FROM leadsalesdiv WHERE lead_id=?";
+    private static final String GET_LEAD_CONFIRMATION = "SELECT * FROM leadconfirmation WHERE lead_id=?";
     
     private static final String DELETE_LEAD_INFO = "DELETE FROM leadinfo WHERE lead_id=?";
     private static final String DELETE_LEAD_ENQUIRY = "DELETE FROM leadenquiry WHERE lead_id=?";
@@ -59,11 +61,15 @@ public class LeadDAO {
     private static final String DELETE_LEAD_REMARK = "DELETE FROM leadremark WHERE lead_id=?";
     private static final String DELETE_LEAD_SALES_DIV = "DELETE FROM leadsalesdiv WHERE lead_id=?";
     private static final String CANCEL_LEAD = "UPDATE leadinfo SET status=?, reason=? WHERE lead_id=?";
+    private static final String DELETE_SITE_LEAD_COMMENT = "DELETE FROM leadcomment WHERE lead_id=? AND sales_div=?";
     
+    private static final String UPDATE_LEAD_CONFIRMATION_COLLECTED = "UPDATE leadconfirmation SET collected_amount=? WHERE lead_id=?";
+    private static final String CONFIRM_LEAD = "UPDATE leadconfirmation SET confirmed_user=?, collected_amount=?, email_path=? WHERE lead_id=?";
+    private static final String UPDATE_LEAD_CONFIRMATION = "UPDATE leadconfirmation SET total_amount=? WHERE lead_id=?";
     private static final String UPDATE_ADDRESS = "UPDATE leadmove SET storeys=?, pushing=? WHERE lead_id=? AND sales_div=?";
     private static final String UPDATE_LEAD_OTHER = "UPDATE leadother SET charge=? WHERE lead_id=? AND sales_div=? AND other=?";
     private static final String UPDATE_LEAD_SALES_DIV = "UPDATE leadsalesdiv SET survey_area=?, survey_area_name=? WHERE lead_id=? AND sales_div=?";
-    private static final String DELETE_SITE_LEAD_COMMENT = "DELETE FROM leadcomment WHERE lead_id=? AND sales_div=?";
+    
     
     public static void deleteLead(int leadId){
         Connection con = null;
@@ -109,6 +115,46 @@ public class LeadDAO {
         } finally {
             ConnectionManager.close(con, ps, null);
         }
+    }
+    
+    public static double getLeadConfirmedTotal(int leadId){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_LEAD_CONFIRMATION);
+            ps.setInt(1, leadId);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getDouble("total_amount");
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return 0;
+    }
+    
+    public static double getLeadConfirmedCollected(int leadId){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_LEAD_CONFIRMATION);
+            ps.setInt(1, leadId);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getDouble("collected_amount");
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return 0;
     }
     
     public static ArrayList<Lead> getAllLeadsByKeyword(String keyword) {
@@ -1299,6 +1345,71 @@ public class LeadDAO {
         }
     }
     
+    public static void createLeadConfirmation(int leadId, double total){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        System.out.println("TOTAL --------- " + total);
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_LEAD_CONFIRMATION);
+            ps.setInt(1, leadId);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                ps = con.prepareStatement(UPDATE_LEAD_CONFIRMATION);
+                ps.setDouble(1, total);
+                ps.setInt(2, leadId);
+                ps.executeUpdate();
+            }else{
+                ps = con.prepareStatement(CREATE_LEAD_CONFIRMATION);
+                ps.setInt(1, leadId);
+                ps.setString(2, "");
+                ps.setDouble(3, total);
+                ps.setInt(4, 0);
+                ps.setString(5, "");
+                ps.executeUpdate();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+    }
+    
+    public static void confirmLead(String nric, double collectAmount, String path, int leadId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(CONFIRM_LEAD);
+            ps.setString(1, nric);
+            ps.setDouble(2, collectAmount);
+            ps.setString(3, path);
+            ps.setInt(4, leadId);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void addLeadConfirmationCollected(int leadId, double collectAmount) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(UPDATE_LEAD_CONFIRMATION_COLLECTED);
+            ps.setDouble(1, collectAmount);
+            ps.setInt(2, leadId);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
     public static void cancelLead(int leadId, String reason){
         Connection con = null;
         PreparedStatement ps = null;
@@ -1310,6 +1421,7 @@ public class LeadDAO {
             ps.setInt(3, leadId);
             ps.executeUpdate();
             SiteSurveyDAO.cancelLeadSiteSurvey(leadId);
+            JobDAO.cancelSalesJob(leadId);
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {

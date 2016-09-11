@@ -60,7 +60,7 @@
     border-bottom-width: 0px;
 ">
             <input type="hidden" name="payslip_id" value="<%=payslip.getPayslip_id()%>">
-            <input class="btn btn-default" type="submit" value="PDF" formaction="payslip_pdf.pdf" formtarget="_blank">
+            <input class="btn btn-default" type="submit" value="PDF" formaction="payslips/<%=employee.getNric()%>" formtarget="_blank">
         </form>
         <button class="btn btn-default" onclick="confirmDelete('<%=payslip.getPayslip_id()%>', 'payslip')">Delete</button>
         </td>

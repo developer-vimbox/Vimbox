@@ -15,10 +15,12 @@ import com.itextpdf.text.pdf.PdfPTableEvent;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.vimbox.database.LeadDAO;
 import com.vimbox.database.LeadPopulationDAO;
 import com.vimbox.util.Converter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,10 +28,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.joda.time.DateTime;
 
-@WebServlet(name = "LeadPDFGenerator", urlPatterns = {"/new_lead_pdf.pdf"})
-public class LeadPDFGenerator extends HttpServlet {
+@WebServlet(name = "InvoicePDFGenerator", urlPatterns = {"/invoices/*"})
+public class InvoicePDFGenerator extends HttpServlet {
 
     private BaseColor tHeaderColor = new BaseColor(202, 225, 255);
+    private BaseColor invoiceColor = new BaseColor(72, 136, 216);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +46,14 @@ public class LeadPDFGenerator extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/pdf");
+        String leadId = request.getParameter("leadId");
+        Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
+        ArrayList<LeadDiv> leadDivs = lead.getSalesDivs();
         try {
             // Document Settings //
             Document document = new Document();
             PdfWriter.getInstance(document, response.getOutputStream());
+            Font invoiceFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.NORMAL, invoiceColor);
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
             Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.NORMAL);
             Font tBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.BOLD);
@@ -72,12 +79,14 @@ public class LeadPDFGenerator extends HttpServlet {
                 if (ch == '/') {
                     occurence += 1;
                 }
+                //occurence == 9 //
                 if (occurence == 3) {
                     slash = i;
                     break;
                 }
             }
-            path = path.substring(0, slash + 1) + "Images/VimboxIcon.png";
+            //documents/images/VimboxIcon.png// 
+            path = path.substring(0, slash + 1) + "images/VimboxIcon.png";
             path = path.replaceAll("%20", " ");
             Image img = Image.getInstance(path);
             img.scaleAbsolute(100f, 100f);
@@ -91,44 +100,84 @@ public class LeadPDFGenerator extends HttpServlet {
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
             table.setWidthPercentage(100);
-            table.setSpacingAfter(20);
+            table.setSpacingAfter(10);
             document.add(table);
             //--------------------------//
 
+            // INVOICE //
+            table = new PdfPTable(1);
+            cell = new PdfPCell(new Phrase("INVOICE", invoiceFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            table.setWidthPercentage(100);
+            table.setSpacingAfter(10);
+            document.add(table);
+            //---------//
+            
             // Customer address and quotation details //
             table = new PdfPTable(2);
-
-            cell = new PdfPCell(new Phrase("QUOTATION", boldFont));
-            cell.setBorder(Rectangle.NO_BORDER);
-            cell.setColspan(2);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("ADDRESS", normalFont));
+            Phrase phrase = null;
+            
+            cell = new PdfPCell(new Phrase("INVOICE TO", boldFont));
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("QUOTATION NO. : " + request.getParameter("leadId"), normalFont));
+            
+            phrase = new Phrase();
+            phrase.add(new Phrase("INVOICE NO.  ", boldFont));
+            phrase.add(new Phrase(leadId, normalFont));
+            cell = new PdfPCell(phrase);
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             table.addCell(cell);
-
-            String[] addressFrom = request.getParameterValues("addressfrom");
-            String name = request.getParameter("salutation") + " " + request.getParameter("name");
-            String address = name + "\n";
+            
+            String name = "";
+            if(lead.getCustomer() != null){
+                name = lead.getCustomer().toString();
+            }
+            cell = new PdfPCell(new Phrase(name, normalFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            
+            phrase = new Phrase();
+            phrase.add(new Phrase("DATE  ", boldFont));
+            phrase.add(new Phrase(Converter.convertDatePdf(new DateTime()), normalFont));
+            cell = new PdfPCell(phrase);
+            cell.setBorder(Rectangle.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            table.addCell(cell);
+            
+            ArrayList<String[]> addressFroms = lead.getAddressFrom();
+            String[] addressFrom = null;
+            if(addressFroms.size() > 0){
+                addressFrom = addressFroms.get(0)[0].split("_");
+            }
+            String address = "";
             if (addressFrom != null) {
                 address += addressFrom[0] + "\nSingapore " + addressFrom[3];
             }
             cell = new PdfPCell(new Phrase(address, normalFont));
+            cell.setRowspan(2);
             cell.setPaddingBottom(10);
             cell.setBorder(Rectangle.BOTTOM);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Phrase("DATE : " + Converter.convertDatePdf(new DateTime()), normalFont));
-            cell.setBorder(Rectangle.BOTTOM);
-            cell.setPaddingBottom(10);
+            phrase = new Phrase();
+            phrase.add(new Phrase("DUE DATE  ", boldFont));
+            phrase.add(new Phrase(Converter.convertDatePdf(new DateTime()), normalFont));
+            cell = new PdfPCell(phrase);
+            cell.setBorder(Rectangle.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             table.addCell(cell);
-
+            
+            phrase = new Phrase();
+            phrase.add(new Phrase("TERMS  ", boldFont));
+            phrase.add(new Phrase("Due on receipt", normalFont));
+            cell = new PdfPCell(phrase);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            cell.setPaddingBottom(10);
+            cell.setBorder(Rectangle.BOTTOM);
+            table.addCell(cell);
+            
             table.setWidthPercentage(100);
             table.setSpacingAfter(30);
             document.add(table);
@@ -156,6 +205,7 @@ public class LeadPDFGenerator extends HttpServlet {
             document.add(table);
 
             // Packing Materials //
+            //ArrayList<Item> materials = leadDiv.getMaterials();
             String[] vimboxMaterialNames = request.getParameterValues("vimboxMaterialName");
             String[] vimboxItemNames = request.getParameterValues("vimboxItemName");
             if (vimboxMaterialNames != null || vimboxItemNames != null) {
@@ -224,7 +274,7 @@ public class LeadPDFGenerator extends HttpServlet {
             }
 
             // Services //
-            String[] serviceNames = request.getParameterValues("serviceName");
+            /*String[] serviceNames = request.getParameterValues("serviceName");
             if (serviceNames != null) {
                 
                 String[] serviceCharges = request.getParameterValues("serviceCharge");
@@ -284,13 +334,13 @@ public class LeadPDFGenerator extends HttpServlet {
                     document.add(table);
                     document.add(line);
                 }
-            }
+            }*/
             //------------------------//
 
             
             
             
-            table = new PdfPTable(2);
+            /*table = new PdfPTable(2);
             cell = new PdfPCell(new Phrase("TOTAL : ", tNormalFont));
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
@@ -307,7 +357,7 @@ public class LeadPDFGenerator extends HttpServlet {
             table.setWidthPercentage(100);
             table.setSpacingBefore(30);
             table.setWidths(new float[]{80,20});
-            document.add(table);
+            document.add(table);*/
             document.close();
 
         } catch (DocumentException de) {

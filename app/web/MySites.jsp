@@ -11,6 +11,16 @@
     </head>
     <%@include file="header.jsp"%>
     <body onload="survey_setup('<%=user.getNric()%>')">
+        <div id="view_dom_modal" class="modal">
+            <!-- Modal content -->
+            <div class="message-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('view_dom_modal')">×</span>
+                    <div id="dom_content"></div>
+                </div>
+            </div>
+        </div>
+        
         <div id="view_survey_modal" class="modal">
             <!-- Modal content -->
             <div class="message-modal-content" style="width: 90%;">

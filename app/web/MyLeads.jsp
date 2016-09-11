@@ -10,8 +10,76 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>My Leads</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
         <script src="JS/ModalFunctions.js"></script>
-        <script src="JS/LeadFunctions.js"></script>
+        <script>
+            $('#confirm_form').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    var modal = document.getElementById("lead_error_modal");
+                    var status = document.getElementById("lead_error_status");
+                    var message = document.getElementById("lead_error_message");
+                    status.innerHTML = data.status;
+                    message.innerHTML = data.message;
+                    modal.style.display = "block";
+
+                    if (data.status === "SUCCESS") {
+                        setTimeout(function () {
+                            my_leads_setup($('#cfmuId').val());
+                            document.getElementById("confirmLeadModal").style.display = "none";
+                            modal.style.display = "none";
+                        }, 500);
+                    }
+                },
+                error: function (data) {
+                    var modal = document.getElementById("lead_error_modal");
+                    var status = document.getElementById("lead_error_status");
+                    var message = document.getElementById("lead_error_message");
+                    status.innerHTML = "ERROR";
+                    message.innerHTML = data;
+                    modal.style.display = "block";
+                }
+            });
+            
+            $('#amount_form').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    var modal = document.getElementById("lead_error_modal");
+                    var status = document.getElementById("lead_error_status");
+                    var message = document.getElementById("lead_error_message");
+                    status.innerHTML = data.status;
+                    message.innerHTML = data.message;
+                    modal.style.display = "block";
+
+                    if (data.status === "SUCCESS") {
+                        $('#amountCollected').val('');
+                        setTimeout(function () {
+                            modal.style.display = "none";
+                        }, 500);
+                        $.getJSON("RetrieveLeadConfirmationDetails", {leadId: $('#amtlId').val()})
+                            .done(function (data) {
+                                document.getElementById("ttlAmtLbl").innerHTML = Number(data.total);
+                                document.getElementById("dptLbl").innerHTML = Number(data.total)*(Number(data.deposit)/100);
+                                document.getElementById("amtCltLbl").innerHTML = Number(data.collected);
+                            })
+                            .fail(function (error) {
+                                modal.innerHTML = "ERROR";
+                                status.innerHTML = error;
+                                message.style.display = "block";
+                            });
+                    }
+                },
+                error: function (data) {
+                    var modal = document.getElementById("lead_error_modal");
+                    var status = document.getElementById("lead_error_status");
+                    var message = document.getElementById("lead_error_message");
+                    status.innerHTML = "ERROR";
+                    message.innerHTML = data;
+                    modal.style.display = "block";
+                }
+            });
+        </script>
     </head>
     <%@include file="header.jsp"%>
     <body onload="my_leads_setup('<%=user.getNric()%>')">
@@ -26,14 +94,76 @@
                     <table>
                         <tr>
                             <td>Lead ID :</td>
-                            <td><label id="leadIdLbl"></label><input type="hidden" name="lId" id="lId" /></td>
+                            <td><label id="leadIdLbl"></label><input type="hidden" id="lId" /></td>
                         </tr>
                         <tr>
                             <td>Reason :</td>
-                            <td><textarea id="reason" name="reason" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea></td>
+                            <td><textarea id="reason" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea></td>
                         </tr>  
                     </table>
                     <button onclick="confirmCancel()">Reject Lead</button>
+                </div>
+            </div>
+        </div>
+        <div id="confirmLeadModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('confirmLeadModal')">×</span>
+                    <h3>Lead Confirmation</h3>
+                    <label id="cfmMessage"></label>
+                    <form action="ConfirmLeadController" id="confirm_form" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="cfmuId" id="cfmuId" value="<%=user.getNric()%>">
+                        <table>
+                            <tr>
+                                <td>Lead ID :</td>
+                                <td><label id="cfmleadIdLbl"></label><input type="hidden" name="cfmlId" id="cfmlId" /></td>
+                            </tr> 
+                            <tr>
+                                <td>Amount Collected :</td>
+                                <td>S$ <input type="number" min="0" step="0.01" name="amountCollected"/></td>
+                            </tr> 
+                            <tr>
+                                <td>Confirmation Email</td>
+                                <td><input type="file" name="file"/></td>
+                            </tr>
+                        </table>
+                        <input type="submit" value="Confirm Lead"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="amountModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('amountModal')">×</span>
+                    <h3>Amount Details</h3>
+                    <table>
+                        <tr>
+                            <td>Total Amount :</td>
+                            <td>S$ <label id="ttlAmtLbl"></label>
+                        </tr> 
+                        <tr>
+                            <td>Deposit Required :</td>
+                            <td>S$ <label id="dptLbl"></label>
+                        </tr> 
+                        <tr>
+                            <td>Amount Collected :</td>
+                            <td>S$ <label id="amtCltLbl"></label>
+                        </tr>  
+                    </table>
+                    <hr>
+                    <form action="AddAmountController" id="amount_form" method="post">
+                        <input type="hidden" name="amtlId" id="amtlId"/>
+                        <table>
+                            <tr>
+                                <td>Collected :</td>
+                                <td>S$ <input type="number" min="0" step="0.01" name="amountCollected" id="amountCollected"/></td>
+                            </tr> 
+                        </table>
+                        <input type="submit" value="Add payment"/>
+                    </form>
                 </div>
             </div>
         </div>

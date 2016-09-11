@@ -81,9 +81,7 @@
                     // DIFFERENT CANCELLATION
                     out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
                     // CHANGE OF DATES
-                }else{
-                    // INVOICE
-                    out.println("<button class='btn btn-default'>Invoice</button>");
+                    out.println("<button class='btn btn-default'>Change</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -134,9 +132,7 @@
                     // DIFFERENT CANCELLATION
                     out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
                     // CHANGE OF DATES
-                }else{
-                    // INVOICE
-                    out.println("<button class='btn btn-default'>Invoice</button>");
+                    out.println("<button class='btn btn-default'>Change</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");

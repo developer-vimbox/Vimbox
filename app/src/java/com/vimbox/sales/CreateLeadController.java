@@ -309,6 +309,7 @@ public class CreateLeadController extends HttpServlet {
             //----------------//
 
             if(leadType.equals("Sales")){
+                double total = 0;
                 String[] surveyDates = request.getParameterValues("siteSurvey_date");
                 String[] timeslots = request.getParameterValues("siteSurvey_timeslot");
                 String[] addresses = request.getParameterValues("siteSurvey_address");
@@ -434,6 +435,7 @@ public class CreateLeadController extends HttpServlet {
                             for (int i = 0; i < serviceNames.length; i++) {
                                 String serviceName = serviceNames[i];
                                 String serviceCharge = serviceCharges[i];
+                                total += Double.parseDouble(serviceCharge);
                                 String serviceManpower = "";
                                 String serviceRemark = "";
                                 if (serviceName.contains("Manpower")) {
@@ -453,12 +455,31 @@ public class CreateLeadController extends HttpServlet {
                         // Others //
                         String[] others = {"storeyCharge", "pushCharge", "detourCharge", "materialCharge", "markup", "discount"};
                         String[] otherCharges = new String[6];
-                        otherCharges[0] = request.getParameter(divId + "_storeyCharge");
-                        otherCharges[1] = request.getParameter(divId + "_pushCharge");
-                        otherCharges[2] = request.getParameter(divId + "_detourCharge");
-                        otherCharges[3] = request.getParameter(divId + "_materialCharge");
-                        otherCharges[4] = request.getParameter(divId + "_markup");
-                        otherCharges[5] = request.getParameter(divId + "_discount");
+                        
+                        String otherCharge0 = request.getParameter(divId + "_storeyCharge");
+                        otherCharges[0] = otherCharge0;
+                        total += Double.parseDouble(otherCharge0);
+                        
+                        String otherCharge1 = request.getParameter(divId + "_pushCharge");
+                        otherCharges[1] = otherCharge1;
+                        total += Double.parseDouble(otherCharge1);
+                        
+                        String otherCharge2 = request.getParameter(divId + "_detourCharge");
+                        otherCharges[2] = otherCharge2;
+                        total += Double.parseDouble(otherCharge2);
+                        
+                        String otherCharge3 = request.getParameter(divId + "_materialCharge");
+                        otherCharges[3] = otherCharge3;
+                        total += Double.parseDouble(otherCharge3);
+                        
+                        String otherCharge4 = request.getParameter(divId + "_markup");
+                        otherCharges[4] = otherCharge4;
+                        total += Double.parseDouble(otherCharge4);
+                        
+                        String otherCharge5 = request.getParameter(divId + "_discount");
+                        otherCharges[5] = otherCharge5;
+                        total += Double.parseDouble(otherCharge5);
+                        
                         // Enter into leadother database //
                         LeadDAO.createLeadOther(leadId, salesDiv, others, otherCharges);
                             //----------------------------------//
@@ -476,6 +497,7 @@ public class CreateLeadController extends HttpServlet {
                         //--------------//
                     }
                 }
+                LeadDAO.createLeadConfirmation(leadId, total);
             }
 
             jsonOutput.addProperty("status", "SUCCESS");

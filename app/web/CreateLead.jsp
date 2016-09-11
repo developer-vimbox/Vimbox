@@ -390,12 +390,22 @@
             });
 
             jQuery(document).bind('keydown', 'ctrl+shift', function (e) {
-                var tableClassName = $(document.activeElement.parentNode.parentNode.parentNode.parentNode).attr('class');
+                var element = document.activeElement.parentNode;
+                var tag = element.tagName;
+                var tableClassName = $(element).attr('class');
+                while (tag !== 'TABLE'){
+                    element = element.parentNode;
+                    tag = element.tagName;
+                    tableClassName = $(element).attr('class');
+                }
+                
                 var activeElement = document.activeElement.parentNode;
                 var tagname = activeElement.tagName;
-                while (tagname !== 'DIV') {
+                var classname = $(activeElement).attr('class');
+                while (tagname !== 'DIV' || classname !== 'tabcontent') {
                     activeElement = activeElement.parentNode;
                     tagname = activeElement.tagName;
+                    classname = $(activeElement).attr('class');
                 }
 
                 switch (tableClassName) {

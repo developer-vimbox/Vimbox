@@ -22,12 +22,12 @@
     }
 %>
 <table class="table table-hover" width="100%">
-    <col width="20%">
+    <col width="10%">
     <col width="30%">
     <col width="20%">
     <col width="10%">
     <col width="10%">
-    <col width="10%">
+    <col width="20%">
     <thead>
     <tr>
         <th>Lead ID</th>
@@ -79,6 +79,7 @@
                     out.println("<button class='btn btn-default' onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', '')\">Continue Survey</button>");
                 }else{
                     out.println("<button class='btn btn-default' onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
+                    out.println("<button class='btn btn-default' onclick=\"viewDom('" + leadId + "')\">DOM</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -114,6 +115,7 @@
                     out.println("<button class='btn btn-default' onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', '')\">Continue Survey</button>");
                 }else{
                     out.println("<button class='btn btn-default' onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
+                    out.println("<button class='btn btn-default' onclick=\"viewDom('" + leadId + "')\">DOM</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");

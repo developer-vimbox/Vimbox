@@ -81,7 +81,7 @@ function confirmJobCancel(leadId, date, timeslot, status) {
     if(status === 'Booked'){
         displayMsg = "Are you sure that you want to cancel this job assignment?";
     }else{
-        displayMsg = "There will be no refund for any cancellation done within 7 days from confirmation.<br>Are you sure that you want to cancel this job assignment?";
+        displayMsg = "There will be no refund for any cancellation done within 7 days away from confirmed Date of Move.<br>Are you sure that you want to cancel this job assignment?";
     }
     status.innerHTML = "Cancel Confirmation";
     var table = "<table width='100%'>";
