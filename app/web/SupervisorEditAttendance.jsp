@@ -33,7 +33,7 @@
 
                     if (data.status === "SUCCESS") {
                         setTimeout(function () {
-                            location.reload()
+                            location.href = 'SupervisorTakeAttendance.jsp';
                         }, 500);
                     }
                 },
@@ -77,12 +77,6 @@
                                     if (movers.isEmpty()) {
                                         out.println("No movers assigned for today.");
                                     } else {
-                                        MoversAttendance firstM = movers.get(0);
-                                        String status = firstM.getStatus();
-                                        double duration = firstM.getDuration();
-                                        if (!status.equals("Assigned")) {
-                                            out.println("<div class='alert alert-success' style='width: 400px;'><button class=\"btn btn-sm btn-default\" onclick=\"window.location.href='SupervisorEditAttendance.jsp'\">Edit Attendance</button> &nbsp; Attendance for today has been taken</div>");
-                                        }
                                 %>
                                 <form action='CreateMoverAttendanceController' method='post' id='attendance_form'>
                                     <input type="hidden" name="today" value="<%=today%>">
@@ -99,75 +93,67 @@
                                         </tr>
                                     </thead>
                                     <%
-                                        
-                                        if (status.equals("Assigned")) {
+                                        String status = "";
+                                        double duration = 0;
+                                        String nric = "";
                                             for (MoversAttendance m : movers) {
                                                 User u = m.getMover();
-                                    %>
-                                    <tr>
-                                        <td><%=u.getNric()%><input type="hidden" name="attendance_nric" value="<%=u.getNric()%>"></td>
-                                        <td><%=u.toString()%></td>
-                                        <td style="text-align: center"><input class="attendance_radio" type="radio" name="attendance_<%=u.getNric()%>" value="Present" checked></td>
-                                        <td style="text-align: center"><input class="attendance_radio" type="radio" name="attendance_<%=u.getNric()%>" value="Absent"></td>
-                                        <td style="text-align: right"><input class="attendance_radio" type="radio" name="attendance_<%=u.getNric()%>" value="Late"></td>
-                                        <td>
-                                            <select name="late_<%=u.getNric()%>_h" id="late_<%=u.getNric()%>_h" disabled>
-                                                <%
-                                                    for (int i = 1; i <= 9; i++) {
-                                                        out.println("<option value='" + i + "'>" + i + "</option>");
-                                                    }
-                                                %>
-                                            </select> H 
-                                            <select name="late_<%=u.getNric()%>_m" id="late_<%=u.getNric()%>_m" disabled>
-                                                <%
-                                                    for (int i = 0; i <= 59; i++) {
-                                                        out.println("<option value='" + i + "'>" + i + "</option>");
-                                                    }
-                                                %>
-                                            </select> M
-                                        </td>
-                                    </tr>
-                                    <%
-                                            }
-                                        } else {
-                                            for (MoversAttendance m : movers) {
-                                                User u = m.getMover();
+                                                nric = u.getNric();
                                                 status = m.getStatus();
                                                 duration = m.getDuration();
                                     %>
                                     <tr>
-                                        <td><%=u.getNric()%><input type="hidden" name="attendance_nric" value="<%=u.getNric()%>"></td>
+                                        <td><%=nric%><input type="hidden" name="attendance_nric" value="<%=nric%>"></td>
                                         <td><%=u.toString()%></td>
-                                        <td style="text-align: center"><%if (status.equals("Present")) 
-                                                out.println("x");%></td>
-                                        <td style="text-align: center"><%if (status.equals("Absent")) 
-                                                out.println("x");%></td>
-                                        <td style="text-align: right"><%if (status.equals("Late")) 
-                                                out.println("x");%></td>
-                                        <td>
-                                            <%
-                                                if (status.equals("Late")){
-                                                    int hour = (int) (duration / 60);
-                                                    int min = (int) (duration % 60);
-                                                    out.println(hour + " hr " + min + " min");
-                                                }
-                                            %>
-                                        </td>
-                                    </tr>
+                                        <td style="text-align: center"><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Present" <%if (status.equals("Present")) {
+                                                    out.println("checked");
+                                                }%>></td>
+                                            <td style="text-align: center"><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Absent" <%if (status.equals("Absent")) {
+                                                    out.println("checked");
+                                                }%>></td>
+                                            <td style="text-align: right"><input class="attendance_radio" type="radio" name="attendance_<%=nric%>" value="Late" <%if (status.equals("Late")) {
+                                                    out.println("checked");
+                                                }%>></td>
+                                            <td>
+                                                    <select name="late_<%=nric%>_h" id="late_<%=nric%>_h" <%if (!status.equals("Late"))out.println("disabled");%>>
+                                                    
+                                                    <%
+                                                        int hour = 1;
+                                                        int min = 0;
+                                                        if (status.equals("Late")) {
+                                                            hour = (int) (duration / 60);
+                                                            min = (int) (duration % 60);
+                                                        }
+
+                                                        for (int i = 1; i <= 9; i++) {
+                                                            if (hour == i) {
+                                                                out.println("<option value='" + i + "' selected>" + i + "</option>");
+                                                            } else {
+                                                                out.println("<option value='" + i + "'>" + i + "</option>");
+                                                            }
+                                                        }
+                                                    %>
+                                                </select> H 
+                                                        <select name="late_<%=nric%>_m" id="late_<%=nric%>_m" <%if(!status.equals("Late"))out.println("disabled");%>> 
+                                                   
+                                                    <%
+                                                        for (int i = 0; i <= 59; i++) {
+                                                            if (min == i) {
+                                                                out.println("<option value='" + i + "' selected>" + i + "</option>");
+                                                            } else {
+                                                                out.println("<option value='" + i + "'>" + i + "</option>");
+                                                            }
+                                                        }
+                                                    %>
+                                                </select> M
+                                            </td>
                                     <%
                                             }
-                                        }
                                     %>
                                 </table>
-                                <%
-                                        if (status.equals("Assigned")) {
-                                %>
                                 <div class='text-center'>
-                                    <button type="submit" class="btn btn-primary">Take Attendance</button>
+                                    <button type="submit" class="btn btn-primary">Edit Attendance</button>
                                 </div>
-                                <%
-                                    }
-                                %>
                                 </form>
                                 <%
                                     }
@@ -180,3 +166,4 @@
         </div>
     </body>
 </html>
+

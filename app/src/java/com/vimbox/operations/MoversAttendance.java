@@ -8,9 +8,9 @@ public class MoversAttendance {
     private User mover;
     private String dom;
     private String status;
-    private int duration;
+    private double duration;
     
-    public MoversAttendance(String supervisor, User mover, String dom, String status, int duration) {
+    public MoversAttendance(String supervisor, User mover, String dom, String status, double duration) {
         this.supervisor = supervisor;
         this.mover = mover;
         this.dom = dom;
@@ -34,7 +34,7 @@ public class MoversAttendance {
         return status;
     }
     
-    public int getDuration() {
+    public double getDuration() {
         return duration;
     }
 }

@@ -19,9 +19,10 @@ import org.joda.time.DateTime;
 
 public class OperationsDAO {
     private static final String CHECK_ASSIGNED_MOVERS = "SELECT * FROM operations_attendance WHERE dom = ? AND assigned_mover = ?";
-    private static final String ASSIGN_MOVER = "INSERT INTO operations_attendance (supervisor, assigned_mover, dom, status, duration) VALUES (?,?,?,?,?)";
+    private static final String ASSIGN_MOVER = "INSERT INTO operations_attendance (supervisor, assigned_mover, dom, attendance, duration) VALUES (?,?,?,?,?)";
     private static final String GET_MOVERS_BY_SUP_AND_DOM = "SELECT * FROM operations_attendance WHERE dom = ? AND supervisor = ?";
     private static final String REMOVE_MOVER = "DELETE FROM operations_attendance WHERE supervisor = ? AND dom = ? AND assigned_mover = ?";
+    private static final String UPDATE_ATTENDANCE = "UPDATE operations_attendance SET attendance = ?, duration = ? WHERE supervisor = ? AND assigned_mover = ? AND dom = ?";
     
     public static boolean checkAssigned(String dom, String sMover) {
         Connection con = null;
@@ -125,8 +126,8 @@ public class OperationsDAO {
                 User m = UserDAO.getUserByNRIC(mover);
                 String sup = rs.getString("supervisor");
                 String date = rs.getString("dom");
-                String status = rs.getString("status");
-                int duration = rs.getInt("duration");
+                String status = rs.getString("attendance");
+                double duration = rs.getInt("duration");
                 movers.add(new MoversAttendance(sup, m, date, status, duration));  
             }
         } catch (SQLException se) {
@@ -135,5 +136,27 @@ public class OperationsDAO {
             ConnectionManager.close(con, ps, rs);
         }
         return movers;
+    }
+    
+    public static void updateAttendance(ArrayList<MoversAttendance> mAtt) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            for (MoversAttendance m : mAtt) {
+                User u = m.getMover();
+                ps = con.prepareStatement(UPDATE_ATTENDANCE);
+                ps.setString(1, m.getStatus());
+                ps.setDouble(2, m.getDuration());
+                ps.setString(3, m.getSupervisor());
+                ps.setString(4, u.getNric());
+                ps.setString(5, m.getDom());
+                ps.executeUpdate();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
     }
 }
