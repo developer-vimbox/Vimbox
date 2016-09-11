@@ -349,20 +349,13 @@ INSERT INTO `operations_assigned` (`lead_id`, `ss_owner`, `supervisor`, `carplat
 --
 
 CREATE TABLE IF NOT EXISTS `operations_attendance` (
-  `job_id` int(10) NOT NULL,
   `supervisor` varchar(20) NOT NULL,
-  `assigned` varchar(255) NOT NULL,
-  `timeslot` varchar(100) NOT NULL,
-  PRIMARY KEY (`job_id`)
+  `assigned_mover` varchar(20) NOT NULL,
+  `dom` date NOT NULL,
+  `attendance` varchar(10) NOT NULL,
+  `duration` int(11) NOT NULL,
+  PRIMARY KEY (`supervisor`,`assigned_mover`,`dom`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `operations_attendance`
---
-
-INSERT INTO `operations_attendance` (`job_id`, `supervisor`, `assigned`, `timeslot`) VALUES
-(393811762, '1234567', '', ''),
-(572643837, '1234567', '', '');
 
 -- --------------------------------------------------------
 

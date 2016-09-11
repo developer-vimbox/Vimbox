@@ -2187,6 +2187,14 @@ function viewDom(leadId){
     $.get("LoadViewDOM.jsp", {leadId: leadId}, function (data) {
         document.getElementById('dom_content').innerHTML = data;
     });
+    modal.style.display = "block";
+}
 
+function viewSalesPortion(leadId) {
+    var modal = document.getElementById("viewLeadModal");
+    var content = document.getElementById("leadContent");
+    $.get("RetrieveSalesPortion.jsp", {getLid: leadId}, function (data) {
+        content.innerHTML = data;
+    });
     modal.style.display = "block";
 }

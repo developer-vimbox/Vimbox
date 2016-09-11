@@ -39,7 +39,6 @@ function openSales(evt, cityName) {
     // Show the current tab, and add an "active" class to the link that opened the tab
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
-    $('#' + cityName).scrollView();
 }
 
 function addFollowup(leadId) {
@@ -104,27 +103,6 @@ function viewLeadsHistory(custId) {
     modal.style.display = "block";
 }
 
-//------------------------- LeadType Functions---------------------------//
-
-function showDiv(e) {
-    var divId = this.value.replace(" ", "");
-    var div = document.getElementById(divId);
-    if (this.checked) {
-        div.style.display = "block";
-        $('#' + divId).scrollView();
-    } else {
-        div.style.display = "none";
-    }
-}
-
-$.fn.scrollView = function () {
-    return this.each(function () {
-        $('html, body').animate({
-            scrollTop: $(this).offset().top
-        }, 1000);
-    });
-}
-//--------------------------------End-----------------------------------//             
 function edit_leadSetup() {
     $('.tabcontent').each(function () {
         var divId = this.id;
@@ -918,7 +896,7 @@ function confirmCancel() {
     var status = document.getElementById("lead_error_status");
     var message = document.getElementById("lead_error_message");
     status.innerHTML = "<b>Cancel Confirmation</b>";
-    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Cancel this lead record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"cancelLeadForm()\">Yes</button></td><td align='center'><button onclick=\"closeModal('lead_error_modal')\">No</button></td></tr></table>";
+    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Cancel this lead record? All pending site surveys and booked/confirmed DOMs of this lead will be cancelled as well. Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"cancelLeadForm()\">Yes</button></td><td align='center'><button onclick=\"closeModal('lead_error_modal')\">No</button></td></tr></table>";
     modal.style.display = "block";
 }
 
@@ -1067,7 +1045,9 @@ function cancelLeadForm() {
 
                 if (data.status === "SUCCESS") {
                     setTimeout(function () {
-                        window.location.href = "MyLeads.jsp";
+                        my_leads_setup($('#uId').val());
+                        document.getElementById("cancelLeadModal").style.display = "none";
+                        modal.style.display = "none";
                     }, 500);
                 }
 
@@ -1084,6 +1064,31 @@ function cancelLead(leadId) {
     $('#lId').val(leadId);
     document.getElementById('leadIdLbl').innerHTML = leadId;
     modal.style.display = "block";
+}
+
+function confirmLead(leadId) {
+    var errorModal = document.getElementById("lead_error_modal");
+    var errorStatus = document.getElementById("lead_error_status");
+    var errorMessage = document.getElementById("lead_error_message");
+            
+    var modal = document.getElementById("confirmLeadModal");
+    $('#cfmlId').val(leadId);
+    document.getElementById('cfmleadIdLbl').innerHTML = leadId;
+    $.getJSON("RetrieveLeadConfirmationDetails", {leadId: leadId})
+        .done(function (data) {
+            document.getElementById("cfmMessage").innerHTML = "Deposit to be collected : S$" + Number(data.total)*(Number(data.deposit)/100);
+            modal.style.display = "block";
+        })
+        .fail(function (error) {
+            errorStatus.innerHTML = "ERROR";
+            errorMessage.innerHTML = error;
+            errorModal.style.display = "block";
+        });
+    
+}
+
+function viewCancelReason(){
+    document.getElementById("viewReasonModal").style.display = "block";
 }
 
 function viewDaySchedule(date) {
@@ -2143,4 +2148,53 @@ function invalidDate() {
     setTimeout(function () {
         modal.style.display = "none";
     }, 1300);
+}
+
+function my_leads_setup(nric){
+    load_leads('', nric, "Pending");
+    load_leads('', nric, "Confirmed");
+    load_leads('', nric, "Rejected");
+}
+
+function load_leads(keyword, nric, type){
+    $.get("LoadMyLeads.jsp", {keyword: keyword, nric: nric, type: type}, function (data) {
+        document.getElementById(type).innerHTML = data;
+    });
+}
+
+function amountCheck(leadId){
+    var errorModal = document.getElementById("lead_error_modal");
+    var errorStatus = document.getElementById("lead_error_status");
+    var errorMessage = document.getElementById("lead_error_message");
+    $('#amtlId').val(leadId);
+    var modal = document.getElementById("amountModal");
+    $.getJSON("RetrieveLeadConfirmationDetails", {leadId: leadId})
+        .done(function (data) {
+            document.getElementById("ttlAmtLbl").innerHTML = Number(data.total);
+            document.getElementById("dptLbl").innerHTML = Number(data.total)*(Number(data.deposit)/100);
+            document.getElementById("amtCltLbl").innerHTML = Number(data.collected);
+            modal.style.display = "block";
+        })
+        .fail(function (error) {
+            errorStatus.innerHTML = "ERROR";
+            errorMessage.innerHTML = error;
+            errorModal.style.display = "block";
+        });
+}
+
+function viewDom(leadId){
+    var modal = document.getElementById("view_dom_modal");
+    $.get("LoadViewDOM.jsp", {leadId: leadId}, function (data) {
+        document.getElementById('dom_content').innerHTML = data;
+    });
+    modal.style.display = "block";
+}
+
+function viewSalesPortion(leadId) {
+    var modal = document.getElementById("viewLeadModal");
+    var content = document.getElementById("leadContent");
+    $.get("RetrieveSalesPortion.jsp", {getLid: leadId}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
 }
