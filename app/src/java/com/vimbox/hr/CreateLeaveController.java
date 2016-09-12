@@ -23,7 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import org.apache.catalina.core.ApplicationPart;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -122,32 +122,35 @@ public class CreateLeaveController extends HttpServlet {
             }
         }
 
-        Part filePart = request.getPart("file");
+        ApplicationPart filePart = (ApplicationPart) request.getPart("file");
         String fileName = "";
         String path = "";
 
         if (filePart != null) {
-            fileName = getFileName(filePart);
-            if (fileName == null) {
-                errorMsg += "Please upload image proof for MC<br>";
+            boolean fileCheck = fileValidation(filePart);
+            if (!fileCheck) {
+                errorMsg += "Please upload a valid image (png, jpg or bmp)<br>";
             } else {
-                //path = System.getProperty("user.dir") + "/MC" + File.separator + fileName;
-                path = this.getClass().getClassLoader().getResource("").getPath();
-                int occurence = 0;
-                int slash = 0;
-                for (int i = path.length() - 1; i >= 0; i--) {
-                    char ch = path.charAt(i);
-                    if (ch == '/') {
-                        occurence += 1;
-                    }
-                    if (occurence == 3) {
-                        slash = i;
-                        break;
-                    }
-                }
-                path = path.substring(0, slash + 1) + "images/MC";
-                path = path.replaceAll("%20", " ");
-                path = path + File.separator + fileName;
+                String fName = filePart.getSubmittedFileName();
+                String fileExt = fName.substring(fName.lastIndexOf("."));
+                fileName = nric + "-MC-" + Converter.convertDateImg(start_date) + "-" + Converter.convertDateImg(end_date) + fileExt;
+                path = System.getProperty("user.dir") + "/documents/mc/" + fileName;
+                /*path = this.getClass().getClassLoader().getResource("").getPath();
+                 int occurence = 0;
+                 int slash = 0;
+                 for (int i = path.length() - 1; i >= 0; i--) {
+                 char ch = path.charAt(i);
+                 if (ch == '/') {
+                 occurence += 1;
+                 }
+                 if (occurence == 3) {
+                 slash = i;
+                 break;
+                 }
+                 }
+                 path = path.substring(0, slash + 1) + "images/MC";
+                 path = path.replaceAll("%20", " ");
+                 path = path + File.separator + fileName;*/
             }
         }
 
@@ -155,7 +158,6 @@ public class CreateLeaveController extends HttpServlet {
             OutputStream out = null;
             InputStream filecontent = null;
             try {
-                UserLeaveDAO.createLeaveRecord(leaveType, leaveName, nric, used, usedString, "/images/MC/" + fileName);
                 if (filePart != null) {
                     out = new FileOutputStream(new File(path));
                     filecontent = filePart.getInputStream();
@@ -167,6 +169,10 @@ public class CreateLeaveController extends HttpServlet {
                         out.write(bytes, 0, read);
                     }
                 }
+
+                UserLeaveDAO.createLeaveRecord(leaveType, leaveName, nric, used, usedString, fileName);
+                //UserLeaveDAO.createLeaveRecord(leaveType, leaveName, nric, used, usedString, "/images/MC/" + fileName);
+
                 jsonOutput.addProperty("status", "SUCCESS");
                 jsonOutput.addProperty("message", "LEAVE / MC ADDED!");
             } catch (SQLException se) {
@@ -191,14 +197,19 @@ public class CreateLeaveController extends HttpServlet {
         jsonOut.println(jsonOutput);
     }
 
-    private String getFileName(final Part part) {
-        for (String content : part.getHeader("content-disposition").split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(
-                        content.indexOf('=') + 1).trim().replace("\"", "");
+    private boolean fileValidation(ApplicationPart filePart) {
+        String fName = filePart.getSubmittedFileName();
+        if (fName != null && !fName.isEmpty()) {
+            String fileExt = fName.substring(fName.lastIndexOf("."));
+            // Checks file for file extension //
+            if (!(fileExt.matches(".png|.jpg|.bmp"))) {
+                return false;
+            } else {
+                return true;
             }
+        } else {
+            return false;
         }
-        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

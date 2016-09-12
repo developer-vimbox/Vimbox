@@ -117,6 +117,27 @@ public class Converter {
         datetimeString = day + "/" + month + "/" + year;
         return datetimeString;
     }
+    
+    public static String convertDateImg(DateTime datetime) {
+        String datetimeString = "";
+        LocalDateTime ldt = datetime.toLocalDateTime();
+        int d = ldt.getDayOfMonth();
+        int m = ldt.getMonthOfYear();
+        int year = ldt.getYear();
+
+        String day = d + "";
+        if (d < 10) {
+            day = 0 + day;
+        }
+
+        String month = m + "";
+        if (m < 10) {
+            month = 0 + month;
+        }
+
+        datetimeString = day + "" + month + "" + year;
+        return datetimeString;
+    }
 
     public static String convertDuplicates(String assigned) {
         String result = "";

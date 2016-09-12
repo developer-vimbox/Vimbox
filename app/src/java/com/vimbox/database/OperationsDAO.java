@@ -1,21 +1,12 @@
 package com.vimbox.database;
 
 import com.vimbox.operations.MoversAttendance;
-import com.vimbox.user.Account;
-import com.vimbox.user.Bank;
-import com.vimbox.user.Contact;
-import com.vimbox.user.Emergency;
-import com.vimbox.user.Module;
 import com.vimbox.user.User;
-import com.vimbox.util.Converter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
-import org.joda.time.DateTime;
 
 public class OperationsDAO {
     private static final String CHECK_ASSIGNED_MOVERS = "SELECT * FROM operations_attendance WHERE dom = ? AND assigned_mover = ?";

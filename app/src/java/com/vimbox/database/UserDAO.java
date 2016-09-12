@@ -31,7 +31,7 @@ public class UserDAO {
     private static final String GET_SITE_SURVEYORS_BY_NAME = "SELECT * FROM users WHERE type='Full' AND designation='Surveyor' AND (first_name LIKE ? OR last_name LIKE ? OR CONCAT(last_name, ' ', first_name) LIKE ?)";
     private static final String GET_FT_USERS_BY_KEYWORD = "SELECT * FROM users WHERE (nric like ? OR first_name like ? OR last_name like ? OR CONCAT(last_name, ' ', first_name) LIKE ? OR date_joined like ? OR department like ? OR designation like ?) AND type='Full'";
     private static final String GET_PT_USERS_BY_KEYWORD = "SELECT * FROM users WHERE (nric like ? OR first_name like ? OR last_name like ? OR CONCAT(last_name, ' ', first_name) LIKE ? OR date_joined like ? OR department like ? OR designation like ?) AND type='Part'";
-    private static final String CREATE_USER = "INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)";
+    private static final String CREATE_USER = "INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     private static final String CREATE_USER_CONTACT = "INSERT INTO users_contact VALUES (?,?,?,?)";
     private static final String CREATE_USER_EMERGENCY = "INSERT INTO users_emergency VALUES (?,?,?,?,?)";
     private static final String CREATE_USER_ACCOUNT = "INSERT INTO users_account VALUES (?,?,?)";
@@ -155,6 +155,7 @@ public class UserDAO {
                     DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                     String mailing_address = rs.getString("mailing_address");
                     String registered_address = rs.getString("registered_address");
+                    String license = rs.getString("license");
                     String department = rs.getString("department");
                     String designation = rs.getString("designation");
                     int salary = rs.getInt("salary");
@@ -199,7 +200,7 @@ public class UserDAO {
                         bank = new Bank(rs.getString("payment_mode"), rs.getString("bank_name"), rs.getString("account_name"), rs.getString("account_no"));
                     }
 
-                    user = new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank);
+                    user = new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank);
                 }
             }
         } catch (SQLException se) {
@@ -233,6 +234,7 @@ public class UserDAO {
                     DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                     String mailing_address = rs.getString("mailing_address");
                     String registered_address = rs.getString("registered_address");
+                    String license = rs.getString("license");
                     String department = rs.getString("department");
                     String designation = rs.getString("designation");
                     int salary = rs.getInt("salary");
@@ -277,8 +279,7 @@ public class UserDAO {
                         bank = new Bank(rs.getString("payment_mode"), rs.getString("bank_name"), rs.getString("account_name"), rs.getString("account_no"));
                     }
 
-                    user = new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank);
-                
+                    user = new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank);
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -324,6 +325,7 @@ public class UserDAO {
                 DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                 String mailing_address = rs.getString("mailing_address");
                 String registered_address = rs.getString("registered_address");
+                String license = rs.getString("license");
                 String department = rs.getString("department");
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
@@ -376,7 +378,7 @@ public class UserDAO {
                     bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
                 }
 
-                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank));
+                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank));
             }
 
             if (rsInner != null) {
@@ -410,6 +412,7 @@ public class UserDAO {
                 DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                 String mailing_address = rs.getString("mailing_address");
                 String registered_address = rs.getString("registered_address");
+                String license = rs.getString("license");
                 String department = rs.getString("department");
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
@@ -462,7 +465,7 @@ public class UserDAO {
                     bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
                 }
 
-                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank));
+                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank));
             }
 
             if (rsInner != null) {
@@ -493,6 +496,7 @@ public class UserDAO {
                 DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                 String mailing_address = rs.getString("mailing_address");
                 String registered_address = rs.getString("registered_address");
+                String license = rs.getString("license");
                 String department = rs.getString("department");
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
@@ -545,7 +549,7 @@ public class UserDAO {
                     bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
                 }
 
-                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank));
+                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank));
             }
 
             if (rsInner != null) {
@@ -559,7 +563,7 @@ public class UserDAO {
         return users;
     }
 
-    public static void createUser(String nric, String first_name, String last_name, Date dj, String mailing_address, String registered_address, String department, String designation, int salary, String employeeType) {
+    public static void createUser(String nric, String first_name, String last_name, Date dj, String mailing_address, String registered_address, String license, String department, String designation, int salary, String employeeType) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -571,10 +575,11 @@ public class UserDAO {
             ps.setDate(4, new java.sql.Date(dj.getTime()));
             ps.setString(5, mailing_address);
             ps.setString(6, registered_address);
-            ps.setString(7, department);
-            ps.setString(8, designation);
-            ps.setInt(9, salary);
-            ps.setString(10, employeeType);
+            ps.setString(7, license);
+            ps.setString(8, department);
+            ps.setString(9, designation);
+            ps.setInt(10, salary);
+            ps.setString(11, employeeType);
             ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();
@@ -726,6 +731,7 @@ public class UserDAO {
                 DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                 String mailing_address = rs.getString("mailing_address");
                 String registered_address = rs.getString("registered_address");
+                String license = rs.getString("license");
                 String department = rs.getString("department");
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
@@ -778,7 +784,7 @@ public class UserDAO {
                     bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
                 }
 
-                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank));
+                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank));
             }
 
             if (rsInner != null) {
@@ -816,6 +822,7 @@ public class UserDAO {
                 DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                 String mailing_address = rs.getString("mailing_address");
                 String registered_address = rs.getString("registered_address");
+                String license = rs.getString("license");
                 String department = rs.getString("department");
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
@@ -848,7 +855,7 @@ public class UserDAO {
                     bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
                 }
 
-                users.add(new User(nric, first_name, last_name, 0, 0, 0, 0, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank));
+                users.add(new User(nric, first_name, last_name, 0, 0, 0, 0, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank));
             }
 
             if (rsInner != null) {
@@ -977,6 +984,7 @@ public class UserDAO {
                 DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                 String mailing_address = rs.getString("mailing_address");
                 String registered_address = rs.getString("registered_address");
+                String license = rs.getString("license");
                 String department = rs.getString("department");
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
@@ -1029,7 +1037,7 @@ public class UserDAO {
                     bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
                 }
 
-                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank));
+                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank));
             }
 
             if (rsInner != null) {
@@ -1060,6 +1068,7 @@ public class UserDAO {
                 DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                 String mailing_address = rs.getString("mailing_address");
                 String registered_address = rs.getString("registered_address");
+                String license = rs.getString("license");
                 String department = rs.getString("department");
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
@@ -1112,7 +1121,7 @@ public class UserDAO {
                     bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
                 }
 
-                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank));
+                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank));
             }
 
             if (rsInner != null) {
@@ -1149,6 +1158,7 @@ public class UserDAO {
                 DateTime date_joined = new DateTime(rs.getDate("date_joined"));
                 String mailing_address = rs.getString("mailing_address");
                 String registered_address = rs.getString("registered_address");
+                String license = rs.getString("license");
                 String department = rs.getString("department");
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
@@ -1201,7 +1211,7 @@ public class UserDAO {
                     bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
                 }
 
-                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, contact, emergency, department, designation, salary, modules, bank));
+                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank));
             }
 
             if (rsInner != null) {

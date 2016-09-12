@@ -80,6 +80,17 @@
             }else if (status.equals("Confirmed")){
         %>
             <button class="btn btn-default" onclick="amountCheck('<%=lead.getId()%>')">Amount</button>
+            <form method="post" class="btn" style="
+    padding-left: 0px;
+    padding-right: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+">
+                <input type="hidden" name="leadId" value="<%=lead.getId()%>">
+                <input class='btn btn-default' type="submit" value="Email" formaction="emails/<%=lead.getId()%>" formtarget="_blank">
+            </form>
             <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
         <%
             }
@@ -96,7 +107,14 @@
         <%
                 }else{
         %>
-            <form method="post">
+            <form method="post" class="btn" style="
+    padding-left: 0px;
+    padding-right: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+">
                 <input type="hidden" name="leadId" value="<%=lead.getId()%>">
                 <input class='btn btn-default' type="submit" value="Invoice" formaction="invoices/<%=lead.getId()%>" formtarget="_blank">
             </form>

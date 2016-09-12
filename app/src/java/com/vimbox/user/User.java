@@ -16,6 +16,7 @@ public class User {
     private DateTime date_joined;
     private String mailing_address;
     private String registered_address;
+    private String license;
     private Contact contact;
     private Emergency emergency;
     private String department;
@@ -24,7 +25,7 @@ public class User {
     private ArrayList<Module> modules;
     private Bank bank;
 
-    public User(String nric, String first_name, String last_name, double leave, int mc, double used_leave, int used_mc, Account account, String type, DateTime date_joined, String mailing_address, String registered_address, Contact contact, Emergency emergency, String department, String designation, int salary, ArrayList<Module> modules, Bank bank) {
+    public User(String nric, String first_name, String last_name, double leave, int mc, double used_leave, int used_mc, Account account, String type, DateTime date_joined, String mailing_address, String registered_address, String license, Contact contact, Emergency emergency, String department, String designation, int salary, ArrayList<Module> modules, Bank bank) {
         this.nric = nric;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -37,6 +38,7 @@ public class User {
         this.date_joined = date_joined;
         this.mailing_address = mailing_address;
         this.registered_address = registered_address;
+        this.license = license;
         this.contact = contact;
         this.emergency = emergency;
         this.department = department;
@@ -92,6 +94,10 @@ public class User {
 
     public String getRegistered_address() {
         return registered_address;
+    }
+
+    public String getLicense() {
+        return license;
     }
 
     public Contact getContact() {

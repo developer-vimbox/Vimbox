@@ -3,6 +3,7 @@ package com.vimbox.sales;
 import com.google.gson.JsonObject;
 import com.vimbox.database.JobDAO;
 import com.vimbox.database.LeadDAO;
+import com.vimbox.util.Converter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import org.apache.catalina.core.ApplicationPart;
 
 @WebServlet(name = "ConfirmLeadController", urlPatterns = {"/ConfirmLeadController"})
 @MultipartConfig
@@ -37,51 +39,38 @@ public class ConfirmLeadController extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache");
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
-        
+
         String errorMsg = "";
-        
+
         String nric = request.getParameter("cfmuId");
         int leadId = Integer.parseInt(request.getParameter("cfmlId"));
-        
+
         boolean checkBooked = JobDAO.checkBookedJobsByLeadId(leadId);
-        
-        if(checkBooked){
+
+        if (checkBooked) {
             String amount = request.getParameter("amountCollected");
             double collectedAmount = 0;
-            if(!amount.isEmpty()){
-                try{
+            if (!amount.isEmpty()) {
+                try {
                     collectedAmount = Double.parseDouble(amount);
-                }catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     errorMsg += "Please enter a valid amount<br>";
                 }
             }
 
-            Part filePart = request.getPart("file");
+            ApplicationPart filePart = (ApplicationPart) request.getPart("file");
             String fileName = "";
             String path = "";
 
             if (filePart != null) {
-                fileName = getFileName(filePart);
-                if (fileName == null) {
-                    errorMsg += "Please upload customer's confirmation email<br>";
+                boolean fileCheck = fileValidation(filePart);
+                if (!fileCheck) {
+                    errorMsg += "Please upload a valid image (png, jpg or bmp)<br>";
                 } else {
-                    //path = System.getProperty("user.dir") + "/MC" + File.separator + fileName;
-                    path = this.getClass().getClassLoader().getResource("").getPath();
-                    int occurence = 0;
-                    int slash = 0;
-                    for (int i = path.length() - 1; i >= 0; i--) {
-                        char ch = path.charAt(i);
-                        if (ch == '/') {
-                            occurence += 1;
-                        }
-                        if (occurence == 3) {
-                            slash = i;
-                            break;
-                        }
-                    }
-                    path = path.substring(0, slash + 1) + "images/emails";
-                    path = path.replaceAll("%20", " ");
-                    path = path + File.separator + fileName;
+                    String fName = filePart.getSubmittedFileName();
+                    String fileExt = fName.substring(fName.lastIndexOf("."));
+                    fileName = leadId + "-email" + fileExt;
+                    path = System.getProperty("user.dir") + "/documents/emails/" + fileName;
                 }
             }
 
@@ -89,7 +78,7 @@ public class ConfirmLeadController extends HttpServlet {
                 OutputStream out = null;
                 InputStream filecontent = null;
                 try {
-                    LeadDAO.confirmLead(nric, collectedAmount, "/images/emails/" + fileName, leadId);
+                    LeadDAO.confirmLead(nric, collectedAmount, fileName, leadId);
                     if (filePart != null) {
                         out = new FileOutputStream(new File(path));
                         filecontent = filePart.getInputStream();
@@ -114,7 +103,7 @@ public class ConfirmLeadController extends HttpServlet {
                     }
                 }
             }
-        }else{
+        } else {
             errorMsg += "There is no booked/confirmed DOM for this lead.<br>Please select DOM to confirm.";
         }
 
@@ -122,18 +111,23 @@ public class ConfirmLeadController extends HttpServlet {
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);
         }
-        
+
         jsonOut.println(jsonOutput);
     }
-    
-    private String getFileName(final Part part) {
-        for (String content : part.getHeader("content-disposition").split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(
-                        content.indexOf('=') + 1).trim().replace("\"", "");
+
+    private boolean fileValidation(ApplicationPart filePart) {
+        String fName = filePart.getSubmittedFileName();
+        if (fName != null && !fName.isEmpty()) {
+            String fileExt = fName.substring(fName.lastIndexOf("."));
+            // Checks file for file extension //
+            if (!(fileExt.matches(".png|.jpg|.bmp"))) {
+                return false;
+            } else {
+                return true;
             }
+        } else {
+            return false;
         }
-        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

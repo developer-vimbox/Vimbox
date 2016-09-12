@@ -131,13 +131,35 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">Department :</label>
+        <label class="col-sm-3 control-label">Driver License :</label>
         <div class="col-sm-3" style="padding-top: 7px;">
-            <%=user.getDepartment()%>
+        <%
+            if(!user.getLicense().isEmpty()){
+        %>
+            <form method="post" class="btn" style="
+    padding-left: 0px;
+    padding-right: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+">
+            <input type="hidden" name="license_name" value="<%=user.getLicense()%>">
+            <input class="btn btn-default" type="submit" value="View" formaction="licenses/<%=user.getNric()%>" formtarget="_blank">
+        </form>
+        <%
+            }
+        %>
         </div>
         <label class="col-sm-2 control-label">Account Name :</label>
         <div class="col-sm-3" style="padding-top: 7px;">
             <%=bank.getAccount_name()%>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Department :</label>
+        <div class="col-sm-3" style="padding-top: 7px;">
+            <%=user.getDepartment()%>
         </div>
     </div>
     <div class="form-group">

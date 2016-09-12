@@ -79,17 +79,17 @@
             <%                String path = leaveMC.getImgPath();
                 if (!path.isEmpty()) {
             %>
-            <button class="btn btn-default" onclick="viewMC()">View</button>
-            <div id="view_mc_modal" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <span class="close" onclick="closeModal('view_mc_modal')">×</span>
-                        <img src="${pageContext.request.contextPath}<%=path%>" width="300" height="300"/>
-                    </div>
-                </div>
-            </div>
-
+            <form method="post" class="btn" style="
+    padding-left: 0px;
+    padding-right: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+">
+                <input type="hidden" name="mc_name" value="<%=path%>">
+                <input class="btn btn-default" type="submit" value="MC" formaction="mcs/<%=employee.getNric()%>" formtarget="_blank"> 
+            </form>
             <%
                 }
             %>
