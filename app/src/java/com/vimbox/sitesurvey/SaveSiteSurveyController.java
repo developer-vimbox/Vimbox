@@ -30,6 +30,7 @@ public class SaveSiteSurveyController extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache");
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
+        double total = 0;
         String lead = request.getParameter("lead");
         String[] leadArr = lead.split("\\|");
         int leadId = Integer.parseInt(leadArr[0]);
@@ -67,6 +68,7 @@ public class SaveSiteSurveyController extends HttpServlet {
                 for (int i = 0; i < serviceNames.length; i++) {
                     String serviceName = serviceNames[i];
                     String serviceCharge = serviceCharges[i];
+                    total += Double.parseDouble(serviceCharge);
                     String serviceManpower = "";
                     String serviceRemark = "";
                     if (serviceName.contains("Manpower")) {
@@ -86,11 +88,25 @@ public class SaveSiteSurveyController extends HttpServlet {
             // Others //
             String[] others = {"storeyCharge", "pushCharge", "detourCharge", "materialCharge", "discount"};
             String[] otherCharges = new String[5];
-            otherCharges[0] = request.getParameter(salesDiv + "_storeyCharge");
-            otherCharges[1] = request.getParameter(salesDiv + "_pushCharge");
-            otherCharges[2] = request.getParameter(salesDiv + "_detourCharge");
-            otherCharges[3] = request.getParameter(salesDiv + "_materialCharge");
-            otherCharges[4] = request.getParameter(salesDiv + "_discount");
+            String otherCharge0 = request.getParameter(salesDiv + "_storeyCharge");
+            otherCharges[0] = otherCharge0;
+            total += Double.parseDouble(otherCharge0);
+
+            String otherCharge1 = request.getParameter(salesDiv + "_pushCharge");
+            otherCharges[1] = otherCharge1;
+            total += Double.parseDouble(otherCharge1);
+
+            String otherCharge2 = request.getParameter(salesDiv + "_detourCharge");
+            otherCharges[2] = otherCharge2;
+            total += Double.parseDouble(otherCharge2);
+
+            String otherCharge3 = request.getParameter(salesDiv + "_materialCharge");
+            otherCharges[3] = otherCharge3;
+            total += Double.parseDouble(otherCharge3);
+
+            String otherCharge4 = request.getParameter(salesDiv + "_discount");
+            otherCharges[4] = otherCharge4;
+            total += Double.parseDouble(otherCharge4);
             // Enter into leadother database //
             LeadDAO.updateLeadOther(leadId, sD, others, otherCharges);
                 //----------------------------------//
@@ -164,6 +180,8 @@ public class SaveSiteSurveyController extends HttpServlet {
                 LeadDAO.updateLeadSalesDiv(leadId, sD, surveyAreasDBString, surveyAreasNamesDBString);
             }
         }
+        
+        LeadDAO.createLeadConfirmation(leadId, total);
 
         jsonOutput.addProperty("status", "SUCCESS");
         String message = "";

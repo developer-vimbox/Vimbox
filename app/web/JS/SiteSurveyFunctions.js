@@ -10,8 +10,6 @@ var totalUnits = [];
 var boxes = [];
 var manpower = [];
 
-
-
 function survey_setup(userId) {
     loadSurveys("", userId, '');
 

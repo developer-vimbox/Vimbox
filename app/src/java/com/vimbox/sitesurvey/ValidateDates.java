@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.vimbox.sitesurvey;
 
 import com.google.gson.JsonObject;
@@ -14,12 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author NYuSheng
- */
-@WebServlet(name = "ValidateSiteSurveyDates", urlPatterns = {"/ValidateSiteSurveyDates"})
-public class ValidateSiteSurveyDates extends HttpServlet {
+@WebServlet(name = "ValidateSiteSurveyDates", urlPatterns = {"/ValidateDates"})
+public class ValidateDates extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,28 +33,24 @@ public class ValidateSiteSurveyDates extends HttpServlet {
         String addressFrom = request.getParameter("addressFrom");
         String addressTo = request.getParameter("addressTo");
 
-        if (addressTo.isEmpty() && addressFrom.isEmpty()) {
-            errorMsg += "Please ensure that either the moving from or to addresses are correctly filled<br>";
-        } else {
-            if (!addressFrom.isEmpty()) {
-                addressFrom = addressFrom.substring(0, addressFrom.length() - 1);
-                String[] arrays = addressFrom.split("\\|", -1);
-                for (String array : arrays) {
-                    if (array.trim().isEmpty()) {
-                        errorMsg += "Please ensure that the moving from addresses are correctly filled<br>";
-                        break;
-                    }
+        if (addressTo.isEmpty() || addressFrom.isEmpty()) {
+            errorMsg += "Please ensure that both the moving from and to addresses are correctly filled<br>";
+        }else{
+            addressFrom = addressFrom.substring(0, addressFrom.length() - 1);
+            String[] arrays = addressFrom.split("\\|", -1);
+            for (String array : arrays) {
+                if (array.trim().isEmpty()) {
+                    errorMsg += "Please ensure that the moving from addresses are correctly filled<br>";
+                    break;
                 }
             }
 
-            if (!addressTo.isEmpty()) {
-                addressTo = addressTo.substring(0, addressTo.length() - 1);
-                String[] arrays = addressTo.split("\\|");
-                for (String array : arrays) {
-                    if (array.trim().isEmpty()) {
-                        errorMsg += "Please ensure that the moving to addresses are correctly filled<br>";
-                        break;
-                    }
+            addressTo = addressTo.substring(0, addressTo.length() - 1);
+            arrays = addressTo.split("\\|");
+            for (String array : arrays) {
+                if (array.trim().isEmpty()) {
+                    errorMsg += "Please ensure that the moving to addresses are correctly filled<br>";
+                    break;
                 }
             }
         }

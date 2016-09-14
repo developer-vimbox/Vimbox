@@ -28,6 +28,7 @@
     int iYear = Integer.parseInt(request.getParameter("getYear"));
     int iMonth = Integer.parseInt(request.getParameter("getMonth"));
     String ttCarplate = request.getParameter("getTT");
+    String type = request.getParameter("type");
     
     Calendar ca = new GregorianCalendar();
     int iTDate = ca.get(Calendar.DATE);
@@ -150,7 +151,7 @@
                                 if (currDate.isBefore(dt)) {
                                     if (curDate == iTDate && iYear == iTYear && iMonth == iTMonth) { // today
                             %>
-                            <button class="btn btn-round btn-primary" onclick="viewMoveDaySchedule('<%=strDate%>');">
+                            <button class="btn btn-round btn-primary" onclick="viewMoveDaySchedule('<%=strDate%>','<%=type%>');">
                                 <%=curDate%>
                             </button>
                             <%
@@ -162,7 +163,7 @@
                             <%
                                 } } else { // future dates
                             %>
-                            <button class="btn btn-round btn-default" onclick="viewMoveDaySchedule('<%=strDate%>');">
+                            <button class="btn btn-round btn-default" onclick="viewMoveDaySchedule('<%=strDate%>','<%=type%>');">
                                 <%=curDate%>
                             </button>
                             <%

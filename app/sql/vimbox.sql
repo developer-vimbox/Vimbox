@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 12, 2016 at 10:59 AM
+-- Generation Time: Sep 14, 2016 at 06:56 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -59,6 +59,13 @@ CREATE TABLE IF NOT EXISTS `customers_history` (
   PRIMARY KEY (`customer_id`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `customers_history`
+--
+
+INSERT INTO `customers_history` (`customer_id`, `id`) VALUES
+(5, 382715999);
+
 -- --------------------------------------------------------
 
 --
@@ -85,6 +92,13 @@ CREATE TABLE IF NOT EXISTS `leadconfirmation` (
   `email_path` varchar(255) NOT NULL,
   PRIMARY KEY (`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadconfirmation`
+--
+
+INSERT INTO `leadconfirmation` (`lead_id`, `confirmed_user`, `total_amount`, `collected_amount`, `email_path`) VALUES
+(382715999, '', 0, 0, '');
 
 -- --------------------------------------------------------
 
@@ -115,6 +129,13 @@ CREATE TABLE IF NOT EXISTS `leadenquiry` (
   PRIMARY KEY (`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `leadenquiry`
+--
+
+INSERT INTO `leadenquiry` (`lead_id`, `enquiry`) VALUES
+(382715999, 'SELECT');
+
 -- --------------------------------------------------------
 
 --
@@ -134,6 +155,13 @@ CREATE TABLE IF NOT EXISTS `leadinfo` (
   `referral` varchar(200) NOT NULL,
   PRIMARY KEY (`owner_user`,`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadinfo`
+--
+
+INSERT INTO `leadinfo` (`owner_user`, `lead_id`, `type`, `customer_id`, `tom`, `datetime_of_creation`, `status`, `reason`, `source`, `referral`) VALUES
+('S9344895B', 382715999, 'Sales', 5, '', '2016-09-13 19:44:20', 'Pending', '', 'Call', 'Friend');
 
 -- --------------------------------------------------------
 
@@ -166,6 +194,14 @@ CREATE TABLE IF NOT EXISTS `leadmove` (
   PRIMARY KEY (`lead_id`,`sales_div`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `leadmove`
+--
+
+INSERT INTO `leadmove` (`lead_id`, `sales_div`, `type`, `address`, `storeys`, `pushing`) VALUES
+(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'from', '39 Cambridge Rd_1_1_210039', ' ', ' '),
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'to', '864 Yishun Ave 4, Block 864_11_11_760864', ' ', ' ');
+
 -- --------------------------------------------------------
 
 --
@@ -178,6 +214,24 @@ CREATE TABLE IF NOT EXISTS `leadother` (
   `other` varchar(100) NOT NULL,
   `charge` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadother`
+--
+
+INSERT INTO `leadother` (`lead_id`, `sales_div`, `other`, `charge`) VALUES
+(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'storeyCharge', '0.00'),
+(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'pushCharge', '0.00'),
+(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'detourCharge', '0.00'),
+(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'materialCharge', '0.00'),
+(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'markup', '0.00'),
+(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'discount', '0.00'),
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'storeyCharge', '0.00'),
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'pushCharge', '0.00'),
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'detourCharge', '0.00'),
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'materialCharge', '0.00'),
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'markup', '0.00'),
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'discount', '0.00');
 
 -- --------------------------------------------------------
 
@@ -204,6 +258,14 @@ CREATE TABLE IF NOT EXISTS `leadsalesdiv` (
   `survey_area_name` varchar(255) NOT NULL,
   PRIMARY KEY (`lead_id`,`sales_div`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadsalesdiv`
+--
+
+INSERT INTO `leadsalesdiv` (`lead_id`, `sales_div`, `survey_area`, `survey_area_name`) VALUES
+(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', '', ''),
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', '', '');
 
 -- --------------------------------------------------------
 
@@ -271,6 +333,16 @@ CREATE TABLE IF NOT EXISTS `operations_assigned` (
   `status` varchar(20) NOT NULL,
   PRIMARY KEY (`lead_id`,`carplate_no`,`dom`,`start_datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `operations_assigned`
+--
+
+INSERT INTO `operations_assigned` (`lead_id`, `ss_owner`, `supervisor`, `carplate_no`, `address_tag`, `address`, `dom`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
+(382715999, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:00:00', '2016-09-15 13:30:00', '1300 - 1400', '', 'Booked'),
+(382715999, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:30:00', '2016-09-15 14:00:00', '1300 - 1400', '', 'Booked'),
+(382715999, 'S9289374H', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 12:30:00', '2016-09-16 13:00:00', '1230 - 1330', '', 'Booked'),
+(382715999, 'S9289374H', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1230 - 1330', '', 'Booked');
 
 -- --------------------------------------------------------
 
@@ -396,6 +468,14 @@ CREATE TABLE IF NOT EXISTS `sitesurvey_assigned` (
   `status` varchar(20) NOT NULL,
   PRIMARY KEY (`lead_id`,`start_datetime`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sitesurvey_assigned`
+--
+
+INSERT INTO `sitesurvey_assigned` (`lead_id`, `ss_owner`, `ss_user`, `address_tag`, `address`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
+(382715999, 'S9344895B', 'S9289374H', 'from|', '39 Cambridge Rd #1-1 S210039|', '2016-09-15 13:30:00', '2016-09-15 14:00:00', '1330 - 1430', '', 'Completed'),
+(382715999, 'S9344895B', 'S9289374H', 'from|', '39 Cambridge Rd #1-1 S210039|', '2016-09-15 14:00:00', '2016-09-15 14:30:00', '1330 - 1430', '', 'Completed');
 
 -- --------------------------------------------------------
 
