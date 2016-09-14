@@ -25,7 +25,8 @@
     int iYear = Integer.parseInt(request.getParameter("getYear"));
     int iMonth = Integer.parseInt(request.getParameter("getMonth"));
     String ssIC = request.getParameter("getSS");
-
+    String type = request.getParameter("type");
+    
     Calendar ca = new GregorianCalendar();
     int iTDate = ca.get(Calendar.DATE);
     int iTYear = ca.get(Calendar.YEAR);
@@ -153,7 +154,15 @@
                             <%
                             } else { // past dates
                             %>
-                            <button class="btn btn-round btn-default" onclick="invalidDate();">
+                            <button class="btn btn-round btn-default" 
+                                    <%
+                                        if(type.equals("Admin")){
+                                            out.println("onclick=\"viewDaySchedule('" + strDate + "');\"");
+                                        }else{
+                                            out.println("onclick='invalidDate();'");
+                                        }
+                                    
+                                    %>>
                                 <%=curDate%>
                             </button>
                             <%

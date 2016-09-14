@@ -906,7 +906,7 @@ function viewCal() {
     var errorMessage = document.getElementById("salesMessage");
 
     var modal = document.getElementById("cal_modal");
-    $.get("SiteSurveyCalendar.jsp", {}, function (data) {
+    $.get("SiteSurveyCalendar.jsp", {type:"Sales"}, function (data) {
         document.getElementById("cal_content").innerHTML = data;
     });
     var d = new Date();
@@ -945,7 +945,7 @@ function viewCal() {
             });
 
     var content = document.getElementById("ssCalTable");
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss"}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss", type:"Sales"}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
@@ -977,34 +977,33 @@ function viewMovCal(type) {
     $("#dMonth").html(n);
     $("#dYear").html(y);
 
-    var fromArray = document.getElementsByName("addressfrom");
-    var addressFrom = "";
-    for (i = 0; i < fromArray.length; i++) {
-        addressFrom += fromArray[i].value + "|";
-    }
-    var toArray = document.getElementsByName("addressto");
-    var addressTo = "";
-    for (i = 0; i < toArray.length; i++) {
-        addressTo += toArray[i].value + "|";
-    }
+        var fromArray = document.getElementsByName("addressfrom");
+        var addressFrom = "";
+        for (i = 0; i < fromArray.length; i++) {
+            addressFrom += fromArray[i].value + "|";
+        }
+        var toArray = document.getElementsByName("addressto");
+        var addressTo = "";
+        for (i = 0; i < toArray.length; i++) {
+            addressTo += toArray[i].value + "|";
+        }
 
-    $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo})
-            .done(function (data) {
-                if (data.status !== "SUCCESS") {
-                    errorStatus.innerHTML = "WARNING";
-                    errorMessage.innerHTML = data.message + "In order to select dom timeslots<br>";
+        $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo})
+                .done(function (data) {
+                    if (data.status !== "SUCCESS") {
+                        errorStatus.innerHTML = "WARNING";
+                        errorMessage.innerHTML = data.message + "In order to select dom timeslots<br>";
+                        errorModal.style.display = "block";
+                        domPass = false;
+                    } else {
+                        domPass = true;
+                    }
+                })
+                .fail(function (error) {
+                    errorStatus.innerHTML = "ERROR";
+                    errorMessage.innerHTML = error;
                     errorModal.style.display = "block";
-                    domPass = false;
-                } else {
-                    domPass = true;
-                }
-            })
-            .fail(function (error) {
-                errorStatus.innerHTML = "ERROR";
-                errorMessage.innerHTML = error;
-                errorModal.style.display = "block";
-            });
-
+                });
     var content;
     if (type === 'Sales') {
         content = document.getElementById("ssCalTable");
@@ -1018,7 +1017,7 @@ function viewMovCal(type) {
     modal.style.display = "block";
 }
 
-function changeMonthYear() {
+function changeMonthYear(type) {
     var content = document.getElementById("ssCalTable");
     var iYear = document.getElementById('iYear').value;
     var iMonth = document.getElementById('iMonth').value;
@@ -1027,14 +1026,14 @@ function changeMonthYear() {
     var n = m_names[iMonth];
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss, type:type}, function (data) {
         content.innerHTML = data;
     });
 }
 
 function changeMoveMonthYear(type) {
     var content;
-    if (type === 'Sales') {
+    if (type === 'Sales' || type === 'Admin') {
         content = document.getElementById("ssCalTable");
     } else {
         content = document.getElementById("site_ssCalTable");
@@ -1348,7 +1347,7 @@ function viewMoveDaySchedule(date, type) {
         }
 
         $.get("RetrieveMovingSchedule.jsp", {leadId: leadId, date: date, truck: truck, carplate: carplates, addressFrom: addressFrom, addressTo: addressTo, timeslots: timeslots, addressesFr: addressesFr, addressesTo: addressesTo, remarks: remarks}, function (results) {
-            if (type === 'Sales') {
+            if (type === 'Sales' || type === 'Admin') {
                 document.getElementById("schedule_content").innerHTML = results;
                 document.getElementById("schedule_modal").style.display = "block";
             } else {
@@ -2214,7 +2213,7 @@ function viewDom(leadId) {
         $.get("LoadViewLeadDOM.jsp", {leadId: leadId}, function (data) {
             document.getElementById('lead_dom').innerHTML = data;
         });
-        
+
         $('#site_dom_form').ajaxForm({
             dataType: 'json',
             success: function (data) {

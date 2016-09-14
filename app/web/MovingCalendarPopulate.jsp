@@ -157,7 +157,15 @@
                             <%
                             } else { // past dates
                             %>
-                            <button class="btn btn-round btn-default" onclick="invalidDate();">
+                            <button class="btn btn-round btn-default" 
+                                    <%
+                                        if(type.equals("Admin")){
+                                            out.println("onclick=\"viewMoveDaySchedule('" + strDate + "','" + type + "');\"");
+                                        }else{
+                                            out.println("onclick='invalidDate();'");
+                                        }
+                                    %>
+                                    >
                                 <%=curDate%>
                             </button>
                             <%

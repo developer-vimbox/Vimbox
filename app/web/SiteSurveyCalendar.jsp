@@ -15,7 +15,7 @@
 <%
     int iYear = nullIntconv(request.getParameter("iYear"));
     int iMonth = nullIntconv(request.getParameter("iMonth"));
-
+    String type = request.getParameter("type");
     Calendar ca = new GregorianCalendar();
     int iTYear = ca.get(Calendar.YEAR);
     int iTMonth = ca.get(Calendar.MONTH);
@@ -45,7 +45,7 @@
                     <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
                                 <td width="7%">
-                                    <select class="form-control" id="iYear" name="iYear" onchange="changeMonthYear()">
+                                    <select class="form-control" id="iYear" name="iYear" onchange="changeMonthYear('<%=type%>')">
                                         <%            
                                             for (int iy = iTYear - 5; iy <= iTYear + 5; iy++) {
                                                 if (iy == iYear) {
@@ -63,7 +63,7 @@
                                 </td>
                                 <td width="1%"><label class="control-label"></label></td>
                                 <td width="10%">
-                                    <select class="form-control" id="iMonth" name="iMonth" onchange="changeMonthYear()">
+                                    <select class="form-control" id="iMonth" name="iMonth" onchange="changeMonthYear('<%=type%>')">
                                         <%
                                             for (int im = 0; im <= 11; im++) {
                                                 if (im == iMonth) {
@@ -81,7 +81,7 @@
                                 </td>
                                 <td width="68%" align="center"><h2><label id="dMonth" style="padding-top: 8px;"><%=new SimpleDateFormat("MMMM").format(new Date(2008,iMonth,01))%></label> <label id="dYear"> <%=iYear%></label></h2></td>
                                 <td width="15%">
-                                    <select class="form-control" id="ssSelect" name="ssSelect" onchange="changeMonthYear()">
+                                    <select class="form-control" id="ssSelect" name="ssSelect" onchange="changeMonthYear('<%=type%>')">
                                         <option value="allss" selected="selected">-- All Site Surveyors --</option>
                                         <%
                                             for (User ss : siteSurveyors) {

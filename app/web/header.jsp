@@ -451,7 +451,7 @@
                     </span>
                 </div>
                 <div class="htooltip dropdown">
-                    <a onclick="admViewMovCal('Sales')"><i class="glyph-icon icon-calendar"></i></a>
+                    <a onclick="admViewMovCal()"><i class="glyph-icon icon-calendar"></i></a>
                     <span class='htooltiptext'>
                         View Operation Schedules
                     </span>

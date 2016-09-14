@@ -1,6 +1,6 @@
 function admViewCal() {
     var modal = document.getElementById("cal_modal");
-    $.get("SiteSurveyCalendar.jsp",{}, function (data) {
+    $.get("SiteSurveyCalendar.jsp",{type:"Admin"}, function (data) {
         document.getElementById("cal_content").innerHTML = data;
     });
     var d = new Date();
@@ -12,7 +12,7 @@ function admViewCal() {
     $("#dYear").html(y);
     
     var content = document.getElementById("ssCalTable");
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss"}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss", type:"Admin"}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
@@ -32,7 +32,7 @@ function admViewMovCal(){
     $("#dYear").html(y); 
     
     var content = document.getElementById("ssCalTable");
-    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt"}, function (data) {
+    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt", type:'Admin'}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
