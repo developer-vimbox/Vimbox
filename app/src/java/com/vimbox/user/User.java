@@ -123,6 +123,22 @@ public class User {
     public ArrayList<Module> getModules() {
         return modules;
     }
+    
+    public ArrayList<String> getModuleNames(){
+        ArrayList<String> list = new ArrayList<String>();
+        for(Module mod : modules){
+            list.add(mod.getModule_name());
+        }
+        return list;
+    }
+    
+    public ArrayList<String> getPermittedPages(){
+        ArrayList<String> pages = new ArrayList<String>();
+        for(Module mod : modules){
+            pages.addAll(mod.getPermittedPages());
+        }
+        return pages;
+    }
 
     public Bank getBank() {
         return bank;

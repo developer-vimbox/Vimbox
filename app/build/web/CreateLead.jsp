@@ -268,7 +268,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Moving Calendar: </label>
                                             <div class="col-sm-4">
-                                                <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewMovCal();">View Calendar</button>
+                                                <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="viewMovCal('Sales');">View Calendar</button>
                                             </div>
                                         </div>
                                         <div id="operation"></div>

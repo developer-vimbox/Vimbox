@@ -904,9 +904,9 @@ function viewCal() {
     var errorModal = document.getElementById("salesModal");
     var errorStatus = document.getElementById("salesStatus");
     var errorMessage = document.getElementById("salesMessage");
-    
+
     var modal = document.getElementById("cal_modal");
-    $.get("SiteSurveyCalendar.jsp",{}, function (data) {
+    $.get("SiteSurveyCalendar.jsp", {type:"Sales"}, function (data) {
         document.getElementById("cal_content").innerHTML = data;
     });
     var d = new Date();
@@ -926,39 +926,48 @@ function viewCal() {
     for (i = 0; i < toArray.length; i++) {
         addressTo += toArray[i].value + "|";
     }
-    
-    $.getJSON("ValidateSiteSurveyDates", {addressFrom: addressFrom, addressTo: addressTo})
-    .done(function (data) {
-        if (data.status !== "SUCCESS") {
-            errorStatus.innerHTML = "WARNING";
-            errorMessage.innerHTML = data.message + "In order to select site survey timeslots<br>";
-            errorModal.style.display = "block";
-            domPass = false;
-        }else{
-            domPass = true;
-        } 
-    })
-    .fail(function (error) {
-        errorStatus.innerHTML = "ERROR";
-        errorMessage.innerHTML = error;
-        errorModal.style.display = "block";
-    });
-    
+
+    $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo})
+            .done(function (data) {
+                if (data.status !== "SUCCESS") {
+                    errorStatus.innerHTML = "WARNING";
+                    errorMessage.innerHTML = data.message + "In order to select site survey timeslots<br>";
+                    errorModal.style.display = "block";
+                    domPass = false;
+                } else {
+                    domPass = true;
+                }
+            })
+            .fail(function (error) {
+                errorStatus.innerHTML = "ERROR";
+                errorMessage.innerHTML = error;
+                errorModal.style.display = "block";
+            });
+
     var content = document.getElementById("ssCalTable");
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss"}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss", type:"Sales"}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
 }
 
-function viewMovCal(){
+function viewMovCal(type) {
     var errorModal = document.getElementById("salesModal");
     var errorStatus = document.getElementById("salesStatus");
     var errorMessage = document.getElementById("salesMessage");
-    
-    var modal = document.getElementById("cal_modal");
-    $.get("MovingCalendar.jsp",{}, function (data) {
-        document.getElementById("cal_content").innerHTML = data;
+
+    var modal;
+    if (type === 'Sales') {
+        modal = document.getElementById("cal_modal");
+    } else {
+        modal = document.getElementById("site_cal_modal");
+    }
+    $.get("MovingCalendar.jsp", {type: type}, function (data) {
+        if (type === 'Sales') {
+            document.getElementById("cal_content").innerHTML = data;
+        } else {
+            document.getElementById("site_cal_content").innerHTML = data;
+        }
     });
     var d = new Date();
     var m = d.getMonth();
@@ -966,44 +975,49 @@ function viewMovCal(){
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var n = m_names[d.getMonth()];
     $("#dMonth").html(n);
-    $("#dYear").html(y); 
-    
-    var fromArray = document.getElementsByName("addressfrom");
-    var addressFrom = "";
-    for (i = 0; i < fromArray.length; i++) {
-        addressFrom += fromArray[i].value + "|";
+    $("#dYear").html(y);
+
+        var fromArray = document.getElementsByName("addressfrom");
+        var addressFrom = "";
+        for (i = 0; i < fromArray.length; i++) {
+            addressFrom += fromArray[i].value + "|";
+        }
+        var toArray = document.getElementsByName("addressto");
+        var addressTo = "";
+        for (i = 0; i < toArray.length; i++) {
+            addressTo += toArray[i].value + "|";
+        }
+
+        $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo})
+                .done(function (data) {
+                    if (data.status !== "SUCCESS") {
+                        errorStatus.innerHTML = "WARNING";
+                        errorMessage.innerHTML = data.message + "In order to select dom timeslots<br>";
+                        errorModal.style.display = "block";
+                        domPass = false;
+                    } else {
+                        domPass = true;
+                    }
+                })
+                .fail(function (error) {
+                    errorStatus.innerHTML = "ERROR";
+                    errorMessage.innerHTML = error;
+                    errorModal.style.display = "block";
+                });
+    var content;
+    if (type === 'Sales') {
+        content = document.getElementById("ssCalTable");
+    } else {
+        content = document.getElementById("site_ssCalTable");
     }
-    var toArray = document.getElementsByName("addressto");
-    var addressTo = "";
-    for (i = 0; i < toArray.length; i++) {
-        addressTo += toArray[i].value + "|";
-    }
-    
-    $.getJSON("ValidateMovingDates", {addressFrom: addressFrom, addressTo: addressTo})
-    .done(function (data) {
-        if (data.status !== "SUCCESS") {
-            errorStatus.innerHTML = "WARNING";
-            errorMessage.innerHTML = data.message + "In order to select dom timeslots<br>";
-            errorModal.style.display = "block";
-            domPass = false;
-        }else{
-            domPass = true;
-        } 
-    })
-    .fail(function (error) {
-        errorStatus.innerHTML = "ERROR";
-        errorMessage.innerHTML = error;
-        errorModal.style.display = "block";
-    });
-    
-    var content = document.getElementById("ssCalTable");
-    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt"}, function (data) {
+
+    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt", type: type}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
 }
 
-function changeMonthYear() {
+function changeMonthYear(type) {
     var content = document.getElementById("ssCalTable");
     var iYear = document.getElementById('iYear').value;
     var iMonth = document.getElementById('iMonth').value;
@@ -1012,13 +1026,18 @@ function changeMonthYear() {
     var n = m_names[iMonth];
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss, type:type}, function (data) {
         content.innerHTML = data;
     });
 }
 
-function changeMoveMonthYear(){
-    var content = document.getElementById("ssCalTable");
+function changeMoveMonthYear(type) {
+    var content;
+    if (type === 'Sales' || type === 'Admin') {
+        content = document.getElementById("ssCalTable");
+    } else {
+        content = document.getElementById("site_ssCalTable");
+    }
     var iYear = document.getElementById('iYear').value;
     var iMonth = document.getElementById('iMonth').value;
     var tt = document.getElementById('ttSelect').value;
@@ -1026,7 +1045,7 @@ function changeMoveMonthYear(){
     var n = m_names[iMonth];
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
-    $.get("MovingCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getTT: tt}, function (data) {
+    $.get("MovingCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getTT: tt, type: type}, function (data) {
         content.innerHTML = data;
     });
 }
@@ -1070,24 +1089,24 @@ function confirmLead(leadId) {
     var errorModal = document.getElementById("lead_error_modal");
     var errorStatus = document.getElementById("lead_error_status");
     var errorMessage = document.getElementById("lead_error_message");
-            
+
     var modal = document.getElementById("confirmLeadModal");
     $('#cfmlId').val(leadId);
     document.getElementById('cfmleadIdLbl').innerHTML = leadId;
     $.getJSON("RetrieveLeadConfirmationDetails", {leadId: leadId})
-        .done(function (data) {
-            document.getElementById("cfmMessage").innerHTML = "Deposit to be collected : S$" + Number(data.total)*(Number(data.deposit)/100);
-            modal.style.display = "block";
-        })
-        .fail(function (error) {
-            errorStatus.innerHTML = "ERROR";
-            errorMessage.innerHTML = error;
-            errorModal.style.display = "block";
-        });
-    
+            .done(function (data) {
+                document.getElementById("cfmMessage").innerHTML = "Deposit to be collected : S$" + Number(data.total) * (Number(data.deposit) / 100);
+                modal.style.display = "block";
+            })
+            .fail(function (error) {
+                errorStatus.innerHTML = "ERROR";
+                errorMessage.innerHTML = error;
+                errorModal.style.display = "block";
+            });
+
 }
 
-function viewCancelReason(){
+function viewCancelReason() {
     document.getElementById("viewReasonModal").style.display = "block";
 }
 
@@ -1111,8 +1130,8 @@ function viewDaySchedule(date) {
         var siteSurveyor = $('#ssSelect').val();
         var addressFrom = "";
         var addressTo = "";
-        
-        if(domPass){
+
+        if (domPass) {
             var fromArray = document.getElementsByName("addressfrom");
             for (i = 0; i < fromArray.length; i++) {
                 addressFrom += fromArray[i].value + "|";
@@ -1122,7 +1141,7 @@ function viewDaySchedule(date) {
                 addressTo += toArray[i].value + "|";
             }
         }
-        
+
         var div = document.getElementById(date);
         var nric = "";
         var timeslots = "";
@@ -1154,7 +1173,7 @@ function viewDaySchedule(date) {
         }
         toggleCounter = 0;
         var leadId = $('#leadId').val();
-        if(leadId == null){
+        if (leadId == null) {
             leadId = 0;
         }
         $.get("RetrieveSiteSurveyorSchedule.jsp", {leadId: leadId, date: date, siteSurveyor: siteSurveyor, addressFrom: addressFrom, addressTo: addressTo, nric: nric, timeslots: timeslots, addresses: addresses, remarks: remarks}, function (results) {
@@ -1171,22 +1190,22 @@ function assignDOM() {
     var carplates = document.getElementsByName("move_carplates");
     var trucks = document.getElementsByName("move_truck_name");
     var timeslots = [];
-    
+
     var remarks = $('#move_remarks').val();
 
     var errorMsg = "";
     if (carplates.length === 0) {
         errorMsg += "Please choose at least a truck<br>";
-    }else{
+    } else {
         for (i = 0; i < carplates.length; i++) {
             var ts = document.getElementsByName(carplates[i].value + "_move_timeslot");
             var times = [];
-            for(j = 0; j < ts.length; j++){
+            for (j = 0; j < ts.length; j++) {
                 times.push(ts[j].value);
             }
             timeslots.push({id: carplates[i].value, value: times});
         }
-        
+
     }
     if (addressesFr.length === 0) {
         errorMsg += "Please choose an moving from address<br>";
@@ -1194,13 +1213,13 @@ function assignDOM() {
     if (addressesTo.length === 0) {
         errorMsg += "Please choose an moving to address<br>";
     }
-    
-    
+
+
     var modal = document.getElementById("salesModal");
     var status = document.getElementById("salesStatus");
     var message = document.getElementById("salesMessage");
-    
-    if(!errorMsg){                           
+
+    if (!errorMsg) {
         var elem = document.getElementById("dom_" + date);
         if (elem != null) {
             elem.parentNode.removeChild(elem);
@@ -1213,14 +1232,14 @@ function assignDOM() {
         stringDiv += "<hr><div class='form-horizontal'>";
         stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Date of Move: </label><div class='col-sm-4' style='padding-top: 7px;'>";
         stringDiv += "<input type='hidden' name='move_date' value='" + date + "'>" + date + "</div></div>";
-        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Truck(s): </label><div class='col-sm-3' style='padding-top: 7px;'>"; 
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Truck(s): </label><div class='col-sm-3' style='padding-top: 7px;'>";
         for (i = 0; i < carplates.length; i++) {
             stringDiv += "<div><div class='col-sm-7' style='padding-left: 0px;'><input type='hidden' name='move_truck' value='" + date + "|" + carplates[i].value + "'>" + trucks[i].value + "</div>";
             var timeslot = timeslots.find(function (obj) {
                 return obj.id === carplates[i].value;
             });
             stringDiv += "<div class='col-sm-5'>"
-            for(j = 0; j < timeslot.value.length; j++){
+            for (j = 0; j < timeslot.value.length; j++) {
                 stringDiv += "<input type='hidden' name='" + carplates[i].value + "_move_timeslots' value='" + (timeslot.value)[j] + "'>" + (timeslot.value)[j] + "<br>";
             }
             stringDiv += "</div></div><br>";
@@ -1249,14 +1268,14 @@ function assignDOM() {
         setTimeout(function () {
             modal.style.display = "none";
         }, 1000);
-    }else{
+    } else {
         status.innerHTML = "ERROR";
         message.innerHTML = errorMsg;
         modal.style.display = "block";
     }
 }
 
-function viewMoveDaySchedule(date) {
+function viewMoveDaySchedule(date, type) {
     var errorModal = document.getElementById("salesModal");
     var errorStatus = document.getElementById("salesStatus");
     var errorMessage = document.getElementById("salesMessage");
@@ -1267,10 +1286,10 @@ function viewMoveDaySchedule(date) {
     var addressesFr = "";
     var addressesTo = "";
     var carplates = "";
-    
+
     if (div != null) {
         var carplateArray = $("#dom_" + date + " input[name=move_truck]");
-        if(carplateArray.length > 1 && truck !== "alltt"){
+        if (carplateArray.length > 1 && truck !== "alltt") {
             errorMsg += "Unable to view day schedule for selected truck.<br>Please de-select truck to view schedule."
         }
         for (var i = 0; i < carplateArray.length; i++) {
@@ -1307,11 +1326,11 @@ function viewMoveDaySchedule(date) {
             }
         }
     }
-    
-    if(!errorMsg){
+
+    if (!errorMsg) {
         var addressFrom = "";
         var addressTo = "";
-        if(domPass){
+        if (domPass) {
             var fromArray = document.getElementsByName("addressfrom");
             for (i = 0; i < fromArray.length; i++) {
                 addressFrom += fromArray[i].value + "|";
@@ -1323,19 +1342,24 @@ function viewMoveDaySchedule(date) {
         }
 
         var leadId = $('#leadId').val();
-        if(leadId == null){
+        if (leadId == null) {
             leadId = 0;
         }
-        
+
         $.get("RetrieveMovingSchedule.jsp", {leadId: leadId, date: date, truck: truck, carplate: carplates, addressFrom: addressFrom, addressTo: addressTo, timeslots: timeslots, addressesFr: addressesFr, addressesTo: addressesTo, remarks: remarks}, function (results) {
-            document.getElementById("schedule_content").innerHTML = results;
-            document.getElementById("schedule_modal").style.display = "block";
+            if (type === 'Sales' || type === 'Admin') {
+                document.getElementById("schedule_content").innerHTML = results;
+                document.getElementById("schedule_modal").style.display = "block";
+            } else {
+                document.getElementById("site_schedule_content").innerHTML = results;
+                document.getElementById("site_schedule_modal").style.display = "block";
+            }
         });
-    }else{
+    } else {
         errorStatus.innerHTML = "ERROR";
         errorMessage.innerHTML = errorMsg;
         errorModal.style.display = "block";
-    }          
+    }
 }
 
 function viewSchedule() {
@@ -1418,7 +1442,7 @@ function viewSchedule() {
     }
 }
 
-function selectDOMSlot(e){
+function selectDOMSlot(e) {
     var cell = $(e);
     var state = cell.data('state') || '';
     var cellHtml = cell.html().trim();
@@ -1435,16 +1459,16 @@ function selectDOMSlot(e){
                 tr += "<div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + cellTiming + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteMoveTimeRow(this)'/></span></div></td></tr>";
                 var after = true;
                 var timetable = document.getElementById(carplate + "_timeslot_table");
-                if(timetable == null){
-                    var tableTr = "<tr style='border-bottom: 1pt solid #dfe8f1;' id='" + carplate + "'>";   
+                if (timetable == null) {
+                    var tableTr = "<tr style='border-bottom: 1pt solid #dfe8f1;' id='" + carplate + "'>";
                     tableTr += "<td><input type='hidden' name='move_carplates' value='" + carplate + "'><input type='hidden' name='move_truck_name' value='" + truck + "'><label name='truck_label'>" + truck + "</label></td>";
                     tableTr += "<td><table id='" + carplate + "_timeslot_table'><tbody></tbody></table></td>";
                     tableTr += "</tr>";
                     $("#truck_assigned_table").append(tableTr);
                     $("#" + carplate + "_timeslot_table > tbody").append(tr);
-                }else{
+                } else {
                     loop1:
-                    for (var i = 0, timerow; timerow = timetable.rows[i]; i++) {
+                            for (var i = 0, timerow; timerow = timetable.rows[i]; i++) {
                         var tableCell = $(timerow).data('value');
                         var tableCellDetails = tableCell.substring(tableCell.indexOf("{") + 1, tableCell.lastIndexOf("}"));
                         var tableCellArray = tableCellDetails.split("|");
@@ -1468,7 +1492,7 @@ function selectDOMSlot(e){
                         $("#" + carplate + "_timeslot_table > tbody").append(tr);
                     }
                 }
-                
+
                 cell.addClass('selected');
                 cell.data('state', 'selected');
                 break;
@@ -1646,11 +1670,11 @@ function deleteSurveyRow(btn) {
     }
 }
 
-function deleteMoveTimeRow(btn){
+function deleteMoveTimeRow(btn) {
     var row = btn.parentNode.parentNode;
     var value = $(row).data('value');
     row.parentNode.removeChild(row);
-    
+
     var table = document.getElementById("moving_table");
     for (var i = 0, row; row = table.rows[i]; i++) {
         for (var j = 0, col; col = row.cells[j]; j++) {
@@ -1664,25 +1688,25 @@ function deleteMoveTimeRow(btn){
             }
         }
     }
-    
+
     var valueDetails = value.substring(value.indexOf("{") + 1, value.lastIndexOf("}"));
     var valueArray = valueDetails.split("|");
     var carplate = valueArray[0];
     var childNodes = document.getElementById(carplate + "_timeslot_table").childNodes;
     var node;
-    for(i=0; i < childNodes.length; i++){
-        if(childNodes[i].nodeName === "TBODY"){
+    for (i = 0; i < childNodes.length; i++) {
+        if (childNodes[i].nodeName === "TBODY") {
             node = childNodes[i];
         }
     }
     childNodes = node.childNodes;
     var count = 0;
-    for(i=0; i < childNodes.length; i++){
-        if(childNodes[i].nodeName === "TR"){
+    for (i = 0; i < childNodes.length; i++) {
+        if (childNodes[i].nodeName === "TR") {
             count++;
         }
     }
-    if(count === 0){
+    if (count === 0) {
         $("#" + carplate).remove();
     }
 }
@@ -1697,14 +1721,14 @@ function addAddress() {
     if (address !== '') {
         var tr = "<tr><input type='hidden' name='site_address' value='" + address + "'>";
         tr += "<td><div class='input-group' style='padding-bottom: 4px;'><span class='form-control'>" + address + "</span><span class='input-group-btn'><input type='button' class='btn btn-round btn-warning' value='x' onclick='deleteAddressRow(this)'/></span></div></td></tr>";
-        
-        
+
+
         $(tr).prependTo("#address_table > tbody");
     }
     $('#address_select').val('');
 }
 
-function addMoveFrAddress(){
+function addMoveFrAddress() {
     var address = $('#move_addressFrom_select').val();
     if (address !== '') {
         var tr = "<tr><td><input type='hidden' name='move_addressFrom' value='" + address + "'>";
@@ -1714,7 +1738,7 @@ function addMoveFrAddress(){
     $('#move_addressFrom_select').val('');
 }
 
-function addMoveToAddress(){
+function addMoveToAddress() {
     var address = $('#move_addressTo_select').val();
     if (address !== '') {
         var tr = "<tr><td><input type='hidden' name='move_addressTot' value='" + address + "'>";
@@ -2150,42 +2174,74 @@ function invalidDate() {
     }, 1300);
 }
 
-function my_leads_setup(nric){
+function my_leads_setup(nric) {
     load_leads('', nric, "Pending");
     load_leads('', nric, "Confirmed");
     load_leads('', nric, "Rejected");
 }
 
-function load_leads(keyword, nric, type){
+function load_leads(keyword, nric, type) {
     $.get("LoadMyLeads.jsp", {keyword: keyword, nric: nric, type: type}, function (data) {
         document.getElementById(type).innerHTML = data;
     });
 }
 
-function amountCheck(leadId){
+function amountCheck(leadId) {
     var errorModal = document.getElementById("lead_error_modal");
     var errorStatus = document.getElementById("lead_error_status");
     var errorMessage = document.getElementById("lead_error_message");
     $('#amtlId').val(leadId);
     var modal = document.getElementById("amountModal");
     $.getJSON("RetrieveLeadConfirmationDetails", {leadId: leadId})
-        .done(function (data) {
-            document.getElementById("ttlAmtLbl").innerHTML = Number(data.total);
-            document.getElementById("dptLbl").innerHTML = Number(data.total)*(Number(data.deposit)/100);
-            document.getElementById("amtCltLbl").innerHTML = Number(data.collected);
-            modal.style.display = "block";
-        })
-        .fail(function (error) {
-            errorStatus.innerHTML = "ERROR";
-            errorMessage.innerHTML = error;
-            errorModal.style.display = "block";
-        });
+            .done(function (data) {
+                document.getElementById("ttlAmtLbl").innerHTML = Number(data.total);
+                document.getElementById("dptLbl").innerHTML = Number(data.total) * (Number(data.deposit) / 100);
+                document.getElementById("amtCltLbl").innerHTML = Number(data.collected);
+                modal.style.display = "block";
+            })
+            .fail(function (error) {
+                errorStatus.innerHTML = "ERROR";
+                errorMessage.innerHTML = error;
+                errorModal.style.display = "block";
+            });
 }
 
-function viewDom(leadId){
+function viewDom(leadId) {
     var modal = document.getElementById("view_dom_modal");
     $.get("LoadViewDOM.jsp", {leadId: leadId}, function (data) {
         document.getElementById('dom_content').innerHTML = data;
+        $.get("LoadViewLeadDOM.jsp", {leadId: leadId}, function (data) {
+            document.getElementById('lead_dom').innerHTML = data;
+        });
+
+        $('#site_dom_form').ajaxForm({
+            dataType: 'json',
+            success: function (data) {
+                var errmodal = document.getElementById("salesModal");
+                var status = document.getElementById("salesStatus");
+                var message = document.getElementById("salesMessage");
+                status.innerHTML = data.status;
+                message.innerHTML = data.message;
+                errmodal.style.display = "block";
+                if (data.status === "SUCCESS") {
+                    document.getElementById('operation').innerHTML = "";
+                    $.get("LoadViewLeadDOM.jsp", {leadId: leadId}, function (data) {
+                        document.getElementById('lead_dom').innerHTML = data;
+                    });
+                    setTimeout(function () {
+                        errmodal.style.display = "none";
+                    }, 500);
+                }
+            },
+            error: function (data) {
+                var errmodal = document.getElementById("salesModal");
+                var status = document.getElementById("salesStatus");
+                var message = document.getElementById("salesMessage");
+                status.innerHTML = "ERROR";
+                message.innerHTML = data;
+                errmodal.style.display = "block";
+            }
+        });
     });
     modal.style.display = "block";
 }

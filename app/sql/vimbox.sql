@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 14, 2016 at 06:56 AM
+-- Generation Time: Sep 14, 2016 at 10:32 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -19,6 +19,44 @@ SET time_zone = "+00:00";
 --
 -- Database: `vimbox`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `access_control`
+--
+
+CREATE TABLE IF NOT EXISTS `access_control` (
+  `page` varchar(255) NOT NULL,
+  `modules` varchar(255) NOT NULL,
+  PRIMARY KEY (`page`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `access_control`
+--
+
+INSERT INTO `access_control` (`page`, `modules`) VALUES
+('AdminLeads.jsp', 'Admin'),
+('AssignJobs.jsp', 'Admin|Operation'),
+('CreateLead.jsp', 'Admin|Sales'),
+('CreateTicket.jsp', 'Admin|Operation|SiteSurvey|HR|Sales'),
+('FullTimeEmployees.jsp', 'Admin|HR'),
+('HomePage.jsp', 'Admin|Operation|SiteSurvey|HR|Sales'),
+('LeaveMCs.jsp', 'Admin|HR'),
+('MyLeads.jsp', 'Admin|Sales'),
+('MySites.jsp', 'Admin|SiteSurvey'),
+('MySiteSurveySchedules.jsp', 'Admin|SiteSurvey'),
+('MyTickets.jsp', 'Admin|Operation|SiteSurvey|HR|Sales'),
+('PartTimeEmployees.jsp', 'Admin|HR'),
+('Payslips.jsp', 'Admin|HR'),
+('SalesOperations.jsp', 'Admin|Sales'),
+('SalesSites.jsp', 'Admin|Sales'),
+('SupervisorJobs.jsp', 'Admin|Operation'),
+('SupervisorTakeAttendance.jsp', 'Admin|Operation'),
+('TakeAttendance.jsp', 'Admin|HR'),
+('TicketForum.jsp', 'Admin|Operation|SiteSurvey|HR|Sales'),
+('ViewAttendance.jsp', 'Admin|HR');
 
 -- --------------------------------------------------------
 
@@ -161,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `leadinfo` (
 --
 
 INSERT INTO `leadinfo` (`owner_user`, `lead_id`, `type`, `customer_id`, `tom`, `datetime_of_creation`, `status`, `reason`, `source`, `referral`) VALUES
-('S9344895B', 382715999, 'Sales', 5, '', '2016-09-13 19:44:20', 'Pending', '', 'Call', 'Friend');
+('S9344895B', 382715999, 'Sales', 5, '', '2016-09-13 19:44:20', 'Rejected', 'Test', 'Call', 'Friend');
 
 -- --------------------------------------------------------
 
@@ -339,10 +377,10 @@ CREATE TABLE IF NOT EXISTS `operations_assigned` (
 --
 
 INSERT INTO `operations_assigned` (`lead_id`, `ss_owner`, `supervisor`, `carplate_no`, `address_tag`, `address`, `dom`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
-(382715999, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:00:00', '2016-09-15 13:30:00', '1300 - 1400', '', 'Booked'),
-(382715999, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:30:00', '2016-09-15 14:00:00', '1300 - 1400', '', 'Booked'),
-(382715999, 'S9289374H', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 12:30:00', '2016-09-16 13:00:00', '1230 - 1330', '', 'Booked'),
-(382715999, 'S9289374H', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1230 - 1330', '', 'Booked');
+(382715999, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:00:00', '2016-09-15 13:30:00', '1300 - 1400', '', 'Cancelled'),
+(382715999, 'S9344895B', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:30:00', '2016-09-15 14:00:00', '1300 - 1400', '', 'Cancelled'),
+(382715999, 'S9289374H', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 12:30:00', '2016-09-16 13:00:00', '1230 - 1330', '', 'Cancelled'),
+(382715999, 'S9289374H', '', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1230 - 1330', '', 'Cancelled');
 
 -- --------------------------------------------------------
 
@@ -602,9 +640,9 @@ CREATE TABLE IF NOT EXISTS `system_modules` (
 --
 
 INSERT INTO `system_modules` (`type`, `department`, `designation`, `modules`, `working_days`) VALUES
-('Full', 'IT', 'Manager', 'Ticket|Sales', 5),
-('Full', 'Operations', 'Mover', '', 6),
-('Full', 'Sales', 'Surveyor', '', 5),
+('Full', 'IT', 'Manager', 'Admin', 5),
+('Full', 'Operations', 'Mover', 'Operation', 6),
+('Full', 'Sales', 'Surveyor', 'SiteSurvey', 5),
 ('Part', 'Admin', 'Part-Time Clerk', '', 5),
 ('Part', 'Operations', 'Part-Time Mover', '', 6);
 

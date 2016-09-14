@@ -15,13 +15,14 @@ public class UserPopulationDAO {
     private static final String GET_USER_MODULES = "SELECT * FROM system_modules WHERE department=? AND designation=?";
     private static final String GET_USER_PAYMENT_MODES = "SELECT * FROM system_payment_modes";
     private static final String GET_USER_WORKING_DAYS = "SELECT working_days FROM system_modules WHERE department=? AND designation=?";
-    
+    private static final String GET_ACCESS_CONTROL_BY_MODULE = "SELECT * FROM access_control WHERE modules LIKE ?";
 
     public static ArrayList<Module> getUserModules(String department, String designation) {
         ArrayList<Module> results = new ArrayList<Module>();
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        ResultSet rs1 = null;
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_USER_MODULES);
@@ -31,7 +32,14 @@ public class UserPopulationDAO {
             while (rs.next()) {
                 String[] mods = rs.getString("modules").split("\\|");
                 for (String mod : mods) {
-                    results.add(new Module(mod));
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rs1 = ps.executeQuery();
+                    while(rs1.next()){
+                        permittedPages.add(rs1.getString("page"));
+                    }
+                    results.add(new Module(mod, permittedPages));
                 }
             }
         } catch (SQLException se) {

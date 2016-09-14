@@ -7,12 +7,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Part Time Employees</title>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="JS/EmployeeFunctions.js"></script>
-        <script src="JS/ModalFunctions.js"></script>
     </head>
     <body onload="parttime_setup()">
         <%@include file="header.jsp"%>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/EmployeeFunctions.js"></script>
         <div id="page-content-wrapper">
             <div id="page-content">
                 <div class="container" style="width: 100%">

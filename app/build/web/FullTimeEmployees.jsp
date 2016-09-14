@@ -8,12 +8,12 @@
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Full Time Employees</title>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="JS/EmployeeFunctions.js"></script>
-        <script src="JS/ModalFunctions.js"></script>
     </head>
     <body onload="fulltime_setup()">
         <%@include file="header.jsp"%>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/EmployeeFunctions.js"></script>
 
         <div id="edit_employee_modal" class="modal"  style="display:none;">
             <div class="modal-content" style="width: 1100px;">

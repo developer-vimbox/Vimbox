@@ -6,13 +6,13 @@ Date.prototype.toDateInputValue = (function () {
     return local.toJSON().slice(0, 10);
 });
 
-function loadLeaveMCs(keyword){
+function loadLeaveMCs(keyword) {
     $.get("LoadLeaveMC.jsp", {keyword: keyword}, function (data) {
         document.getElementById('leave_mc_table').innerHTML = data;
     });
 }
 
-function leaveMc_setup(){
+function leaveMc_setup() {
     loadLeaveMCs("");
 }
 
@@ -32,7 +32,7 @@ function loadDesignations(department) {
         }
     }
     var user_department = document.getElementById(department);
-    
+
     var selectedValue = user_department.options[user_department.selectedIndex].value;
     var content = document.getElementById("user_designation_div");
     $.get("RetrieveEmployeeDesignations.jsp", {user_department: selectedValue, type: value}, function (data) {
@@ -66,82 +66,8 @@ function loadPartTimeDiv() {
     loadDesignations("parttime_user_department");
 }
 
-function createEmployee() {
-    var modal = document.getElementById("employee_error_modal");
-    var status = document.getElementById("employee_error_status");
-    var message = document.getElementById("employee_error_message");
-
-    var radios = document.getElementsByTagName('input');
-    var employeeType;
-    for (var i = 0; i < radios.length; i++) {
-        if (radios[i].type === 'radio' && radios[i].checked) {
-            // get value, set checked flag or do whatever you need to
-            employeeType = radios[i].value;
-        }
-    }
-    if (employeeType == null) {
-        status.innerHTML = "ERROR";
-        message.innerHTML = "Please select the employee type";
-        modal.style.display = "block";
-    } else {
-        var user_first_name = $('#user_first_name').val();
-        var user_last_name = $('#user_last_name').val();
-        var user_nric = $('#user_nric').val();
-        var user_dj = $('#user_dj').val();
-        var user_madd = $('#user_madd').val();
-        var user_radd = $('#user_radd').val();
-        var user_phone = $('#user_phone').val();
-        var user_fax = $('#user_fax').val();
-        var user_home = $('#user_home').val();
-        var user_designation = $('#user_designation').val();
-        var user_department = $('#fulltime_user_department').val();
-        if(user_department == null){
-            user_department = $('#parttime_user_department').val();
-        }
-        var user_salary = $('#user_salary').val();
-        var emergency_name = $('#emergency_name').val();
-        var emergency_relationship = $('#emergency_relationship').val();
-        var emergency_contact = $('#emergency_contact').val();
-        var emergency_office = $('#emergency_office').val();
-        var user_username = $('#user_username').val();
-        var user_password = $('#user_password').val();
-        var user_payment = $('#user_payment').val();
-        var user_bank_name = $('#user_bank_name').val();
-        var user_account_name = $('#user_account_name').val();
-        var user_account_no = $('#user_account_no').val();
-
-        $.getJSON("CreateEmployeeController", {employeeType: employeeType, user_first_name: user_first_name, user_last_name: user_last_name, user_nric: user_nric, user_dj: user_dj, user_madd: user_madd, user_radd: user_radd, user_phone: user_phone, user_fax: user_fax, user_home: user_home
-            , user_designation: user_designation, user_department: user_department, user_salary: user_salary, emergency_name: emergency_name
-            , emergency_relationship: emergency_relationship, emergency_contact: emergency_contact, emergency_office: emergency_office, user_username: user_username
-            , user_password: user_password, user_payment: user_payment, user_bank_name: user_bank_name, user_account_name: user_account_name, user_account_no: user_account_no})
-                .done(function (data) {
-                    var dataStatus = data.status;
-                    var errorMsg = data.message;
-                    status.innerHTML = dataStatus;
-                    message.innerHTML = errorMsg;
-                    modal.style.display = "block";
-                    if (dataStatus === "SUCCESS") {
-                        if(employeeType === 'Full'){
-                            setTimeout(function () {
-                                window.location.href = "FullTimeEmployees.jsp";
-                            }, 500);
-                        }else{
-                            setTimeout(function () {
-                                window.location.href = "PartTimeEmployees.jsp";
-                            }, 500);
-                        }
-                    }
-                })
-                .fail(function (error) {
-                    status.innerHTML = "ERROR";
-                    message.innerHTML = error;
-                    modal.style.display = "block";
-                });
-    }
-}
-
 function viewEmployee(empId) {
-     $.get("LoadViewEmployeeModal.jsp", {empId: empId}, function (data) {
+    $.get("LoadViewEmployeeModal.jsp", {empId: empId}, function (data) {
         document.getElementById('viewEmployeeContent').innerHTML = data;
     });
     document.getElementById("viewEmployeeModal").style.display = "block";
@@ -151,6 +77,41 @@ function editEmployee(empId) {
     var modal = document.getElementById("edit_employee_modal");
     $.get("EditEmployee.jsp", {empId: empId}, function (data) {
         document.getElementById('employee_content').innerHTML = data;
+        $('#edit_employee_form').ajaxForm({
+            dataType: 'json',
+            success: function (data) {
+                var modal = document.getElementById("employee_error_modal");
+                var status = document.getElementById("employee_error_status");
+                var message = document.getElementById("employee_error_message");
+                status.innerHTML = data.status;
+                message.innerHTML = data.message;
+                modal.style.display = "block";
+                if (data.status === "SUCCESS") {
+                    var employeeType = $('#employeeType').val();
+                    if (employeeType === 'Full') {
+                        loadEmployees("", "full-time");
+                        setTimeout(function () {
+                            document.getElementById("edit_employee_modal").style.display = "none";
+                            modal.style.display = "none";
+                        }, 500);
+                    } else {
+                        loadEmployees("", "part-time");
+                        setTimeout(function () {
+                            document.getElementById("edit_employee_modal").style.display = "none";
+                            modal.style.display = "none";
+                        }, 500);
+                    }
+                }
+            },
+            error: function (data) {
+                var modal = document.getElementById("employee_error_modal");
+                var status = document.getElementById("employee_error_status");
+                var message = document.getElementById("employee_error_message");
+                status.innerHTML = "ERROR";
+                message.innerHTML = data;
+                modal.style.display = "block";
+            }
+        });
     });
     modal.style.display = "block";
 }
@@ -161,9 +122,9 @@ function confirmDelete(id, action) {
     var status = document.getElementById(action + "_error_status");
     var message = document.getElementById(action + "_error_message");
     status.innerHTML = "<center><h3 class=\"modal-title\"><b>Delete Confirmation</b></h3></center>";
-    message.innerHTML = "<div class=\"form-horizontal\"> <div class=\"form-group\">Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</div> <div class=\"form-group row\"><center><button class=\"btn btn-default\" onclick=\"delete" + method + "('" + id + "')\">Yes</button>&nbsp;<button class=\"btn btn-default\" onclick=\"closeModal('" + action + "_error_modal')\">No</button></center></div>";
-          
-   
+    message.innerHTML = "<div class=\"form-horizontal\"> <div class=\"form-group\">Delete this " + action.replace("_", " ") + " record? Changes cannot be reverted.</div> <div class=\"form-group row\"><center><button class=\"btn btn-default\" onclick=\"delete" + method + "('" + id + "')\">Yes</button>&nbsp;<button class=\"btn btn-default\" onclick=\"closeModal('" + action + "_error_modal')\">No</button></center></div>";
+
+
 //    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this " + action.replace("_" , " ") + " record? Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"delete" + method + "('" + id + "')\">Yes</button></td><td align='center'><button onclick=\"closeModal('" + action + "_error_modal')\">No</button></td></tr></table>";
     modal.style.display = "block";
 }
@@ -240,73 +201,6 @@ function deleteLeave_mc(id) {
                 message.innerHTML = error;
                 modal.style.display = "block";
             });
-}
-
-function updateEmployee() {
-    var modal = document.getElementById("employee_error_modal");
-    var status = document.getElementById("employee_error_status");
-    var message = document.getElementById("employee_error_message");
-
-    var employeeType = $('#employeeType').val();
-    var user_first_name = $('#user_first_name').val();
-    var user_last_name = $('#user_last_name').val();
-    var user_nric = $('#user_nric').val();
-    var user_dj = $('#user_dj').val();
-    var user_madd = $('#user_madd').val();
-    var user_radd = $('#user_radd').val();
-    var user_phone = $('#user_phone').val();
-    var user_fax = $('#user_fax').val();
-    var user_home = $('#user_home').val();
-    var user_designation = $('#user_designation').val();
-    var user_department = $('#user_department').val();
-    var user_salary = $('#user_salary').val();
-    var emergency_name = $('#emergency_name').val();
-    var emergency_relationship = $('#emergency_relationship').val();
-    var emergency_contact = $('#emergency_contact').val();
-    var emergency_office = $('#emergency_office').val();
-    var user_payment = $('#user_payment').val();
-    var user_bank_name = $('#user_bank_name').val();
-    var user_account_name = $('#user_account_name').val();
-    var user_account_no = $('#user_account_no').val();
-    var user_leave = $('#user_leave').val();
-    var user_used_leave = $('#user_used_leave').val();
-    var user_mc = $('#user_mc').val();
-    var user_used_mc = $('#user_used_mc').val();
-
-    $.getJSON("EditEmployeeController", {employeeType: employeeType, user_first_name: user_first_name, user_last_name: user_last_name, user_nric: user_nric, user_dj: user_dj, user_madd: user_madd, user_radd: user_radd, user_phone: user_phone, user_fax: user_fax, user_home: user_home
-        , user_designation: user_designation, user_department: user_department, user_salary: user_salary, emergency_name: emergency_name
-        , emergency_relationship: emergency_relationship, emergency_contact: emergency_contact, emergency_office: emergency_office
-        , user_payment: user_payment, user_bank_name: user_bank_name, user_account_name: user_account_name, user_account_no: user_account_no
-        , user_leave: user_leave, user_used_leave: user_used_leave, user_mc: user_mc, user_used_mc: user_used_mc})
-            .done(function (data) {
-                var dataStatus = data.status;
-                var errorMsg = data.message;
-                status.innerHTML = dataStatus;
-                message.innerHTML = errorMsg;
-                modal.style.display = "block";
-                if (dataStatus === "SUCCESS") {
-                    if(employeeType === 'Full'){
-                        loadEmployees("", "full-time");
-                        setTimeout(function () {
-                            document.getElementById("edit_employee_modal").style.display = "none";
-                            modal.style.display = "none";
-                        }, 500);
-                    }else{
-                        loadEmployees("", "part-time");
-                        setTimeout(function () {
-                            document.getElementById("edit_employee_modal").style.display = "none";
-                            modal.style.display = "none";
-                        }, 500);
-                    }
-                    
-                }
-            })
-            .fail(function (error) {
-                status.innerHTML = "ERROR";
-                message.innerHTML = error;
-                modal.style.display = "block";
-            });
-
 }
 
 function fcPayslips() {
@@ -411,7 +305,7 @@ $(document).on('change keyup paste', '#payslip_startDate', function () {
 
         var month = startDate.getMonth(); //months from 1-12
         var year = startDate.getFullYear();
-        if(Number(year) > 1000){
+        if (Number(year) > 1000) {
             $('#payslip_paymentDate').val(new Date(year, month + 1, 0).toDateInputValue());
             if (!$('#payslip_endDate').val()) {
                 $('#payslip_endDate').val(new Date(year, month + 1, 0).toDateInputValue());
@@ -430,8 +324,8 @@ function calculateProrate(employee, startdate, enddate) {
                     var original_basic = Number($('#original_basic').val());
                     document.getElementById('payslip_basic').innerHTML = (original_basic * prorate).toFixed(2);
                     var basic = Number(document.getElementById('payslip_basic').innerHTML);
-                    
-					var table = document.getElementById("payslip_dbd");
+
+                    var table = document.getElementById("payslip_dbd");
 
                     for (var i = 0, row; row = table.rows[i]; i++) {
                         //iterate through rows
@@ -443,7 +337,7 @@ function calculateProrate(employee, startdate, enddate) {
                             var cellHtml = col.innerHTML;
                             console.log(cellHtml);
                             if (cellHtml.includes("Employee's CPF Deduction") || cellHtml.includes("Absent") || cellHtml.includes("Late") || cellHtml.includes("Unpaid")) {
-                                
+
                                 found = true;
                                 break;
                             }
@@ -454,18 +348,18 @@ function calculateProrate(employee, startdate, enddate) {
                             i--;
                         }
                     }
-					
+
                     var tr = "<tr>";
                     tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Employee's CPF Deduction\" placeholder='description'></td>";
                     tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic * 0.2).toFixed(2) + "' placeholder='amount'></div></td>";
                     tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                     tr += "</tr>";
                     $(tr).prependTo("#payslip_dbd > tbody");
-					
+
                     var totalDays = Number(data.totalDays);
-                    
+
                     var absent = Number(data.absent);
-                    if(absent > 0){
+                    if (absent > 0) {
                         var tr = "<tr>";
                         tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Absent - " + absent + " day(s)\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * absent * 1.5).toFixed(2) + "' placeholder='amount'></div></td>";
@@ -473,19 +367,19 @@ function calculateProrate(employee, startdate, enddate) {
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
-                    
+
                     var late = Number(data.late);
-                    if(late > 0){
+                    if (late > 0) {
                         var tr = "<tr>";
-                        tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Late - " + (late/60) + " hours(s) " + (late%60) + " min(s)\" placeholder='description'></td>";
+                        tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Late - " + (late / 60) + " hours(s) " + (late % 60) + " min(s)\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left= 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9 * 60)) * late).toFixed(2) + "' placeholder='amount'></div></td>";
                         tr += "<td align='center'><input type='button' class='btn btn-warning' value='x' onclick='deleteEntry(this)'/>";
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
-                    
+
                     var mc = Number(data.mc);
-                    if(mc > 0){
+                    if (mc > 0) {
                         var tr = "<tr>";
                         tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Unpaid MC - " + mc + " day(s)\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + (basic / totalDays * mc).toFixed(2) + "' placeholder='amount'></div></td>";
@@ -493,9 +387,9 @@ function calculateProrate(employee, startdate, enddate) {
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
-                    
+
                     var timeoff = Number(data.timeoff);
-                    if(timeoff > 0){
+                    if (timeoff > 0) {
                         var tr = "<tr>";
                         tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"Unpaid Time Off - " + (timeoff / 9) + " hour(s)\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * timeoff).toFixed(2) + "' placeholder='amount'></div></td>";
@@ -503,14 +397,16 @@ function calculateProrate(employee, startdate, enddate) {
                         tr += "</tr>";
                         $(tr).prependTo("#payslip_dbd > tbody");
                     }
-                    
+
                     var leave = Number(data.leave);
-                    if(leave > 0){
+                    if (leave > 0) {
                         var leaveString = "Unpaid Leave - ";
-                        var leaveDays = leave/9;
-                        if(leaveDays > 0) leaveString += leaveDays + " day(s) ";
-                        var leaveHours = leave%9;
-                        if(leaveHours > 0) leaveString += leaveHours + " hour(s) ";
+                        var leaveDays = leave / 9;
+                        if (leaveDays > 0)
+                            leaveString += leaveDays + " day(s) ";
+                        var leaveHours = leave % 9;
+                        if (leaveHours > 0)
+                            leaveString += leaveHours + " hour(s) ";
                         var tr = "<tr>";
                         tr += "<td align='center'><input type='text' class='form-control' name='payslip_dbddescription' size='27' value=\"" + leaveString + "\" placeholder='description'></td>";
                         tr += "<td align='center'><div class='input-group' style='margin-left: 5px;'><span class='input-group-addon'>$</span><input type='number' class='form-control' step='0.01' min='0' name='payslip_dbdamount' value='" + ((basic / (totalDays * 9)) * leave).toFixed(2) + "' placeholder='amount'></div></td>";
@@ -844,12 +740,12 @@ $(document).on('change', '#leaveEmployee', function () {
                     document.getElementById('leave_employee_mc').innerHTML = "";
                 }
                 var workingDays = data.workingDays;
-                if(workingDays === '5'){
+                if (workingDays === '5') {
                     $('#start_hour').val("09");
                     $('#start_minute').val("00");
                     $('#end_hour').val("09");
                     $('#end_minute').val("00");
-                }else if(workingDays === '6'){
+                } else if (workingDays === '6') {
                     $('#start_hour').val("08");
                     $('#start_minute').val("30");
                     $('#end_hour').val("08");
@@ -868,32 +764,28 @@ function loadLeaveMCNric(nric) {
     modal.style.display = "block";
 }
 
-function viewMC(){
-    document.getElementById('view_mc_modal').style.display = "block";
-}
-
 $(document).on('change', '#start_date', function () {
     var eDate = $('#end_date').val();
-    if(eDate === ''){
+    if (eDate === '') {
         var startDate = new Date($('#start_date').val());
         var date = startDate.getDate();
         var month = startDate.getMonth(); //months from 1-12
         var year = startDate.getFullYear();
-        if(Number(year) > 1000){
+        if (Number(year) > 1000) {
             $('#end_date').val(new Date(year, month, date + 1).toDateInputValue());
         }
     }
 });
 
-$(document).on('change', '.attendance_radio', function(){
-    
+$(document).on('change', '.attendance_radio', function () {
+
     var value = $(this).val();
     var name = $(this).attr('name');
     var nric = (name.split("_"))[1];
-    if(value === 'Late'){
+    if (value === 'Late') {
         document.getElementById("late_" + nric + "_h").disabled = false;
         document.getElementById("late_" + nric + "_m").disabled = false;
-    }else{
+    } else {
         document.getElementById("late_" + nric + "_h").disabled = true;
         document.getElementById("late_" + nric + "_m").disabled = true;
     }
@@ -903,14 +795,14 @@ function attendance_setup() {
     loadAttendances("");
 }
 
-function loadAttendances(keyword){
+function loadAttendances(keyword) {
     $.get("LoadAttendancesYM.jsp", {keyword: keyword}, function (data) {
         document.getElementById('attendance_table').innerHTML = data;
     });
 }
 
-function viewAttendance(keyword){
-     $.get("LoadAttendancesViewModal.jsp", {keyword: keyword}, function (data) {
+function viewAttendance(keyword) {
+    $.get("LoadAttendancesViewModal.jsp", {keyword: keyword}, function (data) {
         document.getElementById('attendance_modal_details').innerHTML = data;
     });
     document.getElementById("view_attendance_modal").style.display = "block";

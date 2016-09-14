@@ -444,6 +444,9 @@
 
                     </div>
                 </div>
+                <%
+                    if(moduleNames.contains("Admin")){
+                %>
                 <div class="htooltip dropdown">
                     <a onclick="admViewCal()"><i class="glyph-icon icon-calendar-o"></i></a>
                     <span class='htooltiptext'>
@@ -476,6 +479,9 @@
                         </div>
                     </div>
                 </div>
+                <%
+                    }
+                %>
                 <div class="dropdown" id="notifications-btn">
                     <a data-toggle="dropdown" href="#">
                         <span class="small-badge bg-yellow"></span>
@@ -593,6 +599,9 @@
         <div id="page-sidebar">
             <div class="scroll-sidebar">
                 <ul id="sidebar-menu">
+                    <%
+                        if(moduleNames.contains("Admin") || moduleNames.contains("HR")){
+                    %>
                     <li>
                         <a href="#" title="Human Resource">
                             <i class="glyph-icon icon-group"></i>
@@ -609,6 +618,13 @@
                             </ul>
                         </div><!-- .sidebar-submenu -->
                     </li>
+                    <%
+                        }
+                    %>
+                    
+                    <%
+                            if(moduleNames.contains("Admin") || moduleNames.contains("Sales")){
+                    %>
                     <li>
                         <a href="#" title="Sales">
                             <i class="glyph-icon icon-dollar"></i>
@@ -624,6 +640,13 @@
 
                         </div><!-- .sidebar-submenu -->
                     </li>
+                    <%
+                        }
+                    %>
+                    
+                    <%
+                        if(moduleNames.contains("Admin") || moduleNames.contains("SiteSurvey")){
+                    %>
                     <li>
                         <a href="#" title="Site Surveys">
                             <i class="glyph-icon icon-building-o"></i>
@@ -637,6 +660,13 @@
 
                         </div><!-- .sidebar-submenu -->
                     </li>
+                    <%
+                        }
+                    %>
+                    
+                    <%
+                        if(moduleNames.contains("Admin") || moduleNames.contains("Operation")){
+                    %>
                     <li>
                         <a href="#" title="Operations">
                             <i class="glyph-icon icon-truck"></i>
@@ -651,6 +681,10 @@
 
                         </div><!-- .sidebar-submenu -->
                     </li>
+                    <%
+                        }
+                    %>
+                    
                     <li>
                         <a href="#" title="Tickets">
                             <i class="glyph-icon icon-ticket"></i>
@@ -665,6 +699,10 @@
 
                         </div><!-- .sidebar-submenu -->
                     </li>
+                    
+                    <%
+                        if(moduleNames.contains("Admin")){
+                    %>
                     <li>
                         <a href="#" title="Admin">
                             <i class="glyph-icon icon-user"></i>
@@ -676,6 +714,9 @@
                             </ul>
                         </div><!-- .sidebar-submenu -->
                     </li>
+                    <%
+                        }
+                    %>
                 </ul><!-- #sidebar-menu -->
             </div>
         </div>
