@@ -53,6 +53,7 @@ function addFollowup(leadId) {
 function followupLead(lead_id) {
     var comment_lead_id = $('#comment_lead_id').val();
     var comment_lead_followup = $('#comment_lead_followup').val();
+    var commentModal = document.getElementById("commentModal");
     var errorModal = document.getElementById("lead_error_modal");
     var errorStatus = document.getElementById("lead_error_status");
     var errorMessage = document.getElementById("lead_error_message");
@@ -67,7 +68,11 @@ function followupLead(lead_id) {
                 errorStatus.innerHTML = status;
                 errorMessage.innerHTML = errorMsg;
                 errorModal.style.display = "block";
-
+                setTimeout(function () {
+                        errorModal.style.display = "none";
+                        commentModal.style.display = "none";
+                        
+                }, 1300);
             })
             .fail(function (error) {
                 errorStatus.innerHTML = "ERROR";

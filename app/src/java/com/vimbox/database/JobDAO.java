@@ -18,7 +18,7 @@ import org.joda.time.format.DateTimeFormatter;
 public class JobDAO {
     
     private static final String CHECK_BOOKED_JOB_EXIST = "SELECT * FROM operations_assigned WHERE lead_id=? AND status != 'Cancelled'";
-    private static final String CHECK_JOB_EXIST = "SELECT * FROM operations_assigned WHERE start_datetime LIKE ? AND carplate_no = ?";
+    private static final String CHECK_JOB_EXIST = "SELECT * FROM operations_assigned WHERE start_datetime LIKE ? AND carplate_no = ? AND status != 'Cancelled'";
     private static final String GET_JOBS_BY_DATE = "SELECT * FROM operations_assigned WHERE start_datetime LIKE ?";
     private static final String CREATE_OPERATION_ASSIGNMENT = "INSERT INTO operations_assigned VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_JOBS_BY_LEAD_ID = "SELECT * FROM operations_assigned WHERE lead_id=?";

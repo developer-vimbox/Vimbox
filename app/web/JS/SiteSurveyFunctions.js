@@ -246,6 +246,7 @@ function displaySiteInfo() {
 }
 
 function displaySiteDiv(e, siteId) {
+    alert("1. " + siteId);
     var siteInfo = document.getElementById("siteInfo");
     siteInfo.style.display = "none";
     $('#siteInfo_tab').removeClass('selected');
@@ -313,6 +314,7 @@ $(document).on('change keyup paste', '#siteArea_name', function () {
 });
 
 function showTableDiv(e, address, areaCounter, divName) {
+    alert("2. " + e);
     var tr = $(e.parentNode);
     var tds = tr.children('td');
     for (i = 0; i < tds.length; i++) {
@@ -509,7 +511,7 @@ function addItem(tableId, salesDiv) {
 
         if (selectedObject.value === 'VimboxDiv') {
             tr = "<tr id='" + tableId + "_tr" + trCounter + "'>";
-            tr += "<td><input type='hidden' value='" + name + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxName'>" + name + "</td>";
+            tr += "<td><input type='hidden' value='" + name + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxName'><center>" + name + "</center></td>";
             tr += "<td><input type='hidden' value='" + remarksValue + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxRemarks'>" + remarks + "</td>";
             tr += "<td align='center'><input type='hidden' value='" + addChargesValue + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxAddCharges'>" + addCharges + "</td>";
             tr += "<td align='center'><input type='hidden' value='" + document.getElementById("itemQty").innerHTML + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxQuantity'>" + document.getElementById("itemQty").innerHTML + "</td>";
@@ -519,7 +521,7 @@ function addItem(tableId, salesDiv) {
             $("#" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_VimboxItemTable").append(tr);
         } else {
             tr = "<tr id='" + tableId + "_tr" + trCounter + "'>";
-            tr += "<td><input type='hidden' value='" + name + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_CustomerName'>" + name + "</td>";
+            tr += "<td><input type='hidden' value='" + name + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_CustomerName'><center>" + name + "</center></td>";
             tr += "<td><input type='hidden' value='" + remarksValue + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_CustomerRemarks'>" + remarks + "</td>";
             tr += "<td align='center'><input type='hidden' value='" + addChargesValue + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_CustomerAddCharges'>" + addCharges + "</td>";
             tr += "<td align='center'><input type='hidden' value='" + document.getElementById("itemQty").innerHTML + "' name='" + salesDiv + "_" + tableName[0] + "_" + tableName[1] + "_CustomerQuantity'>" + document.getElementById("itemQty").innerHTML + "</td>";
@@ -676,7 +678,7 @@ function selectServiceSlot(e, divId) {
                 (frml.value)[divId + "_" + id] = serviceArray[1];
                 var tr = "<tr id='" + divId + "_" + id + "'><td>";
                 tr += "<table class='table table-bordered serviceTable' width='100%'>"
-                tr += "<tr height='10%'><td>" + pri + " - " + sec + "<input type='hidden' name='" + divId + "_serviceName' value='" + id + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='" + divId + "_serviceCharge'></td></tr>";
+                tr += "<tr height='10%'><td>" + pri + " - " + sec + "<input type='hidden' name='" + divId + "_serviceName' value='" + id + "'></td><td align='right'><div class='input-group'><span class='input-group-addon'>$</span><input class='form-control' type='number' step='0.01' min='0' name='" + divId + "_serviceCharge'></div></td></tr>";
                 tr += "<tr>" + generateBreakdown(divId + "_" + id, divId) + "</tr></table></td></tr>";
                 $("#" + divId + "_servicesTable").append(tr);
                 cell.addClass('selected');

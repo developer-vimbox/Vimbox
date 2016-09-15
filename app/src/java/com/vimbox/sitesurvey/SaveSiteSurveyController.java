@@ -40,7 +40,7 @@ public class SaveSiteSurveyController extends HttpServlet {
         String[] salesDivs = request.getParameterValues("salesDiv");
         String[] surveyAreas = request.getParameterValues("survey_area");
         for (String sD : salesDivs) {
-
+            
             String[] sDArr = sD.split("\\|");
             String salesDiv = sDArr[0];
 
