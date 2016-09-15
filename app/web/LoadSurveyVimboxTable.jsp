@@ -18,7 +18,7 @@
                 String value = "Boxes||1";
     %>
     
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="${pageContext.request.contextPath}/images/items/boxes.png" width="100%" height="200"><br><span>Boxes</span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="/images/items/boxes.png" width="100%" height="200"><br><span>Boxes</span></td>
     
     <%
                 try {
@@ -29,7 +29,7 @@
                     }
     %>
     
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="${pageContext.request.contextPath}<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
         
     <%
                 } catch (Exception e) {
@@ -44,7 +44,7 @@
                     }
     %>
     
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="${pageContext.request.contextPath}<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
         
     <%
                 } catch (Exception e) {
@@ -62,7 +62,7 @@
                     }
     %>
     
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="${pageContext.request.contextPath}<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
         
     <%
                     try {
@@ -73,7 +73,7 @@
                         }
     %>
                 
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="${pageContext.request.contextPath}<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
         
     <%
                     } catch (Exception e) {
@@ -88,7 +88,7 @@
                         }
     %>
                     
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="${pageContext.request.contextPath}<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
         
     <%
                     } catch (Exception e) {
@@ -108,7 +108,7 @@
                     }
     %>
     
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="${pageContext.request.contextPath}<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
     
     <%
                     try {
@@ -119,7 +119,7 @@
                         }
     %>
     
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="${pageContext.request.contextPath}<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
     
     <%
                     } catch (Exception e) {
@@ -134,7 +134,7 @@
                         }
     %>
     
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="${pageContext.request.contextPath}<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedVimboxTable', '<%=salesDiv%>'); return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
     
     <%
                     } catch (Exception e) {

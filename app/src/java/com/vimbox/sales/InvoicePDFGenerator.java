@@ -85,7 +85,7 @@ public class InvoicePDFGenerator extends HttpServlet {
                     break;
                 }
             }
-            //documents/images/VimboxIcon.png// 
+            //webapps/images/VimboxIcon.png// 
             path = path.substring(0, slash + 1) + "images/VimboxIcon.png";
             path = path.replaceAll("%20", " ");
             Image img = Image.getInstance(path);
