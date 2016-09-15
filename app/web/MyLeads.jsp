@@ -41,7 +41,7 @@
                     modal.style.display = "block";
                 }
             });
-            
+
             $('#amount_form').ajaxForm({
                 dataType: 'json',
                 success: function (data) {
@@ -58,16 +58,16 @@
                             modal.style.display = "none";
                         }, 500);
                         $.getJSON("RetrieveLeadConfirmationDetails", {leadId: $('#amtlId').val()})
-                            .done(function (data) {
-                                document.getElementById("ttlAmtLbl").innerHTML = Number(data.total);
-                                document.getElementById("dptLbl").innerHTML = Number(data.total)*(Number(data.deposit)/100);
-                                document.getElementById("amtCltLbl").innerHTML = Number(data.collected);
-                            })
-                            .fail(function (error) {
-                                modal.innerHTML = "ERROR";
-                                status.innerHTML = error;
-                                message.style.display = "block";
-                            });
+                                .done(function (data) {
+                                    document.getElementById("ttlAmtLbl").innerHTML = Number(data.total);
+                                    document.getElementById("dptLbl").innerHTML = Number(data.total) * (Number(data.deposit) / 100);
+                                    document.getElementById("amtCltLbl").innerHTML = Number(data.collected);
+                                })
+                                .fail(function (error) {
+                                    modal.innerHTML = "ERROR";
+                                    status.innerHTML = error;
+                                    message.style.display = "block";
+                                });
                     }
                 },
                 error: function (data) {
@@ -154,16 +154,18 @@
                         </tr>  
                     </table>
                     <hr>
-                    <form action="AddAmountController" id="amount_form" method="post">
-                        <input type="hidden" name="amtlId" id="amtlId"/>
-                        <table>
-                            <tr>
-                                <td>Collected :</td>
-                                <td>S$ <input type="number" min="0" step="0.01" name="amountCollected" id="amountCollected"/></td>
-                            </tr> 
-                        </table>
-                        <input type="submit" value="Add payment"/>
-                    </form>
+                    <div id="show_amt">
+                        <form action="AddAmountController" id="amount_form" method="post">
+                            <input type="hidden" name="amtlId" id="amtlId"/>
+                            <table>
+                                <tr>
+                                    <td>Collected :</td>
+                                    <td>S$ <input type="number" min="0" step="0.01" name="amountCollected" id="amountCollected"/></td>
+                                </tr> 
+                            </table>
+                            <input type="submit" value="Add payment"/>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1264,7 +1264,11 @@ function assignDOM() {
         status.innerHTML = "SUCCESS";
         message.innerHTML = "Date of Move selected!";
         modal.style.display = "block";
-        document.getElementById("schedule_modal").style.display = "none";
+        var schedule = document.getElementById("schedule_modal");
+        if(schedule == null){
+            schedule = document.getElementById("site_schedule_modal");
+        }
+        schedule.style.display = "none";
         setTimeout(function () {
             modal.style.display = "none";
         }, 1000);
@@ -2197,6 +2201,11 @@ function amountCheck(leadId) {
                 document.getElementById("ttlAmtLbl").innerHTML = Number(data.total);
                 document.getElementById("dptLbl").innerHTML = Number(data.total) * (Number(data.deposit) / 100);
                 document.getElementById("amtCltLbl").innerHTML = Number(data.collected);
+                if(Number(data.collected) >= (Number(data.total) * (Number(data.deposit) / 100))){
+                    document.getElementById("show_amt").style.display = "none";
+                }else{
+                    document.getElementById("show_amt").style.display = "block";
+                }
                 modal.style.display = "block";
             })
             .fail(function (error) {
@@ -2224,11 +2233,8 @@ function viewDom(leadId) {
                 message.innerHTML = data.message;
                 errmodal.style.display = "block";
                 if (data.status === "SUCCESS") {
-                    document.getElementById('operation').innerHTML = "";
-                    $.get("LoadViewLeadDOM.jsp", {leadId: leadId}, function (data) {
-                        document.getElementById('lead_dom').innerHTML = data;
-                    });
                     setTimeout(function () {
+                        viewDom(leadId);
                         errmodal.style.display = "none";
                     }, 500);
                 }
