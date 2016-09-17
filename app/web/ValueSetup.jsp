@@ -51,7 +51,7 @@
                                             <h3 class="mrg10A">Add New Move Type</h3>
                                             <div class="form-horizontal">
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label">New Move Type: </label>
+                                                    <label class="col-sm-4 control-label">Move Type: </label>
                                                     <div class="col-sm-4">
                                                         <input type="text" class="form-control" id="moveType" required>
                                                     </div>
@@ -71,7 +71,7 @@
                                             <h3 class="mrg10A">Add New Referral Type</h3>
                                             <div class="form-horizontal">
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label">New Referral Type: </label>
+                                                    <label class="col-sm-4 control-label">Referral Type: </label>
                                                     <div class="col-sm-4">
                                                         <input type="text" class="form-control" id="refType" required>
                                                     </div>
