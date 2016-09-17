@@ -6,16 +6,7 @@
         <title>Create Customer</title>
     </head>
     <body>
-        <div id="customer_error_modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('customer_error_modal')">×</span>
-                    <div id="customer_error_status"></div>
-                    <hr>
-                    <div id="customer_error_message"></div>
-                </div>
-            </div>
-        </div>
+        
         <div class="form-horizontal" >
             <div class="form-group">
                 <div class="form-group">

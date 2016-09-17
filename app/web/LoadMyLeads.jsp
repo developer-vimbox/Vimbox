@@ -131,12 +131,15 @@
                     <center><h2>Rejected Reason for Lead <%=lead.getId()%></h2></center>
                 </div>
                 <div class="modal-body">
-                    <table>
-                        <tr>
-                            <td>Reason :</td>
-                            <td><textarea id="reason" name="reason" cols="75" rows="6" disabled><%=lead.getReason()%></textarea></td>
-                        </tr>  
-                    </table>
+                    <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Reason: </label>
+                        <div class="col-sm-7">
+                            <textarea id="reason" name="reason" class="form-control textarea-autosize" disabled><%=lead.getReason()%></textarea>
+
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>

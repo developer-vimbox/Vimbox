@@ -53,6 +53,7 @@ function addFollowup(leadId) {
 function followupLead(lead_id) {
     var comment_lead_id = $('#comment_lead_id').val();
     var comment_lead_followup = $('#comment_lead_followup').val();
+    var commentModal = document.getElementById("commentModal");
     var errorModal = document.getElementById("lead_error_modal");
     var errorStatus = document.getElementById("lead_error_status");
     var errorMessage = document.getElementById("lead_error_message");
@@ -67,7 +68,11 @@ function followupLead(lead_id) {
                 errorStatus.innerHTML = status;
                 errorMessage.innerHTML = errorMsg;
                 errorModal.style.display = "block";
-
+                setTimeout(function () {
+                        errorModal.style.display = "none";
+                        commentModal.style.display = "none";
+                        
+                }, 1300);
             })
             .fail(function (error) {
                 errorStatus.innerHTML = "ERROR";
@@ -895,8 +900,8 @@ function confirmCancel() {
     var modal = document.getElementById("lead_error_modal");
     var status = document.getElementById("lead_error_status");
     var message = document.getElementById("lead_error_message");
-    status.innerHTML = "<b>Cancel Confirmation</b>";
-    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Cancel this lead record? All pending site surveys and booked/confirmed DOMs of this lead will be cancelled as well. Changes cannot be reverted.</td></tr><tr><td align='center'><button onclick=\"cancelLeadForm()\">Yes</button></td><td align='center'><button onclick=\"closeModal('lead_error_modal')\">No</button></td></tr></table>";
+    status.innerHTML = "Cancel Confirmation";
+    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Cancel this lead record? All pending site surveys and booked/confirmed DOMs of this lead will be cancelled as well. Changes cannot be reverted.</td></tr><tr><td></br></td></tr><tr><td align='center'><button class='btn btn-primary' onclick=\"cancelLeadForm()\">Yes</button></td><td align='center'><button class='btn btn-danger' onclick=\"closeModal('lead_error_modal')\">No</button></td></tr></table>";
     modal.style.display = "block";
 }
 
@@ -1095,7 +1100,7 @@ function confirmLead(leadId) {
     document.getElementById('cfmleadIdLbl').innerHTML = leadId;
     $.getJSON("RetrieveLeadConfirmationDetails", {leadId: leadId})
             .done(function (data) {
-                document.getElementById("cfmMessage").innerHTML = "Deposit to be collected : S$" + Number(data.total) * (Number(data.deposit) / 100);
+                document.getElementById("cfmMessage").innerHTML = Number(data.total) * (Number(data.deposit) / 100);
                 modal.style.display = "block";
             })
             .fail(function (error) {

@@ -15,6 +15,7 @@
         
         <script src="JS/jquery.hotkeys.js"></script>
         <script src="JS/ModalFunctions.js"></script>
+        <script src="JS/CustomerFunctions.js"></script>
         <script src="JS/LeadFunctions.js"></script>
         <script src="JS/AddressSearch.js"></script>
         <style>
@@ -45,6 +46,16 @@
                 color: #4b5056;
             }
         </style>
+        <div id="customer_error_modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('customer_error_modal')">×</span>
+                    <div id="customer_error_status"></div>
+                    <hr>
+                    <div id="customer_error_message"></div>
+                </div>
+            </div>
+        </div>
         <div id="cal_modal" class="modal">
             <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">

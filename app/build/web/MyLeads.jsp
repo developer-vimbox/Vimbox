@@ -87,48 +87,83 @@
         <div id="cancelLeadModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('cancelLeadModal')">×</span>
-                    <h3>Lead Cancellation</h3>
+                    <center><h2>Lead Cancellation</h2></center>
+                </div>
+                <div class="modal-body">
                     <input type="hidden" id="uId" value="<%=user.getNric()%>">
-                    <table>
-                        <tr>
-                            <td>Lead ID :</td>
-                            <td><label id="leadIdLbl"></label><input type="hidden" id="lId" /></td>
-                        </tr>
-                        <tr>
-                            <td>Reason :</td>
-                            <td><textarea id="reason" cols="75" rows="6" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea></td>
-                        </tr>  
-                    </table>
-                    <button onclick="confirmCancel()">Reject Lead</button>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Lead ID: </label>
+                            <div class="col-sm-7">
+                                <label id="leadIdLbl" class="form-control"></label><input type="hidden" id="lId" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Rejection Reason: </label>
+                            <div class="col-sm-7">
+                                <textarea id="reason" class="form-control textarea-autosize" autofocus autocomplete="off" oninvalid="this.setCustomValidity('Please enter a comment')" oninput="setCustomValidity('')"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"> </label>
+                            <div class="col-sm-7 text-center">
+                                <button class="btn btn-primary" onclick="confirmCancel()">Reject Lead</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div id="confirmLeadModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('confirmLeadModal')">×</span>
-                    <h3>Lead Confirmation</h3>
-                    <label id="cfmMessage"></label>
+                    <center><h2>Lead Confirmation</h2></center>
+                </div>
+                <div class="modal-body">
                     <form action="ConfirmLeadController" id="confirm_form" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="cfmuId" id="cfmuId" value="<%=user.getNric()%>">
-                        <table>
-                            <tr>
-                                <td>Lead ID :</td>
-                                <td><label id="cfmleadIdLbl"></label><input type="hidden" name="cfmlId" id="cfmlId" /></td>
-                            </tr> 
-                            <tr>
-                                <td>Amount Collected :</td>
-                                <td>S$ <input type="number" min="0" step="0.01" name="amountCollected"/></td>
-                            </tr> 
-                            <tr>
-                                <td>Confirmation Email</td>
-                                <td><input type="file" name="file"/></td>
-                            </tr>
-                        </table>
-                        <input type="submit" value="Confirm Lead"/>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Deposit to be collected: </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">S$</span>
+                                        <label class="form-control" id="cfmMessage" disabled></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Lead ID: </label>
+                                <div class="col-sm-6">
+                                    <label class="form-control" id="cfmleadIdLbl"></label><input type="hidden" name="cfmlId" id="cfmlId" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Amount Collected: </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">S$</span>
+                                        <input class="form-control" type="number" min="0" step="0.01" name="amountCollected"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Confirmation Email: </label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="file" name="file"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> </label>
+                                <div class="col-sm-6 text-center">
+                                    <input class="btn btn-primary" type="submit" value="Confirm Lead"/>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -136,34 +171,61 @@
         <div id="amountModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('amountModal')">×</span>
-                    <h3>Amount Details</h3>
-                    <table>
-                        <tr>
-                            <td>Total Amount :</td>
-                            <td>S$ <label id="ttlAmtLbl"></label>
-                        </tr> 
-                        <tr>
-                            <td>Deposit Required :</td>
-                            <td>S$ <label id="dptLbl"></label>
-                        </tr> 
-                        <tr>
-                            <td>Amount Collected :</td>
-                            <td>S$ <label id="amtCltLbl"></label>
-                        </tr>  
-                    </table>
+                    <center><h2>Amount Details</h2></center>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Total Amount: </label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">S$</span>
+                                    <label class="form-control" id="ttlAmtLbl" disabled></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Deposit Required: </label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">S$</span>
+                                    <label class="form-control" id="dptLbl" disabled></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Amount Collected: </label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">S$</span>
+                                    <label class="form-control" id="amtCltLbl" disabled></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <hr>
                     <div id="show_amt">
                         <form action="AddAmountController" id="amount_form" method="post">
                             <input type="hidden" name="amtlId" id="amtlId"/>
-                            <table>
-                                <tr>
-                                    <td>Collected :</td>
-                                    <td>S$ <input type="number" min="0" step="0.01" name="amountCollected" id="amountCollected"/></td>
-                                </tr> 
-                            </table>
-                            <input type="submit" value="Add payment"/>
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Collected: </label>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">S$</span>
+                                            <input class="form-control" type="number" min="0" step="0.01" name="amountCollected" id="amountCollected"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label"> </label>
+                                    <div class="col-sm-6 text-center">
+                                        <input class="btn btn-primary" type="submit" value="Add payment"/>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -182,11 +244,12 @@
             </div>
         </div>
         <div id="lead_error_modal" class="modal">
-            <div class="error-modal-content">
-                <div class="modal-body">
+            <div class="modal-content" style="width: 400px;">
+                <div class="modal-header">
                     <span class="close" onclick="closeModal('lead_error_modal')">×</span>
-                    <div id="lead_error_status"></div>
-                    <hr>
+                    <center><h2><div id="lead_error_status"></div></h2></center>
+                </div>
+                <div class="modal-body">
                     <div id="lead_error_message"></div>
                 </div>
             </div>

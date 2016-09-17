@@ -93,6 +93,7 @@ public class ConfirmLeadController extends HttpServlet {
                     jsonOutput.addProperty("status", "SUCCESS");
                     jsonOutput.addProperty("message", "Lead confirmed!");
                 } catch (FileNotFoundException fne) {
+                    System.out.println("File errorrr: " + fne);
                     errorMsg += "Error reading uploaded image<br>";
                 } finally {
                     if (out != null) {

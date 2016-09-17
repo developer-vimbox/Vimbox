@@ -5,7 +5,7 @@
     ArrayList<String> moduleNames = user.getModuleNames();
     ArrayList<String> permittedPages = user.getPermittedPages();
     
-    String url = request.getRequestURL().toString();
+    String urll = request.getRequestURL().toString();
     
     if (user == null) {
         response.sendRedirect("Login.jsp");
@@ -13,7 +13,7 @@
     }else{
         boolean permitted = false;
         for(String ppage : permittedPages){
-            if(url.contains(ppage)){
+            if(urll.contains(ppage)){
                 permitted = true;
                 break;
             }
