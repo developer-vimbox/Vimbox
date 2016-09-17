@@ -306,44 +306,6 @@
                                                         <button class ="btn btn-primary" onclick="assignMovers()">Assign Mover</button>
                                                     </div>
                                                 </div>
-                                                <!--                                                <div class="form-group">
-                                                                                                    <label class="col-sm-3 control-label">Work Timing: </label>
-                                                                                                    <div class="col-sm-5">
-                                                                                                        <label class="radio-inline">
-                                                                                                            <input class="timeSlot" type="radio" name="timeSlot" value="FullDay" checked>Full Day
-                                                                                                        </label>
-                                                                                                        <label class="radio-inline">
-                                                                                                            <input class="timeSlot" type="radio" name="timeSlot" value="TimeSlot">Time Slot &nbsp;
-                                                                                                            <select name="ts_h_fr" id="ts_h_fr" disabled>
-                                                <%
-                                                    //for (int i = 9; i <= 18; i++) {
-                                                    // out.println("<option value='" + i + "'>" + i + "</option>");
-                                                    //}
-                                                %>
-                                            </select> : 
-                                            <select name="ts_m_fr" id="ts_m_fr" disabled>
-                                                <option value="0">0</option>
-                                                <option value="0">30</option>
-                                                <%
-                                                    //for (int i = 0; i <= 59; i++) {
-                                                    //out.println("<option value='" + i + "'>" + i + "</option>");
-                                                    //}
-                                                %>
-                                            </select>
-                                            &nbsp; TO &nbsp;
-                                            <select name="ts_h_to" id="ts_h_to" disabled>
-                                                <%                                                                    //for (int i = 9; i <= 18; i++) {
-                                                    //out.println("<option value='" + i + "'>" + i + "</option>");
-                                                    //}
-%>
-                                            </select> : 
-                                            <select name="ts_m_to" id="ts_m_to" disabled>
-                                                <option value="0">0</option>
-                                                <option value="0">30</option>
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>-->
                                             </div>
                                         </div>
                                     </div>

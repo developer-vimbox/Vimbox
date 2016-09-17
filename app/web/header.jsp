@@ -711,6 +711,7 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <li><a href="AdminLeads.jsp" title="View All Leads"><span>All Leads</span></a></li>
+                                <li><a href="ValueSetup.jsp" title="Value Setup"><span>Value Setup</span></a></li>
                             </ul>
                         </div><!-- .sidebar-submenu -->
                     </li>
