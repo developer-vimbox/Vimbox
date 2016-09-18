@@ -29,6 +29,7 @@ public class LeadPopulationDAO {
     private static final String DEL_REF_TYPE = "DELETE FROM system_referrals WHERE source=?";
     private static final String DEL_SVC_TYPE = "DELETE FROM system_services WHERE primary_service=? AND secondary_service=?";
     private static final String GET_DEPOSIT_PERCENTAGE = "SELECT * FROM system_percentage WHERE name='Deposit'";
+     private static final String GET_SELECTED_SERVICE_DESCRIPTION = "SELECT description FROM system_services WHERE primary_service=? AND secondary_service=?";
 
     public static ArrayList<String> getAllServices() {
         ArrayList<String> results = new ArrayList<String>();
@@ -379,6 +380,28 @@ public class LeadPopulationDAO {
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_SECONDARY_SERVICE_DESCRIPTION);
+            ps.setString(1, primaryService);
+            ps.setString(2, secondaryService);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                description = rs.getString("description");
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return description;
+    }
+    
+      public static String getSelectedServiceDesc(String primaryService, String secondaryService) {
+        String description = "";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_SELECTED_SERVICE_DESCRIPTION);
             ps.setString(1, primaryService);
             ps.setString(2, secondaryService);
             rs = ps.executeQuery();

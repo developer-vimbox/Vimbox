@@ -32,7 +32,7 @@ public class LeadDAO {
     private static final String CREATE_LEAD_REMARK = "INSERT INTO leadremark VALUES (?,?,?)";
     private static final String CREATE_LEAD_SALES_DIV = "INSERT INTO leadsalesdiv VALUES (?,?,?,?)";
     private static final String CREATE_LEAD_CONFIRMATION = "INSERT INTO leadconfirmation VALUES (?,?,?,?,?)";
-    
+
     private static final String GET_ALL_LEAD_INFO_BY_KEYWORD = "SELECT * FROM (SELECT  * FROM leadinfo ldi left outer join customers cust USING (customer_id)) joined, users urs WHERE joined.owner_user = urs.nric AND (CONCAT(joined.last_name, ' ', joined.first_name) LIKE ? OR CONCAT(urs.last_name, ' ', urs.first_name) LIKE ? OR contact LIKE ? OR email LIKE ? OR lead_id LIKE ? OR status LIKE ? OR datetime_of_creation LIKE ?)  ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_INFO_USER = "SELECT * FROM leadinfo left outer join customers USING (customer_id) WHERE (CONCAT(last_name, ' ', first_name) LIKE ? OR type LIKE ? OR contact LIKE ? OR lead_id LIKE ? OR datetime_of_creation LIKE ?) AND owner_user=? AND status=? ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_ENQUIRY = "SELECT * FROM leadenquiry WHERE lead_id=?";
@@ -48,7 +48,7 @@ public class LeadDAO {
     private static final String GET_LEAD_REMARK = "SELECT * FROM leadremark WHERE lead_id=? AND sales_div=?";
     private static final String GET_LEAD_SALES_DIV = "SELECT * FROM leadsalesdiv WHERE lead_id=?";
     private static final String GET_LEAD_CONFIRMATION = "SELECT * FROM leadconfirmation WHERE lead_id=?";
-    
+
     private static final String DELETE_LEAD_INFO = "DELETE FROM leadinfo WHERE lead_id=?";
     private static final String DELETE_LEAD_ENQUIRY = "DELETE FROM leadenquiry WHERE lead_id=?";
     private static final String DELETE_LEAD_MOVE = "DELETE FROM leadmove WHERE lead_id=?";
@@ -62,7 +62,7 @@ public class LeadDAO {
     private static final String DELETE_LEAD_SALES_DIV = "DELETE FROM leadsalesdiv WHERE lead_id=?";
     private static final String CANCEL_LEAD = "UPDATE leadinfo SET status=?, reason=? WHERE lead_id=?";
     private static final String DELETE_SITE_LEAD_COMMENT = "DELETE FROM leadcomment WHERE lead_id=? AND sales_div=?";
-    
+
     private static final String UPDATE_LEAD_CONFIRMATION_COLLECTED = "UPDATE leadconfirmation SET collected_amount=? WHERE lead_id=?";
     private static final String CONFIRM_LEAD = "UPDATE leadconfirmation SET confirmed_user=?, collected_amount=?, email_path=? WHERE lead_id=?";
     private static final String CONFIRM_LEAD_STATUS = "UPDATE leadinfo SET status='Confirmed' WHERE lead_id=?";
@@ -70,12 +70,12 @@ public class LeadDAO {
     private static final String UPDATE_ADDRESS = "UPDATE leadmove SET storeys=?, pushing=? WHERE lead_id=? AND sales_div=?";
     private static final String UPDATE_LEAD_OTHER = "UPDATE leadother SET charge=? WHERE lead_id=? AND sales_div=? AND other=?";
     private static final String UPDATE_LEAD_SALES_DIV = "UPDATE leadsalesdiv SET survey_area=?, survey_area_name=? WHERE lead_id=? AND sales_div=?";
-    
-    
-    public static void deleteLead(int leadId){
+    private static final String GET_LEAD_SERVICES_BY_LEADID = "SELECT * FROM leadservice WHERE lead_id=?";
+
+    public static void deleteLead(int leadId) {
         Connection con = null;
         PreparedStatement ps = null;
-        try{
+        try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(DELETE_LEAD_INFO);
             ps.setInt(1, leadId);
@@ -117,8 +117,8 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
-    public static double getLeadConfirmedTotal(int leadId){
+
+    public static double getLeadConfirmedTotal(int leadId) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -127,7 +127,7 @@ public class LeadDAO {
             ps = con.prepareStatement(GET_LEAD_CONFIRMATION);
             ps.setInt(1, leadId);
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getDouble("total_amount");
             }
         } catch (SQLException se) {
@@ -137,8 +137,8 @@ public class LeadDAO {
         }
         return 0;
     }
-    
-    public static String getLeadConfirmedEmail(int leadId){
+
+    public static String getLeadConfirmedEmail(int leadId) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -147,7 +147,7 @@ public class LeadDAO {
             ps = con.prepareStatement(GET_LEAD_CONFIRMATION);
             ps.setInt(1, leadId);
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getString("email_path");
             }
         } catch (SQLException se) {
@@ -157,8 +157,8 @@ public class LeadDAO {
         }
         return null;
     }
-    
-    public static double getLeadConfirmedCollected(int leadId){
+
+    public static double getLeadConfirmedCollected(int leadId) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -167,7 +167,7 @@ public class LeadDAO {
             ps = con.prepareStatement(GET_LEAD_CONFIRMATION);
             ps.setInt(1, leadId);
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getDouble("collected_amount");
             }
         } catch (SQLException se) {
@@ -177,7 +177,7 @@ public class LeadDAO {
         }
         return 0;
     }
-    
+
     public static ArrayList<Lead> getAllLeadsByKeyword(String keyword) {
         ArrayList<Lead> results = new ArrayList<Lead>();
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
@@ -195,7 +195,7 @@ public class LeadDAO {
             ps.setString(5, "%" + keyword + "%");
             ps.setString(6, "%" + keyword + "%");
             ps.setString(7, "%" + keyword + "%");
-            
+
             rs = ps.executeQuery();
             while (rs.next()) {
                 // Lead Info //
@@ -213,7 +213,7 @@ public class LeadDAO {
                 String reason = rs.getString("reason");
                 String source = rs.getString("source");
                 String referral = rs.getString("referral");
-                
+
                 String enquiry = "";
                 ps = con.prepareStatement(GET_LEAD_ENQUIRY);
                 ps.setInt(1, leadId);
@@ -221,12 +221,12 @@ public class LeadDAO {
                 if (rs1.next()) {
                     enquiry = rs1.getString("enquiry");
                 }
-                
+
                 ArrayList<String[]> addressFrom = new ArrayList<String[]>();
                 ps = con.prepareStatement(GET_LEAD_MOVE_FROM);
                 ps.setInt(1, leadId);
                 rs1 = ps.executeQuery();
-                while(rs1.next()) {
+                while (rs1.next()) {
                     String address = rs1.getString("address");
                     String storeys = rs1.getString("storeys");
                     String pushing = rs1.getString("pushing");
@@ -237,7 +237,7 @@ public class LeadDAO {
                 ps = con.prepareStatement(GET_LEAD_MOVE_TO);
                 ps.setInt(1, leadId);
                 rs1 = ps.executeQuery();
-                while(rs1.next()) {
+                while (rs1.next()) {
                     String address = rs1.getString("address");
                     String storeys = rs1.getString("storeys");
                     String pushing = rs1.getString("pushing");
@@ -249,20 +249,20 @@ public class LeadDAO {
                 ps = con.prepareStatement(GET_LEAD_SALES_DIV);
                 ps.setInt(1, leadId);
                 rs1 = ps.executeQuery();
-                while(rs1.next()){
+                while (rs1.next()) {
                     salesDivs.put(rs1.getString("sales_div"), new String[]{rs1.getString("survey_area"), rs1.getString("survey_area_name")});
                 }
-                
+
                 ArrayList<LeadDiv> leadDivs = new ArrayList<LeadDiv>();
                 for (Map.Entry<String, String[]> entry : salesDivs.entrySet()) {
                     String salesDiv = entry.getKey();
                     String[] survey = entry.getValue();
-                    
+
                     String[] surveyAreas = survey[0].split("\\|");
                     String[] surveyAreaNames = survey[1].split("\\|");
-                    
+
                     ArrayList<LeadArea> leadAreas = new ArrayList<LeadArea>();
-                    for(int j=0; j<surveyAreas.length; j++){
+                    for (int j = 0; j < surveyAreas.length; j++) {
                         String leadAreaDiv = surveyAreas[j];
                         String leadName = surveyAreas[j];
                         // Customer Items //
@@ -272,7 +272,7 @@ public class LeadDAO {
                         ps.setString(2, salesDiv);
                         ps.setString(3, leadAreaDiv);
                         rs1 = ps.executeQuery();
-                        while(rs1.next()){
+                        while (rs1.next()) {
                             String itemName = rs1.getString("itemname");
                             String itemRemark = rs1.getString("itemremark");
                             String itemCharge = rs1.getString("itemcharge");
@@ -306,7 +306,7 @@ public class LeadDAO {
                         ps.setString(2, salesDiv);
                         ps.setString(3, leadAreaDiv);
                         rs1 = ps.executeQuery();
-                        while(rs1.next()){
+                        while (rs1.next()) {
                             String itemName = rs1.getString("itemname");
                             String itemRemark = rs1.getString("itemremark");
                             String itemCharge = rs1.getString("itemcharge");
@@ -340,7 +340,7 @@ public class LeadDAO {
                         ps.setString(2, salesDiv);
                         ps.setString(3, leadAreaDiv);
                         rs1 = ps.executeQuery();
-                        while(rs1.next()){
+                        while (rs1.next()) {
                             String itemName = rs1.getString("materialname");
                             String itemCharge = rs1.getString("materialcharge");
                             double charge;
@@ -360,49 +360,49 @@ public class LeadDAO {
                         }
                         leadAreas.add(new LeadArea(leadAreaDiv, leadName, customerItems, vimboxItems, materials));
                     }
-                    
+
                     // Services //
                     ArrayList<String[]> services = new ArrayList<String[]>();
                     ps = con.prepareStatement(GET_LEAD_SERVICE);
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs1 = ps.executeQuery();
-                    while(rs1.next()){
+                    while (rs1.next()) {
                         String serviceName = rs1.getString("service");
                         String serviceCharge = rs1.getString("charge");
                         String[] svc = serviceName.split("_");
                         String secSvc = "";
-                        for(int i=1; i<svc.length; i++){
+                        for (int i = 1; i < svc.length; i++) {
                             secSvc += (svc[i]);
-                            if(i < svc.length-1){
+                            if (i < svc.length - 1) {
                                 secSvc += " ";
                             }
                         }
                         String formula = LeadPopulationDAO.getServiceFormula(svc[0], secSvc);
                         String serviceMp = rs1.getString("manpower");
                         String serviceRm = rs1.getString("remarks");
-                        services.add(new String[]{serviceName,serviceCharge,formula,serviceMp,serviceRm});
+                        services.add(new String[]{serviceName, serviceCharge, formula, serviceMp, serviceRm});
                     }
-                    
+
                     // Other Charges // 
-                    HashMap<String,String> otherCharges = new HashMap<String,String>();
+                    HashMap<String, String> otherCharges = new HashMap<String, String>();
                     ps = con.prepareStatement(GET_LEAD_OTHER);
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs1 = ps.executeQuery();
-                    while(rs1.next()){
+                    while (rs1.next()) {
                         String serviceName = rs1.getString("other");
                         String serviceCharge = rs1.getString("charge");
-                        otherCharges.put(serviceName,serviceCharge);
+                        otherCharges.put(serviceName, serviceCharge);
                     }
-                    
+
                     // Customer comments //
                     ArrayList<String> comments = new ArrayList<String>();
                     ps = con.prepareStatement(GET_LEAD_COMMENT);
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs1 = ps.executeQuery();
-                    while(rs1.next()){
+                    while (rs1.next()) {
                         String comment = rs1.getString("comment");
                         comments.add(comment);
                     }
@@ -413,14 +413,14 @@ public class LeadDAO {
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs1 = ps.executeQuery();
-                    while(rs1.next()){
+                    while (rs1.next()) {
                         String remark = rs1.getString("remark");
                         remarks.add(remark);
                     }
-                    
+
                     leadDivs.add(new LeadDiv(salesDiv, leadAreas, services, otherCharges, comments, remarks));
                 }
-                
+
                 ArrayList<SiteSurvey> siteSurveys = SiteSurveyDAO.getSiteSurveysByLeadId(leadId);
                 results.add(new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, siteSurveys, dt, tom, jobs, addressFrom, addressTo, leadDivs));
             }
@@ -432,7 +432,7 @@ public class LeadDAO {
         }
         return results;
     }
-    
+
     public static ArrayList<Lead> getLeadsByOwnerUser(String keyword, String nric, String queryStatus) {
         ArrayList<Lead> results = new ArrayList<Lead>();
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
@@ -451,7 +451,7 @@ public class LeadDAO {
             ps.setString(5, "%" + keyword + "%");
             ps.setString(6, nric);
             ps.setString(7, queryStatus);
-            
+
             rs = ps.executeQuery();
             while (rs.next()) {
                 // Lead Info //
@@ -468,7 +468,7 @@ public class LeadDAO {
                 String reason = rs.getString("reason");
                 String source = rs.getString("source");
                 String referral = rs.getString("referral");
-                
+
                 String enquiry = "";
                 ps = con.prepareStatement(GET_LEAD_ENQUIRY);
                 ps.setInt(1, leadId);
@@ -476,12 +476,12 @@ public class LeadDAO {
                 if (rs1.next()) {
                     enquiry = rs1.getString("enquiry");
                 }
-                
+
                 ArrayList<String[]> addressFrom = new ArrayList<String[]>();
                 ps = con.prepareStatement(GET_LEAD_MOVE_FROM);
                 ps.setInt(1, leadId);
                 rs1 = ps.executeQuery();
-                while(rs1.next()) {
+                while (rs1.next()) {
                     String address = rs1.getString("address");
                     String storeys = rs1.getString("storeys");
                     String pushing = rs1.getString("pushing");
@@ -492,7 +492,7 @@ public class LeadDAO {
                 ps = con.prepareStatement(GET_LEAD_MOVE_TO);
                 ps.setInt(1, leadId);
                 rs1 = ps.executeQuery();
-                while(rs1.next()) {
+                while (rs1.next()) {
                     String address = rs1.getString("address");
                     String storeys = rs1.getString("storeys");
                     String pushing = rs1.getString("pushing");
@@ -504,20 +504,20 @@ public class LeadDAO {
                 ps = con.prepareStatement(GET_LEAD_SALES_DIV);
                 ps.setInt(1, leadId);
                 rs1 = ps.executeQuery();
-                while(rs1.next()){
+                while (rs1.next()) {
                     salesDivs.put(rs1.getString("sales_div"), new String[]{rs1.getString("survey_area"), rs1.getString("survey_area_name")});
                 }
-                
+
                 ArrayList<LeadDiv> leadDivs = new ArrayList<LeadDiv>();
                 for (Map.Entry<String, String[]> entry : salesDivs.entrySet()) {
                     String salesDiv = entry.getKey();
                     String[] survey = entry.getValue();
-                    
+
                     String[] surveyAreas = survey[0].split("\\|");
                     String[] surveyAreaNames = survey[1].split("\\|");
-                    
+
                     ArrayList<LeadArea> leadAreas = new ArrayList<LeadArea>();
-                    for(int j=0; j<surveyAreas.length; j++){
+                    for (int j = 0; j < surveyAreas.length; j++) {
                         String leadAreaDiv = surveyAreas[j];
                         String leadName = surveyAreas[j];
                         // Customer Items //
@@ -527,7 +527,7 @@ public class LeadDAO {
                         ps.setString(2, salesDiv);
                         ps.setString(3, leadAreaDiv);
                         rs1 = ps.executeQuery();
-                        while(rs1.next()){
+                        while (rs1.next()) {
                             String itemName = rs1.getString("itemname");
                             String itemRemark = rs1.getString("itemremark");
                             String itemCharge = rs1.getString("itemcharge");
@@ -561,7 +561,7 @@ public class LeadDAO {
                         ps.setString(2, salesDiv);
                         ps.setString(3, leadAreaDiv);
                         rs1 = ps.executeQuery();
-                        while(rs1.next()){
+                        while (rs1.next()) {
                             String itemName = rs1.getString("itemname");
                             String itemRemark = rs1.getString("itemremark");
                             String itemCharge = rs1.getString("itemcharge");
@@ -595,7 +595,7 @@ public class LeadDAO {
                         ps.setString(2, salesDiv);
                         ps.setString(3, leadAreaDiv);
                         rs1 = ps.executeQuery();
-                        while(rs1.next()){
+                        while (rs1.next()) {
                             String itemName = rs1.getString("materialname");
                             String itemCharge = rs1.getString("materialcharge");
                             double charge;
@@ -615,49 +615,49 @@ public class LeadDAO {
                         }
                         leadAreas.add(new LeadArea(leadAreaDiv, leadName, customerItems, vimboxItems, materials));
                     }
-                    
+
                     // Services //
                     ArrayList<String[]> services = new ArrayList<String[]>();
                     ps = con.prepareStatement(GET_LEAD_SERVICE);
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs1 = ps.executeQuery();
-                    while(rs1.next()){
+                    while (rs1.next()) {
                         String serviceName = rs1.getString("service");
                         String serviceCharge = rs1.getString("charge");
                         String[] svc = serviceName.split("_");
                         String secSvc = "";
-                        for(int i=1; i<svc.length; i++){
+                        for (int i = 1; i < svc.length; i++) {
                             secSvc += (svc[i]);
-                            if(i < svc.length-1){
+                            if (i < svc.length - 1) {
                                 secSvc += " ";
                             }
                         }
                         String formula = LeadPopulationDAO.getServiceFormula(svc[0], secSvc);
                         String serviceMp = rs1.getString("manpower");
                         String serviceRm = rs1.getString("remarks");
-                        services.add(new String[]{serviceName,serviceCharge,formula,serviceMp,serviceRm});
+                        services.add(new String[]{serviceName, serviceCharge, formula, serviceMp, serviceRm});
                     }
-                    
+
                     // Other Charges // 
-                    HashMap<String,String> otherCharges = new HashMap<String,String>();
+                    HashMap<String, String> otherCharges = new HashMap<String, String>();
                     ps = con.prepareStatement(GET_LEAD_OTHER);
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs1 = ps.executeQuery();
-                    while(rs1.next()){
+                    while (rs1.next()) {
                         String serviceName = rs1.getString("other");
                         String serviceCharge = rs1.getString("charge");
-                        otherCharges.put(serviceName,serviceCharge);
+                        otherCharges.put(serviceName, serviceCharge);
                     }
-                    
+
                     // Customer comments //
                     ArrayList<String> comments = new ArrayList<String>();
                     ps = con.prepareStatement(GET_LEAD_COMMENT);
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs1 = ps.executeQuery();
-                    while(rs1.next()){
+                    while (rs1.next()) {
                         String comment = rs1.getString("comment");
                         comments.add(comment);
                     }
@@ -668,14 +668,14 @@ public class LeadDAO {
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs1 = ps.executeQuery();
-                    while(rs1.next()){
+                    while (rs1.next()) {
                         String remark = rs1.getString("remark");
                         remarks.add(remark);
                     }
-                    
+
                     leadDivs.add(new LeadDiv(salesDiv, leadAreas, services, otherCharges, comments, remarks));
                 }
-                
+
                 ArrayList<SiteSurvey> siteSurveys = SiteSurveyDAO.getSiteSurveysByLeadId(leadId);
                 results.add(new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, siteSurveys, dt, tom, jobs, addressFrom, addressTo, leadDivs));
             }
@@ -715,7 +715,7 @@ public class LeadDAO {
                 String reason = rs.getString("reason");
                 String source = rs.getString("source");
                 String referral = rs.getString("referral");
-                
+
                 String enquiry = "";
                 ps = con.prepareStatement(GET_LEAD_ENQUIRY);
                 ps.setInt(1, leadId);
@@ -723,12 +723,12 @@ public class LeadDAO {
                 if (rs.next()) {
                     enquiry = rs.getString("enquiry");
                 }
-                
+
                 ArrayList<String[]> addressFrom = new ArrayList<String[]>();
                 ps = con.prepareStatement(GET_LEAD_MOVE_FROM);
                 ps.setInt(1, leadId);
                 rs = ps.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
                     String address = rs.getString("address");
                     String storeys = rs.getString("storeys");
                     String pushing = rs.getString("pushing");
@@ -739,7 +739,7 @@ public class LeadDAO {
                 ps = con.prepareStatement(GET_LEAD_MOVE_TO);
                 ps.setInt(1, leadId);
                 rs = ps.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
                     String address = rs.getString("address");
                     String storeys = rs.getString("storeys");
                     String pushing = rs.getString("pushing");
@@ -751,11 +751,11 @@ public class LeadDAO {
                 ps = con.prepareStatement(GET_LEAD_SALES_DIV);
                 ps.setInt(1, leadId);
                 rs = ps.executeQuery();
-                while(rs.next()){
+                while (rs.next()) {
                     salesDivs.put(rs.getString("sales_div"), new String[]{rs.getString("survey_area"), rs.getString("survey_area_name")});
-                    
+
                 }
-                
+
                 ArrayList<LeadDiv> leadDivs = new ArrayList<LeadDiv>();
                 for (Map.Entry<String, String[]> entry : salesDivs.entrySet()) {
                     String salesDiv = entry.getKey();
@@ -763,8 +763,8 @@ public class LeadDAO {
                     String[] surveyAreas = survey[0].split("\\|");
                     String[] surveyAreaNames = survey[1].split("\\|");
                     ArrayList<LeadArea> leadAreas = new ArrayList<LeadArea>();
-                    
-                    for(int i=0; i<surveyAreas.length; i++){
+
+                    for (int i = 0; i < surveyAreas.length; i++) {
                         String leadAreaDiv = surveyAreas[i];
                         String leadName = surveyAreaNames[i];
                         // Customer Items //
@@ -774,7 +774,7 @@ public class LeadDAO {
                         ps.setString(2, salesDiv);
                         ps.setString(3, leadAreaDiv);
                         rs = ps.executeQuery();
-                        while(rs.next()){
+                        while (rs.next()) {
                             String itemName = rs.getString("itemname");
                             String itemRemark = rs.getString("itemremark");
                             String itemCharge = rs.getString("itemcharge");
@@ -808,7 +808,7 @@ public class LeadDAO {
                         ps.setString(2, salesDiv);
                         ps.setString(3, leadAreaDiv);
                         rs = ps.executeQuery();
-                        while(rs.next()){
+                        while (rs.next()) {
                             String itemName = rs.getString("itemname");
                             String itemRemark = rs.getString("itemremark");
                             String itemCharge = rs.getString("itemcharge");
@@ -842,7 +842,7 @@ public class LeadDAO {
                         ps.setString(2, salesDiv);
                         ps.setString(3, leadAreaDiv);
                         rs = ps.executeQuery();
-                        while(rs.next()){
+                        while (rs.next()) {
                             String itemName = rs.getString("materialname");
                             String itemCharge = rs.getString("materialcharge");
                             double charge;
@@ -860,52 +860,52 @@ public class LeadDAO {
                             }
                             materials.add(new Item(itemName, "", charge, 0, qty));
                         }
-                        
+
                         leadAreas.add(new LeadArea(leadAreaDiv, leadName, customerItems, vimboxItems, materials));
                     }
-                    
+
                     // Services //
                     ArrayList<String[]> services = new ArrayList<String[]>();
                     ps = con.prepareStatement(GET_LEAD_SERVICE);
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs = ps.executeQuery();
-                    while(rs.next()){
+                    while (rs.next()) {
                         String serviceName = rs.getString("service");
                         String serviceCharge = rs.getString("charge");
                         String[] svc = serviceName.split("_");
                         String secSvc = "";
-                        for(int i=1; i<svc.length; i++){
+                        for (int i = 1; i < svc.length; i++) {
                             secSvc += (svc[i]);
-                            if(i < svc.length-1){
+                            if (i < svc.length - 1) {
                                 secSvc += " ";
                             }
                         }
                         String formula = LeadPopulationDAO.getServiceFormula(svc[0], secSvc);
                         String serviceMp = rs.getString("manpower");
                         String serviceRm = rs.getString("remarks");
-                        services.add(new String[]{serviceName,serviceCharge,formula,serviceMp,serviceRm});
+                        services.add(new String[]{serviceName, serviceCharge, formula, serviceMp, serviceRm});
                     }
-                    
+
                     // Other Charges // 
-                    HashMap<String,String> otherCharges = new HashMap<String,String>();
+                    HashMap<String, String> otherCharges = new HashMap<String, String>();
                     ps = con.prepareStatement(GET_LEAD_OTHER);
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs = ps.executeQuery();
-                    while(rs.next()){
+                    while (rs.next()) {
                         String serviceName = rs.getString("other");
                         String serviceCharge = rs.getString("charge");
-                        otherCharges.put(serviceName,serviceCharge);
+                        otherCharges.put(serviceName, serviceCharge);
                     }
-                    
+
                     // Customer comments //
                     ArrayList<String> comments = new ArrayList<String>();
                     ps = con.prepareStatement(GET_LEAD_COMMENT);
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs = ps.executeQuery();
-                    while(rs.next()){
+                    while (rs.next()) {
                         String comment = rs.getString("comment");
                         comments.add(comment);
                     }
@@ -916,14 +916,14 @@ public class LeadDAO {
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     rs = ps.executeQuery();
-                    while(rs.next()){
+                    while (rs.next()) {
                         String remark = rs.getString("remark");
                         remarks.add(remark);
                     }
-                    
+
                     leadDivs.add(new LeadDiv(salesDiv, leadAreas, services, otherCharges, comments, remarks));
                 }
-                
+
                 ArrayList<SiteSurvey> siteSurveys = SiteSurveyDAO.getSiteSurveysByLeadId(leadId);
                 lead = new Lead(user, leadId, type, customer, status, reason, source, referral, enquiry, siteSurveys, dt, tom, jobs, addressFrom, addressTo, leadDivs);
             }
@@ -934,7 +934,7 @@ public class LeadDAO {
         }
         return lead;
     }
-    
+
     public static void createLeadInfo(User owner, int leadId, String type, int custId, String typesOfMove, String dt, String status, String source, String referral) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -965,12 +965,12 @@ public class LeadDAO {
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(CREATE_LEAD_MOVE);
-            for(int i=0; i<addresses.size(); i++){
+            for (int i = 0; i < addresses.size(); i++) {
                 String salesDiv = salesDivs.get(i);
                 String address = addresses.get(i);
                 String storey = storeys.get(i);
                 String pushing = pushings.get(i);
-                try{
+                try {
                     ps.setInt(1, leadId);
                     ps.setString(2, salesDiv);
                     ps.setString(3, type);
@@ -978,7 +978,7 @@ public class LeadDAO {
                     ps.setString(5, storey);
                     ps.setString(6, pushing);
                     ps.executeUpdate();
-                }catch (SQLException se) {
+                } catch (SQLException se) {
                     se.printStackTrace();
                 }
             }
@@ -988,7 +988,7 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
+
     public static void createLeadEnquiry(int leadId, String enquiry) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -1005,12 +1005,12 @@ public class LeadDAO {
         }
     }
 
-    public static void createLeadSalesDiv(int leadId, String[] salesDivs){
+    public static void createLeadSalesDiv(int leadId, String[] salesDivs) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = ConnectionManager.getConnection();
-            for(String salesDiv: salesDivs){
+            for (String salesDiv : salesDivs) {
                 ps = con.prepareStatement(CREATE_LEAD_SALES_DIV);
                 ps.setInt(1, leadId);
                 ps.setString(2, salesDiv);
@@ -1024,7 +1024,7 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
+
     public static void createLeadCustItem(int leadId, String salesDiv, String[] custItemNames, String[] custItemRemarks, String[] custItemCharges, String[] custItemQtys, String[] custItemUnits) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -1057,7 +1057,7 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
+
     public static void createSiteLeadCustItem(int leadId, String salesDiv, String surveyArea, String[] custItemNames, String[] custItemRemarks, String[] custItemCharges, String[] custItemQtys, String[] custItemUnits) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -1066,7 +1066,7 @@ public class LeadDAO {
             ps = con.prepareStatement(DELETE_LEAD_CUST_ITEM);
             ps.setInt(1, leadId);
             ps.executeUpdate();
-            
+
             ps = con.prepareStatement(CREATE_LEAD_CUST_ITEM);
             for (int i = 0; i < custItemNames.length; i++) {
                 String itemName = custItemNames[i];
@@ -1127,7 +1127,7 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
+
     public static void createSiteLeadVimboxItem(int leadId, String salesDiv, String surveyArea, String[] vimboxItemNames, String[] vimboxItemRemarks, String[] vimboxItemCharges, String[] vimboxItemQtys, String[] vimboxItemUnits) {
         Connection con = null;
         PreparedStatement ps1 = null;
@@ -1140,7 +1140,7 @@ public class LeadDAO {
             ps1 = con.prepareStatement(DELETE_LEAD_MATERIAL);
             ps1.setInt(1, leadId);
             ps1.executeUpdate();
-            
+
             ps1 = con.prepareStatement(CREATE_LEAD_VIMBOX_ITEM);
             ps2 = con.prepareStatement(CREATE_LEAD_MATERIAL);
             for (int i = 0; i < vimboxItemNames.length; i++) {
@@ -1150,7 +1150,7 @@ public class LeadDAO {
                 String itemCharge = vimboxItemCharges[i];
                 String itemQty = vimboxItemQtys[i];
                 String itemUnit = vimboxItemUnits[i];
-                if(itemName.equals("Boxes")){
+                if (itemName.equals("Boxes")) {
                     try {
                         ps1.setInt(1, leadId);
                         ps1.setString(2, salesDiv);
@@ -1164,7 +1164,7 @@ public class LeadDAO {
                     } catch (SQLException se) {
                         se.printStackTrace();
                     }
-                }else{
+                } else {
                     try {
                         ps2.setInt(1, leadId);
                         ps2.setString(2, salesDiv);
@@ -1228,7 +1228,7 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
+
     public static void createSiteLeadService(String leadServiceInsertString, int leadId) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -1271,7 +1271,7 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
+
     public static void updateLeadOther(int leadId, String salesDiv, String[] others, String[] otherCharges) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -1320,7 +1320,7 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
+
     public static void createSiteLeadComments(int leadId, String salesDiv, String comments) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -1330,7 +1330,7 @@ public class LeadDAO {
             ps.setInt(1, leadId);
             ps.setString(2, salesDiv);
             ps.executeUpdate();
-            
+
             ps = con.prepareStatement(CREATE_LEAD_COMMENT);
             ps.setInt(1, leadId);
             ps.setString(2, salesDiv);
@@ -1365,8 +1365,8 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
-    public static void createLeadConfirmation(int leadId, double total){
+
+    public static void createLeadConfirmation(int leadId, double total) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -1375,12 +1375,12 @@ public class LeadDAO {
             ps = con.prepareStatement(GET_LEAD_CONFIRMATION);
             ps.setInt(1, leadId);
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 ps = con.prepareStatement(UPDATE_LEAD_CONFIRMATION);
                 ps.setDouble(1, total);
                 ps.setInt(2, leadId);
                 ps.executeUpdate();
-            }else{
+            } else {
                 ps = con.prepareStatement(CREATE_LEAD_CONFIRMATION);
                 ps.setInt(1, leadId);
                 ps.setString(2, "");
@@ -1395,7 +1395,7 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, rs);
         }
     }
-    
+
     public static void confirmLead(String nric, double collectAmount, String path, int leadId) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -1407,11 +1407,11 @@ public class LeadDAO {
             ps.setString(3, path);
             ps.setInt(4, leadId);
             ps.executeUpdate();
-            
+
             ps = con.prepareStatement(CONFIRM_LEAD_STATUS);
             ps.setInt(1, leadId);
             ps.executeUpdate();
-            
+
             JobDAO.confirmSalesJob(leadId);
         } catch (SQLException se) {
             se.printStackTrace();
@@ -1419,7 +1419,7 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
+
     public static void addLeadConfirmationCollected(int leadId, double collectAmount) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -1435,8 +1435,8 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
-    public static void cancelLead(int leadId, String reason){
+
+    public static void cancelLead(int leadId, String reason) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -1454,8 +1454,8 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
-    public static void updateAddress(int leadId, String salesDiv, String storeys, String pushing){
+
+    public static void updateAddress(int leadId, String salesDiv, String storeys, String pushing) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -1472,8 +1472,8 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
-    public static void updateLeadSalesDiv(int leadId, String salesDiv, String surveyAreasDBString, String surveyAreasNamesDBString){
+
+    public static void updateLeadSalesDiv(int leadId, String salesDiv, String surveyAreasDBString, String surveyAreasNamesDBString) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -1489,5 +1489,45 @@ public class LeadDAO {
         } finally {
             ConnectionManager.close(con, ps, null);
         }
-    } 
+    }
+
+    public static ArrayList<String[]> getServicesByLeadId(String leadId) {
+        ArrayList<String[]> services = new ArrayList<String[]>();
+        Connection con = null;
+        PreparedStatement ps = null;
+         ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_LEAD_SERVICES_BY_LEADID);
+            ps.setString(1, leadId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+            String serviceName = rs.getString("service");
+            String serviceCharge = rs.getString("charge");
+            String[] svc = serviceName.split("_");
+            String secSvc = "";
+            
+            for (int i = 1; i < svc.length; i++) {
+                secSvc += (svc[i]);
+                if (i < svc.length - 1) {
+                    secSvc += " ";
+                }
+            }
+            String serviceMp = rs.getString("manpower");
+            String serviceRm = rs.getString("remarks");
+            String sName = "";
+            for(String name: svc){
+                sName += name + " ";
+            }
+            services.add(new String[]{sName, serviceCharge, serviceMp, serviceRm});
+        }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+            return services;
+        }
+    }
+
 }
+

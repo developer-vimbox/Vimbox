@@ -30,9 +30,10 @@ import org.joda.time.DateTime;
 
 @WebServlet(name = "InvoicePDFGenerator", urlPatterns = {"/invoices/*"})
 public class InvoicePDFGenerator extends HttpServlet {
-
+    
     private BaseColor tHeaderColor = new BaseColor(202, 225, 255);
     private BaseColor invoiceColor = new BaseColor(72, 136, 216);
+    private BaseColor lineColor = new BaseColor(211, 211, 211);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,6 +50,7 @@ public class InvoicePDFGenerator extends HttpServlet {
         String leadId = request.getParameter("leadId");
         Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
         ArrayList<LeadDiv> leadDivs = lead.getSalesDivs();
+        
         try {
             // Document Settings //
             Document document = new Document();
@@ -59,6 +61,7 @@ public class InvoicePDFGenerator extends HttpServlet {
             Font tBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.BOLD);
             Font tNormalFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.NORMAL);
             Font priceFont = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD);
+            Font totalFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
             DecimalFormat df = new DecimalFormat("#,###.00");
             document.open();
             //-------------------//
@@ -70,7 +73,7 @@ public class InvoicePDFGenerator extends HttpServlet {
             cell = new PdfPCell(new Phrase("Vimbox Services Pte Ltd", boldFont));
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
-
+            
             String path = this.getClass().getClassLoader().getResource("").getPath();
             int occurence = 0;
             int slash = 0;
@@ -95,7 +98,7 @@ public class InvoicePDFGenerator extends HttpServlet {
             cell.setRowspan(2);
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
-
+            
             cell = new PdfPCell(new Phrase("18 Boon Lay Way\n#08-115\nTradehub 21\nSingapore\nSingapore 609966\n63394439\nadmin@vimboxmovers.com.sg\nwww.vimboxmovers.sg", normalFont));
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
@@ -113,7 +116,7 @@ public class InvoicePDFGenerator extends HttpServlet {
             table.setSpacingAfter(10);
             document.add(table);
             //---------//
-            
+
             // Customer address and quotation details //
             table = new PdfPTable(2);
             Phrase phrase = null;
@@ -131,7 +134,7 @@ public class InvoicePDFGenerator extends HttpServlet {
             table.addCell(cell);
             
             String name = "";
-            if(lead.getCustomer() != null){
+            if (lead.getCustomer() != null) {
                 name = lead.getCustomer().toString();
             }
             cell = new PdfPCell(new Phrase(name, normalFont));
@@ -148,7 +151,7 @@ public class InvoicePDFGenerator extends HttpServlet {
             
             ArrayList<String[]> addressFroms = lead.getAddressFrom();
             String[] addressFrom = null;
-            if(addressFroms.size() > 0){
+            if (addressFroms.size() > 0) {
                 addressFrom = addressFroms.get(0)[0].split("_");
             }
             String address = "";
@@ -160,7 +163,7 @@ public class InvoicePDFGenerator extends HttpServlet {
             cell.setPaddingBottom(10);
             cell.setBorder(Rectangle.BOTTOM);
             table.addCell(cell);
-
+            
             phrase = new Phrase();
             phrase.add(new Phrase("DUE DATE  ", boldFont));
             phrase.add(new Phrase(Converter.convertDatePdf(new DateTime()), normalFont));
@@ -229,7 +232,7 @@ public class InvoicePDFGenerator extends HttpServlet {
                 cell.setColspan(4);
                 cell.setBorder(Rectangle.NO_BORDER);
                 table.addCell(cell);
-
+                
                 if (vimboxItemNames != null) {
                     String[] vimboxItemRemarks = request.getParameterValues("vimboxItemRemark");
                     String[] vimboxItemQtys = request.getParameterValues("vimboxItemQty");
@@ -249,7 +252,7 @@ public class InvoicePDFGenerator extends HttpServlet {
                         table.addCell(cell);
                     }
                 }
-
+                
                 if (vimboxMaterialNames != null) {
                     String[] vimboxMaterialQtys = request.getParameterValues("vimboxMaterialQty");
                     for (int i = 0; i < vimboxMaterialNames.length; i++) {
@@ -274,96 +277,84 @@ public class InvoicePDFGenerator extends HttpServlet {
             }
 
             // Services //
-            /*String[] serviceNames = request.getParameterValues("serviceName");
-            if (serviceNames != null) {
-                
-                String[] serviceCharges = request.getParameterValues("serviceCharge");
-                for (int i = 0; i < serviceNames.length; i++) {
-                    table = new PdfPTable(4);
-                    String[] svcName = serviceNames[i].split("_");
-                    String priSvc = svcName[0];
-                    String secSvc = svcName[1];
-                    String svcDescription = LeadPopulationDAO.getServiceDescription(priSvc, secSvc);
-
+            ArrayList<String[]> services = LeadDAO.getServicesByLeadId(leadId);
+            table = new PdfPTable(4);
+            double totalCharges = 0;
+            if (services != null) {
+                for (String[] s : services) {
+                    String serviceName = s[0];
+                    String serviceCharge = s[1];
+                    String serviceMp = s[2];
+                    String serviceRm = s[3];
+                    String[] tempDescName = serviceName.split(" ");
+                    String svcDescription = LeadPopulationDAO.getSelectedServiceDesc(tempDescName[0], tempDescName[1]);
+                    String qty = "";
                     // Title //
-                    cell = new PdfPCell(new Phrase(priSvc + " Service", tBoldFont));
-                    cell.setColspan(3);
+
+                    cell = new PdfPCell();
+                    cell.addElement(new Phrase(serviceName + " Service", tBoldFont));
+                    cell.addElement(new Phrase(svcDescription, tNormalFont));
                     cell.setBorder(Rectangle.NO_BORDER);
+                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                    table.addCell(cell);
+                    //Remarks
+                    cell = new PdfPCell(new Phrase(serviceRm, tNormalFont));
+                    cell.setBorder(Rectangle.NO_BORDER);
+                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
                     table.addCell(cell);
 
-                    // Charges //
-                    double sCharge = Double.parseDouble(serviceCharges[i]);
-                    String svcCharge = df.format(sCharge);
-                    cell = new PdfPCell(new Phrase(svcCharge, tNormalFont));
+                    //Qty
+                    cell = new PdfPCell(new Phrase(qty, tNormalFont));
                     cell.setBorder(Rectangle.NO_BORDER);
-                    cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
                     table.addCell(cell);
 
-                    // Title Description //
-                    cell = new PdfPCell(new Phrase(svcDescription, tNormalFont));
-                    cell.setColspan(4);
-                    cell.setBorder(Rectangle.NO_BORDER);
-                    table.addCell(cell);
-
-                    // Special case : Moving (Display all the items, remarks and qtys //
-                    if (priSvc.equals("Moving")) {
-                        String[] custItemNames = request.getParameterValues("customerItemName");
-                        if (custItemNames != null) {
-                            String[] custItemRemarks = request.getParameterValues("customerItemRemark");
-                            String[] custItemQtys = request.getParameterValues("customerItemQty");
-                            for (int j = 0; j < custItemNames.length; j++) {
-                                String itemName = custItemNames[j];
-                                cell = new PdfPCell(new Phrase("- " + itemName, tNormalFont));
-                                cell.setBorder(Rectangle.NO_BORDER);
-                                table.addCell(cell);
-                                String itemRemark = custItemRemarks[j];
-                                cell = new PdfPCell(new Phrase(itemRemark, tNormalFont));
-                                cell.setBorder(Rectangle.NO_BORDER);
-                                table.addCell(cell);
-                                String itemQty = custItemQtys[j];
-                                cell = new PdfPCell(new Phrase(itemQty, tNormalFont));
-                                cell.setColspan(2);
-                                cell.setBorder(Rectangle.NO_BORDER);
-                                table.addCell(cell);
-                            }
-                        }
+                    //charges
+                    if (serviceCharge != null) {
+                        double sCharge = Double.parseDouble(serviceCharge);
+                        totalCharges += sCharge;
+                        String svcCharge = df.format(sCharge);
+                        cell = new PdfPCell(new Phrase(svcCharge, tNormalFont));
+                        cell.setBorder(Rectangle.NO_BORDER);
+                        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                        table.addCell(cell);
                     }
-                    table.setWidths(contentColWidths);
-                    table.setWidthPercentage(100);
-                    table.setSpacingBefore(10);
-                    document.add(table);
-                    document.add(line);
                 }
-            }*/
-            //------------------------//
+                
+                table.setSpacingBefore(10);
+                table.setWidths(contentColWidths);
+                table.setWidthPercentage(100);
+                document.add(table);
+                LineSeparator line2 = new LineSeparator();
+                line2.setOffset(-7);
+                line2.setLineColor(lineColor);
+                document.add(line2);
+            }
 
-            
-            
-            
-            /*table = new PdfPTable(2);
-            cell = new PdfPCell(new Phrase("TOTAL : ", tNormalFont));
-            cell.setBorder(Rectangle.NO_BORDER);
-            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-            cell.setVerticalAlignment(PdfPCell.ALIGN_BOTTOM);
-            table.addCell(cell);
-            
-            String tPrice = request.getParameter("totalPrice");
-            double totalPrice = Double.parseDouble(tPrice);
-            cell = new PdfPCell(new Phrase("S$" + df.format(totalPrice), priceFont));
-            cell.setBorder(Rectangle.NO_BORDER);
-            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-            table.addCell(cell);
-            
+//            
+            //Calculate total
+            table = new PdfPTable(4);
+            table.setSpacingBefore(10);
             table.setWidthPercentage(100);
-            table.setSpacingBefore(30);
-            table.setWidths(new float[]{80,20});
-            document.add(table);*/
+            table.setSpacingAfter(10);
+            cell = new PdfPCell(new Phrase("BALANCE DUE", tNormalFont));
+            cell.setColspan(3);
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            cell = new PdfPCell(new Phrase("$" + df.format(totalCharges), totalFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            cell.setColspan(1);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            
+            table.addCell(cell);
+            document.add(table);
             document.close();
-
+            
         } catch (DocumentException de) {
             throw new IOException(de.getMessage());
         }
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
