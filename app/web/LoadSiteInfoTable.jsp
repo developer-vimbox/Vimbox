@@ -65,7 +65,7 @@
                         String aT = leadAreaDiv[0];
                         String areaCounter = leadAreaDiv[1];
 
-                        out.println("<tr><td><table class='table table-bordered' id='" + divId + "_" + aT + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + aT + "_CustomerItemTableLbl'>" + leadName + "</label></tr>");
+                        out.println("<tr><td><table class='table table-bordered' id='" + divId + "_" + aT + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><center><label id='" + divId + "_" + aT + "_CustomerItemTableLbl'>" + leadName + "</label><center></tr>");
 
                         ArrayList<Item> customerItems = leadArea.getCustomerItems();
                         int trCounter = 1;
@@ -129,7 +129,7 @@
                         String aT = leadAreaDiv[0];
                         String areaCounter = leadAreaDiv[1];
 
-                        out.println("<tr><td><table class='table table-bordered' id='" + divId + "_" + aT + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + aT + "_VimboxItemTableLbl'>" + leadName + "</label></tr>");
+                        out.println("<tr><td><table class='table table-bordered' id='" + divId + "_" + aT + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><center><label id='" + divId + "_" + aT + "_VimboxItemTableLbl'>" + leadName + "</label></center></tr>");
 
                         int trCounter = 1;
                         ArrayList<Item> vimboxItems = new ArrayList<Item>();

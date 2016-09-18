@@ -40,7 +40,7 @@ public class SaveSiteSurveyController extends HttpServlet {
         String[] salesDivs = request.getParameterValues("salesDiv");
         String[] surveyAreas = request.getParameterValues("survey_area");
         for (String sD : salesDivs) {
-            
+
             String[] sDArr = sD.split("\\|");
             String salesDiv = sDArr[0];
 
@@ -53,7 +53,6 @@ public class SaveSiteSurveyController extends HttpServlet {
                 }
 
             }
-
             String storeys = request.getParameter(salesDiv + "_storeys");
             String distance = request.getParameter(salesDiv + "_distance");
 
@@ -68,7 +67,14 @@ public class SaveSiteSurveyController extends HttpServlet {
                 for (int i = 0; i < serviceNames.length; i++) {
                     String serviceName = serviceNames[i];
                     String serviceCharge = serviceCharges[i];
-                    total += Double.parseDouble(serviceCharge);
+                    try {
+                        if (serviceCharge.matches("-?\\d+(\\.\\d+)?")) {
+                            total += Double.parseDouble(serviceCharge);
+                        }
+
+                    } catch (Exception e) {
+                        total += 0;
+                    }
                     String serviceManpower = "";
                     String serviceRemark = "";
                     if (serviceName.contains("Manpower")) {
@@ -88,27 +94,50 @@ public class SaveSiteSurveyController extends HttpServlet {
             // Others //
             String[] others = {"storeyCharge", "pushCharge", "detourCharge", "materialCharge", "discount"};
             String[] otherCharges = new String[5];
-            String otherCharge0 = request.getParameter(salesDiv + "_storeyCharge");
-            otherCharges[0] = otherCharge0;
-            total += Double.parseDouble(otherCharge0);
+            if (otherCharges != null) {
+                try {
 
-            String otherCharge1 = request.getParameter(salesDiv + "_pushCharge");
-            otherCharges[1] = otherCharge1;
-            total += Double.parseDouble(otherCharge1);
+                    String otherCharge0 = request.getParameter(salesDiv + "_storeyCharge");
+                    otherCharges[0] = otherCharge0;
+                    if (otherCharge0.matches("-?\\d+(\\.\\d+)?")) {
+                        total += Double.parseDouble(otherCharge0);
+                    }
 
-            String otherCharge2 = request.getParameter(salesDiv + "_detourCharge");
-            otherCharges[2] = otherCharge2;
-            total += Double.parseDouble(otherCharge2);
+                    String otherCharge1 = request.getParameter(salesDiv + "_pushCharge");
+                    otherCharges[1] = otherCharge1;
+                      if (otherCharge1.matches("-?\\d+(\\.\\d+)?")) {
+                        total += Double.parseDouble(otherCharge1);
+                    }
 
-            String otherCharge3 = request.getParameter(salesDiv + "_materialCharge");
-            otherCharges[3] = otherCharge3;
-            total += Double.parseDouble(otherCharge3);
+                    String otherCharge2 = request.getParameter(salesDiv + "_detourCharge");
+                    otherCharges[2] = otherCharge2;
+                    total += Double.parseDouble(otherCharge2);
+                    if (otherCharge2.matches("-?\\d+(\\.\\d+)?")) {
+                        total += Double.parseDouble(otherCharge2);
+                    }
 
-            String otherCharge4 = request.getParameter(salesDiv + "_discount");
-            otherCharges[4] = otherCharge4;
-            total += Double.parseDouble(otherCharge4);
-            // Enter into leadother database //
-            LeadDAO.updateLeadOther(leadId, sD, others, otherCharges);
+                    String otherCharge3 = request.getParameter(salesDiv + "_materialCharge");
+                    otherCharges[3] = otherCharge3;
+                    total += Double.parseDouble(otherCharge3);
+                    if (otherCharge3.matches("-?\\d+(\\.\\d+)?")) {
+                        total += Double.parseDouble(otherCharge3);
+                    }
+
+                    String otherCharge4 = request.getParameter(salesDiv + "_discount");
+                    otherCharges[4] = otherCharge4;
+                    total += Double.parseDouble(otherCharge4);
+                    if (otherCharge4.matches("-?\\d+(\\.\\d+)?")) {
+                        total += Double.parseDouble(otherCharge4);
+                    }
+                    
+
+                } catch (Exception e) {
+                    total += 0;
+                }
+
+                // Enter into leadother database //
+                LeadDAO.updateLeadOther(leadId, sD, others, otherCharges);
+            }
                 //----------------------------------//
             //--------//
 
@@ -126,7 +155,6 @@ public class SaveSiteSurveyController extends HttpServlet {
                 String siteName = request.getParameter(salesDiv + "+" + ss + "+siteAreaName");
                 surveyAreasDBs.add(ss);
                 surveyAreaNamesDBs.add(siteName);
-
                 // Customer items //
                 String[] custItemNames = request.getParameterValues(salesDiv + "_" + ss + "_CustomerName");
                 String[] custItemRemarks = request.getParameterValues(salesDiv + "_" + ss + "_CustomerRemarks");
@@ -149,8 +177,8 @@ public class SaveSiteSurveyController extends HttpServlet {
                 String[] vimboxItemCharges = request.getParameterValues(salesDiv + "_" + ss + "_VimboxAddCharges");
                 String[] vimboxItemQtys = request.getParameterValues(salesDiv + "_" + ss + "_VimboxQuantity");
                 String[] vimboxItemUnits = request.getParameterValues(salesDiv + "_" + ss + "_VimboxUnits");
-                
-                if (vimboxItemNames != null &&  vimboxItemRemarks != null && vimboxItemCharges != null && vimboxItemQtys != null && vimboxItemUnits != null) {
+
+                if (vimboxItemNames != null && vimboxItemRemarks != null && vimboxItemCharges != null && vimboxItemQtys != null && vimboxItemUnits != null) {
                     // Enter into leadvimboxitem database //
                     LeadDAO.createSiteLeadVimboxItem(leadId, sD, ss, vimboxItemNames, vimboxItemRemarks, vimboxItemCharges, vimboxItemQtys, vimboxItemUnits);
                     //----------------------------------//
@@ -180,7 +208,7 @@ public class SaveSiteSurveyController extends HttpServlet {
                 LeadDAO.updateLeadSalesDiv(leadId, sD, surveyAreasDBString, surveyAreasNamesDBString);
             }
         }
-        
+
         LeadDAO.createLeadConfirmation(leadId, total);
 
         jsonOutput.addProperty("status", "SUCCESS");

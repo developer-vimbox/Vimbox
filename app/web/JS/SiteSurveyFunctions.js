@@ -223,8 +223,8 @@ function addArea(address, fullAddr) {
 
 function addAreaTable(divId, address, areaCounter) {
     var col = "<col width='20%'><col width='45%'><col width='10%'><col width='10%'><col width='10%'><col width='5%'>"
-    var newCustTable = "<tr><td><table class='table table-bordered'  id='" + divId + "_" + address + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + address + "_CustomerItemTableLbl'>Area</label></tr></table></td></tr>";
-    var newVimboxTable = "<tr><td><table class='table table-bordered' id='" + divId + "_" + address + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><label id='" + divId + "_" + address + "_VimboxItemTableLbl'>Area</label></tr></table></td></tr>";
+    var newCustTable = "<tr><td><table class='table table-bordered'  id='" + divId + "_" + address + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><center><label id='" + divId + "_" + address + "_CustomerItemTableLbl'>Area</label></center></tr></table></td></tr>";
+    var newVimboxTable = "<tr><td><table class='table table-bordered' id='" + divId + "_" + address + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><center><label id='" + divId + "_" + address + "_VimboxItemTableLbl'>Area</label></center></tr></table></td></tr>";
 
     $("#" + divId + "_CustomerItemTable").append(newCustTable);
     $("#" + divId + "_VimboxItemTable").append(newVimboxTable);
@@ -246,7 +246,6 @@ function displaySiteInfo() {
 }
 
 function displaySiteDiv(e, siteId) {
-    alert("1. " + siteId);
     var siteInfo = document.getElementById("siteInfo");
     siteInfo.style.display = "none";
     $('#siteInfo_tab').removeClass('selected');
@@ -314,7 +313,6 @@ $(document).on('change keyup paste', '#siteArea_name', function () {
 });
 
 function showTableDiv(e, address, areaCounter, divName) {
-    alert("2. " + e);
     var tr = $(e.parentNode);
     var tds = tr.children('td');
     for (i = 0; i < tds.length; i++) {

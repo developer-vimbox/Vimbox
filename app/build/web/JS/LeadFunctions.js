@@ -69,9 +69,9 @@ function followupLead(lead_id) {
                 errorMessage.innerHTML = errorMsg;
                 errorModal.style.display = "block";
                 setTimeout(function () {
-                        errorModal.style.display = "none";
-                        commentModal.style.display = "none";
-                        
+                    errorModal.style.display = "none";
+                    commentModal.style.display = "none";
+
                 }, 1300);
             })
             .fail(function (error) {
@@ -911,7 +911,7 @@ function viewCal() {
     var errorMessage = document.getElementById("salesMessage");
 
     var modal = document.getElementById("cal_modal");
-    $.get("SiteSurveyCalendar.jsp", {type:"Sales"}, function (data) {
+    $.get("SiteSurveyCalendar.jsp", {type: "Sales"}, function (data) {
         document.getElementById("cal_content").innerHTML = data;
     });
     var d = new Date();
@@ -950,7 +950,7 @@ function viewCal() {
             });
 
     var content = document.getElementById("ssCalTable");
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss", type:"Sales"}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss", type: "Sales"}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
@@ -982,33 +982,33 @@ function viewMovCal(type) {
     $("#dMonth").html(n);
     $("#dYear").html(y);
 
-        var fromArray = document.getElementsByName("addressfrom");
-        var addressFrom = "";
-        for (i = 0; i < fromArray.length; i++) {
-            addressFrom += fromArray[i].value + "|";
-        }
-        var toArray = document.getElementsByName("addressto");
-        var addressTo = "";
-        for (i = 0; i < toArray.length; i++) {
-            addressTo += toArray[i].value + "|";
-        }
+    var fromArray = document.getElementsByName("addressfrom");
+    var addressFrom = "";
+    for (i = 0; i < fromArray.length; i++) {
+        addressFrom += fromArray[i].value + "|";
+    }
+    var toArray = document.getElementsByName("addressto");
+    var addressTo = "";
+    for (i = 0; i < toArray.length; i++) {
+        addressTo += toArray[i].value + "|";
+    }
 
-        $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo})
-                .done(function (data) {
-                    if (data.status !== "SUCCESS") {
-                        errorStatus.innerHTML = "WARNING";
-                        errorMessage.innerHTML = data.message + "In order to select dom timeslots<br>";
-                        errorModal.style.display = "block";
-                        domPass = false;
-                    } else {
-                        domPass = true;
-                    }
-                })
-                .fail(function (error) {
-                    errorStatus.innerHTML = "ERROR";
-                    errorMessage.innerHTML = error;
+    $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo})
+            .done(function (data) {
+                if (data.status !== "SUCCESS") {
+                    errorStatus.innerHTML = "WARNING";
+                    errorMessage.innerHTML = data.message + "In order to select dom timeslots<br>";
                     errorModal.style.display = "block";
-                });
+                    domPass = false;
+                } else {
+                    domPass = true;
+                }
+            })
+            .fail(function (error) {
+                errorStatus.innerHTML = "ERROR";
+                errorMessage.innerHTML = error;
+                errorModal.style.display = "block";
+            });
     var content;
     if (type === 'Sales') {
         content = document.getElementById("ssCalTable");
@@ -1031,7 +1031,7 @@ function changeMonthYear(type) {
     var n = m_names[iMonth];
     $("#dMonth").html(n);
     $("#dYear").html(iYear);
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss, type:type}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getSS: ss, type: type}, function (data) {
         content.innerHTML = data;
     });
 }
@@ -1453,6 +1453,7 @@ function viewSchedule() {
 
 function selectDOMSlot(e) {
     var cell = $(e);
+
     var state = cell.data('state') || '';
     var cellHtml = cell.html().trim();
 
@@ -1506,33 +1507,31 @@ function selectDOMSlot(e) {
                 cell.data('state', 'selected');
                 break;
             case 'selected':
-                var table = document.getElementById("move_timeslot_table");
-                for (var i = 0, row; row = table.rows[i]; i++) {
+                var timetable = document.getElementById(carplate + "_timeslot_table");
+                var rowcount = 0;
+                for (var i = 0, row; row = timetable.rows[i]; i++) {
+                    rowcount++;
                     if ($(row).data('value').includes(carplate + "|" + truck + "|" + cellTiming)) {
                         row.parentNode.removeChild(row);
+                        rowcount--;
                         break;
+                    }
+                }
+                var table = document.getElementById("truck_assigned_table");
+                if (rowcount == 0) {
+                    var trs = $(table).find('> tbody > tr');
+                    if (trs != null) {
+                        for (var j = 0; j < trs.length; j++) {
+                            var currTr = trs[j];
+                            if (currTr.id == carplate) {
+                               currTr.parentNode.removeChild(currTr);
+                            }
+                        }
                     }
                 }
                 cell.removeClass('selected');
                 cell.data('state', '');
-                var empty = true;
-                var table = document.getElementById("moving_table");
-                for (var i = 0, row; row = table.rows[i]; i++) {
-                    for (var j = 0, col; col = row.cells[j]; j++) {
-                        var tableCell = $(col);
-                        var cellState = tableCell.data('state') || '';
-                        if (cellState === 'selected') {
-                            empty = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (empty) {
-                    $('#truck_carplate').val('');
-                    $('#truck').val('');
-                    document.getElementById("truck_label").innerHTML = "";
-                }
+//               
                 break;
             default:
                 break;
