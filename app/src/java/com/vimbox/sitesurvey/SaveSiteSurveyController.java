@@ -162,9 +162,6 @@ public class SaveSiteSurveyController extends HttpServlet {
                 String[] custItemQtys = request.getParameterValues(salesDiv + "_" + ss + "_CustomerQuantity");
                 String[] custItemUnits = request.getParameterValues(salesDiv + "_" + ss + "_CustomerUnits");
                 if (custItemCharges != null && custItemNames != null && custItemRemarks != null && custItemQtys != null && custItemUnits != null) {
-                    for (String custCh : custItemCharges) {
-                        System.out.println(custCh);
-                    }
                     // Enter into leadcustitem database //
                     LeadDAO.createSiteLeadCustItem(leadId, sD, ss, custItemNames, custItemRemarks, custItemCharges, custItemQtys, custItemUnits);
                     //----------------------------------//

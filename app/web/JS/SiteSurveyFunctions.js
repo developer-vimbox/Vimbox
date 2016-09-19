@@ -29,6 +29,7 @@ function loadSurveys(keyword, userId, type) {
 }
 
 function initSurvey() {
+
     var salesDiv = document.getElementsByName("salesDiv");
     for (i = 0; i < salesDiv.length; i++) {
         var divId = (salesDiv[i].value.split("|"))[0];
@@ -40,134 +41,144 @@ function initSurvey() {
         materialCharges.push({id: divId, value: 0});
     }
 
-    $('.tabcontent').each(function () {
-        var divId = this.id;
+    var tabcontent = document.getElementsByClassName("tab-content")[0];
+    var divs = tabcontent.getElementsByTagName("div");
+    for (var i = 0, divMax = divs.length; i < divMax; i++) {
+        var div = divs[i];
+        var fieldsets = div.getElementsByTagName("fieldset");
+        for (var j = 0, max = fieldsets.length; j < max; j++) {
+            var element = fieldsets[j];
+            var divId = element.id;
+            var totalUnit = totalUnits.find(function (obj) {
+                return obj.id === divId;
+            });
+            var box = boxes.find(function (obj) {
+                return obj.id === divId;
+            });
+            var addCharge = additionalCharges.find(function (obj) {
+                return obj.id === divId;
+            });
+            var mp = manpower.find(function (obj) {
+                return obj.id === divId;
+            });
+            var frml = formula.find(function (obj) {
+                return obj.id === divId;
+            });
+            var matCharge = materialCharges.find(function (obj) {
+                return obj.id === divId;
+            });
 
-        var totalUnit = totalUnits.find(function (obj) {
-            return obj.id === divId;
-        });
-        var box = boxes.find(function (obj) {
-            return obj.id === divId;
-        });
-        var addCharge = additionalCharges.find(function (obj) {
-            return obj.id === divId;
-        });
-        var mp = manpower.find(function (obj) {
-            return obj.id === divId;
-        });
-        var frml = formula.find(function (obj) {
-            return obj.id === divId;
-        });
-        var matCharge = materialCharges.find(function (obj) {
-            return obj.id === divId;
-        });
+            var customerTable = document.getElementById(divId + "_CustomerItemTable");
+            var vimboxTable = document.getElementById(divId + "_VimboxItemTable");
 
-        var customerTable = document.getElementById(divId + "_CustomerItemTable");
-        var vimboxTable = document.getElementById(divId + "_VimboxItemTable");
 
-        var customerTableAreas = customerTable.getElementsByTagName("table");
-        var vimboxTableAreas = vimboxTable.getElementsByTagName("table");
+            var customerTableAreas = customerTable.getElementsByTagName("table");
+            var vimboxTableAreas = vimboxTable.getElementsByTagName("table");
 
-        if (customerTableAreas != null) {
-            for (i = 0; i < customerTableAreas.length; i++) {
-                var tableArea = customerTableAreas[i];
-                var id = tableArea.id;
-                var idArr = id.split("_");
-                // divId 0 aT 1 areaCounter 2 //
-                initSurveyTable("", idArr[1], idArr[2], divId);
-                var areaTotal = 0;
-                $("#" + id + " > tbody  > tr").each(function () {
-                    var inputs = this.getElementsByTagName("input");
-                    if (inputs.length > 0) {
-                        var name = inputs[0].value;
-                        if (name === "Boxes") {
-                            box.value += Number(inputs[4].value);
-                        }
-                        var charges = inputs[2].value;
-                        if (!isNaN(charges)) {
-                            addCharge.value += Number(charges);
-                        }
-                        totalUnit.value += Number(inputs[4].value);
-                        areaTotal += Number(inputs[4].value);
-                    }
-                });
-                areaUnits.push({id: idArr[1] + "_" + idArr[2] + "_SelectedItemsTable", value: areaTotal});
-                selectedItemType.push({id: idArr[1] + "_" + idArr[2], value: "ItemsDiv"});
-            }
+            if (customerTableAreas != null) {
+                for (i = 0; i < customerTableAreas.length; i++) {
+                    var tableArea = customerTableAreas[i];
+                    var id = tableArea.id;
+                    var idArr = id.split("_");
+                    // divId 0 aT 1 areaCounter 2 //
 
-            for (i = 0; i < vimboxTableAreas.length; i++) {
-                var tableArea = vimboxTableAreas[i];
-                var id = tableArea.id;
-                var idArr = id.split("_");
-                var tempVar1 = idArr[1];
-                var tempVar2 = idArr[2];
-                // divId 0 aT 1 areaCounter 2 //
-                var areaTotal = areaUnits.find(function (obj) {
-                    return obj.id === tempVar1 + "_" + tempVar2 + "_SelectedItemsTable";
-                });
-
-                $("#" + id + " > tbody  > tr").each(function () {
-                    var inputs = this.getElementsByTagName("input");
-                    if (inputs.length > 0) {
-                        var name = inputs[0].value;
-                        if (name === "Boxes") {
-                            box.value += Number(inputs[4].value);
+                    initSurveyTable("", idArr[1], idArr[2], divId);
+                    var areaTotal = 0;
+                    $("#" + id + " > tbody  > tr").each(function () {
+                        var inputs = this.getElementsByTagName("input");
+                        if (inputs.length > 0) {
+                            var name = inputs[0].value;
+                            if (name === "Boxes") {
+                                box.value += Number(inputs[4].value);
+                            }
+                            var charges = inputs[2].value;
+                            if (!isNaN(charges)) {
+                                addCharge.value += Number(charges);
+                            }
                             totalUnit.value += Number(inputs[4].value);
-                            areaTotal.value += Number(inputs[4].value);
+                            areaTotal += Number(inputs[4].value);
                         }
-                        var charges = inputs[2].value;
-                        if (!isNaN(charges)) {
-                            matCharge.value += Number(charges);
+                    });
+                    areaUnits.push({id: idArr[1] + "_" + idArr[2] + "_SelectedItemsTable", value: areaTotal});
+                    selectedItemType.push({id: idArr[1] + "_" + idArr[2], value: "ItemsDiv"});
+                }
+
+                for (i = 0; i < vimboxTableAreas.length; i++) {
+                    var tableArea = vimboxTableAreas[i];
+                    var id = tableArea.id;
+                    var idArr = id.split("_");
+                    var tempVar1 = idArr[1];
+                    var tempVar2 = idArr[2];
+                    // divId 0 aT 1 areaCounter 2 //
+                    var areaTotal = areaUnits.find(function (obj) {
+                        return obj.id === tempVar1 + "_" + tempVar2 + "_SelectedItemsTable";
+                    });
+
+                    $("#" + id + " > tbody  > tr").each(function () {
+                        var inputs = this.getElementsByTagName("input");
+                        if (inputs.length > 0) {
+                            var name = inputs[0].value;
+                            if (name === "Boxes") {
+                                box.value += Number(inputs[4].value);
+                                totalUnit.value += Number(inputs[4].value);
+                                areaTotal.value += Number(inputs[4].value);
+                            }
+                            var charges = inputs[2].value;
+                            if (!isNaN(charges)) {
+                                matCharge.value += Number(charges);
+                            }
                         }
-                    }
-                });
-                document.getElementById(tempVar1 + "_" + tempVar2 + "_total").innerHTML = areaTotal.value;
-            }
-        }
-
-        $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
-            var cellHtml = this.innerHTML.trim();
-            var manpowerPresent = cellHtml.match(/manpower/i);
-            if (manpowerPresent) {
-                var serviceCharge = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
-                var serviceArray = serviceCharge.split(",");
-                var svcSplit = serviceArray[0].split("|");
-                var pri = svcSplit[0];
-                var sec = svcSplit[1];
-                var id = (pri + "_" + sec).replace(" ", "_");
-                (mp.value)[id] = Number(document.getElementById(divId + '_' + id + "manpowerInput").value);
-            }
-        });
-
-        var svcs = [];
-        $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
-            var inputs = this.getElementsByTagName("input");
-            var id = $(this).attr('id');
-            (frml.value)[id] = inputs[2].value;
-            var table = this.getElementsByTagName("table");
-            $(table).append("<tr>" + generateBreakdown(id, divId) + "</tr>");
-            svcs.push(id);
-        });
-
-        $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
-            var cellHtml = this.innerHTML.trim();
-            var inputs = this.getElementsByTagName('input');
-            if (cellHtml) {
-                var serviceCharge = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
-                var serviceArray = serviceCharge.split(",");
-                var svcSplit = serviceArray[0].split("|");
-                var pri = svcSplit[0];
-                var sec = svcSplit[1];
-                var id = (pri + "_" + sec).replace(" ", "_");
-                if (svcs.indexOf(divId + "_" + id) > -1) {
-                    $(this).addClass('selected');
-                    $(this).data('state', 'selected');
+                    });
+                    document.getElementById(tempVar1 + "_" + tempVar2 + "_total").innerHTML = areaTotal.value;
                 }
             }
-        });
-        //document.getElementById(divId + "_totalUnits").innerHTML = "Total Units : " + totalUnit.value;
-        update_services(divId);
-    });
+
+            $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
+                var cellHtml = this.innerHTML.trim();
+                var manpowerPresent = cellHtml.match(/manpower/i);
+                if (manpowerPresent) {
+                    var serviceCharge = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
+                    var serviceArray = serviceCharge.split(",");
+                    var svcSplit = serviceArray[0].split("|");
+                    var pri = svcSplit[0];
+                    var sec = svcSplit[1];
+                    var id = (pri + "_" + sec).replace(" ", "_");
+                    (mp.value)[id] = Number(document.getElementById(divId + '_' + id + "manpowerInput").value);
+                }
+            });
+
+            var svcs = [];
+            $("#" + divId + "_servicesTable > tbody  > tr").each(function () {
+                var inputs = this.getElementsByTagName("input");
+                var id = $(this).attr('id');
+                (frml.value)[id] = inputs[2].value;
+                var table = this.getElementsByTagName("table");
+                $(table).append("<tr>" + generateBreakdown(id, divId) + "</tr>");
+                svcs.push(id);
+            });
+
+            $("#" + divId + "_serviceTable > tbody  > tr > td").each(function () {
+                var cellHtml = this.innerHTML.trim();
+                var inputs = this.getElementsByTagName('input');
+                if (cellHtml) {
+                    var serviceCharge = cellHtml.substring(cellHtml.indexOf("{") + 1, cellHtml.lastIndexOf("}"));
+                    var serviceArray = serviceCharge.split(",");
+                    var svcSplit = serviceArray[0].split("|");
+                    var pri = svcSplit[0];
+                    var sec = svcSplit[1];
+                    var id = (pri + "_" + sec).replace(" ", "_");
+                    if (svcs.indexOf(divId + "_" + id) > -1) {
+                        $(this).addClass('selected');
+                        $(this).data('state', 'selected');
+                    }
+                }
+            });
+        }
+    }
+
+    //document.getElementById(divId + "_totalUnits").innerHTML = "Total Units : " + totalUnit.value;
+    update_services(divId);
+
 }
 
 function startSurvey(leadId, date, timeslot, type) {
@@ -322,6 +333,7 @@ function showTableDiv(e, address, areaCounter, divName) {
     var itemTypeObject = selectedItemType.find(function (obj) {
         return obj.id === address + "_" + areaCounter;
     });
+
     itemTypeObject.value = divName;
     var div = document.getElementById(address + "_" + areaCounter + "_" + itemTypeObject.value);
     var td = $(div.parentNode);
@@ -647,7 +659,7 @@ function closeItemModal(modalName) {
 
 function selectService(divId) {
     var modal = document.getElementById(divId + "_serviceModal");
-     $(divId + "_serviceModal").appendTo("body");
+    $(divId + "_serviceModal").appendTo("body");
     modal.style.display = "block";
 }
 
@@ -981,10 +993,10 @@ function complete() {
 }
 
 function sales_survey_setup() {
-    loadSalesSurveys('','Pending');
-    loadSalesSurveys('','Ongoing');
-    loadSalesSurveys('','Completed');
-    loadSalesSurveys('','Cancelled');
+    loadSalesSurveys('', 'Pending');
+    loadSalesSurveys('', 'Ongoing');
+    loadSalesSurveys('', 'Completed');
+    loadSalesSurveys('', 'Cancelled');
 }
 
 function loadSalesSurveys(keyword, type) {
@@ -1161,25 +1173,25 @@ function showSiteInfoTable(id, divId) {
 }
 function showSiteInfoTables(id, divId, address, leadId, fromto) {
     var content = "";
-    if(fromto == 'from'){
+    if (fromto == 'from') {
         content = document.getElementById("fromContent");
         content.style.display = 'block';
         var to = document.getElementById("toContent");
         to.style.display = 'none';
-    }else if(fromto == 'to'){
+    } else if (fromto == 'to') {
         content = document.getElementById("toContent");
         content.style.display = 'block';
         var from = document.getElementById("fromContent");
         from.style.display = 'none';
-    } 
+    }
     $.get("LoadSiteInfoTable.jsp", {getField: id, getDivId: divId, getAdd: address, leadId: leadId}, function (data) {
         content.innerHTML = data;
     });
 
 }
-function displaytodefault(){
-     $("#toonload").trigger('click');
+function displaytodefault() {
+    $("#toonload").trigger('click');
 }
-function displayfromdefault(){
-     $("#fromonload").trigger('click');
+function displayfromdefault() {
+    $("#fromonload").trigger('click');
 }

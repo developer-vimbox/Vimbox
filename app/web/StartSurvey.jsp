@@ -174,7 +174,7 @@
                                                             <%
                                                                 for (String address : addressesFrom) {
                                                                     String addressTab = addressTabs.get(address);
-                                                                    String[] addrDetails = lead.getStoreysPushingDFrom(address);
+                                                                    String[] addrDetails = lead.getStoreysPushingD(address);
 
                                                                     LeadDiv leadDiv = lead.getSalesDivByAddress(address);
                                                                     String divId = (leadDiv.getSalesDiv().split("\\|"))[0];
@@ -530,7 +530,7 @@
                                                                     out.println("<table class='table table-bordered' width='100%' border='1'>");
                                                                     out.println("<col width='50%'>");
                                                                     String addressTab = addressTabs.get(address);
-                                                                    String[] addrDetails = lead.getStoreysPushingDFrom(address);
+                                                                    String[] addrDetails = lead.getStoreysPushingD(address);
                                                                     
                                                                     LeadDiv leadDiv = lead.getSalesDivByAddress(address);
                                                                     String divId = (leadDiv.getSalesDiv().split("\\|"))[0];
@@ -1189,6 +1189,10 @@
                     if (data.completed === "YES") {
                         setTimeout(function () {
                             window.location.href = "MySites.jsp";
+                        }, 500);
+                    }else{
+                        setTimeout(function () {
+                            modal.style.display = "none";
                         }, 500);
                     }
                 },

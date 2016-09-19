@@ -130,7 +130,7 @@ public class Lead {
         return null;
     }
     
-    public String[] getStoreysPushingDFrom(String address){
+    public String[] getStoreysPushingD(String address){
         String[] storeysPushingD = null;
         for(String [] addFrom : addressFrom){
             String[] addrArray = addFrom[0].split("_");
@@ -138,6 +138,16 @@ public class Lead {
             if(addrString.equals(address)){
                 storeysPushingD = new String[]{addFrom[1], addFrom[2]};
                 break;
+            }
+        }
+        if(storeysPushingD == null){
+            for(String [] addTo : addressTo){
+                String[] addrArray = addTo[0].split("_");
+                String addrString = addrArray[0] + " #" + addrArray[1] + "-" + addrArray[2] + " S" + addrArray[3];
+                if(addrString.equals(address)){
+                    storeysPushingD = new String[]{addTo[1], addTo[2]};
+                    break;
+                }
             }
         }
         return storeysPushingD;
