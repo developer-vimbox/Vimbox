@@ -11,6 +11,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.vimbox.customer.Customer;
 import com.vimbox.database.LeadDAO;
 import com.vimbox.database.LeadPopulationDAO;
 import com.vimbox.util.Converter;
@@ -31,6 +32,8 @@ public class QuotationPDFGenerator extends HttpServlet {
     private BaseColor tHeaderColor = new BaseColor(202, 225, 255);
     private BaseColor invoiceColor = new BaseColor(72, 136, 216);
     private BaseColor lineColor = new BaseColor(211, 211, 211);
+    private BaseColor redColor = new BaseColor(255, 0, 0);
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,6 +46,12 @@ public class QuotationPDFGenerator extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/pdf");
+        String leadId = request.getParameter("leadId");
+        String refNum = request.getParameter("refNum");
+        Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
+        ArrayList<LeadDiv> leadDivs = lead.getSalesDivs();
+        Customer cust = lead.getCustomer();
+        
         try {
             // Document Settings //
             Document document = new Document();
@@ -54,15 +63,16 @@ public class QuotationPDFGenerator extends HttpServlet {
             Font tNormalFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.NORMAL);
             Font priceFont = new Font(Font.FontFamily.TIMES_ROMAN, 15, Font.BOLD);
             Font totalFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.NORMAL, redColor);
             DecimalFormat df = new DecimalFormat("#,###.00");
             document.open();
             //-------------------//
 
             // Company details and logo //
-            PdfPTable table = new PdfPTable(1);
+            PdfPTable table = new PdfPTable(2);
             // the cell object
             PdfPCell cell;
-            cell = new PdfPCell(new Phrase("VIMBOX SERVICES PRIVATE LIMITED (201319626W)\n18 BOON LAY WAY #08-115\nTRADEHUB 21 SINGAPORE 609966\nTEL 63394439 WEB WWW.VIMBOXMOVERS.SG", normalFont));
+            cell = new PdfPCell(new Phrase("VIMBOX SERVICES PRIVATE LIMITED (201319626W)\n18 BOON LAY WAY #08-115\nTRADEHUB 21 SINGAPORE 609966\nTEL 63394439\nWWW.VIMBOXMOVERS.SG", normalFont));
             cell.setBorder(Rectangle.BOTTOM);
             table.addCell(cell);
             
@@ -94,8 +104,51 @@ public class QuotationPDFGenerator extends HttpServlet {
             table.setSpacingAfter(10);
             document.add(table);
             //--------------------------//
+            
+            table = new PdfPTable(1);
+            cell = new PdfPCell(new Phrase("QUOTATION", invoiceFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(cell);
+            table.setSpacingAfter(10);
+            document.add(table);
 
+            table = new PdfPTable(2);
+            cell = new PdfPCell(new Phrase("Our Ref: " + refNum, normalFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Validity of Quote: ONE(1) Month", redFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            table.addCell(cell);
+            table.setWidthPercentage(100);
+            table.setSpacingAfter(10);
+            document.add(table);
 
+            table = new PdfPTable(1);
+            String dateCreated = Converter.convertDateQuotationPdf(lead.getDt());
+            cell = new PdfPCell(new Phrase(dateCreated, normalFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            table.setWidthPercentage(100);
+            table.setSpacingAfter(10);
+            document.add(table);
+            
+            table = new PdfPTable(1);
+            cell = new PdfPCell(new Phrase(cust.toString().toUpperCase(), boldFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            table.setWidthPercentage(100);
+            document.add(table);
+            
+            table = new PdfPTable(1);
+            cell = new PdfPCell(new Phrase("TEL: " + cust.getContact(), boldFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            table.setWidthPercentage(100);
+            document.add(table);
+            
             // Services and breakdown //
             /*float[] contentColWidths = new float[]{40f, 40f, 10f, 10f};
             LineSeparator line = new LineSeparator();

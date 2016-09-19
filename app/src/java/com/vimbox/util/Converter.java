@@ -9,6 +9,8 @@ import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Minutes;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class Converter {
     
@@ -349,5 +351,11 @@ public class Converter {
             }
         }
         return toReturn;
+    }
+    
+    public static String convertDateQuotationPdf(DateTime datetime) {
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMMM yyyy");
+        String str = fmt.print(datetime);
+        return str;
     }
 }

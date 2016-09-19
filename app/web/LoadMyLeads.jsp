@@ -1,3 +1,4 @@
+<%@page import="com.vimbox.database.OperationsDAO"%>
 <%@page import="com.vimbox.database.LeadPopulationDAO"%>
 <%@page import="com.vimbox.util.Converter"%>
 <%@page import="com.vimbox.customer.Customer"%>
@@ -102,8 +103,36 @@
         <%
             if(leadType.equals("Sales")){
                 if(status.equals("Pending")){
+                    
+                    String refNum = "VBSPL_";
+                    refNum += customer.getLast_name().charAt(0) + "" + customer.getFirst_name().charAt(customer.getFirst_name().length() - 1);
+                    int custContact = customer.getContact() % 1000;
+                    refNum += Integer.toString(custContact) + "_";
+                    refNum += lead.getType();
+                    
+                    String dateOfMove = OperationsDAO.getDOMbyLeadID(lead.getId());
+                    if(dateOfMove != "") {
+                        int index = dateOfMove.indexOf("-");
+                        String yy = dateOfMove.substring(index - 2, index);
+                        String mm = dateOfMove.substring(index + 1, index + 3);
+                        refNum += "_" + mm + yy;
+                    }
+                    
+                    
+                    refNum = refNum.toUpperCase();
         %>
-            <button class="btn btn-default">Quotation</button>
+            <form method="post" class="btn" style="
+    padding-left: 0px;
+    padding-right: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+">
+                <input type="hidden" name="leadId" value="<%=lead.getId()%>">
+                <input type="hidden" name="refNum" value="<%=refNum%>">
+                <input class='btn btn-default' type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
+            </form>
         <%
                 }else{
         %>
