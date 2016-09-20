@@ -38,14 +38,30 @@ public class AddMoveTypeServlet extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
         PrintWriter out = response.getWriter();
-
+        boolean error = false;
+        String errorMsg = "";
         // Retrieves the entered movetype //
         String moveType = request.getParameter("moveType");
-        LeadPopulationDAO.addMoveType(moveType);
+        String abb = request.getParameter("abb");
+        if(moveType.isEmpty()){
+            error = true;
+            errorMsg += "Please enter move type<br>";
+        }
+        if(abb.isEmpty()){
+            error = true;
+            errorMsg += "Please enter abbreviation<br>";
+        }
+        
         JsonObject jsonOutput = new JsonObject();
-
-        jsonOutput.addProperty("status", "SUCCESSFULLY ADDED");
-        jsonOutput.addProperty("errorMsg", "Move type added");
+        if(error) {
+            jsonOutput.addProperty("status", "ERROR");
+            jsonOutput.addProperty("errorMsg", errorMsg);
+        } else {
+            LeadPopulationDAO.addMoveType(moveType, abb);
+            jsonOutput.addProperty("status", "SUCCESS");
+            jsonOutput.addProperty("errorMsg", "Move type successfully added!");
+        }
+        
 
         out.println(jsonOutput);
     }

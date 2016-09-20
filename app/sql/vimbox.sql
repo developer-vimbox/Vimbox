@@ -724,6 +724,7 @@ INSERT INTO `system_modules` (`type`, `department`, `designation`, `modules`, `w
 
 CREATE TABLE IF NOT EXISTS `system_move_types` (
   `type` varchar(20) NOT NULL,
+  `abbreviation` varchar(10) NOT NULL,
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -732,10 +733,10 @@ CREATE TABLE IF NOT EXISTS `system_move_types` (
 --
 
 INSERT INTO `system_move_types` (`type`) VALUES
-('Disposal'),
-('Office'),
-('Residential'),
-('Storage');
+('Disposal', 'DIS'),
+('Office', 'OFF'),
+('Residential', 'HH'),
+('Storage', 'STORE');
 
 -- --------------------------------------------------------
 

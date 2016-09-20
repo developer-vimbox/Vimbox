@@ -71,8 +71,9 @@ function addMoveType() {
     var msgStatus = document.getElementById("error-status");
     var msgContent = document.getElementById("error-content");
     var moveType = $('#moveType').val();
+    var abb = $('#abb').val();
 
-    $.getJSON("AddMoveTypeServlet", {moveType: moveType})
+    $.getJSON("AddMoveTypeServlet", {moveType: moveType, abb: abb})
             .done(function (data) {
                 var status = data.status;
                 var errorMsg = data.errorMsg;
@@ -83,7 +84,10 @@ function addMoveType() {
                     modal.style.display = "none";
                 }, 800);
                 viewMoveType();
-                document.getElementById("moveType").value = "";
+                if (status === "SUCCESS") {
+                    document.getElementById("moveType").value = "";
+                    document.getElementById("abb").value = "";
+                }
             })
             .fail(function (error) {
                 msgStatus.innerHTML = "ERROR";
@@ -93,6 +97,7 @@ function addMoveType() {
                     modal.style.display = "none";
                 }, 800);
                 document.getElementById("moveType").value = "";
+                document.getElementById("abb").value = "";
             });
 }
 

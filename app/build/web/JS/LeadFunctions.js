@@ -1509,14 +1509,15 @@ function selectDOMSlot(e) {
             case 'selected':
                 var timetable = document.getElementById(carplate + "_timeslot_table");
                 var rowcount = 0;
+                var removeRow;
                 for (var i = 0, row; row = timetable.rows[i]; i++) {
                     rowcount++;
                     if ($(row).data('value').includes(carplate + "|" + truck + "|" + cellTiming)) {
-                        row.parentNode.removeChild(row);
+                        removeRow = row;
                         rowcount--;
-                        break;
                     }
                 }
+                removeRow.parentNode.removeChild(removeRow);
                 var table = document.getElementById("truck_assigned_table");
                 if (rowcount == 0) {
                     var trs = $(table).find('> tbody > tr');

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class LeadPopulationDAO {
 
     private static final String GET_MOVE_TYPES = "SELECT * FROM system_move_types";
+    private static final String GET_MOVE_TYPE_ABB = "SELECT * FROM system_move_types WHERE type=?";
     private static final String GET_ENQUIRIES = "SELECT * FROM system_enquiries";
     private static final String GET_SOURCES = "SELECT * FROM system_sources";
     private static final String GET_REFERRALS = "SELECT * FROM system_referrals";
@@ -22,7 +23,7 @@ public class LeadPopulationDAO {
     private static final String GET_SECONDARY_SERVICES = "SELECT secondary_service FROM system_services where primary_service=?";
     private static final String GET_SECONDARY_SERVICE_FORMULA = "SELECT formula FROM system_services WHERE primary_service=? AND secondary_service=?";
     private static final String GET_SECONDARY_SERVICE_DESCRIPTION = "SELECT system_services FROM services WHERE primary_service=? AND secondary_service=?";
-    private static final String ADD_MOVE_TYPE = "INSERT INTO system_move_types VALUES (?)";
+    private static final String ADD_MOVE_TYPE = "INSERT INTO system_move_types VALUES (?,?)";
     private static final String ADD_REF_TYPE = "INSERT INTO system_referrals VALUES (?)";
     private static final String ADD_SVC_TYPE = "INSERT INTO system_services VALUES (?,?,?,?)";
     private static final String DEL_MOVE_TYPE = "DELETE FROM system_move_types WHERE type=?";
@@ -140,8 +141,8 @@ public class LeadPopulationDAO {
         return results;
     }
 
-    public static ArrayList<String> getMoveTypes() {
-        ArrayList<String> results = new ArrayList<String>();
+    public static ArrayList<String[]> getMoveTypes() {
+        ArrayList<String[]> results = new ArrayList<String[]>();
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -151,7 +152,9 @@ public class LeadPopulationDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 String type = rs.getString("type");
-                results.add(type);
+                String abb = rs.getString("abbreviation");
+                String[] types = {type, abb};
+                results.add(types);
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -160,8 +163,29 @@ public class LeadPopulationDAO {
         }
         return results;
     }
+    
+    public static String getMoveTypeAbb(String mtype) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String abb = "";
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_MOVE_TYPE_ABB);
+            ps.setString(1, mtype);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                abb = rs.getString("abbreviation");
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return abb;
+    }
 
-    public static void addMoveType(String moveType) {
+    public static void addMoveType(String moveType, String abb) {
         Connection con = null;
         PreparedStatement ps = null;
 
@@ -169,6 +193,7 @@ public class LeadPopulationDAO {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(ADD_MOVE_TYPE);
             ps.setString(1, moveType);
+            ps.setString(2, abb);
             ps.executeUpdate();
             ps.close();
             con.close();

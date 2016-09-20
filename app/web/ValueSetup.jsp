@@ -57,6 +57,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Abbreviation: </label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control" id="abb" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label"> </label>
                                                     <div class="col-sm-4 text-center">
                                                         <button onclick="addMoveType()" class="btn btn-primary">Add Move Type</button>
