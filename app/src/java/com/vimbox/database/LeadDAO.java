@@ -48,7 +48,10 @@ public class LeadDAO {
     private static final String GET_LEAD_REMARK = "SELECT * FROM leadremark WHERE lead_id=? AND sales_div=?";
     private static final String GET_LEAD_SALES_DIV = "SELECT * FROM leadsalesdiv WHERE lead_id=?";
     private static final String GET_LEAD_CONFIRMATION = "SELECT * FROM leadconfirmation WHERE lead_id=?";
-
+    private static final String GET_WEEK_LEAD_CONFIRMATION = "SELECT lc.`lead_id`, lc.`total_amount`, DAYNAME(li.`datetime_of_creation`) as name_of_day FROM `leadconfirmation`as lc inner join `leadinfo` li on lc.`lead_id` = li.`lead_id` where lc.`lead_id` in (SELECT `lead_id` FROM `leadinfo` WHERE YEARWEEK(`datetime_of_creation`, 1)=YEARWEEK(?, 1)) ORDER BY name_of_day ASC";
+    private static final String GET_MTH_LEAD_CONFIRMATION = "SELECT lc.`lead_id`, lc.`total_amount`, MONTHNAME(li.`datetime_of_creation`) as month_name FROM `leadconfirmation`as lc inner join `leadinfo` li on lc.`lead_id` = li.`lead_id` where lc.`lead_id` in (SELECT `lead_id` FROM `leadinfo` WHERE  YEAR(`datetime_of_creation`)=YEAR(NOW())) ORDER BY month_name ASC";
+    private static final String GET_YR_LEAD_CONFIRMATION = "SELECT lc.`lead_id`, lc.`total_amount`, MONTHNAME(li.`datetime_of_creation`) as month_name FROM `leadconfirmation`as lc inner join `leadinfo` li on lc.`lead_id` = li.`lead_id` where lc.`lead_id` in (SELECT `lead_id` FROM `leadinfo` WHERE  YEAR(`datetime_of_creation`) = ?) ORDER BY month_name ASC;  ";
+            
     private static final String DELETE_LEAD_INFO = "DELETE FROM leadinfo WHERE lead_id=?";
     private static final String DELETE_LEAD_ENQUIRY = "DELETE FROM leadenquiry WHERE lead_id=?";
     private static final String DELETE_LEAD_MOVE = "DELETE FROM leadmove WHERE lead_id=?";
@@ -139,6 +142,76 @@ public class LeadDAO {
             ConnectionManager.close(con, ps, rs);
         }
         return 0;
+    }
+    
+    
+     public static ArrayList<String[]> getWeekLeadConfirmation(String date) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_WEEK_LEAD_CONFIRMATION);
+            ps.setString(1, date);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String leadid = rs.getString("lead_id");
+                String totalAmt = Double.toString(rs.getDouble("total_amount")); 
+                String nameOfDay = rs.getString("name_of_day");
+                results.add(new String[]{leadid, totalAmt, nameOfDay});
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
+    }
+      public static ArrayList<String[]> getMonthLeadConfirmation() {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_MTH_LEAD_CONFIRMATION);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String leadid = rs.getString("lead_id");
+                String totalAmt = Double.toString(rs.getDouble("total_amount")); 
+                String nameOfDay = rs.getString("month_name");
+                results.add(new String[]{leadid, totalAmt, nameOfDay});
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
+    }
+  public static ArrayList<String[]> getYearLeadConfirmation(String year) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_YR_LEAD_CONFIRMATION);
+            ps.setString(1, year);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String leadid = rs.getString("lead_id");
+                String totalAmt = Double.toString(rs.getDouble("total_amount")); 
+                String nameOfDay = rs.getString("month_name");
+                results.add(new String[]{leadid, totalAmt, nameOfDay});
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
     }
 
     public static String getLeadConfirmedEmail(int leadId) {

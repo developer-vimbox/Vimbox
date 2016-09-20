@@ -146,7 +146,17 @@
 <link rel="stylesheet" type="text/css" href="assets/icons/linecons/linecons.css">
 <link rel="stylesheet" type="text/css" href="assets/icons/spinnericon/spinnericon.css">
 
+<!-- Chart.js -->
 
+<script type="text/javascript" src="assets/widgets/charts/chart-js/chart-core.js"></script>
+
+<script type="text/javascript" src="assets/widgets/charts/chart-js/chart-bar.js"></script>
+<script type="text/javascript" src="assets/widgets/charts/chart-js/chart-doughnut.js"></script>
+<script type="text/javascript" src="assets/widgets/charts/chart-js/chart-line.js"></script>
+<script type="text/javascript" src="assets/widgets/charts/chart-js/chart-polar.js"></script>
+<script type="text/javascript" src="assets/widgets/charts/chart-js/chart-radar.js"></script>
+
+<script type="text/javascript" src="assets/widgets/charts/chart-js/chart-demo.js"></script>
 <!-- WIDGETS -->
 
 <link rel="stylesheet" type="text/css" href="assets/widgets/accordion-ui/accordion.css">
@@ -636,6 +646,7 @@
                                 <li> <a href="MyLeads.jsp" title="My Leads"><span>My Leads</span></a></li>
                                 <li> <a href="SalesSites.jsp" title="Sites"><span>Sites Surveys</span></a></li>
                                 <li> <a href="SalesOperations.jsp" title="Operations"><span>Operations</span></a></li>
+                                <li> <a href="ViewSalesReport.jsp" title="Sales Report"><span>Sales Report</span></a></li>
                             </ul>
 
                         </div><!-- .sidebar-submenu -->
