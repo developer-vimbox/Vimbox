@@ -108,7 +108,18 @@
                     refNum += customer.getLast_name().charAt(0) + "" + customer.getFirst_name().charAt(customer.getFirst_name().length() - 1);
                     int custContact = customer.getContact() % 1000;
                     refNum += Integer.toString(custContact) + "_";
-                    refNum += lead.getType();
+                    String toms = lead.getTom();
+                    System.out.println(toms);
+                    System.out.println(toms.contains("|"));
+                    if (toms.contains("|")) {
+                        String[] tomSplit = lead.getTom().split("\\|");
+                        for (int i = 0; i < tomSplit.length; i++) {
+                            System.out.println(tomSplit[i]);
+                            refNum += LeadPopulationDAO.getMoveTypeAbb(tomSplit[i]);
+                        }
+                    } else {
+                        refNum += LeadPopulationDAO.getMoveTypeAbb(toms);
+                    }
                     
                     ArrayList<String[]> dateOfMove = OperationsDAO.getDOMbyLeadID(lead.getId());
                     // always get the last dom, sql already sorted by descending order. just get(0) will do.
