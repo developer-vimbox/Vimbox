@@ -126,6 +126,10 @@ INSERT INTO `access_control` (`page`, `modules`) VALUES
 ('TicketForum.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
 ('TicketsHistory.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
 ('ViewAttendance.jsp', 'Admin|HR'),
+('ViewSalesReport.jsp', 'Admin|Sales'),
+('LoadSalesReport.jsp', 'Admin|Sales'),
+('LoadMonthSalesReport.jsp', 'Admin|Sales'),
+('LoadYearSalesReport.jsp', 'Admin|Sales'),
 ('ValueSetup.jsp', 'Admin');
 
 -- --------------------------------------------------------
