@@ -32,6 +32,7 @@ public class LeadDAO {
     private static final String CREATE_LEAD_REMARK = "INSERT INTO leadremark VALUES (?,?,?)";
     private static final String CREATE_LEAD_SALES_DIV = "INSERT INTO leadsalesdiv VALUES (?,?,?,?)";
     private static final String CREATE_LEAD_CONFIRMATION = "INSERT INTO leadconfirmation VALUES (?,?,?,?,?)";
+    private static final String CREATE_QUOTATION_REF = "INSERT INTO leadquotation VALUES (?,?)";
 
     private static final String GET_ALL_LEAD_INFO_BY_KEYWORD = "SELECT * FROM (SELECT  * FROM leadinfo ldi left outer join customers cust USING (customer_id)) joined, users urs WHERE joined.owner_user = urs.nric AND (CONCAT(joined.last_name, ' ', joined.first_name) LIKE ? OR CONCAT(urs.last_name, ' ', urs.first_name) LIKE ? OR contact LIKE ? OR email LIKE ? OR lead_id LIKE ? OR status LIKE ? OR datetime_of_creation LIKE ?)  ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_INFO_USER = "SELECT * FROM leadinfo left outer join customers USING (customer_id) WHERE (CONCAT(last_name, ' ', first_name) LIKE ? OR type LIKE ? OR contact LIKE ? OR lead_id LIKE ? OR datetime_of_creation LIKE ?) AND owner_user=? AND status=? ORDER BY datetime_of_creation DESC";
@@ -48,7 +49,8 @@ public class LeadDAO {
     private static final String GET_LEAD_REMARK = "SELECT * FROM leadremark WHERE lead_id=? AND sales_div=?";
     private static final String GET_LEAD_SALES_DIV = "SELECT * FROM leadsalesdiv WHERE lead_id=?";
     private static final String GET_LEAD_CONFIRMATION = "SELECT * FROM leadconfirmation WHERE lead_id=?";
-
+    private static final String GET_QUOTATION_SERVICE = "SELECT * FROM leadquotation WHERE ref_num=?";
+    
     private static final String DELETE_LEAD_INFO = "DELETE FROM leadinfo WHERE lead_id=?";
     private static final String DELETE_LEAD_ENQUIRY = "DELETE FROM leadenquiry WHERE lead_id=?";
     private static final String DELETE_LEAD_MOVE = "DELETE FROM leadmove WHERE lead_id=?";
@@ -74,6 +76,7 @@ public class LeadDAO {
     private static final String UPDATE_LEAD_OTHER = "UPDATE leadother SET charge=? WHERE lead_id=? AND sales_div=? AND other=?";
     private static final String UPDATE_LEAD_SALES_DIV = "UPDATE leadsalesdiv SET survey_area=?, survey_area_name=? WHERE lead_id=? AND sales_div=?";
     private static final String GET_LEAD_SERVICES_BY_LEADID = "SELECT * FROM leadservice WHERE lead_id=?";
+    private static final String UPDATE_QUOTATION_SERVICE = "UPDATE leadquotation SET service_include=? WHERE ref_num=?";
 
     public static void deleteLead(int leadId) {
         Connection con = null;
@@ -1532,6 +1535,59 @@ public class LeadDAO {
         } finally {
             ConnectionManager.close(con, ps, null);
             return services;
+        }
+    }
+    
+    public static void createQuotation(String refNum, String serviceInclude) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(CREATE_QUOTATION_REF);
+            ps.setString(1, refNum);
+            ps.setString(2, serviceInclude);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static String getQuotationService(String refNum){
+        String service = "";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_QUOTATION_SERVICE);
+            ps.setString(1,refNum);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                service = rs.getString("service_include");  
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return service;
+    }
+    
+    public static void updateQuotationService(String refNum, String serviceInclude) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(UPDATE_QUOTATION_SERVICE);
+            ps.setString(1, serviceInclude);
+            ps.setString(2, refNum);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
         }
     }
 

@@ -101,9 +101,9 @@
         <button class="btn btn-default" onclick="viewLead('<%=lead.getId()%>')">VS</button>
         <button class="btn btn-default" onclick="viewFollowups('<%=lead.getId()%>')">VF</button>
         <%
-            if(leadType.equals("Sales")){
-                if(status.equals("Pending")){
-                    
+            if (leadType.equals("Sales")) {
+                if (status.equals("Pending")) {
+
                     String refNum = "VBSPL_";
                     refNum += customer.getLast_name().charAt(0) + "" + customer.getFirst_name().charAt(customer.getFirst_name().length() - 1);
                     int custContact = customer.getContact() % 1000;
@@ -120,34 +120,56 @@
                     } else {
                         refNum += LeadPopulationDAO.getMoveTypeAbb(toms);
                     }
-                    
+
                     ArrayList<String[]> dateOfMove = OperationsDAO.getDOMbyLeadID(lead.getId());
                     // always get the last dom, sql already sorted by descending order. just get(0) will do.
-                    if(!dateOfMove.isEmpty()) {
+                    if (!dateOfMove.isEmpty()) {
                         String[] dts = dateOfMove.get(0);
                         String dd = dts[0];
-                        if(dd != "") {
+                        if (dd != "") {
                             int index = dd.indexOf("-");
                             String yy = dd.substring(index - 2, index);
                             String mm = dd.substring(index + 1, index + 3);
                             refNum += "_" + mm + yy;
                         }
                     }
-                    
+
                     refNum = refNum.toUpperCase();
+                    String qService = LeadDAO.getQuotationService(refNum);
         %>
-            <form method="post" class="btn" style="
-    padding-left: 0px;
-    padding-right: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-    border-top-width: 0px;
-    border-bottom-width: 0px;
-">
-                <input type="hidden" name="leadId" value="<%=lead.getId()%>">
-                <input type="hidden" name="refNum" value="<%=refNum%>">
-                <input class='btn btn-default' type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
-            </form>
+        <button class="btn btn-default" onclick="viewQuotation('<%=refNum%>')">Quotation</button>
+        <div id="quotation_modal_<%=refNum%>" class="modal">
+            <div class="modal-content" style="width: 430px; min-height: 330px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('quotation_modal_<%=refNum%>')">×</span>
+                    <center><h2>Input for Quotation Generation</h2></center>
+                </div>
+                <div class="modal-body">        
+                    <form method="post" class="btn">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2"></label>
+                                <div class="col-sm-8">
+                                    The cost of moving service includes:<br>
+                                    <textarea rows="4" cols="41" class="form-control" name="serviceIncludes"><%=qService%></textarea>
+                                    <input type="hidden" name="leadId" value="<%=lead.getId()%>">
+                                    <input type="hidden" name="refNum" value="<%=refNum%>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2"></label>
+                                <div class="col-sm-8">
+                                    <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
+                                </div>
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <%
                 }else{
         %>

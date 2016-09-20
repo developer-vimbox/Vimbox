@@ -2371,3 +2371,10 @@ function showYearReport() {
     });
 
 }
+
+function viewQuotation(refNum) {
+    var s = "quotation_modal_" + refNum;
+    document.getElementById(s).style.display = "block";
+}
+
+

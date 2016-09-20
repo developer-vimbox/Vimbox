@@ -52,6 +52,13 @@ public class QuotationPDFGenerator extends HttpServlet {
         response.setContentType("application/pdf");
         String leadId = request.getParameter("leadId");
         String refNum = request.getParameter("refNum");
+        String serviceIncludes = request.getParameter("serviceIncludes");
+        String qService = LeadDAO.getQuotationService(refNum);
+        if(qService == "") {
+            LeadDAO.createQuotation(refNum, serviceIncludes);
+        } else {
+            LeadDAO.updateQuotationService(refNum, serviceIncludes);
+        }
         Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
         ArrayList<LeadDiv> leadDivs = lead.getSalesDivs();
         Customer cust = lead.getCustomer();
@@ -285,9 +292,7 @@ public class QuotationPDFGenerator extends HttpServlet {
             document.add(table);
 
             table = new PdfPTable(1);
-            cell = new PdfPCell(new Phrase("     •     Moving service based on the items shown to our surveyor (listed in the messages) inclusive of manpower and transport;\n"
-                    + "     •     Necessary dismantling / assembling of furniture;\n"
-                    + "     •     Necessary protective wrapping of furniture;", normalFont));
+            cell = new PdfPCell(new Phrase(serviceIncludes, normalFont));
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
             table.setWidthPercentage(100);

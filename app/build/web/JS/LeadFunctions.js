@@ -1270,7 +1270,7 @@ function assignDOM() {
         message.innerHTML = "Date of Move selected!";
         modal.style.display = "block";
         var schedule = document.getElementById("schedule_modal");
-        if(schedule == null){
+        if (schedule == null) {
             schedule = document.getElementById("site_schedule_modal");
         }
         schedule.style.display = "none";
@@ -1525,7 +1525,7 @@ function selectDOMSlot(e) {
                         for (var j = 0; j < trs.length; j++) {
                             var currTr = trs[j];
                             if (currTr.id == carplate) {
-                               currTr.parentNode.removeChild(currTr);
+                                currTr.parentNode.removeChild(currTr);
                             }
                         }
                     }
@@ -2206,9 +2206,9 @@ function amountCheck(leadId) {
                 document.getElementById("ttlAmtLbl").innerHTML = Number(data.total);
                 document.getElementById("dptLbl").innerHTML = Number(data.total) * (Number(data.deposit) / 100);
                 document.getElementById("amtCltLbl").innerHTML = Number(data.collected);
-                if(Number(data.collected) >= (Number(data.total) * (Number(data.deposit) / 100))){
+                if (Number(data.collected) >= (Number(data.total) * (Number(data.deposit) / 100))) {
                     document.getElementById("show_amt").style.display = "none";
-                }else{
+                } else {
                     document.getElementById("show_amt").style.display = "block";
                 }
                 modal.style.display = "block";
@@ -2265,3 +2265,116 @@ function viewSalesPortion(leadId) {
     });
     modal.style.display = "block";
 }
+function showSalesReport(selopt) {
+    var opt = selopt.value;
+    if (opt == 'week') {
+        showWeekReport();
+    
+//    } else if (opt == 'month') {
+//        showMonthReport();
+//    } 
+    }else if (opt == 'year') {
+       showMonthReport();
+    }
+}
+
+function showWeekReport() {
+
+    var chdate = document.getElementById("seldate");
+    var chdatelbl = document.getElementById("seldatelbl");
+
+    chdatelbl.style.display = "block";
+    chdate.style.display = "block";
+
+
+//    var selyearlbl = document.getElementById("selyearlbl");
+//    var selyear = document.getElementById("selyear");
+//    if (selyearlbl.style.display == "block" && selyear.style.display == "block") {
+//        selyearlbl.style.display = "none";
+//        selyear.style.display = "none";
+//    }
+    $(document).ready(function () {
+        var schtable = document.getElementById("shwreport");
+        $.ajax({
+            url: 'LoadSalesReport.jsp',
+            data: {seldate: chdate.value},
+            type: 'POST',
+            success: function (response) {
+                $(schtable).html(response);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(xhr.responseText);
+                alert(thrownError);
+            }
+        });
+    });
+
+}
+function showMonthReport() {
+    var chdate = document.getElementById("seldate");
+    var chdatelbl = document.getElementById("seldatelbl");
+    if (chdate.style.display == "block" && chdatelbl.style.display == "block") {
+        chdatelbl.style.display = "none";
+        chdate.style.display = "none";
+    }
+//    var selyearlbl = document.getElementById("selyearlbl");
+//    var selyear = document.getElementById("selyear");
+//    if (selyearlbl.style.display == "block" && selyear.style.display == "block") {
+//        selyearlbl.style.display = "none";
+//        selyear.style.display = "none";
+//    }
+    var schtable = document.getElementById("shwreport");
+    $.ajax({
+        url: 'LoadMonthSalesReport.jsp',
+        type: 'POST',
+        success: function (response) {
+            $(schtable).html(response);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status);
+            alert(xhr.responseText);
+            alert(thrownError);
+        }
+    });
+
+}
+function showYearReport() {
+    
+    var chdate = document.getElementById("seldate");
+    var chdatelbl = document.getElementById("seldatelbl");
+    if (chdate.style.display == "block" && chdatelbl.style.display == "block") {
+        chdatelbl.style.display = "none";
+        chdate.style.display = "none";
+    }
+    var selyearlbl = document.getElementById("selyearlbl");
+    var selyear = document.getElementById("selyear");
+    alert(selyear.value);
+    if (selyearlbl.style.display == "none" && selyear.style.display == "none") {
+        selyearlbl.style.display = "block";
+        selyear.style.display = "block";
+    }
+    var schtable = document.getElementById("shwreport");
+    $.ajax({
+        url: 'LoadYearSalesReport.jsp',
+        data: {selyear: selyear.value},
+        type: 'POST',
+        success: function (response) {
+            alert(response);
+            $(schtable).html(response);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status);
+            alert(xhr.responseText);
+            alert(thrownError);
+        }
+    });
+
+}
+
+function viewQuotation(refNum) {
+    var s = "quotation_modal_" + refNum;
+    document.getElementById(s).style.display = "block";
+}
+
+
