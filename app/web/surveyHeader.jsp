@@ -310,6 +310,7 @@
                                 <li> <a href="MyLeads.jsp" title="My Leads"><span>My Leads</span></a></li>
                                 <li> <a href="MySalesSites.jsp" title="My Sites"><span>My Sites</span></a></li>
                                 <li> <a href="SalesOperations.jsp" title="Operations"><span>Operations</span></a></li>
+                                <li> <a href="ViewSalesReport.jsp" title="Sales Report"><span>Sales Report</span></a></li>
                             </ul>
 
                     </li>
