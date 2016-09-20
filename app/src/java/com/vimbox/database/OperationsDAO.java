@@ -14,7 +14,7 @@ public class OperationsDAO {
     private static final String GET_MOVERS_BY_SUP_AND_DOM = "SELECT * FROM operations_attendance WHERE dom = ? AND supervisor = ?";
     private static final String REMOVE_MOVER = "DELETE FROM operations_attendance WHERE supervisor = ? AND dom = ? AND assigned_mover = ?";
     private static final String UPDATE_ATTENDANCE = "UPDATE operations_attendance SET attendance = ?, duration = ? WHERE supervisor = ? AND assigned_mover = ? AND dom = ?";
-    private static final String GET_DOM_BY_LEADID = "SELECT * FROM operations_assigned WHERE lead_id = ? ORDER BY dom DESC";
+    private static final String GET_DOM_BY_LEADID = "SELECT * FROM operations_assigned WHERE lead_id = ? GROUP BY dom ORDER BY dom DESC";
     
     public static boolean checkAssigned(String dom, String sMover) {
         Connection con = null;
@@ -152,18 +152,21 @@ public class OperationsDAO {
         }
     }
     
-    public static String getDOMbyLeadID(int leadId){
+    public static ArrayList<String[]> getDOMbyLeadID(int leadId){
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String dom = "";
+        ArrayList<String[]> dom = new ArrayList<String[]>();
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_DOM_BY_LEADID);
             ps.setInt(1,leadId);
             rs = ps.executeQuery();
-            if(rs.next()){
-                dom = rs.getString("dom");
+            while(rs.next()){
+                String d = rs.getString("dom");
+                String ts = rs.getString("timeslot");
+                String[] dts = {d, ts};
+                dom.add(dts);
             }
         } catch (SQLException se) {
             se.printStackTrace();

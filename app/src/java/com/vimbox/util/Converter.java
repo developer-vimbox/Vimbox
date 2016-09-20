@@ -358,4 +358,12 @@ public class Converter {
         String str = fmt.print(datetime);
         return str;
     }
+    
+    public static DateTime convertStringtoDt(String datetime) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTime dt = formatter.parseDateTime(datetime);
+        System.out.println("str: " + datetime);
+        System.out.println("dt: " + dt);
+        return dt;
+    }
 }

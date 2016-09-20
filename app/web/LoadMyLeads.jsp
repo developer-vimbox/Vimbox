@@ -110,14 +110,18 @@
                     refNum += Integer.toString(custContact) + "_";
                     refNum += lead.getType();
                     
-                    String dateOfMove = OperationsDAO.getDOMbyLeadID(lead.getId());
-                    if(dateOfMove != "") {
-                        int index = dateOfMove.indexOf("-");
-                        String yy = dateOfMove.substring(index - 2, index);
-                        String mm = dateOfMove.substring(index + 1, index + 3);
-                        refNum += "_" + mm + yy;
+                    ArrayList<String[]> dateOfMove = OperationsDAO.getDOMbyLeadID(lead.getId());
+                    // always get the last dom, sql already sorted by descending order. just get(0) will do.
+                    if(!dateOfMove.isEmpty()) {
+                        String[] dts = dateOfMove.get(0);
+                        String dd = dts[0];
+                        if(dd != "") {
+                            int index = dd.indexOf("-");
+                            String yy = dd.substring(index - 2, index);
+                            String mm = dd.substring(index + 1, index + 3);
+                            refNum += "_" + mm + yy;
+                        }
                     }
-                    
                     
                     refNum = refNum.toUpperCase();
         %>
