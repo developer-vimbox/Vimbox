@@ -2,10 +2,10 @@ function assign_jobs_setup() {
     loadAssignJobs('');
 }
 
-function selectAllJobs(source){
+function selectAllJobs(source) {
     var checkboxes = document.getElementsByName('selectedJobs');
-    for(var i=0, n=checkboxes.length;i<n;i++) {
-      checkboxes[i].checked = source.checked;
+    for (var i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = source.checked;
     }
 }
 
@@ -15,24 +15,24 @@ function loadAssignJobs(keyword) {
     });
 }
 
-function assignJobModal(){
+function assignJobModal() {
     var modal = document.getElementById("job_error_modal");
     var status = document.getElementById("job_error_status");
     var message = document.getElementById("job_error_message");
-    
+
     var leadIds = "";
     var leadIdsArray = $("input[name=selectedJobs]");
     for (var i = 0; i < leadIdsArray.length; i++) {
-        if(leadIdsArray[i].checked){
+        if (leadIdsArray[i].checked) {
             leadIds += leadIdsArray[i].value + "|";
         }
     }
-    
-    if(!leadIds){
+
+    if (!leadIds) {
         status.innerHTML = "ERROR";
         message.innerHTML = "Please select at least one job";
         modal.style.display = "block";
-    }else{
+    } else {
         $.get("LoadAssignJobModal.jsp", {leadIds: leadIds}, function (data) {
             document.getElementById("assignJobContent").innerHTML = data;
             document.getElementById("assignJobModal").style.display = "block";
@@ -40,14 +40,14 @@ function assignJobModal(){
     }
 }
 
-function assignJob(){
+function assignJob() {
     var modal = document.getElementById("job_error_modal");
     var status = document.getElementById("job_error_status");
     var message = document.getElementById("job_error_message");
-    
+
     var leadIds = document.getElementById("leadIds").value;
     var supervisor = document.getElementsByName("supervisor")[0].value;
-    
+
     $.get("AssignJobController", {leadIds: leadIds, supervisor: supervisor}, function (data) {
         status.innerHTML = data.status;
         message.innerHTML = data.message;
@@ -78,18 +78,18 @@ function confirmJobCancel(leadId, date, timeslot, status) {
     var message = document.getElementById("operation_error_message");
 
     var displayMsg = "";
-    if(status === 'Booked'){
+    if (status === 'Booked') {
         displayMsg = "Are you sure that you want to cancel this job assignment?";
-    }else{
+    } else {
         displayMsg = "There will be no refund for any cancellation done within 7 days away from confirmed Date of Move.<br>Are you sure that you want to cancel this job assignment?";
     }
     status.innerHTML = "Cancel Confirmation";
     var table = "<table width='100%'>";
     table += "<tr><td colspan='2'>" + displayMsg + "</td></tr>";
     table += "<tr><td align='center'>";
-    if(status === 'Booked'){
+    if (status === 'Booked') {
         table += "<button onclick=\"jobCancel('" + leadId + "','" + date + "','" + timeslot + "')\">YES</button>";
-    }else{
+    } else {
         table += "<button onclick=\"jobCancel('" + leadId + "','" + date + "','" + timeslot + "')\">YES</button>";
     }
     table += "</td><td align='center'><button onclick=\"closeModal('operation_error_modal'); return false;\">No</button></td></tr>";
@@ -154,7 +154,7 @@ function removeMover(ic) {
     var dom = $('#dom').val();
     $.getJSON("RemoveMoverController", {supervisor: supervisor, mover: ic, dom: dom})
             .done(function (data) {
-               document.getElementById("full-time").checked = true;
+                document.getElementById("full-time").checked = true;
                 loadBody('Full');
             })
             .fail(function (error) {
@@ -165,7 +165,7 @@ function removeMover(ic) {
 
 function loadBody(empType) {
     loadMovers(empType);
-    
+
     var dom = document.getElementById('dom').value;
     var supervisor = document.getElementById('supervisor').value;
     var table = document.getElementById("movers_table");
@@ -187,7 +187,7 @@ function assignMovers() {
             .done(function (data) {
                 var status = data.status;
                 var errorMsg = data.message;
-                
+
                 errorStatus.innerHTML = status;
                 errorMessage.innerHTML = errorMsg;
                 errorModal.style.display = "block";
@@ -206,16 +206,86 @@ function assignMovers() {
             });
 }
 
-$(document).on('change', '.attendance_radio', function(){
-    
+$(document).on('change', '.attendance_radio', function () {
+
     var value = $(this).val();
     var name = $(this).attr('name');
     var nric = (name.split("_"))[1];
-    if(value === 'Late'){
+    if (value === 'Late') {
         document.getElementById("late_" + nric + "_h").disabled = false;
         document.getElementById("late_" + nric + "_m").disabled = false;
-    }else{
+    } else {
         document.getElementById("late_" + nric + "_h").disabled = true;
         document.getElementById("late_" + nric + "_m").disabled = true;
     }
 });
+
+function changeDom(leadId, date, timeslot, status) {
+    var details = leadId + "|" + date + "|" + timeslot + "|" + status;
+    var modal = document.getElementById("change_dom_cal_modal");
+    $.get("ChangeDOMCalendar.jsp", {details: details}, function (data) {
+        document.getElementById("change_dom_cal_content").innerHTML = data;
+    });
+    var d = new Date();
+    var m = d.getMonth();
+    var y = d.getFullYear();
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[d.getMonth()];
+    $("#dMonth").html(n);
+    $("#dYear").html(y);
+
+    var content = document.getElementById("change_dom_cal_table");
+
+    $.get("ChangeDOMCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt", details: details}, function (data) {
+        content.innerHTML = data;
+    });
+    modal.style.display = "block";
+}
+
+function changeDomMonthYear(details) {
+    var content = document.getElementById("change_dom_cal_table");
+
+    var iYear = document.getElementById('iYear').value;
+    var iMonth = document.getElementById('iMonth').value;
+    var tt = document.getElementById('ttSelect').value;
+    var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var n = m_names[iMonth];
+    $("#dMonth").html(n);
+    $("#dYear").html(iYear);
+
+    $.get("ChangeDOMCalendarPopulate.jsp", {getYear: iYear, getMonth: iMonth, getTT: tt, details: details}, function (data) {
+        content.innerHTML = data;
+    });
+}
+
+function viewChangeDOMDaySchedule(date, details) {
+    var errmodal = document.getElementById("operation_error_modal");
+    var status = document.getElementById("operation_error_status");
+    var message = document.getElementById("operation_error_message");
+    var truck = $('#ttSelect').val();
+    $.get("RetrieveChangeDOMSchedule.jsp", {details: details, date: date, truck: truck}, function (results) {
+        document.getElementById("change_dom_schedule_content").innerHTML = results;
+        document.getElementById("change_dom_schedule_modal").style.display = "block";
+        $('#change_dom_form').ajaxForm({
+            dataType: 'json',
+            success: function (data) {
+                status.innerHTML = data.status;
+                message.innerHTML = data.message;
+                errmodal.style.display = "block";
+                if (data.status === "SUCCESS") {
+                    setTimeout(function () {
+                        sales_operation_setup();
+                        errmodal.style.display = "none";
+                        document.getElementById("change_dom_cal_modal").style.display = "none";
+                        document.getElementById("change_dom_schedule_modal").style.display = "none";
+                    }, 500);
+                }
+            },
+            error: function (data) {
+                status.innerHTML = "ERROR";
+                message.innerHTML = data;
+                errmodal.style.display = "block";
+            }
+        });
+    });
+}

@@ -77,11 +77,12 @@
                 out.println("<td align='center'>");
                 if(jStatus.equals("Booked")){
                     out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"changeDom('" + leadId + "', '" + jj + "', '" + timeslot + "', 'Booked')\">Change</button>");
                 }else if(jStatus.equals("Confirmed")){
                     // DIFFERENT CANCELLATION
                     out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
                     // CHANGE OF DATES
-                    out.println("<button class='btn btn-default'>Change</button>");
+                    out.println("<button class='btn btn-default' onclick=\"changeDom('" + leadId + "', '" + jj + "', '" + timeslot + "', 'Confirmed')\">Change</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -128,11 +129,12 @@
                 out.println("<td align='center'>");
                 if(jStatus.equals("Booked")){
                     out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
+                    out.println("<button class='btn btn-default' onclick=\"changeDom('" + leadId + "', '" + jj + "', '" + timeslot + "', 'Booked')\">Change</button>");
                 }else if(jStatus.equals("Confirmed")){
                     // DIFFERENT CANCELLATION
                     out.println("<button class='btn btn-default' onclick=\"confirmJobCancel('" + leadId + "', '" + jj + "', '" + timeslot + "','" + jStatus + "')\">Cancel</button>");
                     // CHANGE OF DATES
-                    out.println("<button class='btn btn-default'>Change</button>");
+                    out.println("<button class='btn btn-default' onclick=\"changeDom('" + leadId + "', '" + jj + "', '" + timeslot + "', 'Confirmed')\">Change</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");

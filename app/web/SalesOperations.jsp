@@ -4,13 +4,30 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>My Operations</title>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="JS/OperationFunctions.js"></script>
-        <script src="JS/ModalFunctions.js"></script>
-        <link rel="stylesheet" type="text/css" href="CSS/modalcss.css">
     </head>
     <%@include file="header.jsp"%>
     <body onload="sales_operation_setup()">
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        <script src="JS/OperationFunctions.js"></script>
+        <div id="change_dom_cal_modal" class="modal">
+            <div class="modal-content" style="width: 90%;">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('change_dom_cal_modal')">×</span>
+                    <br>
+                    <div id="change_dom_cal_content"></div>
+                    <br>
+                    <div id="change_dom_cal_table"></div>
+                </div>
+            </div>
+        </div>
+        <div id="change_dom_schedule_modal" class="modal">
+            <div class="modal-content" style="width: 95%;">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('change_dom_schedule_modal')">×</span>
+                    <div id="change_dom_schedule_content"></div>
+                </div>
+            </div>
+        </div>
         <div id="operation_error_modal" class="modal">
             <!-- Modal content -->
             <div class="message-modal-content">

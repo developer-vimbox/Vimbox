@@ -33,6 +33,7 @@ public class JobDAO {
     private static final String UPDATE_JOB_SUPERVISOR = "UPDATE operations_assigned SET supervisor=? WHERE lead_id=?";
     private static final String GET_JOBS_BY_SUPERVISOR = "SELECT * FROM operations_assigned WHERE supervisor =? group by lead_id, dom";
     private static final String GET_JOBS_BY_SUPERVISOR_AND_DATE = "SELECT * FROM operations_assigned WHERE supervisor = ? AND dom = ?";
+    private static final String DELETE_JOBS_BY_LEAD_ID_DATE_TIMESLOT = "DELETE FROM operations_assigned WHERE lead_id = ? AND dom = ? AND timeslot = ?";
     
     public static boolean checkBookedJobsByLeadId(int leadId){
         Connection con = null;
@@ -662,5 +663,22 @@ public class JobDAO {
             ConnectionManager.close(con, ps, rs);
         }
         return results;
+    }
+    
+    public static void deleteJobByIdDateTimeslot(int leadId, String date, String timeslot){
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(DELETE_JOBS_BY_LEAD_ID_DATE_TIMESLOT);
+            ps.setInt(1, leadId);
+            ps.setString(2, date);
+            ps.setString(3, timeslot);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
     }
 }
