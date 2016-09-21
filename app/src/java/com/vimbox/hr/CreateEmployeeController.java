@@ -135,18 +135,16 @@ public class CreateEmployeeController extends HttpServlet {
             String path = "";
 
             if (filePart != null) {
-                boolean fileCheck = fileValidation(filePart);
-                try {
-                    String fName = filePart.getSubmittedFileName();
-                    String fileExt = fName.substring(fName.lastIndexOf("."));
+                String fName = filePart.getSubmittedFileName();
+                if(fName != null){
+                    boolean fileCheck = fileValidation(filePart);
                     if (!fileCheck) {
                         errorMsg += "Please upload a valid image (png, jpg or bmp)<br>";
                     } else {
+                        String fileExt = fName.substring(fName.lastIndexOf("."));
                         fileName = user_nric + "-driver-license" + fileExt;
                         path = System.getProperty("user.dir") + "/documents/licenses/" + fileName;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -270,8 +268,8 @@ public class CreateEmployeeController extends HttpServlet {
                 } catch (FileNotFoundException fne) {
                     errorMsg += "Error reading uploaded image<br>";
                 } finally {
-                    if (out != null) {
-                        out.close();
+                    if (outpt != null) {
+                        outpt.close();
                     }
                     if (filecontent != null) {
                         filecontent.close();

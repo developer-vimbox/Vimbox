@@ -516,7 +516,8 @@
                                                     <%
                                                         String[] tom = lead.getTom().split("\\|");
 
-                                                        for (String type : moveTypes) {
+                                                        for (String[] moveType : moveTypes) {
+                                                            String type = moveType[0];
                                                             boolean present = false;
                                                             for (String tm : tom) {
                                                                 if (tm.equals(type)) {
@@ -1343,7 +1344,13 @@
                                                                                 <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
-                                                                                        <input class='form-control storeyCharge' type="number" step="0.01" min="0" id="<%=divId%>_storeyCharge" name="<%=divId%>_storeyCharge" value="<%=others.get("storeyCharge")%>">
+                                                                                        <%
+                                                                                            String charge = others.get("storeyCharge");
+                                                                                            if(charge == null){
+                                                                                                charge = "0.00";
+                                                                                            }
+                                                                                        %>
+                                                                                        <input class='form-control storeyCharge' type="number" step="0.01" min="0" id="<%=divId%>_storeyCharge" name="<%=divId%>_storeyCharge" value="<%=charge%>">
                                                                                     </div> </td>
                                                                             </tr>
                                                                         </table>
@@ -1357,7 +1364,13 @@
                                                                                 <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
-                                                                                        <input class='form-control pushCharge'  type="number" step="0.01" min="0" id="<%=divId%>_pushCharge"  name="<%=divId%>_pushCharge" value="<%=others.get("pushCharge")%>">
+                                                                                        <%
+                                                                                            charge = others.get("pushCharge");
+                                                                                            if(charge == null){
+                                                                                                charge = "0.00";
+                                                                                            }
+                                                                                        %>
+                                                                                        <input class='form-control pushCharge'  type="number" step="0.01" min="0" id="<%=divId%>_pushCharge"  name="<%=divId%>_pushCharge" value="<%=charge%>">
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
@@ -1372,7 +1385,13 @@
                                                                                 <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
-                                                                                        <input class='form-control detourCharge' type="number" step="0.01" min="0" id="<%=divId%>_detourCharge"  name="<%=divId%>_detourCharge" value="<%=others.get("detourCharge")%>">
+                                                                                        <%
+                                                                                            charge = others.get("detourCharge");
+                                                                                            if(charge == null){
+                                                                                                charge = "0.00";
+                                                                                            }
+                                                                                        %>
+                                                                                        <input class='form-control detourCharge' type="number" step="0.01" min="0" id="<%=divId%>_detourCharge"  name="<%=divId%>_detourCharge" value="<%=charge%>">
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
@@ -1387,7 +1406,13 @@
                                                                                 <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
-                                                                                        <input class='form-control materialCharge' type="number" step="0.01" min="0" id="<%=divId%>_materialCharge"  name="<%=divId%>_materialCharge" value="<%=others.get("materialCharge")%>">
+                                                                                        <%
+                                                                                            charge = others.get("materialCharge");
+                                                                                            if(charge == null){
+                                                                                                charge = "0.00";
+                                                                                            }
+                                                                                        %>
+                                                                                        <input class='form-control materialCharge' type="number" step="0.01" min="0" id="<%=divId%>_materialCharge"  name="<%=divId%>_materialCharge" value="<%=charge%>">
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
@@ -1402,7 +1427,13 @@
                                                                                 <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
-                                                                                        <input class='form-control markup' type="number" step="0.01" min="0" id="<%=divId%>_markup"  name="<%=divId%>_markup" value="<%=others.get("markup")%>">
+                                                                                        <%
+                                                                                            charge = others.get("markup");
+                                                                                            if(charge == null){
+                                                                                                charge = "0.00";
+                                                                                            }
+                                                                                        %>
+                                                                                        <input class='form-control markup' type="number" step="0.01" min="0" id="<%=divId%>_markup"  name="<%=divId%>_markup" value="<%=charge%>">
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
@@ -1417,7 +1448,13 @@
                                                                                 <td align="right" style="width: 60%;">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
-                                                                                        <input  class='form-control discount' type="number" step="0.01" min="0" id="<%=divId%>_discount"  name="<%=divId%>_discount" value="<%=others.get("discount")%>">
+                                                                                        <%
+                                                                                            charge = others.get("discount");
+                                                                                            if(charge == null){
+                                                                                                charge = "0.00";
+                                                                                            }
+                                                                                        %>
+                                                                                        <input  class='form-control discount' type="number" step="0.01" min="0" id="<%=divId%>_discount"  name="<%=divId%>_discount" value="<%=charge%>">
                                                                                     </div>
                                                                                 </td>
 

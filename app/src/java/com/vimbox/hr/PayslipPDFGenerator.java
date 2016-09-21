@@ -73,12 +73,12 @@ public class PayslipPDFGenerator extends HttpServlet {
                 if (ch == '/') {
                     occurence += 1;
                 }
-                if (occurence == 3) {
+                if (occurence == 7) {
                     slash = i;
                     break;
                 }
             }
-            path = path.substring(0, slash + 1) + "images/VimboxIcon.png";
+            path = path.substring(0, slash + 1) + "documents/VimboxIcon.png";
             path = path.replaceAll("%20", " ");
             Image img = Image.getInstance(path);
             img.scaleAbsolute(80f, 80f);

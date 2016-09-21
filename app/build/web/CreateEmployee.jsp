@@ -6,56 +6,22 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Create Employee</title>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
-        <script src="http://malsup.github.com/jquery.form.js"></script> 
-        <script src="JS/ModalFunctions.js"></script>
-        <script>
-            $('#employee_form').ajaxForm({
-                dataType: 'json',
-                success: function (data) {
-                    var modal = document.getElementById("employee_error_modal");
-                    var status = document.getElementById("employee_error_status");
-                    var message = document.getElementById("employee_error_message");
-                    status.innerHTML = data.status;
-                    message.innerHTML = data.message;
-                    modal.style.display = "block";
-
-                    var radios = document.getElementsByTagName('input');
-                    var employeeType;
-                    for (var i = 0; i < radios.length; i++) {
-                        if (radios[i].type === 'radio' && radios[i].checked) {
-                            // get value, set checked flag or do whatever you need to
-                            employeeType = radios[i].value;
-                        }
-                    }
-                    
-                    if (data.status === "SUCCESS") {
-                        if(employeeType === 'Full'){
-                            setTimeout(function () {
-                                window.location.href = "FullTimeEmployees.jsp";
-                            }, 500);
-                        }else{
-                            setTimeout(function () {
-                                window.location.href = "PartTimeEmployees.jsp";
-                            }, 500);
-                        }
-                    }
-                },
-                error: function (data) {
-                    var modal = document.getElementById("employee_error_modal");
-                    var status = document.getElementById("employee_error_status");
-                    var message = document.getElementById("employee_error_message");
-                    status.innerHTML = "ERROR";
-                    message.innerHTML = data;
-                    modal.style.display = "block";
-                }
-            });
-        </script>
-        <script src="JS/EmployeeFunctions.js"></script>
     </head>
     <body>
         <%@include file="header.jsp"%>
+        <script src="http://malsup.github.com/jquery.form.js"></script>
+        <script src="JS/EmployeeFunctions.js"></script>
+        <div id="employee_error_modal" class="modal">
+            <div class="modal-content" style="width: 400px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('employee_error_modal')">×</span>
+                    <center><h2><div id="employee_error_status"></div></h2></center>
+                </div>
+                <div class="modal-body">
+                    <div id="employee_error_message"></div>
+                </div>
+            </div>
+        </div>
         <div id="page-content-wrapper">
             <div id="page-content">
                 <div class="container" style="width: 100%;">
@@ -289,16 +255,47 @@
                 </div>
             </div>
         </div> 
-        <div id="employee_error_modal" class="modal">
-            <div class="modal-content" style="width: 400px;">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('employee_error_modal')">×</span>
-                    <center><h2><div id="employee_error_status"></div></h2></center>
-                </div>
-                <div class="modal-body">
-                    <div id="employee_error_message"></div>
-                </div>
-            </div>
-        </div>
+        <script>
+            $('#employee_form').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    var modal = document.getElementById("employee_error_modal");
+                    var status = document.getElementById("employee_error_status");
+                    var message = document.getElementById("employee_error_message");
+                    status.innerHTML = data.status;
+                    message.innerHTML = data.message;
+                    modal.style.display = "block";
+
+                    var radios = document.getElementsByTagName('input');
+                    var employeeType;
+                    for (var i = 0; i < radios.length; i++) {
+                        if (radios[i].type === 'radio' && radios[i].checked) {
+                            // get value, set checked flag or do whatever you need to
+                            employeeType = radios[i].value;
+                        }
+                    }
+
+                    if (data.status === "SUCCESS") {
+                        if (employeeType === 'Full') {
+                            setTimeout(function () {
+                                window.location.href = "FullTimeEmployees.jsp";
+                            }, 500);
+                        } else {
+                            setTimeout(function () {
+                                window.location.href = "PartTimeEmployees.jsp";
+                            }, 500);
+                        }
+                    }
+                },
+                error: function (data) {
+                    var modal = document.getElementById("employee_error_modal");
+                    var status = document.getElementById("employee_error_status");
+                    var message = document.getElementById("employee_error_message");
+                    status.innerHTML = "ERROR";
+                    message.innerHTML = data;
+                    modal.style.display = "block";
+                }
+            });
+        </script>
     </body>
 </html>
