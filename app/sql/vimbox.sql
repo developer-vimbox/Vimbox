@@ -736,7 +736,7 @@ CREATE TABLE IF NOT EXISTS `system_move_types` (
 -- Dumping data for table `system_move_types`
 --
 
-INSERT INTO `system_move_types` (`type`) VALUES
+INSERT INTO `system_move_types` (`type`, `abbreviation`) VALUES
 ('Disposal', 'DIS'),
 ('Office', 'OFF'),
 ('Residential', 'HH'),

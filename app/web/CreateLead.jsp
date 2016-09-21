@@ -270,7 +270,9 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Move Type: </label>
                                             <div class="col-sm-6" style="padding-top: 7px;">
-                                                <%                                                for (String type : moveTypes) {
+                                                <%                                                
+                                                    for (String[] moveType : moveTypes) {
+                                                        String type = moveType[0];
                                                         out.println("<input class='checkbox-inline' type='checkbox' name='tom' value='" + type + "'>" + type);
                                                     }
                                                 %>

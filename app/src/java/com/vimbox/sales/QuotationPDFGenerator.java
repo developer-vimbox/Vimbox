@@ -101,14 +101,14 @@ public class QuotationPDFGenerator extends HttpServlet {
                 if (ch == '/') {
                     occurence += 1;
                 }
-                //occurence == 9 //
-                if (occurence == 3) {
+                //occurence == 3 //
+                if (occurence == 9) {
                     slash = i;
                     break;
                 }
             }
-            //webapps/images/VimboxIcon.png// 
-            path = path.substring(0, slash + 1) + "images/VimboxIcon.png";
+            //images/VimboxIcon.png// 
+            path = path.substring(0, slash + 1) + "webapps/images/VimboxIcon.png";
             path = path.replaceAll("%20", " ");
             Image img = Image.getInstance(path);
             img.scaleAbsolute(70f, 70f);

@@ -516,7 +516,8 @@
                                                     <%
                                                         String[] tom = lead.getTom().split("\\|");
 
-                                                        for (String type : moveTypes) {
+                                                        for (String[] moveType : moveTypes) {
+                                                            String type = moveType[0];
                                                             boolean present = false;
                                                             for (String tm : tom) {
                                                                 if (tm.equals(type)) {
