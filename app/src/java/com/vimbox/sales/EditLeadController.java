@@ -258,6 +258,10 @@ public class EditLeadController extends HttpServlet {
                 //----------------------------------//
             //----------------//
             
+            if(salesDivs != null){
+                LeadDAO.createLeadSalesDiv(leadId, salesDivs);
+            }
+            
                 // Enter into operation_assigned database //
             if(domDates != null){
                 for (String domDate : domDates) {
@@ -412,8 +416,6 @@ public class EditLeadController extends HttpServlet {
                 }
 
                 if(salesDivs != null){
-                    LeadDAO.createLeadSalesDiv(leadId, salesDivs);
-
                     for(String salesDiv: salesDivs){
                         String divId = salesDiv.split("\\|")[0];
                         // Customer items //

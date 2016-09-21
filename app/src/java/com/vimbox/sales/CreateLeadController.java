@@ -308,6 +308,10 @@ public class CreateLeadController extends HttpServlet {
                 //----------------------------------//
             //----------------//
 
+            if(salesDivs != null){
+                LeadDAO.createLeadSalesDiv(leadId, salesDivs);
+            }
+            
             if(leadType.equals("Sales")){
                 double total = 0;
                 String[] surveyDates = request.getParameterValues("siteSurvey_date");
@@ -385,7 +389,7 @@ public class CreateLeadController extends HttpServlet {
                 }
 
                 if(salesDivs != null){
-                    LeadDAO.createLeadSalesDiv(leadId, salesDivs);
+                    
 
                     for(String salesDiv: salesDivs){
                         String divId = salesDiv.split("\\|")[0];
