@@ -1123,6 +1123,12 @@ CREATE TABLE IF NOT EXISTS `users_leave_record` (
 INSERT INTO `users_leave_record` (`leave_type`, `leave_name`, `nric`, `date`, `time_string`, `leave_duration`, `img`) VALUES
 ('Paid', 'MC', 'S9344895B', '2016-09-16', '0900 - 1800', 9, '/images/MC/S9344895B-MC-16092016-17092016.png');
 
+CREATE TABLE IF NOT EXISTS leadquotation (
+  ref_num varchar(50) NOT NULL,
+  service_include varchar(300) NOT NULL,
+  PRIMARY KEY (ref_num)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

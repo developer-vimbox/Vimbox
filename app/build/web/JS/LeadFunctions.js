@@ -2303,9 +2303,9 @@ function showWeekReport() {
                 $(schtable).html(response);
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status);
-                alert(xhr.responseText);
-                alert(thrownError);
+//                alert(xhr.status);
+//                alert(xhr.responseText);
+//                alert(thrownError);
             }
         });
     });
@@ -2332,9 +2332,9 @@ function showMonthReport() {
             $(schtable).html(response);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status);
-            alert(xhr.responseText);
-            alert(thrownError);
+//            alert(xhr.status);
+//            alert(xhr.responseText);
+//            alert(thrownError);
         }
     });
 
@@ -2360,13 +2360,13 @@ function showYearReport() {
         data: {selyear: selyear.value},
         type: 'POST',
         success: function (response) {
-            alert(response);
+            //alert(response);
             $(schtable).html(response);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status);
-            alert(xhr.responseText);
-            alert(thrownError);
+//            alert(xhr.status);
+//            alert(xhr.responseText);
+//            alert(thrownError);
         }
     });
 
