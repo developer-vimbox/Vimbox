@@ -69,10 +69,10 @@ public class QuotationPDFGenerator extends HttpServlet {
             PdfWriter.getInstance(document, response.getOutputStream());
             Font invoiceFont = new Font(Font.FontFamily.HELVETICA, 15, Font.NORMAL, invoiceColor);
             Font boldFont = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD);
-            Font underlineFont = new Font(Font.FontFamily.HELVETICA, 9, Font.UNDERLINE);
-            Font linkFont = new Font(Font.FontFamily.HELVETICA, 9, Font.UNDERLINE, linkColor);
+            Font underlineFont = new Font(Font.FontFamily.HELVETICA, 10, Font.UNDERLINE);
+            Font linkFont = new Font(Font.FontFamily.HELVETICA, 10, Font.UNDERLINE, linkColor);
             Font normalFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
-            Font redFont = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL, redColor);
+            Font redFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL, redColor);
             Font tcFont = new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL);
             Font tcBoldFont = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD);
             Font tcUnderlineFont = new Font(Font.FontFamily.HELVETICA, 8, Font.UNDERLINE);
@@ -107,7 +107,8 @@ public class QuotationPDFGenerator extends HttpServlet {
                     break;
                 }
             }
-            //images/VimboxIcon.png// 
+            //images/VimboxIcon.png//
+            //documents/VimboxIcon.png//
             path = path.substring(0, slash + 1) + "documents/VimboxIcon.png";
             path = path.replaceAll("%20", " ");
             Image img = Image.getInstance(path);
@@ -388,6 +389,14 @@ public class QuotationPDFGenerator extends HttpServlet {
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
             table.setWidthPercentage(100);
+            table.setSpacingAfter(10);
+            document.add(table);
+            
+            table = new PdfPTable(1);
+            cell = new PdfPCell(new Phrase("By Accepting this quotation, I the customer confirm that I have read Vimbox Services Private Limited’s terms and conditions below and agree to be bound by them.", normalFont));
+            cell.setBorder(Rectangle.NO_BORDER);
+            table.addCell(cell);
+            table.setWidthPercentage(100);
             table.setSpacingAfter(15);
             document.add(table);
 
@@ -412,14 +421,7 @@ public class QuotationPDFGenerator extends HttpServlet {
             cell.setBorder(Rectangle.NO_BORDER);
             table.addCell(cell);
             table.setWidthPercentage(100);
-            document.add(table);
-
-            table = new PdfPTable(1);
-            cell = new PdfPCell(new Phrase("By Accepting this quotation, I the customer confirm that I have read Vimbox Services Private Limited’s terms and conditions below and agree to be bound by them.", tcFont));
-            cell.setBorder(Rectangle.NO_BORDER);
-            table.addCell(cell);
-            table.setWidthPercentage(100);
-            table.setSpacingAfter(15);
+            table.setSpacingAfter(10);
             document.add(table);
 
             table = new PdfPTable(1);
