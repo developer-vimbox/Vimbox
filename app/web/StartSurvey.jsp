@@ -67,12 +67,12 @@
                                             <col width="250">
                                             <tr>
                                                 <td style="padding-top: 10px;">
-                                                    <table class="table table-bordered" style="width:100%;height:100%;;" border="1">
+                                                    <table class="table table-bordered" style="width:90%;height:100%;;" border="1">
                                                         <tbody><tr height="8%">
                                                                 <td>
                                                                     <input type="hidden" id="complete_status" name="complete" value="no">
                                                                     <button class="btn loading-button btn-primary" style="width:100%;height:100%;" onclick="confirmComplete();
-            return false;">Complete Site Survey</button>
+            return false;">Complete</button>
                                                                 </td>
                                                             </tr>
                                                             <tr height="8%">
@@ -905,7 +905,7 @@
                                                         </div>
 
                                                     </td>
-                                                    <td>
+                                                    <td style="width: 10%;">
                                                         Total Units : <label id="<%=aT%>_<%=areaCounter%>_total">0</label>
                                                         <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=aT%>', '<%=areaCounter%>');">×</span>
                                                     </td>

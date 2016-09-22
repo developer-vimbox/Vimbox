@@ -17,7 +17,7 @@
                 </div>
             </div>
         </td>
-        <td>
+        <td style="width: 10%;">
             Total Units : <label id="<%=address%>_<%=areaCounter%>_total">0</label>
             <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=address%>', '<%=areaCounter%>');">×</span>
         </td>
