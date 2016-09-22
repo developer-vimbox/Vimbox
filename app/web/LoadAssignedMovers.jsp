@@ -6,7 +6,7 @@
     String dom = request.getParameter("getDOM");
     String supervisor = request.getParameter("getSupervisor");
     
-    ArrayList<User> movers = OperationsDAO.getMoversBySupAndDOM(supervisor, dom);
+    ArrayList<User> movers = OperationsDAO.getMoversAssigned(dom);
     if (movers.isEmpty()) {
         out.println("No movers assigned");
     } else {

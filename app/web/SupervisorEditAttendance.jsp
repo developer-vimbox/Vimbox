@@ -63,8 +63,7 @@
         </div>
         <%            DateTime dt = new DateTime();
             String today = Converter.convertDateHtml(dt);
-            String supervisor = user.getNric();
-            ArrayList<MoversAttendance> movers = OperationsDAO.getMoverAttendance(supervisor, today);
+            ArrayList<MoversAttendance> movers = OperationsDAO.getMoverAttendances(today);
         %>
         <div id="page-content-wrapper">
             <div id="page-content">
@@ -77,6 +76,7 @@
                                     if (movers.isEmpty()) {
                                         out.println("No movers assigned for today.");
                                     } else {
+                                        String supervisor = movers.get(0).getSupervisor();
                                 %>
                                 <form action='CreateMoverAttendanceController' method='post' id='attendance_form'>
                                     <input type="hidden" name="today" value="<%=today%>">

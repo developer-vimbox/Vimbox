@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 15, 2016 at 04:00 AM
+-- Generation Time: Sep 22, 2016 at 07:46 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -37,36 +37,37 @@ CREATE TABLE IF NOT EXISTS `access_control` (
 --
 
 INSERT INTO `access_control` (`page`, `modules`) VALUES
-('AdminLeads.jsp', 'Admin'),
 ('AddFollowUpComment.jsp', 'Admin|Sales'),
-('AssignJobs.jsp', 'Admin|Operations'),
-('ChangePassword.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
+('AdminLeads.jsp', 'Admin'),
+('AssignJobs.jsp', 'Admin|Operation'),
+('ChangePassword.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
 ('CreateCustomer.jsp', 'Admin|Sales'),
 ('CreateEmployee.jsp', 'Admin|HR'),
 ('CreateLead.jsp', 'Admin|Sales'),
 ('CreateLeaveMC.jsp', 'Admin|HR'),
 ('CreatePayslip.jsp', 'Admin|HR'),
-('CreateTicket.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
+('CreateTicket.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
 ('EditAttendance.jsp', 'Admin|HR'),
 ('EditCustomer.jsp', 'Admin|Sales'),
 ('EditEmployee.jsp', 'Admin|HR'),
 ('EditLead.jsp', 'Admin|Sales'),
 ('EditPayslip.jsp', 'Admin|HR'),
-('EditTicket.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
+('EditTicket.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
 ('FullTimeEmployees.jsp', 'Admin|HR'),
-('header.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
-('HomePage.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
+('header.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
+('HomePage.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
 ('LeadsHistory.jsp', 'Admin|Sales'),
 ('LeaveMCs.jsp', 'Admin|HR'),
 ('LoadAdminLeads.jsp', 'Admin'),
-('LoadAssignedMovers.jsp', 'Admin|Sales|Operations'),
-('LoadAssignJobModal.jsp', 'Admin|Sales|Operations'),
-('LoadAssignJobs.jsp', 'Admin|Operations'),
+('LoadAssignedMovers.jsp', 'Admin|Sales|Operation'),
+('LoadAssignJobModal.jsp', 'Admin|Sales|Operation'),
+('LoadAssignJobs.jsp', 'Admin|Operation'),
 ('LoadAttendancesViewModal.jsp', 'Admin|HR'),
 ('LoadAttendancesYM.jsp', 'Admin|HR'),
 ('LoadEmployees.jsp', 'Admin|HR'),
 ('LoadLeaveMC.jsp', 'Admin|HR'),
 ('LoadLeaveMCNric.jsp', 'Admin|HR'),
+('LoadMonthSalesReport.jsp', 'Admin|Sales'),
 ('LoadMyLeads.jsp', 'Admin|Sales'),
 ('LoadMySurveyMonthlySchedule.jsp', 'Admin|SiteSurvey'),
 ('LoadMySurveySchedule.jsp', 'Admin|SiteSurvey'),
@@ -74,6 +75,7 @@ INSERT INTO `access_control` (`page`, `modules`) VALUES
 ('LoadPayslips.jsp', 'Admin|HR'),
 ('LoadSales.jsp', 'Admin|Sales'),
 ('LoadSalesOperations.jsp', 'Admin|Sales'),
+('LoadSalesReport.jsp', 'Admin|Sales'),
 ('LoadSalesSurveys.jsp', 'Admin|Sales|SiteSurvey'),
 ('LoadServices.jsp', 'Admin|Sales'),
 ('LoadSiteInfoTable.jsp', 'Admin|Sales'),
@@ -84,53 +86,51 @@ INSERT INTO `access_control` (`page`, `modules`) VALUES
 ('LoadViewDOM.jsp', 'Admin|Sales'),
 ('LoadViewEmployeeModal.jsp', 'Admin|HR'),
 ('LoadViewLeadDOM.jsp', 'Admin|Sales'),
+('LoadYearSalesReport.jsp', 'Admin|Sales'),
 ('MovingCalendar.jsp', 'Admin|Sales'),
 ('MovingCalendarPopulate.jsp', 'Admin|Sales'),
-('MyJobs.jsp', 'Admin|Operations'),
+('MyJobs.jsp', 'Admin|Operation'),
 ('MyLeads.jsp', 'Admin|Sales'),
 ('MyLeadsAction.jsp', 'Admin|Sales'),
 ('MyScheduleCalendar.jsp', 'Admin|SiteSurvey'),
 ('MySites.jsp', 'Admin|SiteSurvey'),
 ('MySiteSurveySchedules.jsp', 'Admin|SiteSurvey'),
-('MyTickets.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
+('MyTickets.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
 ('PartTimeEmployees.jsp', 'Admin|HR'),
 ('Payslips.jsp', 'Admin|HR'),
 ('PopulateLeadFields.jsp', 'Admin|Sales'),
 ('RetrieveEmployeeDesignations.jsp', 'Admin|HR'),
 ('RetrieveLeadDetails.jsp', 'Admin|Sales'),
 ('RetrieveLeadFollowup.jsp', 'Admin|Sales'),
-('RetrieveMovers.jsp', 'Admin|Operations'),
-('RetrieveMovingSchedule.jsp', 'Admin|Operations|Sales'),
+('RetrieveMovers.jsp', 'Admin|Operation'),
+('RetrieveMovingSchedule.jsp', 'Admin|Operation|Sales'),
 ('RetrievePayslipDetails.jsp', 'Admin|HR'),
-('RetrieveSalesPortion.jsp', 'Admin|Operations|Sales'),
+('RetrieveSalesPortion.jsp', 'Admin|Operation|Sales'),
 ('RetrieveSiteSurveyorSchedule.jsp', 'Admin|SiteSurvey|Sales'),
 ('RetrieveSurveyDetails.jsp', 'Admin|SiteSurvey|Sales'),
-('RetrieveTicket.jsp', 'Admin|Operation|SiteSurvey|HR|Sales'),
-('RetrieveTicketComment.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
+('RetrieveTicket.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
+('RetrieveTicketComment.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
 ('SalesOperations.jsp', 'Admin|Sales'),
 ('SalesSites.jsp', 'Admin|Sales'),
-('SearchCustomers.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
-('SearchCustomersByName.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
+('SearchCustomers.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
+('SearchCustomersByName.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
 ('SearchSecondaryServices.jsp', 'Admin|Sales'),
-('SearchTickets.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
+('SearchTickets.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
 ('SiteSurveyCalendar.jsp', 'Admin|SiteSurvey|Sales'),
 ('SiteSurveyCalendarPopulate.jsp', 'Admin|SiteSurvey|Sales'),
 ('StartSurvey.jsp', 'Admin|SiteSurvey'),
-('SupervisorDailyJobs.jsp', 'Admin|Operations'),
-('SupervisorEditAttendance.jsp', 'Admin|Operations'),
-('SupervisorJobs.jsp', 'Admin|Operations'),
-('SupervisorJobsCalendar.jsp', 'Admin|Operations'),
-('SupervisorTakeAttendance.jsp', 'Admin|Operations'),
+('SupervisorDailyJobs.jsp', 'Admin|Supervisor'),
+('SupervisorEditAttendance.jsp', 'Admin|Supervisor'),
+('SupervisorJobs.jsp', 'Admin|Supervisor'),
+('SupervisorJobsCalendar.jsp', 'Admin|Supervisor'),
+('SupervisorTakeAttendance.jsp', 'Admin|Supervisor'),
 ('surveyHeader.jsp', 'Admin|SiteSurvey'),
 ('TakeAttendance.jsp', 'Admin|HR'),
-('TicketForum.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
-('TicketsHistory.jsp', 'Admin|Operations|SiteSurvey|HR|Sales'),
+('TicketForum.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
+('TicketsHistory.jsp', 'Admin|Operation|SiteSurvey|HR|Sales|Supervisor'),
+('ValueSetup.jsp', 'Admin'),
 ('ViewAttendance.jsp', 'Admin|HR'),
-('ViewSalesReport.jsp', 'Admin|Sales'),
-('LoadSalesReport.jsp', 'Admin|Sales'),
-('LoadMonthSalesReport.jsp', 'Admin|Sales'),
-('LoadYearSalesReport.jsp', 'Admin|Sales'),
-('ValueSetup.jsp', 'Admin');
+('ViewSalesReport.jsp', 'Admin|Sales');
 
 -- --------------------------------------------------------
 
@@ -176,6 +176,10 @@ CREATE TABLE IF NOT EXISTS `customers_history` (
 --
 
 INSERT INTO `customers_history` (`customer_id`, `id`) VALUES
+(1, 386815461),
+(2, 164389514),
+(4, 872011880),
+(5, 367598110),
 (5, 382715999);
 
 -- --------------------------------------------------------
@@ -210,7 +214,11 @@ CREATE TABLE IF NOT EXISTS `leadconfirmation` (
 --
 
 INSERT INTO `leadconfirmation` (`lead_id`, `confirmed_user`, `total_amount`, `collected_amount`, `email_path`) VALUES
-(382715999, '', 0, 0, '');
+(164389514, 'S9344895B', 0, 100, '164389514-email.jpg'),
+(367598110, '', 0, 0, ''),
+(382715999, '', 0, 0, ''),
+(386815461, 'S9344895B', 0, 56, '386815461-email.jpg'),
+(872011880, 'S9344895B', 0, 45, '872011880-email.png');
 
 -- --------------------------------------------------------
 
@@ -229,6 +237,20 @@ CREATE TABLE IF NOT EXISTS `leadcustitem` (
   `itemunit` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `leadcustitem`
+--
+
+INSERT INTO `leadcustitem` (`lead_id`, `sales_div`, `survey_area`, `itemname`, `itemremark`, `itemcharge`, `itemqty`, `itemunit`) VALUES
+(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', 'Boxes', '', '', '11', '11'),
+(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', 'Boxes', '', '', '22', '22'),
+(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', '', 'Boxes', '', '', '1', '1'),
+(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', '', 'Boxes', '', '', '11', '11'),
+(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', 'Boxes', '', '', '1', '1'),
+(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', 'Boxes', '', '', '2', '2'),
+(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', 'Boxes', '', '', '2', '2'),
+(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', 'Boxes', '', '', '3', '3');
+
 -- --------------------------------------------------------
 
 --
@@ -246,7 +268,11 @@ CREATE TABLE IF NOT EXISTS `leadenquiry` (
 --
 
 INSERT INTO `leadenquiry` (`lead_id`, `enquiry`) VALUES
-(382715999, 'SELECT');
+(164389514, 'SELECT'),
+(367598110, 'SELECT'),
+(382715999, 'SELECT'),
+(386815461, 'SELECT'),
+(872011880, 'SELECT');
 
 -- --------------------------------------------------------
 
@@ -273,7 +299,11 @@ CREATE TABLE IF NOT EXISTS `leadinfo` (
 --
 
 INSERT INTO `leadinfo` (`owner_user`, `lead_id`, `type`, `customer_id`, `tom`, `datetime_of_creation`, `status`, `reason`, `source`, `referral`) VALUES
-('S9344895B', 382715999, 'Sales', 5, '', '2016-09-13 19:44:20', 'Rejected', 'Test', 'Call', 'Friend');
+('S9344895B', 164389514, 'Sales', 2, '', '2016-09-22 09:31:48', 'Confirmed', '', 'Call', 'Friend'),
+('S9344895B', 367598110, 'Sales', 5, 'Residential', '2016-09-22 13:45:15', 'Pending', '', 'Call', 'Friend'),
+('S9344895B', 382715999, 'Sales', 5, '', '2016-09-13 19:44:20', 'Rejected', 'Test', 'Call', 'Friend'),
+('S9344895B', 386815461, 'Sales', 1, 'Residential', '2016-09-22 09:27:27', 'Confirmed', '', 'Call', 'Friend'),
+('S9344895B', 872011880, 'Sales', 4, '', '2016-09-22 11:04:08', 'Confirmed', '', 'Call', 'Friend');
 
 -- --------------------------------------------------------
 
@@ -311,8 +341,16 @@ CREATE TABLE IF NOT EXISTS `leadmove` (
 --
 
 INSERT INTO `leadmove` (`lead_id`, `sales_div`, `type`, `address`, `storeys`, `pushing`) VALUES
+(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'from', '365 W Craig Rd #111, North Las Vegas, NV 89032_1_1_111', ' ', ' '),
+(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'to', '3698 Diane Ave SW, Canton, OH 44706_11_11_1111', ' ', ' '),
+(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'from', '241 Yishun Ring Rd_1_1_760241', ' ', ' '),
+(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'to', '242 Yishun Ring Rd, Block 242_2_2_760242', ' ', ' '),
 (382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'from', '39 Cambridge Rd_1_1_210039', ' ', ' '),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'to', '864 Yishun Ave 4, Block 864_11_11_760864', ' ', ' ');
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'to', '864 Yishun Ave 4, Block 864_11_11_760864', ' ', ' '),
+(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'from', '241 Yishun Ring Rd_1_1_760241', ' ', ' '),
+(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'to', '242 Yishun Ring Rd, Block 242_2_2_760242', ' ', ' '),
+(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'from', '241 Yishun Ring Rd_1_1_760241', ' ', ' '),
+(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'to', '242 Yishun Ring Rd, Block 242_2_2_760242', ' ', ' ');
 
 -- --------------------------------------------------------
 
@@ -343,7 +381,74 @@ INSERT INTO `leadother` (`lead_id`, `sales_div`, `other`, `charge`) VALUES
 (382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'detourCharge', '0.00'),
 (382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'materialCharge', '0.00'),
 (382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'markup', '0.00'),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'discount', '0.00');
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'discount', '0.00'),
+(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'storeyCharge', '0.00'),
+(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'pushCharge', '0.00'),
+(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'detourCharge', '0.00'),
+(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'materialCharge', '0.00'),
+(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'markup', '0.00'),
+(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'discount', '0.00'),
+(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'storeyCharge', '0.00'),
+(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'pushCharge', '0.00'),
+(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'detourCharge', '0.00'),
+(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'materialCharge', '0.00'),
+(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'markup', '0.00'),
+(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'discount', '0.00'),
+(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'storeyCharge', '0.00'),
+(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'pushCharge', '0.00'),
+(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'detourCharge', '0.00'),
+(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'materialCharge', '0.00'),
+(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'markup', '0.00'),
+(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'discount', '0.00'),
+(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'storeyCharge', '0.00'),
+(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'pushCharge', '0.00'),
+(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'detourCharge', '0.00'),
+(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'materialCharge', '0.00'),
+(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'markup', '0.00'),
+(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'discount', '0.00'),
+(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'storeyCharge', '0.00'),
+(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'pushCharge', '0.00'),
+(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'detourCharge', '0.00'),
+(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'materialCharge', '0.00'),
+(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'markup', '0.00'),
+(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'discount', '0.00'),
+(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'storeyCharge', '0.00'),
+(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'pushCharge', '0.00'),
+(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'detourCharge', '0.00'),
+(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'materialCharge', '0.00'),
+(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'markup', '0.00'),
+(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'discount', '0.00'),
+(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'storeyCharge', '0.00'),
+(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'pushCharge', '0.00'),
+(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'detourCharge', '0.00'),
+(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'materialCharge', '0.00'),
+(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'markup', '0.00'),
+(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'discount', '0.00'),
+(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'storeyCharge', '0.00'),
+(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'pushCharge', '0.00'),
+(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'detourCharge', '0.00'),
+(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'materialCharge', '0.00'),
+(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'markup', '0.00'),
+(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'discount', '0.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leadquotation`
+--
+
+CREATE TABLE IF NOT EXISTS `leadquotation` (
+  `ref_num` varchar(50) NOT NULL,
+  `service_include` varchar(300) NOT NULL,
+  PRIMARY KEY (`ref_num`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leadquotation`
+--
+
+INSERT INTO `leadquotation` (`ref_num`, `service_include`) VALUES
+('VBSPL_GN293_HH_0916', 'jhjhg');
 
 -- --------------------------------------------------------
 
@@ -376,8 +481,16 @@ CREATE TABLE IF NOT EXISTS `leadsalesdiv` (
 --
 
 INSERT INTO `leadsalesdiv` (`lead_id`, `sales_div`, `survey_area`, `survey_area_name`) VALUES
+(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', '', ''),
+(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', '', ''),
+(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', ''),
+(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', ''),
 (382715999, 'sales1|39 Cambridge Rd #1-1 S210039', '', ''),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', '', '');
+(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', '', ''),
+(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', ''),
+(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', ''),
+(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', ''),
+(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', '');
 
 -- --------------------------------------------------------
 
@@ -451,10 +564,25 @@ CREATE TABLE IF NOT EXISTS `operations_assigned` (
 --
 
 INSERT INTO `operations_assigned` (`lead_id`, `ss_owner`, `supervisor`, `carplate_no`, `address_tag`, `address`, `dom`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
+(164389514, 'S9344895B', '', 'SFX6729B', 'from|to|', '365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111|', '2016-09-23', '2016-09-23 13:00:00', '2016-09-23 13:30:00', '1300 - 1500', '', 'Confirmed'),
+(164389514, 'S9344895B', '', 'SFX6729B', 'from|to|', '365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111|', '2016-09-23', '2016-09-23 13:30:00', '2016-09-23 14:00:00', '1300 - 1500', '', 'Confirmed'),
+(164389514, 'S9344895B', '', 'SFX6729B', 'from|to|', '365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111|', '2016-09-23', '2016-09-23 14:00:00', '2016-09-23 14:30:00', '1300 - 1500', '', 'Confirmed'),
+(164389514, 'S9344895B', '', 'SFX6729B', 'from|to|', '365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111|', '2016-09-23', '2016-09-23 14:30:00', '2016-09-23 15:00:00', '1300 - 1500', '', 'Confirmed'),
+(367598110, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-25', '2016-09-25 12:00:00', '2016-09-25 12:30:00', '1200 - 1330', '', 'Booked'),
+(367598110, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-25', '2016-09-25 12:30:00', '2016-09-25 13:00:00', '1200 - 1330', '', 'Booked'),
+(367598110, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-25', '2016-09-25 13:00:00', '2016-09-25 13:30:00', '1200 - 1330', '', 'Booked'),
 (382715999, 'S9344895B', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:00:00', '2016-09-15 13:30:00', '1300 - 1400', '', 'Confirmed'),
 (382715999, 'S9344895B', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:30:00', '2016-09-15 14:00:00', '1300 - 1400', '', 'Confirmed'),
 (382715999, 'S9289374H', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 12:30:00', '2016-09-16 13:00:00', '1230 - 1330', '', 'Confirmed'),
-(382715999, 'S9289374H', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1230 - 1330', '', 'Confirmed');
+(382715999, 'S9289374H', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1230 - 1330', '', 'Confirmed'),
+(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 10:30:00', '2016-09-24 11:00:00', '1030 - 1300', '', 'Confirmed'),
+(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 11:00:00', '2016-09-24 11:30:00', '1030 - 1300', '', 'Confirmed'),
+(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 11:30:00', '2016-09-24 12:00:00', '1030 - 1300', '', 'Confirmed'),
+(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 12:00:00', '2016-09-24 12:30:00', '1030 - 1300', '', 'Confirmed'),
+(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 12:30:00', '2016-09-24 13:00:00', '1030 - 1300', '', 'Confirmed'),
+(872011880, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-22', '2016-09-22 13:00:00', '2016-09-22 13:30:00', '1300 - 1430', '', 'Confirmed'),
+(872011880, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-22', '2016-09-22 13:30:00', '2016-09-22 14:00:00', '1300 - 1430', '', 'Confirmed'),
+(872011880, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-22', '2016-09-22 14:00:00', '2016-09-22 14:30:00', '1300 - 1430', '', 'Confirmed');
 
 -- --------------------------------------------------------
 
@@ -470,6 +598,15 @@ CREATE TABLE IF NOT EXISTS `operations_attendance` (
   `duration` int(11) NOT NULL,
   PRIMARY KEY (`supervisor`,`assigned_mover`,`dom`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `operations_attendance`
+--
+
+INSERT INTO `operations_attendance` (`supervisor`, `assigned_mover`, `dom`, `attendance`, `duration`) VALUES
+('S9382938D', '1234567', '2016-09-24', 'Assigned', 0),
+('S9384873Z', '1234567', '2016-09-22', 'Absent', 0),
+('S9384873Z', '1234567', '2016-09-23', 'Assigned', 0);
 
 -- --------------------------------------------------------
 
@@ -587,7 +724,11 @@ CREATE TABLE IF NOT EXISTS `sitesurvey_assigned` (
 
 INSERT INTO `sitesurvey_assigned` (`lead_id`, `ss_owner`, `ss_user`, `address_tag`, `address`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
 (382715999, 'S9344895B', 'S9289374H', 'from|', '39 Cambridge Rd #1-1 S210039|', '2016-09-15 13:30:00', '2016-09-15 14:00:00', '1330 - 1430', '', 'Completed'),
-(382715999, 'S9344895B', 'S9289374H', 'from|', '39 Cambridge Rd #1-1 S210039|', '2016-09-15 14:00:00', '2016-09-15 14:30:00', '1330 - 1430', '', 'Completed');
+(382715999, 'S9344895B', 'S9289374H', 'from|', '39 Cambridge Rd #1-1 S210039|', '2016-09-15 14:00:00', '2016-09-15 14:30:00', '1330 - 1430', '', 'Completed'),
+(386815461, 'S9344895B', 'S9289374H', 'to|from|', '242 Yishun Ring Rd, Block 242 #2-2 S760242|241 Yishun Ring Rd #1-1 S760241|', '2016-09-23 11:00:00', '2016-09-23 11:30:00', '1100 - 1300', '', 'Pending'),
+(386815461, 'S9344895B', 'S9289374H', 'to|from|', '242 Yishun Ring Rd, Block 242 #2-2 S760242|241 Yishun Ring Rd #1-1 S760241|', '2016-09-23 11:30:00', '2016-09-23 12:00:00', '1100 - 1300', '', 'Pending'),
+(386815461, 'S9344895B', 'S9289374H', 'to|from|', '242 Yishun Ring Rd, Block 242 #2-2 S760242|241 Yishun Ring Rd #1-1 S760241|', '2016-09-23 12:00:00', '2016-09-23 12:30:00', '1100 - 1300', '', 'Pending'),
+(386815461, 'S9344895B', 'S9289374H', 'to|from|', '242 Yishun Ring Rd, Block 242 #2-2 S760242|241 Yishun Ring Rd #1-1 S760241|', '2016-09-23 12:30:00', '2016-09-23 13:00:00', '1100 - 1300', '', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -716,6 +857,7 @@ CREATE TABLE IF NOT EXISTS `system_modules` (
 INSERT INTO `system_modules` (`type`, `department`, `designation`, `modules`, `working_days`) VALUES
 ('Full', 'IT', 'Manager', 'Admin', 5),
 ('Full', 'Operations', 'Mover', 'Operation', 6),
+('Full', 'Operations', 'Supervisor', 'Supervisor', 6),
 ('Full', 'Sales', 'Surveyor', 'SiteSurvey', 5),
 ('Part', 'Admin', 'Part-Time Clerk', '', 5),
 ('Part', 'Operations', 'Part-Time Mover', '', 6);
@@ -950,6 +1092,9 @@ INSERT INTO `users` (`nric`, `first_name`, `last_name`, `date_joined`, `mailing_
 ('1234567', 'test', 'test', '2016-08-16', 'TestingAgainOk', '', '', 'Operations', 'Mover', 1234, 'Full'),
 ('S9289374H', 'SiteSurveyor', '1', '2016-08-12', 'Test', '', '', 'Sales', 'Surveyor', 3000, 'Full'),
 ('S9344895B', 'Yu Sheng', 'Ngo', '2016-06-18', 'Yishun Ave 4 Blk 864 #11-37 S760864', '', '', 'IT', 'Manager', 6000, 'Full'),
+('S93485983F', 'Ernest', 'Che', '2016-09-22', 'BLK 253', '', '', 'Operations', 'Mover', 560, 'Full'),
+('S9382938D', 'Yu Sheng', 'Ngo', '2016-09-22', 'BLK 241', '', '', 'Operations', 'Supervisor', 3000, 'Full'),
+('S9384873Z', 'Xuening', 'Loo', '2016-09-22', 'BLK 241', '', '', 'Operations', 'Supervisor', 3000, 'Full'),
 ('S9887362K', 'SiteSurveyor', '2', '2016-08-12', 'Test', '', '', 'Sales', 'Surveyor', 3000, 'Full');
 
 -- --------------------------------------------------------
@@ -973,7 +1118,10 @@ INSERT INTO `users_account` (`nric`, `username`, `password`) VALUES
 ('S9289374H', '1@sitesurvey.com', 'password'),
 ('S9887362K', '2@sitesurvey.com', 'password'),
 ('S9344895B', 'admin', 'password'),
-('1234567', 'test@test.com', 'password');
+('S93485983F', 'er@gmail.com', 'password'),
+('1234567', 'test@test.com', 'password'),
+('S9384873Z', 'xuening@gmail.com', 'password'),
+('S9382938D', 'ys@gmail', 'password');
 
 -- --------------------------------------------------------
 
@@ -1022,6 +1170,9 @@ INSERT INTO `users_bank` (`nric`, `payment_mode`, `bank_name`, `account_name`, `
 ('1234567', 'Cheque', 'dewfwe', 'wefewf', '1245634'),
 ('S9289374H', 'Cheque', 'DBS', 'site1-account', '123456789'),
 ('S9344895B', 'Cheque', 'DBS', 'yusheng account', '123-4567-8'),
+('S93485983F', 'Cash', 'DBS', 'Savings', '9384'),
+('S9382938D', 'Cash', 'DBS', 'Savings', '9383463'),
+('S9384873Z', 'Cash', 'DBS', 'Savings', '94859854'),
 ('S9887362K', 'Cheque', 'DBS', 'sitesurvey2-account', '123456789');
 
 -- --------------------------------------------------------
@@ -1046,6 +1197,9 @@ INSERT INTO `users_contact` (`nric`, `phone_no`, `fax_no`, `home_no`) VALUES
 ('1234567', 12345678, 0, 0),
 ('S9289374H', 12345678, 0, 0),
 ('S9344895B', 97312965, 0, 67384625),
+('S93485983F', 945839485, 0, 0),
+('S9382938D', 93485873, 0, 0),
+('S9384873Z', 92384873, 0, 0),
 ('S9887362K', 12345678, 0, 0);
 
 -- --------------------------------------------------------
@@ -1071,6 +1225,9 @@ INSERT INTO `users_emergency` (`nric`, `name`, `relationship`, `contact_no`, `of
 ('1234567', 'test', 'etst', 12344567, 0),
 ('S9289374H', 'Mother', 'mother', 12345678, 0),
 ('S9344895B', 'Phua Kuee Hoy', 'Mother', 85732675, 0),
+('S93485983F', 'Pamlea', 'Frien', 945896968, 0),
+('S9382938D', 'Pamela', 'Friend', 93845893, 0),
+('S9384873Z', 'Pamela', 'Friedn', 92384982, 0),
 ('S9887362K', 'Mother', 'mother', 12345678, 0);
 
 -- --------------------------------------------------------
@@ -1097,6 +1254,9 @@ INSERT INTO `users_leave` (`nric`, `date_joined`, `leave`, `mc`, `used_leave`, `
 ('1234567', '2016-08-16', 56, 14, 0, 0),
 ('S9289374H', '2016-08-12', 56, 14, 0, 0),
 ('S9344895B', '2016-06-18', 56, 14, 0, 5),
+('S93485983F', '2016-09-22', 56, 14, 0, 0),
+('S9382938D', '2016-09-22', 56, 14, 0, 0),
+('S9384873Z', '2016-09-22', 56, 14, 0, 0),
 ('S9887362K', '2016-08-12', 56, 14, 0, 0);
 
 -- --------------------------------------------------------
@@ -1122,12 +1282,6 @@ CREATE TABLE IF NOT EXISTS `users_leave_record` (
 
 INSERT INTO `users_leave_record` (`leave_type`, `leave_name`, `nric`, `date`, `time_string`, `leave_duration`, `img`) VALUES
 ('Paid', 'MC', 'S9344895B', '2016-09-16', '0900 - 1800', 9, '/images/MC/S9344895B-MC-16092016-17092016.png');
-
-CREATE TABLE IF NOT EXISTS leadquotation (
-  ref_num varchar(50) NOT NULL,
-  service_include varchar(300) NOT NULL,
-  PRIMARY KEY (ref_num)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

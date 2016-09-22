@@ -676,7 +676,7 @@
                     %>
                     
                     <%
-                        if(moduleNames.contains("Admin") || moduleNames.contains("Operation")){
+                        if(moduleNames.contains("Admin") || moduleNames.contains("Supervisor")){
                     %>
                     <li>
                         <a href="#" title="Operations">
@@ -685,7 +685,11 @@
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
+                                <%
+                                    if(moduleNames.contains("Admin")) {
+                                %>
                                 <li><a href="AssignJobs.jsp" title="Assign Jobs"><span>Assign Jobs</span></a></li>
+                                <% } %>
                                 <li><a href="SupervisorJobs.jsp" title="Supervisor Jobs"><span>Supervisor Jobs</span></a></li>
                                 <li><a href="SupervisorTakeAttendance.jsp" title="Supervisor Take Attendance"><span>Take Attendance</span></a></li>
                             </ul>

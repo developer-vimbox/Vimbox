@@ -63,8 +63,7 @@
         </div>
         <%            DateTime dt = new DateTime();
             String today = Converter.convertDateHtml(dt);
-            String supervisor = user.getNric();
-            ArrayList<MoversAttendance> movers = OperationsDAO.getMoverAttendance(supervisor, today);
+            ArrayList<MoversAttendance> movers = OperationsDAO.getMoverAttendances(today);
         %>
         <div id="page-content-wrapper">
             <div id="page-content">
@@ -80,6 +79,7 @@
                                         MoversAttendance firstM = movers.get(0);
                                         String status = firstM.getStatus();
                                         double duration = firstM.getDuration();
+                                        String supervisor = firstM.getSupervisor();
                                         if (!status.equals("Assigned")) {
                                             out.println("<div class='alert alert-success' style='width: 400px;'><button class=\"btn btn-sm btn-default\" onclick=\"window.location.href='SupervisorEditAttendance.jsp'\">Edit Attendance</button> &nbsp; Attendance for today has been taken</div>");
                                         }

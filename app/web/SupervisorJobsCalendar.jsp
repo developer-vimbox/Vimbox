@@ -49,7 +49,7 @@
     DateTime currDate = null;
     DateTime dt = new DateTime();
     DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd");
-    ArrayList<Job> jobs = JobDAO.getJobsBySupervisor(user.getNric());
+    ArrayList<Job> jobs = JobDAO.getJobsForSupervisors();
 %>
 
 <style type="text/css">

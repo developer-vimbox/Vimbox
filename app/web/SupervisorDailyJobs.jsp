@@ -27,7 +27,7 @@
         <%@include file="header.jsp"%>
         <%            String dom = request.getParameter("dom");
         String userIC = user.getNric();
-            ArrayList<Job> jobs = JobDAO.getJobsBySupervisorAndDate(userIC, dom);
+            ArrayList<Job> jobs = JobDAO.getJobsByDom(dom);
         %>
         <div id="viewLeadModal" class="modal">
             <div class="modal-content" style="width: 80%;">
@@ -96,6 +96,12 @@
                                         <li><a href="#assignMovers" data-toggle="tab">Movers</a></li>
                                     </ul>
                                     <div class="tab-content">
+                                        <%
+                                            if(jobs.isEmpty()) {
+                                                out.println("No jobs assigned today.");
+                                            } else {
+                                        %>
+                                        
                                         <div id="assignedJobs" class="tab-pane active">
                                             <table class="table table-hover" width="100%">
                                                 <col width="5%">
@@ -259,7 +265,7 @@
                                                 %>
                                             </table>
                                         </div>
-
+                                        <% } %>
                                         <div id="assignMovers" class="tab-pane">
                                             <div id="error_modal" class="modal">
                                                 <div class="modal-content" style="width: 300px;">

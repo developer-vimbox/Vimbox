@@ -35,7 +35,6 @@
                 iMonth = iTMonth;
             }
 
-            //ArrayList<Job> jobs = JobDAO.getJobsBySupervisor(user.getNric());
         %>
 
         <div id="page-content-wrapper">

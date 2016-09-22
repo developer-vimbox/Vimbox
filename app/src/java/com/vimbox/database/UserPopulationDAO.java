@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class UserPopulationDAO {
 
-    private static final String GET_FULL_USER_DEPARTMENTS = "SELECT department FROM system_modules WHERE type='Full'";
-    private static final String GET_PART_USER_DEPARTMENTS = "SELECT department FROM system_modules WHERE type='Part'";
+    private static final String GET_FULL_USER_DEPARTMENTS = "SELECT department FROM system_modules WHERE type='Full' GROUP BY department";
+    private static final String GET_PART_USER_DEPARTMENTS = "SELECT department FROM system_modules WHERE type='Part' GROUP BY department";
     private static final String GET_USER_DESIGNATIONS = "SELECT designation FROM system_modules WHERE department=? AND type=?";
     private static final String GET_USER_MODULES = "SELECT * FROM system_modules WHERE department=? AND designation=?";
     private static final String GET_USER_PAYMENT_MODES = "SELECT * FROM system_payment_modes";

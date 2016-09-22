@@ -30,11 +30,11 @@ public class RemoveMoverController extends HttpServlet {
 
         String dom = request.getParameter("dom");
         String mover = request.getParameter("mover");
-        String supervisor = request.getParameter("supervisor");
+        //String supervisor = request.getParameter("supervisor");
 
         JsonObject jsonOutput = new JsonObject();
 
-        OperationsDAO.removeMover(supervisor, mover, dom);
+        OperationsDAO.removeMover(mover, dom);
         
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "Mover removed!");

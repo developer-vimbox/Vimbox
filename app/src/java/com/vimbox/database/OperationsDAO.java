@@ -12,9 +12,11 @@ public class OperationsDAO {
     private static final String CHECK_ASSIGNED_MOVERS = "SELECT * FROM operations_attendance WHERE dom = ? AND assigned_mover = ?";
     private static final String ASSIGN_MOVER = "INSERT INTO operations_attendance (supervisor, assigned_mover, dom, attendance, duration) VALUES (?,?,?,?,?)";
     private static final String GET_MOVERS_BY_SUP_AND_DOM = "SELECT * FROM operations_attendance WHERE dom = ? AND supervisor = ?";
-    private static final String REMOVE_MOVER = "DELETE FROM operations_attendance WHERE supervisor = ? AND dom = ? AND assigned_mover = ?";
-    private static final String UPDATE_ATTENDANCE = "UPDATE operations_attendance SET attendance = ?, duration = ? WHERE supervisor = ? AND assigned_mover = ? AND dom = ?";
+    private static final String GET_MOVERS_ASSIGNED = "SELECT * FROM operations_attendance WHERE dom = ?";
+    private static final String REMOVE_MOVER = "DELETE FROM operations_attendance WHERE dom = ? AND assigned_mover = ?";
+    private static final String UPDATE_ATTENDANCE = "UPDATE operations_attendance SET attendance = ?, duration = ? WHERE assigned_mover = ? AND dom = ?";
     private static final String GET_DOM_BY_LEADID = "SELECT * FROM operations_assigned WHERE lead_id = ? GROUP BY dom ORDER BY dom DESC";
+    private static final String GET_MOVERS_ATTENDANCE = "SELECT * FROM operations_attendance WHERE dom = ?";
     
     public static boolean checkAssigned(String dom, String sMover) {
         Connection con = null;
@@ -85,15 +87,14 @@ public class OperationsDAO {
         return movers;
     }
     
-    public static void removeMover(String supervisor, String mover, String dom){
+    public static void removeMover(String mover, String dom){
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(REMOVE_MOVER);
-            ps.setString(1, supervisor);
-            ps.setString(2, dom);
-            ps.setString(3, mover);
+            ps.setString(1, dom);
+            ps.setString(2, mover);
             ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();
@@ -102,7 +103,7 @@ public class OperationsDAO {
         }
     }
     
-    public static ArrayList<MoversAttendance> getMoverAttendance(String supervisor, String dom){
+    public static ArrayList<MoversAttendance> getMoverAttendanceBySup(String supervisor, String dom){
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -140,9 +141,8 @@ public class OperationsDAO {
                 ps = con.prepareStatement(UPDATE_ATTENDANCE);
                 ps.setString(1, m.getStatus());
                 ps.setDouble(2, m.getDuration());
-                ps.setString(3, m.getSupervisor());
-                ps.setString(4, u.getNric());
-                ps.setString(5, m.getDom());
+                ps.setString(3, u.getNric());
+                ps.setString(4, m.getDom());
                 ps.executeUpdate();
             }
         } catch (SQLException se) {
@@ -174,5 +174,55 @@ public class OperationsDAO {
             ConnectionManager.close(con, ps, rs);
         }
         return dom;
+    }
+    
+    public static ArrayList<User> getMoversAssigned(String dom){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<User> movers = new ArrayList<User>();
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_MOVERS_ASSIGNED);
+            ps.setString(1,dom);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                String mover = rs.getString("assigned_mover");
+                User u = UserDAO.getUserByNRIC(mover);
+                movers.add(u);   
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return movers;
+    }
+    
+    public static ArrayList<MoversAttendance> getMoverAttendances(String dom){
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<MoversAttendance> movers = new ArrayList<MoversAttendance>();
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_MOVERS_ATTENDANCE);
+            ps.setString(1,dom);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                String mover = rs.getString("assigned_mover");
+                User m = UserDAO.getUserByNRIC(mover);
+                String sup = rs.getString("supervisor");
+                String date = rs.getString("dom");
+                String status = rs.getString("attendance");
+                double duration = rs.getInt("duration");
+                movers.add(new MoversAttendance(sup, m, date, status, duration));  
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return movers;
     }
 }
