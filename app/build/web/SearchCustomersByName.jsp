@@ -9,17 +9,69 @@
         <title>Customer Search</title>
     </head>
     <body>
+        <style type="text/css"> .javascript { display: none; } </style>
+ <div class="javascript">
+<script type="text/javascript" src="assets/widgets/datatable/datatable.js"></script>
+<script type="text/javascript" src="assets/widgets/datatable/datatable-bootstrap.js"></script>
+<script type="text/javascript" src="assets/widgets/datatable/datatable-tabletools.js"></script>
+<script type="text/javascript">
+
+    /* Datatables basic */
+
+    $(document).ready(function() {
+        $('#custSearchTable').dataTable();
+        $('#crmSearchTable').dataTable();
+    });
+
+    /* Datatables hide columns */
+
+    $(document).ready(function() {
+        var table = $('#datatable-hide-columns').DataTable( {
+            "scrollY": "300px",
+            "paging": false
+        } );
+
+        $('#datatable-hide-columns_filter').hide();
+
+        $('a.toggle-vis').on( 'click', function (e) {
+            e.preventDefault();
+
+            // Get the column API object
+            var column = table.column( $(this).attr('data-column') );
+
+            // Toggle the visibility
+            column.visible( ! column.visible() );
+        } );
+    } );
+
+    /* Datatable row highlight */
+
+    $(document).ready(function() {
+        var table = $('#datatable-row-highlight').DataTable();
+
+        $('#datatable-row-highlight tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('tr-selected');
+        } );
+    });
+
+
+
+    $(document).ready(function() {
+        $('.dataTables_filter input').attr("placeholder", "Search...");
+    });
+
+</script>
+ </div>
         <div class="form-horizontal" >
             <div class="form-group">
-                <!--
-                <center><h3 class="modal-title"><b>Search Results</b></h3></center>
-                <br> -->
                 <div class="col-sm-6">
                     <%
                         String name = request.getParameter("getName");
                         String module = request.getParameter("getAction");
+                        String tableID = "";
                         ArrayList<Customer> results = null;
                         if (module.equals("crm")) {
+                            tableID = "crmSearchTable";
                             try {
                                 int num = Integer.parseInt(name);
                                 results = CustomerDAO.getCustomersByContact(num);
@@ -27,8 +79,9 @@
                                 results = CustomerDAO.getCustomersByString(name);
                             }
                         } else {
+                            tableID = "custSearchTable";
                             results = CustomerDAO.getCustomersByName(name);
-                            out.println("<button class=\"btn btn-default\"onclick='addNewCustomer();return false;'>Add New</button>");
+                            out.println("<button class=\"btn btn-info\"onclick='addNewCustomer();return false;'>Add New</button>");
                         }
                     %>
                 </div>
@@ -39,21 +92,23 @@
             if (results.isEmpty()) {
                 out.println("No results found");
             } else {
-                if (results.size() == 1) {
-                    out.println(results.size() + " record found");
-                } else {
-                    out.println(results.size() + " records found");
-                }
+//                if (results.size() == 1) {
+//                    out.println(results.size() + " record found");
+//                } else {
+//                    out.println(results.size() + " records found");
+//                }
         %>
-        <br><br>
         <div id="resultsTable">
-            <table class="table table-hover">
+            <table class="table table-hover" id="<%=tableID%>">
+                <thead>
                 <tr>
                     <th>Name</th>
                     <th>Contact</th>
                     <th>Email</th>
                     <th>Action</th>
                 </tr>
+                </thead>
+                <tbody>
                 <%
                     for (Customer customer : results) {
                         int custId = customer.getCustomer_id();
@@ -92,6 +147,7 @@
                 <%
                     }
                 %>
+                </tbody>
             </table>
         </div>
         <%

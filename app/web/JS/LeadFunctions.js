@@ -104,6 +104,9 @@ function viewLeadsHistory(custId) {
     var leadsHistoryContent = document.getElementById("leadsHistoryContent");
     $.get("LeadsHistory.jsp", {getId: custId}, function (data) {
         leadsHistoryContent.innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
     modal.style.display = "block";
 }

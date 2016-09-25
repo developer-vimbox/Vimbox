@@ -12,13 +12,13 @@
     <body>
         <%@include file="header.jsp"%>
         <script src="http://malsup.github.com/jquery.form.js"></script> 
-        
+
         <script src="JS/jquery.hotkeys.js"></script>
         <script src="JS/ModalFunctions.js"></script>
         <script src="JS/CustomerFunctions.js"></script>
         <script src="JS/LeadFunctions.js"></script>
         <script src="JS/AddressSearch.js"></script>
-        <style>
+        <style> 
 
             table.salesTable td {
                 padding: 5px;
@@ -46,16 +46,6 @@
                 color: #4b5056;
             }
         </style>
-        <div id="customer_error_modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('customer_error_modal')">×</span>
-                    <div id="customer_error_status"></div>
-                    <hr>
-                    <div id="customer_error_message"></div>
-                </div>
-            </div>
-        </div>
         <div id="cal_modal" class="modal">
             <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">
@@ -100,7 +90,7 @@
             </div>
         </div>
         <div id="customer_modal" class="modal">
-            <div class="modal-content">
+            <div class="modal-content" style="width: 60%;">
                 <div class="modal-header">
                     <span class="close" onclick="closeModal('customer_modal')">×</span>
                     <center><h2>Select Customer</h2></center>
@@ -270,8 +260,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Move Type: </label>
                                             <div class="col-sm-6" style="padding-top: 7px;">
-                                                <%                                                
-                                                    for (String[] moveType : moveTypes) {
+                                                <%                                                    for (String[] moveType : moveTypes) {
                                                         String type = moveType[0];
                                                         out.println("<input class='checkbox-inline' type='checkbox' name='tom' value='" + type + "'>" + type);
                                                     }
@@ -406,12 +395,12 @@
                 var element = document.activeElement.parentNode;
                 var tag = element.tagName;
                 var tableClassName = $(element).attr('class');
-                while (tag !== 'TABLE'){
+                while (tag !== 'TABLE') {
                     element = element.parentNode;
                     tag = element.tagName;
                     tableClassName = $(element).attr('class');
                 }
-                
+
                 var activeElement = document.activeElement.parentNode;
                 var tagname = activeElement.tagName;
                 var classname = $(activeElement).attr('class');

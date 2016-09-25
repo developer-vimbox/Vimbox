@@ -389,7 +389,7 @@
                     </button>
                 </div>
                 <div id="customer_modal_header" class="modal">
-                    <div class="modal-content" style="width: 700px;">
+                    <div class="modal-content" style="width: 60%;">
                         <div class="modal-header">
                             <span class="close" onclick="closeModal('customer_modal_header')">×</span>
                             <center><h2>Customer Search</h2></center>
@@ -402,7 +402,7 @@
                                     </div>
 
                                     <div id="edit_customer_modal" class="modal">
-                                        <div class="modal-content" style="width: 500px;">
+                                        <div class="modal-content" style="width: 70%;">
                                             <div class="modal-header">
                                                 <span class="close" onclick="closeModal('edit_customer_modal')">×</span>
                                                 <center><h2>Edit Customer</h2></center>
@@ -414,7 +414,7 @@
                                     </div>
 
                                     <div id="leadsHistoryModal" class="modal">
-                                        <div class="modal-content" style="width: 900px;">
+                                        <div class="modal-content" style="width: 80%;">
                                             <div class="modal-header">
                                                 <span class="close" onclick="closeModal('leadsHistoryModal')">×</span>
                                                 <center><h2>Leads History</h2></center>
@@ -424,21 +424,8 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div id="customer_error_modal" class="modal">
-                                        <div class="error-modal-content">
-                                            <div class="modal-header">
-                                                <span class="close" onclick="closeModal('customer_error_modal')">×</span>
-                                                <center><h2><div id="customer_error_status"></div></h2></center>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div id="customer_error_message"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div id="ticketsHistoryModal" class="modal">
-                                        <div class="modal-content" style="width: 900px;">
+                                        <div class="modal-content" style="width: 80%;">
                                             <div class="modal-header">
                                                 <span class="close" onclick="closeModal('ticketsHistoryModal')">×</span>
                                                 <center><h2>Tickets History</h2></center>

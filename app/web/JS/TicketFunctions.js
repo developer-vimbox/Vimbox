@@ -213,6 +213,9 @@ function viewTicketsHistory(custId) {
     var ticketsHistoryContent = document.getElementById("ticketsHistoryContent");
     $.get("TicketsHistory.jsp", {getId: custId}, function (data) {
         ticketsHistoryContent.innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
     modal.style.display = "block";
 }

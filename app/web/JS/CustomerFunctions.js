@@ -4,6 +4,9 @@ function customerSearch(module) {
     var content = document.getElementById("customer_content");
     $.get("SearchCustomersByName.jsp", {getName: name, getAction: module}, function (data) {
         content.innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
     modal.style.display = "block";
 }
@@ -14,6 +17,9 @@ function customerSearchHeader(module) {
     var content = document.getElementById("customer_content_header");
     $.get("SearchCustomersByName.jsp", {getName: name, getAction: module}, function (data) {
         content.innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
     modal.style.display = "block";
 }
