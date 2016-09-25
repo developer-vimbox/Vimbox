@@ -222,6 +222,7 @@ function addArea(address, fullAddr) {
 
     var div = document.createElement('div');
     div.id = address + "_div_" + areaCounter;
+    console.log(div.id);
     div.className = "survey_area_div";
     $.get("LoadSurvey.jsp", {address: address, areaCounter: areaCounter, fullAddr: fullAddr}, function (data) {
         div.innerHTML = data;
@@ -237,8 +238,8 @@ function addArea(address, fullAddr) {
 
 function addAreaTable(divId, address, areaCounter) {
     var col = "<col width='20%'><col width='45%'><col width='10%'><col width='10%'><col width='10%'><col width='5%'>"
-    var newCustTable = "<tr><td><table class='table table-bordered'  id='" + divId + "_" + address + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><center><label id='" + divId + "_" + address + "_CustomerItemTableLbl'>Area</label></center></tr></table></td></tr>";
-    var newVimboxTable = "<tr><td><table class='table table-bordered' id='" + divId + "_" + address + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><center><label id='" + divId + "_" + address + "_VimboxItemTableLbl'>Area</label></center></tr></table></td></tr>";
+    var newCustTable = "<tr><td><table class='table table-bordered'  id='" + divId + "_" + address + "_" + areaCounter + "_CustomerItemTable' width='100%'>" + col + "<tr><th colspan='6'><center><label id='" + divId + "_" + address + "_" + areaCounter + "_CustomerItemTableLbl'>Area</label></center></tr></table></td></tr>";
+    var newVimboxTable = "<tr><td><table class='table table-bordered' id='" + divId + "_" + address + "_" + areaCounter + "_VimboxItemTable' width='100%'>" + col + "<tr><th colspan='6'><center><label id='" + divId + "_" + address + "_" + areaCounter + "_VimboxItemTableLbl'>Area</label></center></tr></table></td></tr>";
 
     $("#" + divId + "_CustomerItemTable").append(newCustTable);
     $("#" + divId + "_VimboxItemTable").append(newVimboxTable);
@@ -321,9 +322,10 @@ $(document).on('change keyup paste', '#siteArea_name', function () {
     document.getElementById(lblId).innerHTML = this.value;
     // Getting the salesDiv and address //
     var address = lblId.split("_")[0];
+    var counter = lblId.split("_")[2];
     var divId = value.split("|")[1];
-    document.getElementById(divId + "_" + address + "_CustomerItemTableLbl").innerHTML = this.value;
-    document.getElementById(divId + "_" + address + "_VimboxItemTableLbl").innerHTML = this.value;
+    document.getElementById(divId + "_" + address + "_" + counter + "_CustomerItemTableLbl").innerHTML = this.value;
+    document.getElementById(divId + "_" + address + "_" + counter + "_VimboxItemTableLbl").innerHTML = this.value;
 });
 
 function showTableDiv(e, address, areaCounter, divName) {
