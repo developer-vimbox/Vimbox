@@ -82,7 +82,7 @@
                                     </ul>
                                     <div class="tab-content">
                                         <div id="pendingTickets" class="tab-pane active">
-                                            <div class="form-group">
+                                            <!--<div class="form-group">
                                                 <div class="col-sm-4">
                                                     <div class="input-group bootstrap-touchspin">
                                                         <input type = "text" id="pKw" placeholder="Enter keyword or date (YYYY-MM-DD)" class = "form-control"  style="width: 400px;color:black;">
@@ -91,12 +91,11 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <br/><br/>
+                                            </div>-->
                                             <div id="pending"></div>
                                         </div>
                                         <div id="resolvedTickets" class="tab-pane">
-                                            <div class="form-group">
+                                            <!--<div class="form-group">
                                                 <div class="col-sm-4">
                                                     <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                                         <input type = "text"  id="rKw" placeholder="Enter keyword or date (YYYY-MM-DD)" class = "form-control"  style="width: 400px;color:black;">
@@ -105,8 +104,7 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <br/><br/>
+                                            </div>-->
                                             <div id="resolved"></div>
                                         </div>
                                     </div>

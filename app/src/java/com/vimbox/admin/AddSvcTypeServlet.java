@@ -42,13 +42,36 @@ public class AddSvcTypeServlet extends HttpServlet {
         String secondary = request.getParameter("svcType_secondary");
         String formula = request.getParameter("svcType_formula");
         String description = request.getParameter("svcType_description");
-        System.out.println("Add Svc Type: " + primary + " " + secondary + " " + formula);
-        LeadPopulationDAO.addSvcType(primary, secondary, formula, description);
+        
+        boolean error = false;
+        String errorMsg = "";
+        
+        if(primary.isEmpty()) {
+            error = true;
+            errorMsg += "Please enter primary<br>";
+        }
+        if(secondary.isEmpty()) {
+            error = true;
+            errorMsg += "Please enter secondary<br>";
+        }
+        if(formula.isEmpty()) {
+            error = true;
+            errorMsg += "Please enter formula<br>";
+        }
+        if(description.isEmpty()) {
+            error = true;
+            errorMsg += "Please enter description<br>";
+        }
+        
         JsonObject jsonOutput = new JsonObject();
-
-        jsonOutput.addProperty("status", "SUCCESS");
-        jsonOutput.addProperty("errorMsg", "Service type added");
-
+        if(error) {
+            jsonOutput.addProperty("status", "ERROR");
+            jsonOutput.addProperty("errorMsg", errorMsg);
+        } else {
+            LeadPopulationDAO.addSvcType(primary, secondary, formula, description);
+            jsonOutput.addProperty("status", "SUCCESS");
+            jsonOutput.addProperty("errorMsg", "Service type added!");
+        }
         out.println(jsonOutput);
     }
 

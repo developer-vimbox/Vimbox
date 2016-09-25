@@ -18,6 +18,54 @@
     </head>
     <body>
         <%@include file="header.jsp"%>
+
+<script type="text/javascript">
+
+    /* Datatables basic */
+
+    $(document).ready(function() {
+        $('#myTicketsTable').dataTable();
+        $('#assignedTicketsTable').dataTable();
+    });
+
+    /* Datatables hide columns */
+
+    $(document).ready(function() {
+        var table = $('#datatable-hide-columns').DataTable( {
+            "scrollY": "300px",
+            "paging": false
+        } );
+
+        $('#datatable-hide-columns_filter').hide();
+
+        $('a.toggle-vis').on( 'click', function (e) {
+            e.preventDefault();
+
+            // Get the column API object
+            var column = table.column( $(this).attr('data-column') );
+
+            // Toggle the visibility
+            column.visible( ! column.visible() );
+        } );
+    } );
+
+    /* Datatable row highlight */
+
+    $(document).ready(function() {
+        var table = $('#datatable-row-highlight').DataTable();
+
+        $('#datatable-row-highlight tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('tr-selected');
+        } );
+    });
+
+
+
+    $(document).ready(function() {
+        $('.dataTables_filter input').attr("placeholder", "Search...");
+    });
+
+</script>
         <%            ArrayList<Ticket> myTickets = TicketDAO.getTicketsByOwnerUser(user);
             ArrayList<Ticket> assignedTickets = TicketDAO.getTicketsByAssignedUser(user);
 
@@ -47,37 +95,7 @@
 
         <div id="page-content-wrapper">
             <div id="page-content" style="min-height: 545px;">
-
                 <div class="container">
-
-                    <!-- Tocify -->
-
-                    <!--<link rel="stylesheet" type="text/css" href="assets/widgets/tocify/tocify.css">-->
-                    <script type="text/javascript" src="assets/widgets/sticky/sticky.js"></script>
-                    <script type="text/javascript" src="assets/widgets/tocify/tocify.js"></script>
-
-                    <script type="text/javascript">
-                        $(function () {
-                            var toc = $("#tocify-menu").tocify({context: ".toc-tocify", showEffect: "fadeIn", extendPage: false, selectors: "h2, h3, h4"});
-                        });
-                        jQuery(document).ready(function ($) {
-
-                            /* Sticky bars */
-
-                            $(function () {
-                                "use strict";
-
-                                $('.sticky-nav').hcSticky({
-                                    top: 50,
-                                    innerTop: 50,
-                                    stickTo: 'document'
-                                });
-
-                            });
-
-                        });
-                    </script>
-
                     <div id="page-title">
                         <h2>My Tickets</h2> <br/>
                         <div class="panel">
@@ -89,58 +107,62 @@
                                     </ul>
                                     <div class="tab-content">
                                         <div id="myTickets" class="tab-pane active">
-                                            <table class="table table-hover">
-                                                <tr>
-                                                    <th>Ticket ID</th>
-                                                    <th>Cust Name</th>
-                                                    <th>Cust Contact</th>
-                                                    <th>Cust Email</th>
-                                                    <th>Subject</th>
-                                                    <th>Date & Time</th>
-                                                    <th>Edited on</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                <%                                for (Ticket myTicket : myTickets) {
-                                                        int ticketId = myTicket.getTicket_id();
-                                                        Customer customer = myTicket.getCustomer();
-                                                        String customerName = customer.toString();
-                                                        String contact = customer.getContact() + "";
-                                                        if (contact.equals("0")) {
-                                                            contact = "N/A";
-                                                        }
-                                                        String email = customer.getEmail();
-                                                        if (email.isEmpty()) {
-                                                            email = "N/A";
-                                                        }
-                                                        String subject = myTicket.getSubject();
-                                                        String dateTime = Converter.convertDate(myTicket.getDatetime_of_creation());
-                                                        String edited = Converter.convertDate(myTicket.getDatetime_of_edit());
-                                                        String status = myTicket.getStatus();
-                                                %>
-
-                                                <tr>
-                                                    <td><%=ticketId%></td>
-                                                    <td><%=customerName%></td>
-                                                    <td><%=contact%></td>
-                                                    <td><%=email%></td>
-                                                    <td><%=subject%></td>
-                                                    <td><%=dateTime%></td>
-                                                    <td><%=edited%></td>
-                                                    <td><%=status%></td>
-                                                    <td>
-                                                        <%
-                                                            if (status.equals("Pending")) {
-                                                        %>
-                                                        <button class="btn btn-default" onclick="editTicket(<%=ticketId%>)">Edit</button>
-                                                        <%
+                                            <table class="table table-hover" id="myTicketsTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Ticket ID</th>
+                                                        <th>Cust Name</th>
+                                                        <th>Cust Contact</th>
+                                                        <th>Cust Email</th>
+                                                        <th>Subject</th>
+                                                        <th>Date & Time</th>
+                                                        <th>Edited on</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <%                                for (Ticket myTicket : myTickets) {
+                                                            int ticketId = myTicket.getTicket_id();
+                                                            Customer customer = myTicket.getCustomer();
+                                                            String customerName = customer.toString();
+                                                            String contact = customer.getContact() + "";
+                                                            if (contact.equals("0")) {
+                                                                contact = "N/A";
                                                             }
-                                                        %>
-                                                    </td>
-                                                </tr>
-                                                <%
-                                                    }
-                                                %>
+                                                            String email = customer.getEmail();
+                                                            if (email.isEmpty()) {
+                                                                email = "N/A";
+                                                            }
+                                                            String subject = myTicket.getSubject();
+                                                            String dateTime = Converter.convertDate(myTicket.getDatetime_of_creation());
+                                                            String edited = Converter.convertDate(myTicket.getDatetime_of_edit());
+                                                            String status = myTicket.getStatus();
+                                                    %>
+
+                                                    <tr>
+                                                        <td><%=ticketId%></td>
+                                                        <td><%=customerName%></td>
+                                                        <td><%=contact%></td>
+                                                        <td><%=email%></td>
+                                                        <td><%=subject%></td>
+                                                        <td><%=dateTime%></td>
+                                                        <td><%=edited%></td>
+                                                        <td><%=status%></td>
+                                                        <td>
+                                                            <%
+                                                                if (status.equals("Pending")) {
+                                                            %>
+                                                            <button class="btn btn-default" onclick="editTicket(<%=ticketId%>)">Edit</button>
+                                                            <%
+                                                                }
+                                                            %>
+                                                        </td>
+                                                    </tr>
+                                                    <%
+                                                        }
+                                                    %>
+                                                </tbody>
                                             </table>
                                         </div>
                                         <div id="edit_ticket_modal" class="modal">
@@ -191,7 +213,8 @@
                                             </div>
                                         </div>
                                         <div id="assignedTickets" class="tab-pane">
-                                            <table class="table table-hover">
+                                            <table class="table table-hover" id="assignedTicketsTable">
+                                                <thead>
                                                 <tr>
                                                     <th>Ticket ID</th>
                                                     <th>Cust Name</th>
@@ -203,6 +226,8 @@
                                                     <th>Action</th>
                                                     <th>View</th>
                                                 </tr>
+                                                </thead>
+                                                <tbody>
                                                 <%
                                                     for (Ticket ticket : assignedTickets) {
                                                         int ticketId = ticket.getTicket_id();
@@ -252,7 +277,7 @@
                                                                         <div class="form-group">
                                                                             <label class="col-sm-3 control-label">Comment: </label>
                                                                             <div class="col-sm-7">
-                                                                                <textarea class="form-control" id="ticket_comment<%=ticketId%>" cols="75" rows="6" autofocus></textarea>
+                                                                                <textarea class="form-control" id="ticket_comment<%=ticketId%>" cols="30" rows="6" autofocus></textarea>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group">
@@ -309,6 +334,7 @@
                                                 <%
                                                     }
                                                 %>
+                                                </tbody>
                                             </table>
                                         </div>
                                         <div id="ticket_error_modal" class="modal">

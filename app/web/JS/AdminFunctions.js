@@ -45,24 +45,36 @@ function admLeads_setup() {
 function admLeads_search(keyword) {
     $.get("LoadAdminLeads.jsp", {keyword: keyword}, function (data) {
         document.getElementById("admLeadsTable").innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
 function viewMoveType() {
     $.get("LoadMoveType.jsp", function (data) {
         document.getElementById('moveType_table').innerHTML = data;
+        $('.javascriptMove').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
 function viewRefType() {
    $.get("LoadRefType.jsp", function (data) {
         document.getElementById('refType_table').innerHTML = data;
+        $('.javascriptRef').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
 function viewSvcType() {
     $.get("LoadSvcType.jsp", function (data) {
         document.getElementById('svcType_table').innerHTML = data;
+        $('.javascriptSvc').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
@@ -118,7 +130,9 @@ function addRefType() {
                         modal.style.display = "none";
                     }, 800);
                     viewRefType();
-                document.getElementById("refType").value = "";
+                if (status === "SUCCESS") {
+                    document.getElementById("refType").value = "";
+                }
             })
             .fail(function (error) {
                 msgStatus.innerHTML = "ERROR";
@@ -152,10 +166,12 @@ function addSvcType() {
                         document.getElementById("messageModal3").style.display = "none";
                     }, 800);
                 viewSvcType();
-                document.getElementById("svcType_primary").value = "";
-                document.getElementById("svcType_secondary").value = "";
-                document.getElementById("svcType_formula").value = "";
-                document.getElementById("svcType_description").value = "";
+                if(status === "SUCCESS") {
+                    document.getElementById("svcType_primary").value = "";
+                    document.getElementById("svcType_secondary").value = "";
+                    document.getElementById("svcType_formula").value = "";
+                    document.getElementById("svcType_description").value = "";
+                }
             })
             .fail(function (error) {
                 msgStatus.innerHTML = "ERROR";

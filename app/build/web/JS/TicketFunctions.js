@@ -192,6 +192,9 @@ function searchPending(kw) {
     var pkwDiv = document.getElementById("pending");
     $.get("SearchTickets.jsp", {getKeyword: kw, getStatus: "pending"}, function (data) {
         pkwDiv.innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
@@ -199,6 +202,9 @@ function searchResolved(kw) {
     var rkwDiv = document.getElementById("resolved");
     $.get("SearchTickets.jsp", {getKeyword: kw, getStatus: "resolved"}, function (data) {
         rkwDiv.innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 

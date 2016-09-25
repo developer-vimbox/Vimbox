@@ -12,6 +12,9 @@ function selectAllJobs(source) {
 function loadAssignJobs(keyword) {
     $.get("LoadAssignJobs.jsp", {keyword: keyword}, function (data) {
         document.getElementById("jobs_table").innerHTML = data;
+        $('.javascript').each(function() {
+            eval($(this).text());
+        });
     });
 }
 
@@ -69,6 +72,9 @@ function sales_operation_setup() {
 function loadSalesOperations(keyword, type) {
     $.get("LoadSalesOperations.jsp", {keyword: keyword, type: type}, function (data) {
         document.getElementById(type).innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 

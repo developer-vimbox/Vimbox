@@ -8,6 +8,58 @@
 <%@page import="java.util.Date"%>
 <%@page import="com.vimbox.hr.Payslip"%>
 <%@page import="java.util.ArrayList"%>
+<style type="text/css"> .javascript { display: none; } </style>
+ <div class="javascript">
+<script type="text/javascript" src="assets/widgets/datatable/datatable.js"></script>
+<script type="text/javascript" src="assets/widgets/datatable/datatable-bootstrap.js"></script>
+<script type="text/javascript" src="assets/widgets/datatable/datatable-tabletools.js"></script>
+<script type="text/javascript">
+
+    /* Datatables basic */
+
+    $(document).ready(function() {
+        $('#payslipsTable').dataTable();
+    });
+
+    /* Datatables hide columns */
+
+    $(document).ready(function() {
+        var table = $('#datatable-hide-columns').DataTable( {
+            "scrollY": "300px",
+            "paging": false
+        } );
+
+        $('#datatable-hide-columns_filter').hide();
+
+        $('a.toggle-vis').on( 'click', function (e) {
+            e.preventDefault();
+
+            // Get the column API object
+            var column = table.column( $(this).attr('data-column') );
+
+            // Toggle the visibility
+            column.visible( ! column.visible() );
+        } );
+    } );
+
+    /* Datatable row highlight */
+
+    $(document).ready(function() {
+        var table = $('#datatable-row-highlight').DataTable();
+
+        $('#datatable-row-highlight tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('tr-selected');
+        } );
+    });
+
+
+
+    $(document).ready(function() {
+        $('.dataTables_filter input').attr("placeholder", "Search...");
+    });
+
+</script>
+ </div>
 <%
     String keyword = request.getParameter("keyword");
     ArrayList<Payslip> results = new ArrayList<Payslip>();
@@ -25,12 +77,13 @@
     }
 %>
 
-<table class="table table-hover">
+<table class="table table-hover" id="payslipsTable">
     <col width="20%">
     <col width="20%">
     <col width="20%">
     <col width="15%">
     <col width="25%">
+    <thead>
     <tr>
         <th>Payslip ID</th>
         <th>NRIC</th>
@@ -38,7 +91,8 @@
         <th>Pay Month</th>
         <th>Actions</th>
     </tr>
-
+    </thead>
+    <tbody>
     <%
         for (Payslip payslip : results) {
             User employee = payslip.getUser();
@@ -68,6 +122,7 @@
             out.println("</tr>");
         }
     %>
+</tbody>
 </table>
 <div id="edit_payslip_modal" class="modal">
     <div class="modal-content" style="width: 800px;">

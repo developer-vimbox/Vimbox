@@ -25,6 +25,52 @@
     </head>
     <body onload="loadBody('Full')">
         <%@include file="header.jsp"%>
+        <script type="text/javascript">
+
+    /* Datatables basic */
+
+    $(document).ready(function() {
+        $('#dailyJobsTable').dataTable();
+    });
+
+    /* Datatables hide columns */
+
+    $(document).ready(function() {
+        var table = $('#datatable-hide-columns').DataTable( {
+            "scrollY": "300px",
+            "paging": false
+        } );
+
+        $('#datatable-hide-columns_filter').hide();
+
+        $('a.toggle-vis').on( 'click', function (e) {
+            e.preventDefault();
+
+            // Get the column API object
+            var column = table.column( $(this).attr('data-column') );
+
+            // Toggle the visibility
+            column.visible( ! column.visible() );
+        } );
+    } );
+
+    /* Datatable row highlight */
+
+    $(document).ready(function() {
+        var table = $('#datatable-row-highlight').DataTable();
+
+        $('#datatable-row-highlight tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('tr-selected');
+        } );
+    });
+
+
+
+    $(document).ready(function() {
+        $('.dataTables_filter input').attr("placeholder", "Search...");
+    });
+
+</script>
         <%            String dom = request.getParameter("dom");
         String userIC = user.getNric();
             ArrayList<Job> jobs = JobDAO.getJobsByDom(dom);
@@ -103,7 +149,7 @@
                                         %>
                                         
                                         <div id="assignedJobs" class="tab-pane active">
-                                            <table class="table table-hover" width="100%">
+                                            <table class="table table-hover" id="dailyJobsTable">
                                                 <col width="5%">
                                                 <col width="10%">
                                                 <col width="15%">

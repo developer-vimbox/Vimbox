@@ -32,7 +32,7 @@
 
 <script type="text/javascript" src="assets/widgets/tabs/tabs-responsive.js"></script>
 <script type="text/javascript">
-    /* Responsive tabs */
+
     $(document).ready(function () {
         $(function () {
             "use strict";
@@ -248,7 +248,9 @@
 <!--<script type="text/javascript" src="assets/js-core/transition.js"></script>-->
 <script type="text/javascript" src="assets/js-core/modernizr.js"></script>
 <script type="text/javascript" src="assets/js-core/jquery-cookie.js"></script>
-
+<script type="text/javascript" src="assets/widgets/datatable/datatable.js"></script>
+<script type="text/javascript" src="assets/widgets/datatable/datatable-bootstrap.js"></script>
+<script type="text/javascript" src="assets/widgets/datatable/datatable-tabletools.js"></script>
 <script type="text/javascript">
     $(window).load(function () {
         setTimeout(function () {
@@ -288,7 +290,7 @@
             <div id="header-nav-left">
                 <div class="user-account-btn dropdown">
                     <a href="#" title="My Account" class="user-profile clearfix" data-toggle="dropdown">
-                        <span><%=name%></span>
+                        <span style="width: auto;"><%=name%></span>
                         <span><%=designation%></span>
                         <i class="glyph-icon icon-angle-down"></i>
                     </a>

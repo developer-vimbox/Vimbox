@@ -2192,6 +2192,9 @@ function my_leads_setup(nric) {
 function load_leads(keyword, nric, type) {
     $.get("LoadMyLeads.jsp", {keyword: keyword, nric: nric, type: type}, function (data) {
         document.getElementById(type).innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 

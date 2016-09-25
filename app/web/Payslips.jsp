@@ -32,18 +32,18 @@
                             <div class="form-horizontal">
                                 <div class="form-group">
                                     <div class="col-sm-4">
-                                        <div class="input-group bootstrap-touchspin">
+                                        <!--<div class="input-group bootstrap-touchspin">
                                             <input type="text" id="payslip_search" placeholder="Search Payslip" class="form-control" style="width: 400px;color:black;">
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="loadPayslips($('#payslip_search').val())">Search</button>
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="fcPayslips()">Fast Create</button>
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="location.href = 'CreatePayslip.jsp';">Create New</button>
                                             </span>
-                                        </div>
+                                        </div>-->
+                                        <button class="btn btn-info" type="button" onclick="fcPayslips()">Fast Create</button>
+                                                <button class="btn btn-info" type="button" onclick="location.href = 'CreatePayslip.jsp';">Create New</button>
                                     </div>
                                 </div>
-
-                                <br>
                                 <div id="payslips_table"></div>
                             </div>
                             <div id="fastCreateModal" class="modal">

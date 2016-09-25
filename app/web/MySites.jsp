@@ -146,7 +146,7 @@
                                     </ul>
                                     <div class="tab-content">
                                         <div id="pendingSurvey" class="tab-pane active">
-                                            <div class="form-group">
+                                            <!--<div class="form-group">
                                                 <div class="col-sm-4">
                                                     <div class="input-group bootstrap-touchspin">
                                                         <input type="text" id="nc_survey_search" placeholder="Enter Lead ID" class="form-control" style="width: 400px;color:black;">
@@ -155,14 +155,13 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <br><br>
+                                            </div>-->
                                             <div id="nc_surveys_table"></div>
                                         </div>
 
 
                                         <div id="completedSurvey" class="tab-pane">
-                                            <div class="form-group">
+                                            <!--<div class="form-group">
                                                 <div class="col-sm-4">
                                                     <div class="input-group bootstrap-touchspin">
                                                         <input type="text" id="c_survey_search" placeholder="Enter Lead ID" class="form-control" style="width: 400px;color:black;">
@@ -171,9 +170,7 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <br><br>
+                                            </div>-->
                                             <div id="c_surveys_table"></div>
                                         </div>
                                     </div>

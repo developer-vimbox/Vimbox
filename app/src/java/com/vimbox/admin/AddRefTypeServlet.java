@@ -37,14 +37,24 @@ public class AddRefTypeServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache");
         PrintWriter out = response.getWriter();
 
-        // Retrieves the entered movetype //
         String refType = request.getParameter("refType");
-        LeadPopulationDAO.addRefType(refType);
+        boolean error = false;
+        String errorMsg = "";
+        
+        if(refType.isEmpty()){
+            error = true;
+            errorMsg += "Please enter move type<br>";
+        }
+
         JsonObject jsonOutput = new JsonObject();
-
-        jsonOutput.addProperty("status", "SUCCESSFULLY ADDED");
-        jsonOutput.addProperty("errorMsg", "Referral type added");
-
+        if (error) {
+            jsonOutput.addProperty("status", "ERROR");
+            jsonOutput.addProperty("errorMsg", errorMsg);
+        } else {
+            LeadPopulationDAO.addRefType(refType);
+            jsonOutput.addProperty("status", "SUCCESS");
+            jsonOutput.addProperty("errorMsg", "Referral type added!");
+        }
         out.println(jsonOutput);
     }
 

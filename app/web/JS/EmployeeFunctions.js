@@ -9,6 +9,9 @@ Date.prototype.toDateInputValue = (function () {
 function loadLeaveMCs(keyword) {
     $.get("LoadLeaveMC.jsp", {keyword: keyword}, function (data) {
         document.getElementById('leave_mc_table').innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
@@ -17,8 +20,12 @@ function leaveMc_setup() {
 }
 
 function loadEmployees(keyword, timer) {
+    
     $.get("LoadEmployees.jsp", {keyword: keyword, timer: timer}, function (data) {
         document.getElementById('employees_table').innerHTML = data;
+            $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
@@ -239,6 +246,9 @@ function fgPayslips() {
 function loadPayslips(keyword) {
     $.get("LoadPayslips.jsp", {keyword: keyword}, function (data) {
         document.getElementById('payslips_table').innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
@@ -798,12 +808,18 @@ function attendance_setup() {
 function loadAttendances(keyword) {
     $.get("LoadAttendancesYM.jsp", {keyword: keyword}, function (data) {
         document.getElementById('attendance_table').innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
 function viewAttendance(keyword) {
     $.get("LoadAttendancesViewModal.jsp", {keyword: keyword}, function (data) {
         document.getElementById('attendance_modal_details').innerHTML = data;
+        $('.javascriptt').each(function() {
+      eval($(this).text());
+    });
     });
     document.getElementById("view_attendance_modal").style.display = "block";
 }

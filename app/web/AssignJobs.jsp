@@ -51,17 +51,14 @@
                         <h2>All Jobs</h2> <br/>
                         <div class="panel">
                             <div class="panel-body">
-                                <div class="form-group">
+                                <!--<div class="form-group">
                                     <div class="col-sm-4">
                                         <div class="input-group bootstrap-touchspin">
                                             <input type="text" id="job_search" placeholder="Enter Lead ID or Date (YYYY-MM-DD)" class="form-control" style="width: 400px;color:black;">
-                                            
                                             <button class="btn btn-default bootstrap-touchspin-up" type="button" onclick="loadAssignJobs($('#job_search').val())">Search</button>
-                                            
                                         </div>
                                     </div>
-                                </div>
-                                <br><br>
+                                </div>-->
                                 <div id="jobs_table"></div>
                             </div>
                         </div>

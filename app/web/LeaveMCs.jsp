@@ -22,7 +22,7 @@
             </div>
         </div>
         <div id="page-content-wrapper">
-            <div id="page-content" style="min-height: 7630px;">
+            <div id="page-content">
                 <div class="container">
                     <div id="page-title">
                         <h2>Leave / MC Record</h2> <br>
@@ -32,16 +32,16 @@
                             <div class="form-horizontal">
                                 <div class="form-group">
                                     <div class="col-sm-4">
-                                        <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                        <!--<div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                             <input type="text" id="leave_mc_search" class="form-control" style="width: 400px;color:black;">
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button"  onclick="loadLeaveMCs($('#leave_mc_search').val())">Search</button>
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="location.href = 'CreateLeaveMC.jsp';">Add New</button>
                                             </span>
-                                        </div>
+                                        </div>-->
+                                        <button class="btn btn-info" type="button" onclick="location.href = 'CreateLeaveMC.jsp';">Add New</button>
                                     </div>
                                 </div>
-                                <br>
                                 <div id="leave_mc_table"></div>
                             </div>
                         </div>

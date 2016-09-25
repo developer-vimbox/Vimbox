@@ -30,7 +30,7 @@
                     </div>
                     <div class="panel">
                         <div class="panel-body">
-                            <div class="form-horizontal">
+                            <!--<div class="form-horizontal">
                                 <div class="form-group">
                                     <div class="col-sm-4">
                                         <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
@@ -39,7 +39,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="example-box-wrapper">
                                 <ul class="nav-responsive nav nav-tabs">
                                     <li class="active"><a href="#Pending" data-toggle="tab">Pending</a></li>

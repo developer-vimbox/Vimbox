@@ -6,6 +6,58 @@
 <%@page import="com.vimbox.hr.LeaveMC"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.vimbox.database.UserLeaveDAO"%>
+<style type="text/css"> .javascript { display: none; } </style>
+ <div class="javascript">
+<script type="text/javascript" src="assets/widgets/datatable/datatable.js"></script>
+<script type="text/javascript" src="assets/widgets/datatable/datatable-bootstrap.js"></script>
+<script type="text/javascript" src="assets/widgets/datatable/datatable-tabletools.js"></script>
+<script type="text/javascript">
+
+    /* Datatables basic */
+
+    $(document).ready(function() {
+        $('#leadMCTable').dataTable();
+    });
+
+    /* Datatables hide columns */
+
+    $(document).ready(function() {
+        var table = $('#datatable-hide-columns').DataTable( {
+            "scrollY": "300px",
+            "paging": false
+        } );
+
+        $('#datatable-hide-columns_filter').hide();
+
+        $('a.toggle-vis').on( 'click', function (e) {
+            e.preventDefault();
+
+            // Get the column API object
+            var column = table.column( $(this).attr('data-column') );
+
+            // Toggle the visibility
+            column.visible( ! column.visible() );
+        } );
+    } );
+
+    /* Datatable row highlight */
+
+    $(document).ready(function() {
+        var table = $('#datatable-row-highlight').DataTable();
+
+        $('#datatable-row-highlight tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('tr-selected');
+        } );
+    });
+
+
+
+    $(document).ready(function() {
+        $('.dataTables_filter input').attr("placeholder", "Search...");
+    });
+
+</script>
+ </div>
 <%
     String keyword = request.getParameter("keyword");
 
@@ -30,7 +82,7 @@
         out.println("<br><br>");
     }
 %>
-<table class="table table-hover">
+<table class="table table-hover" id="leadMCTable">
     <thead>
     <tr>
         <th>NRIC</th>
@@ -94,7 +146,7 @@
                 }
             %>
             
-             <button class="btn btn-default" onclick="confirmDelete('<%=nric + "_" + Converter.convertDateHtml(leaveMC.getDate())%>', 'leave_mc')">Delete</button>
+             <button class="btn btn-warning" onclick="confirmDelete('<%=nric + "_" + Converter.convertDateHtml(leaveMC.getDate())%>', 'leave_mc')">Delete</button>
         </td>
     </tr>
     </tbody>

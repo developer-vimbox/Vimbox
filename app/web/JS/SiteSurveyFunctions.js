@@ -25,6 +25,9 @@ function loadSurveys(keyword, userId, type) {
         } else {
             document.getElementById('c_surveys_table').innerHTML = data;
         }
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 
@@ -1002,6 +1005,9 @@ function sales_survey_setup() {
 function loadSalesSurveys(keyword, type) {
     $.get("LoadSalesSurveys.jsp", {keyword: keyword, type: type}, function (data) {
         document.getElementById(type).innerHTML = data;
+        $('.javascript').each(function() {
+      eval($(this).text());
+    });
     });
 }
 

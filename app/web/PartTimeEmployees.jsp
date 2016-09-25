@@ -24,17 +24,16 @@
                             <div class="form-horizontal">
                                 <div class="form-group">
                                     <div class="col-sm-4">
-                                        <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                        <!--<div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                             <input type="text" id="employee_search" placeholder="Enter employee name" class="form-control" style="width: 400px;color:black;">
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="loadEmployees($('#employee_search').val(), 'part-time')">Search</button>
                                                 <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="location.href = 'CreateEmployee.jsp';">Add New</button>
                                             </span>
-                                        </div>
+                                        </div>-->
+                                        <button class="btn btn-info" type="button" onclick="location.href = 'CreateEmployee.jsp';">Add New</button>
                                     </div>
-
                                 </div>
-                                <br><br>
                                 <div id="employees_table"></div>
                             </div>
                         </div>

@@ -34,17 +34,16 @@
                             <div class="form-horizontal">
                                  <div class="form-group">
                                         <div class="col-sm-4">
-                                            <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                            <!--<div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                                 <input type="text" id="attendance_search" placeholder="YYYY-MM" class="form-control" style="width: 400px;color:black;">
                                                 <span class="input-group-btn">
                                                     <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="loadAttendances($('#attendance_search').val())">Search</button>
                                                     <button class="btn btn-default  bootstrap-touchspin-up" type="button" onclick="location.href = 'TakeAttendance.jsp';">Take Attendance</button>
                                                 </span>
-                                            </div>
+                                            </div>-->
+                                            <button class="btn btn-info" type="button" onclick="location.href = 'TakeAttendance.jsp';">Take Attendance</button>
                                         </div>
                                     </div>
-
-                                <br>
                                 <div id="attendance_table">
                                 </div>
                             </div>
