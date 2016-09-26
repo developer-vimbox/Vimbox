@@ -3,7 +3,7 @@
     String areaCounter = request.getParameter("areaCounter");
     String salesDiv = request.getParameter("fullAddr");
 %>
-<table style='width:100%;height:100%;' class='table table-bordered' border="1">
+<table id="startsurvey_areatable" style='width:100%;height:100%;' class='table table-bordered' border="1">
     <col width="33%">
     <col width="33%">
     <tr height="20">
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </td>
-        <td style="width: 10%;">
+        <td>
             Total Units : <label id="<%=address%>_<%=areaCounter%>_total">0</label>
             <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=address%>', '<%=areaCounter%>');">×</span>
         </td>

@@ -4,7 +4,7 @@
 <script src="JS/LeadFunctions.js"></script>
 <script src="JS/TicketFunctions.js"></script>
 <style>
-   .dropdown-submenu .dropdown-menu > li{
+    .dropdown-submenu .dropdown-menu > li{
         z-index: 10000;
     }
 </style>
@@ -103,6 +103,17 @@
     @keyframes fadeEffect {
         from {opacity: 0;}
         to {opacity: 1;}
+    }
+    @media only screen and (min-device-width: 768px) and (max-device-width: 1024px)and (orientation:portrait){
+        #startsurvey_sidebar{ width:20%; } 
+        #startsurvey_areatable{table-layout: fixed;}
+        #header-nav-custom{margin-top: 2%}
+    }
+    @media all and (device-width: 1024px) and (device-height: 768px) and (orientation:landscape) {
+        #startsurvey_sidebar{ width:20%; }
+        #startsurvey_areatable{table-layout: fixed;}
+        #header-nav-custom{margin-top: 2% important;}
+        #header-nav-right{margin: 0 0 0 0 important; margin-top: 2% important; }
     }
 </style>
 
@@ -280,98 +291,98 @@
             </div>
             <div id="header-nav-custom" style="margin-top: 1%;">
                 <div class="dropdown">
-            <a href="#" data-toggle="dropdown" data-placement="bottom" class="popover-button-header tooltip-button" title="" data-original-title="Dashboard Quick Menu" aria-expanded="false">
-                <i class="glyph-icon icon-bars" style="text-align: center;font-size: 21px;"></i>
-            </a>
-            <div class="dropdown-menu float-left" style="display: none;">
-                <div class="box-sm">
-                    <ul id="sidebar-menu" class="sf-js-enabled sf-arrows">
-                    <li class="dropdown-submenu">
-                        <a href="#" data-toggle="dropdown" title="Human Resource" class="sf-with-ul">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
-                            <span>Human Resource</span>
-                        </a>
-                            <ul class="dropdown-menu">
-                                <li> <a href="FullTimeEmployees.jsp" title="Full Time Employees"><span>Full Time Employees</span></a></li>
-                                <li> <a href="PartTimeEmployees.jsp" title="Part Time Employees"><span>Part Time Employees</span></a></li>
-                                <li> <a href="Payslips.jsp" title="Payslips"><span>Payslips</span></a></li>
-                                <li> <a href="TakeAttendance.jsp" title="Take Attendance">Take Attendance</a></li>
-                                <li> <a href="ViewAttendance.jsp" title="View Attendance">View Attendance</a></li>
-                                <li> <a href="LeaveMCs.jsp" title="Leave / MC">Leave / MC</a></li>
-                            </ul>
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a href="#" title="Sales" class="sf-with-ul">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
-                            <span>Sales</span>
-                        </a>
-                            <ul class="dropdown-menu">
-                                <li> <a href="CreateLead.jsp" title="Create Lead"><span>Create Lead</span></a></li>
-                                <li> <a href="MyLeads.jsp" title="My Leads"><span>My Leads</span></a></li>
-                                <li> <a href="MySalesSites.jsp" title="My Sites"><span>My Sites</span></a></li>
-                                <li> <a href="SalesOperations.jsp" title="Operations"><span>Operations</span></a></li>
-                                <li> <a href="ViewSalesReport.jsp" title="Sales Report"><span>Sales Report</span></a></li>
-                            </ul>
+                    <a href="#" data-toggle="dropdown" data-placement="bottom" class="popover-button-header tooltip-button" title="" data-original-title="Dashboard Quick Menu" aria-expanded="false">
+                        <i class="glyph-icon icon-bars" style="text-align: center;font-size: 21px;"></i>
+                    </a>
+                    <div class="dropdown-menu float-left" style="display: none;">
+                        <div class="box-sm">
+                            <ul id="sidebar-menu" class="sf-js-enabled sf-arrows">
+                                <li class="dropdown-submenu">
+                                    <a href="#" data-toggle="dropdown" title="Human Resource" class="sf-with-ul">
+                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <span>Human Resource</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li> <a href="FullTimeEmployees.jsp" title="Full Time Employees"><span>Full Time Employees</span></a></li>
+                                        <li> <a href="PartTimeEmployees.jsp" title="Part Time Employees"><span>Part Time Employees</span></a></li>
+                                        <li> <a href="Payslips.jsp" title="Payslips"><span>Payslips</span></a></li>
+                                        <li> <a href="TakeAttendance.jsp" title="Take Attendance">Take Attendance</a></li>
+                                        <li> <a href="ViewAttendance.jsp" title="View Attendance">View Attendance</a></li>
+                                        <li> <a href="LeaveMCs.jsp" title="Leave / MC">Leave / MC</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="#" title="Sales" class="sf-with-ul">
+                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <span>Sales</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li> <a href="CreateLead.jsp" title="Create Lead"><span>Create Lead</span></a></li>
+                                        <li> <a href="MyLeads.jsp" title="My Leads"><span>My Leads</span></a></li>
+                                        <li> <a href="MySalesSites.jsp" title="My Sites"><span>My Sites</span></a></li>
+                                        <li> <a href="SalesOperations.jsp" title="Operations"><span>Operations</span></a></li>
+                                        <li> <a href="ViewSalesReport.jsp" title="Sales Report"><span>Sales Report</span></a></li>
+                                    </ul>
 
-                    </li>
-                      <li class="dropdown-submenu">
-                        <a href="#" title="Site Surveys" class="sf-with-ul">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
-                            <span>Site Surveys</span>
-                        </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
-                                <li><a href="MySiteSurveySchedules.jsp" title="My Schedule"><span>My Schedule</span></a></li>
-                            </ul>
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a href="#" title="Operations" class="sf-with-ul">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
-                            <span>Operations</span>
-                        </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="AssignJobs.jsp" title="Assign Jobs"><span>Assign Jobs</span></a></li>
-                            </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="#" title="Site Surveys" class="sf-with-ul">
+                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <span>Site Surveys</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="MySites.jsp" title="My Sites"><span>My Sites</span></a></li>
+                                        <li><a href="MySiteSurveySchedules.jsp" title="My Schedule"><span>My Schedule</span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="#" title="Operations" class="sf-with-ul">
+                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <span>Operations</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="AssignJobs.jsp" title="Assign Jobs"><span>Assign Jobs</span></a></li>
+                                    </ul>
 
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a href="#" title="Tickets" class="sf-with-ul">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
-                            <span>Tickets</span>
-                        </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="CreateTicket.jsp" title="Create Ticket"><span>Create Ticket</span></a></li>
-                                <li><a href="MyTickets.jsp" title="My Tickets"><span>My Tickets</span></a></li>
-                                <li><a href="TicketForum.jsp" title="TicketForum"><span>Ticket Forum</span></a></li>
-                            </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="#" title="Tickets" class="sf-with-ul">
+                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <span>Tickets</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="CreateTicket.jsp" title="Create Ticket"><span>Create Ticket</span></a></li>
+                                        <li><a href="MyTickets.jsp" title="My Tickets"><span>My Tickets</span></a></li>
+                                        <li><a href="TicketForum.jsp" title="TicketForum"><span>Ticket Forum</span></a></li>
+                                    </ul>
 
-                    </li>
-                      <li class="dropdown-submenu">
-                        <a href="#" title="Admin" class="sf-with-ul">
-                            <i class="glyph-icon icon-linecons-diamond"></i>
-                            <span>Admin</span>
-                        </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="AdminLeads.jsp" title="View All Leads"><span>All Leads</span></a></li>
-                            </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="#" title="Admin" class="sf-with-ul">
+                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <span>Admin</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="AdminLeads.jsp" title="View All Leads"><span>All Leads</span></a></li>
+                                    </ul>
 
-                    </li>
-                  
-                </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-            </div>
             <div id="header-nav-left" style="margin-left: 3%;">
-              
-<!--                <div class="menu-custom-btn-dropdown">
-                    <button class="dropbtn"><i class="glyph-icon icon-unlock-alt"></i></button>
-                    <div class="menu-custom-btn-dropdown-content">
-                        <a href="#">Link 1</a>
-                        <a href="#">Link 2</a>
-                        <a href="#">Link 3</a>
-                    </div>
-                </div>-->
+
+                <!--                <div class="menu-custom-btn-dropdown">
+                                    <button class="dropbtn"><i class="glyph-icon icon-unlock-alt"></i></button>
+                                    <div class="menu-custom-btn-dropdown-content">
+                                        <a href="#">Link 1</a>
+                                        <a href="#">Link 2</a>
+                                        <a href="#">Link 3</a>
+                                    </div>
+                                </div>-->
 
                 <!--             <div class="menu-custom-btn dropdown">
                                     <a href="#" title="Menu" class="menu clearfix" data-toggle="dropdown">

@@ -109,6 +109,12 @@
     float: right;
     margin: 15px 20px 0 0;
 }
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px)and (orientation:portrait){
+    #header-nav-right{
+        margin: 0 0 0 0 !important;
+        margin-top: 2% !important;
+    }
+}
 #header-nav-right .header-btn,
 #header-nav-right > .dropdown {
     margin: 0 0 0 5px;
@@ -566,9 +572,9 @@ body #nav-toggle.collapsed span {
 }
 
 .t {
--webkit-transition: transform 0.5s ease;
--o-transition: transform 0.5s ease;
-transition: transform 0.5s ease;
+    -webkit-transition: transform 0.5s ease;
+    -o-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
 }
 .a {
     transform: translateX(-300px);

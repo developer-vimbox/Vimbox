@@ -25,6 +25,7 @@
             table .selected{
                 color:black
             }
+         
         </style>
     </head>
     <%@include file="surveyHeader.jsp"%>
@@ -66,7 +67,7 @@
                                         <table class='table table-bordered' width="100%" height="100%">
                                             <col width="250">
                                             <tr>
-                                                <td style="padding-top: 10px;">
+                                                <td id="startsurvey_sidebar" style="padding-top: 10px;">
                                                     <table class="table table-bordered" style="width:90%;height:100%;;" border="1">
                                                         <tbody><tr height="8%">
                                                                 <td>
@@ -504,11 +505,11 @@
                                                                             <tr>
                                                                                 <td>
                                                                                     <button class='btn btn-default' align="center" onclick="closeManpowerModal('<%=divId%>');
-                                                                        return false;" style="width:100%;">CANCEL</button>
+                                                                                            return false;" style="width:100%;">CANCEL</button>
                                                                                 </td>
                                                                                 <td>
                                                                                     <button class='btn btn-default' align="center" onclick="submitManpower('<%=divId%>');
-                                                                        return false;" style="width:100%;">REQUEST</button>
+                                                                                            return false;" style="width:100%;">REQUEST</button>
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
@@ -531,7 +532,7 @@
                                                                     out.println("<col width='50%'>");
                                                                     String addressTab = addressTabs.get(address);
                                                                     String[] addrDetails = lead.getStoreysPushingD(address);
-                                                                    
+
                                                                     LeadDiv leadDiv = lead.getSalesDivByAddress(address);
                                                                     String divId = (leadDiv.getSalesDiv().split("\\|"))[0];
                                                                     out.println("<tr>");
@@ -853,11 +854,11 @@
                                                                             <tr>
                                                                                 <td>
                                                                                     <button class='btn btn-default' align="center" onclick="closeManpowerModal('<%=divId%>');
-                                                                        return false;" style="width:100%;">CANCEL</button>
+                                                                                            return false;" style="width:100%;">CANCEL</button>
                                                                                 </td>
                                                                                 <td>
                                                                                     <button class='btn btn-default' align="center" onclick="submitManpower('<%=divId%>');
-                                                                        return false;" style="width:100%;">REQUEST</button>
+                                                                                            return false;" style="width:100%;">REQUEST</button>
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
@@ -923,7 +924,7 @@
                                                                                 <input class='form-control' type="text" id="<%=aT%>_<%=areaCounter%>_search" placeholder="Search Item Name" style="color:black;">
                                                                                 <span class="input-group-btn">
                                                                                     <button class="btn btn-default  bootstrap-touchspin-up" onclick="loadSurveyItemsTable($('#<%=aT%>_<%=areaCounter%>_search').val(), '<%=aT%>', '<%=areaCounter%>', '<%=salesDiv%>');
-                                                                                                return false;">Search</button>
+                                                                                            return false;">Search</button>
                                                                                 </span>
                                                                             </div>
                                                                         </div>
@@ -939,9 +940,9 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="height: 30px;" colspan="2" width="50%" align="center" class="selected" onclick="showTableDiv(this, '<%=aT%>', '<%=areaCounter%>', 'ItemsDiv');
-                                                                                return false;"><b>CUSTOMER</b></td>
+                                                                        return false;"><b>CUSTOMER</b></td>
                                                                 <td style="height: 30px;"  align="center" onclick="showTableDiv(this, '<%=aT%>', '<%=areaCounter%>', 'VimboxDiv');
-                                                                                return false;"><b>VIMBOX</b></td>
+                                                                        return false;"><b>VIMBOX</b></td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="3" height="690">
@@ -1075,9 +1076,9 @@
                                                 </tr>
                                                 <tr height="20">
                                                     <td align="center" onclick="addNew('<%=aT%>', '<%=areaCounter%>', '');
-                                                                    return false;">New</td>
+                                                            return false;">New</td>
                                                     <td align="center" onclick="addNew('<%=aT%>', '<%=areaCounter%>', 'Special');
-                                                                    return false;">Special</td>
+                                                            return false;">Special</td>
                                                     <td>
                                                         <input class='btn loading-button btn-primary' type="submit" style="width:100%;" value="SAVE">
                                                     </td>
@@ -1190,7 +1191,7 @@
                         setTimeout(function () {
                             window.location.href = "MySites.jsp";
                         }, 500);
-                    }else{
+                    } else {
                         setTimeout(function () {
                             modal.style.display = "none";
                         }, 500);
