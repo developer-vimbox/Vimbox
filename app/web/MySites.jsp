@@ -9,34 +9,35 @@
     <body onload="survey_setup('<%=user.getNric()%>')">
         <script src="http://malsup.github.com/jquery.form.js"></script> 
         <script src="JS/SiteSurveyFunctions.js"></script>
+        <script src="JS/OperationFunctions.js"></script>
         <script>
-            $('#confirm_form').ajaxForm({
-                dataType: 'json',
-                success: function (data) {
-                    var modal = document.getElementById("lead_error_modal");
-                    var status = document.getElementById("lead_error_status");
-                    var message = document.getElementById("lead_error_message");
-                    status.innerHTML = data.status;
-                    message.innerHTML = data.message;
-                    modal.style.display = "block";
+        $('#confirm_form').ajaxForm({
+            dataType: 'json',
+            success: function (data) {
+                var modal = document.getElementById("lead_error_modal");
+                var status = document.getElementById("lead_error_status");
+                var message = document.getElementById("lead_error_message");
+                status.innerHTML = data.status;
+                message.innerHTML = data.message;
+                modal.style.display = "block";
 
-                    if (data.status === "SUCCESS") {
-                        setTimeout(function () {
-                            my_leads_setup($('#cfmuId').val());
-                            document.getElementById("confirmLeadModal").style.display = "none";
-                            modal.style.display = "none";
-                        }, 500);
-                    }
-                },
-                error: function (data) {
-                    var modal = document.getElementById("lead_error_modal");
-                    var status = document.getElementById("lead_error_status");
-                    var message = document.getElementById("lead_error_message");
-                    status.innerHTML = "ERROR";
-                    message.innerHTML = data;
-                    modal.style.display = "block";
+                if (data.status === "SUCCESS") {
+                    setTimeout(function () {
+                        my_leads_setup($('#cfmuId').val());
+                        document.getElementById("confirmLeadModal").style.display = "none";
+                        modal.style.display = "none";
+                    }, 500);
                 }
-            });
+            },
+            error: function (data) {
+                var modal = document.getElementById("lead_error_modal");
+                var status = document.getElementById("lead_error_status");
+                var message = document.getElementById("lead_error_message");
+                status.innerHTML = "ERROR";
+                message.innerHTML = data;
+                modal.style.display = "block";
+            }
+        });
         </script>
         <div id="view_dom_modal" class="modal">
             <!-- Modal content -->
@@ -57,7 +58,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="site_cal_modal" class="modal">
             <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">
@@ -69,7 +70,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="site_schedule_modal" class="modal">
             <div class="modal-content" style="width: 95%;">
                 <div class="modal-body">
@@ -78,7 +79,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="salesModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content" style="width: 400px;">
@@ -91,7 +92,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="confirmLeadModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
@@ -120,7 +121,7 @@
                 </div>
             </div>
         </div>
-                        
+
         <div id="lead_error_modal" class="modal">
             <div class="error-modal-content">
                 <div class="modal-body">
@@ -131,6 +132,37 @@
                 </div>
             </div>
         </div>
+
+        <div id="change_dom_cal_modal" class="modal">
+            <div class="modal-content" style="width: 90%;">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('change_dom_cal_modal')">×</span>
+                    <br>
+                    <div id="change_dom_cal_content"></div>
+                    <br>
+                    <div id="change_dom_cal_table"></div>
+                </div>
+            </div>
+        </div>
+        <div id="change_dom_schedule_modal" class="modal">
+            <div class="modal-content" style="width: 95%;">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('change_dom_schedule_modal')">×</span>
+                    <div id="change_dom_schedule_content"></div>
+                </div>
+            </div>
+        </div>
+        <div id="operation_error_modal" class="modal">
+            <!-- Modal content -->
+            <div class="message-modal-content">
+                <div class="modal-body">
+                    <span class="close" onclick="closeModal('operation_error_modal')">×</span>
+                    <div id="operation_error_status"></div>
+                    <hr>
+                    <div id="operation_error_message"></div>
+                </div>
+            </div>
+        </div> 
         <div id="page-content-wrapper">
             <div id="page-content">
                 <div class="container">

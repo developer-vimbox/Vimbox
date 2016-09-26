@@ -15,6 +15,7 @@
         String jj = "";
         String jRem = "";
         String jStatus = "";
+        String timeslot = "";
         HashMap<String, ArrayList<String>> timeslots = new HashMap<String, ArrayList<String>>();
         ArrayList<String> addressesFr = new ArrayList<String>();
         ArrayList<String> addressesTo = new ArrayList<String>();
@@ -22,9 +23,11 @@
             Job job = jobs.get(i);
             String j = job.getDate();
             String jTruck = job.getAssignedTruck().toString();
+            String nextTimeslot = job.getTimeslots();
             if (i == 0) {
                 jj = j;
                 jRem = job.getRemarks();
+                timeslot = nextTimeslot;
                 jStatus = job.getStatus();
             }
 
@@ -36,6 +39,10 @@
         <label class="col-sm-3 control-label">Date of Move: </label>
         <div class="col-sm-4" style="padding-top: 7px;">
             <%=jj%>
+        </div>
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-3"  style="padding-top: 7px;">
+            <button class='btn btn-default' onclick="changeDom('<%=leadId%>', '<%=jj%>', '<%=timeslot%>', '<%=jStatus%>')">Change</button>
         </div>
     </div>
 
@@ -98,6 +105,7 @@
         jj = j;
         jRem = job.getRemarks();
         jStatus = job.getStatus();
+        timeslot = nextTimeslot;
         timeslots = new HashMap<String, ArrayList<String>>();
         addressesFr = new ArrayList<String>();
         addressesTo = new ArrayList<String>();
@@ -137,6 +145,10 @@
         <label class="col-sm-3 control-label">Date of Move: </label>
         <div class="col-sm-4" style="padding-top: 7px;">
             <%=jj%>
+        </div>
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-3"  style="padding-top: 7px;">
+            <button class='btn btn-default' onclick="changeDom('<%=leadId%>', '<%=jj%>', '<%=timeslot%>', '<%=jStatus%>')">Change</button>
         </div>
     </div>
 

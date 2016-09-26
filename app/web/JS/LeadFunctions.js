@@ -104,9 +104,9 @@ function viewLeadsHistory(custId) {
     var leadsHistoryContent = document.getElementById("leadsHistoryContent");
     $.get("LeadsHistory.jsp", {getId: custId}, function (data) {
         leadsHistoryContent.innerHTML = data;
-        $('.javascript').each(function() {
-      eval($(this).text());
-    });
+        $('.javascript').each(function () {
+            eval($(this).text());
+        });
     });
     modal.style.display = "block";
 }
@@ -2195,9 +2195,9 @@ function my_leads_setup(nric) {
 function load_leads(keyword, nric, type) {
     $.get("LoadMyLeads.jsp", {keyword: keyword, nric: nric, type: type}, function (data) {
         document.getElementById(type).innerHTML = data;
-        $('.javascript').each(function() {
-      eval($(this).text());
-    });
+        $('.javascript').each(function () {
+            eval($(this).text());
+        });
     });
 }
 
@@ -2263,6 +2263,12 @@ function viewDom(leadId) {
     modal.style.display = "block";
 }
 
+function domRefresh(leadId) {
+    $.get("LoadViewLeadDOM.jsp", {leadId: leadId}, function (data) {
+        document.getElementById('lead_dom').innerHTML = data;
+    });
+}
+
 function viewSalesPortion(leadId) {
     var modal = document.getElementById("viewLeadModal");
     var content = document.getElementById("leadContent");
@@ -2275,12 +2281,12 @@ function showSalesReport(selopt) {
     var opt = selopt.value;
     if (opt == 'week') {
         showWeekReport();
-    
+
 //    } else if (opt == 'month') {
 //        showMonthReport();
 //    } 
-    }else if (opt == 'year') {
-       showMonthReport();
+    } else if (opt == 'year') {
+        showMonthReport();
     }
 }
 
@@ -2346,7 +2352,7 @@ function showMonthReport() {
 
 }
 function showYearReport() {
-    
+
     var chdate = document.getElementById("seldate");
     var chdatelbl = document.getElementById("seldatelbl");
     if (chdate.style.display == "block" && chdatelbl.style.display == "block") {

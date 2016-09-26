@@ -36,6 +36,7 @@
 <%
     }
 %>
+<button class="btn btn-default" onclick="domRefresh('<%=leadId%>')">Refresh</button>
     <br>
     <fieldset>
         <div id="lead_dom"></div>
