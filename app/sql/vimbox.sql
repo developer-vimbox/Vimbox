@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2016 at 07:46 AM
+-- Generation Time: Sep 29, 2016 at 04:52 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -146,18 +146,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `contact` int(20) NOT NULL,
   `email` varchar(100) NOT NULL,
   PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
-
---
--- Dumping data for table `customers`
---
-
-INSERT INTO `customers` (`customer_id`, `salutation`, `first_name`, `last_name`, `contact`, `email`) VALUES
-(1, 'Ms', 'pamelas', 'seah', 90827736, 'pamela@gmail.com'),
-(2, 'Mr', 'khairul', 'anwar', 98873304, 'khairul@gmail.com'),
-(3, 'Mr', 'test', '', 89765432, ''),
-(4, 'Mr', 'Test', 'test', 72947462, ''),
-(5, 'Ms', 'Subin', 'Gan', 62745293, '');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -170,17 +159,6 @@ CREATE TABLE IF NOT EXISTS `customers_history` (
   `id` int(11) NOT NULL,
   PRIMARY KEY (`customer_id`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `customers_history`
---
-
-INSERT INTO `customers_history` (`customer_id`, `id`) VALUES
-(1, 386815461),
-(2, 164389514),
-(4, 872011880),
-(5, 367598110),
-(5, 382715999);
 
 -- --------------------------------------------------------
 
@@ -209,17 +187,6 @@ CREATE TABLE IF NOT EXISTS `leadconfirmation` (
   PRIMARY KEY (`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `leadconfirmation`
---
-
-INSERT INTO `leadconfirmation` (`lead_id`, `confirmed_user`, `total_amount`, `collected_amount`, `email_path`) VALUES
-(164389514, 'S9344895B', 0, 100, '164389514-email.jpg'),
-(367598110, '', 0, 0, ''),
-(382715999, '', 0, 0, ''),
-(386815461, 'S9344895B', 0, 56, '386815461-email.jpg'),
-(872011880, 'S9344895B', 0, 45, '872011880-email.png');
-
 -- --------------------------------------------------------
 
 --
@@ -237,20 +204,6 @@ CREATE TABLE IF NOT EXISTS `leadcustitem` (
   `itemunit` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `leadcustitem`
---
-
-INSERT INTO `leadcustitem` (`lead_id`, `sales_div`, `survey_area`, `itemname`, `itemremark`, `itemcharge`, `itemqty`, `itemunit`) VALUES
-(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', 'Boxes', '', '', '11', '11'),
-(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', 'Boxes', '', '', '22', '22'),
-(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', '', 'Boxes', '', '', '1', '1'),
-(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', '', 'Boxes', '', '', '11', '11'),
-(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', 'Boxes', '', '', '1', '1'),
-(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', 'Boxes', '', '', '2', '2'),
-(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', 'Boxes', '', '', '2', '2'),
-(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', 'Boxes', '', '', '3', '3');
-
 -- --------------------------------------------------------
 
 --
@@ -262,17 +215,6 @@ CREATE TABLE IF NOT EXISTS `leadenquiry` (
   `enquiry` varchar(255) NOT NULL,
   PRIMARY KEY (`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `leadenquiry`
---
-
-INSERT INTO `leadenquiry` (`lead_id`, `enquiry`) VALUES
-(164389514, 'SELECT'),
-(367598110, 'SELECT'),
-(382715999, 'SELECT'),
-(386815461, 'SELECT'),
-(872011880, 'SELECT');
 
 -- --------------------------------------------------------
 
@@ -293,17 +235,6 @@ CREATE TABLE IF NOT EXISTS `leadinfo` (
   `referral` varchar(200) NOT NULL,
   PRIMARY KEY (`owner_user`,`lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `leadinfo`
---
-
-INSERT INTO `leadinfo` (`owner_user`, `lead_id`, `type`, `customer_id`, `tom`, `datetime_of_creation`, `status`, `reason`, `source`, `referral`) VALUES
-('S9344895B', 164389514, 'Sales', 2, '', '2016-09-22 09:31:48', 'Confirmed', '', 'Call', 'Friend'),
-('S9344895B', 367598110, 'Sales', 5, 'Residential', '2016-09-22 13:45:15', 'Pending', '', 'Call', 'Friend'),
-('S9344895B', 382715999, 'Sales', 5, '', '2016-09-13 19:44:20', 'Rejected', 'Test', 'Call', 'Friend'),
-('S9344895B', 386815461, 'Sales', 1, 'Residential', '2016-09-22 09:27:27', 'Confirmed', '', 'Call', 'Friend'),
-('S9344895B', 872011880, 'Sales', 4, '', '2016-09-22 11:04:08', 'Confirmed', '', 'Call', 'Friend');
 
 -- --------------------------------------------------------
 
@@ -336,22 +267,6 @@ CREATE TABLE IF NOT EXISTS `leadmove` (
   PRIMARY KEY (`lead_id`,`sales_div`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `leadmove`
---
-
-INSERT INTO `leadmove` (`lead_id`, `sales_div`, `type`, `address`, `storeys`, `pushing`) VALUES
-(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'from', '365 W Craig Rd #111, North Las Vegas, NV 89032_1_1_111', ' ', ' '),
-(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'to', '3698 Diane Ave SW, Canton, OH 44706_11_11_1111', ' ', ' '),
-(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'from', '241 Yishun Ring Rd_1_1_760241', ' ', ' '),
-(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'to', '242 Yishun Ring Rd, Block 242_2_2_760242', ' ', ' '),
-(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'from', '39 Cambridge Rd_1_1_210039', ' ', ' '),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'to', '864 Yishun Ave 4, Block 864_11_11_760864', ' ', ' '),
-(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'from', '241 Yishun Ring Rd_1_1_760241', ' ', ' '),
-(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'to', '242 Yishun Ring Rd, Block 242_2_2_760242', ' ', ' '),
-(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'from', '241 Yishun Ring Rd_1_1_760241', ' ', ' '),
-(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'to', '242 Yishun Ring Rd, Block 242_2_2_760242', ' ', ' ');
-
 -- --------------------------------------------------------
 
 --
@@ -365,72 +280,6 @@ CREATE TABLE IF NOT EXISTS `leadother` (
   `charge` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `leadother`
---
-
-INSERT INTO `leadother` (`lead_id`, `sales_div`, `other`, `charge`) VALUES
-(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'storeyCharge', '0.00'),
-(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'pushCharge', '0.00'),
-(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'detourCharge', '0.00'),
-(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'materialCharge', '0.00'),
-(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'markup', '0.00'),
-(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', 'discount', '0.00'),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'storeyCharge', '0.00'),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'pushCharge', '0.00'),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'detourCharge', '0.00'),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'materialCharge', '0.00'),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'markup', '0.00'),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', 'discount', '0.00'),
-(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'storeyCharge', '0.00'),
-(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'pushCharge', '0.00'),
-(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'detourCharge', '0.00'),
-(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'materialCharge', '0.00'),
-(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'markup', '0.00'),
-(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'discount', '0.00'),
-(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'storeyCharge', '0.00'),
-(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'pushCharge', '0.00'),
-(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'detourCharge', '0.00'),
-(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'materialCharge', '0.00'),
-(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'markup', '0.00'),
-(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'discount', '0.00'),
-(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'storeyCharge', '0.00'),
-(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'pushCharge', '0.00'),
-(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'detourCharge', '0.00'),
-(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'materialCharge', '0.00'),
-(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'markup', '0.00'),
-(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', 'discount', '0.00'),
-(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'storeyCharge', '0.00'),
-(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'pushCharge', '0.00'),
-(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'detourCharge', '0.00'),
-(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'materialCharge', '0.00'),
-(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'markup', '0.00'),
-(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', 'discount', '0.00'),
-(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'storeyCharge', '0.00'),
-(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'pushCharge', '0.00'),
-(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'detourCharge', '0.00'),
-(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'materialCharge', '0.00'),
-(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'markup', '0.00'),
-(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'discount', '0.00'),
-(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'storeyCharge', '0.00'),
-(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'pushCharge', '0.00'),
-(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'detourCharge', '0.00'),
-(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'materialCharge', '0.00'),
-(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'markup', '0.00'),
-(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'discount', '0.00'),
-(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'storeyCharge', '0.00'),
-(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'pushCharge', '0.00'),
-(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'detourCharge', '0.00'),
-(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'materialCharge', '0.00'),
-(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'markup', '0.00'),
-(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', 'discount', '0.00'),
-(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'storeyCharge', '0.00'),
-(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'pushCharge', '0.00'),
-(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'detourCharge', '0.00'),
-(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'materialCharge', '0.00'),
-(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'markup', '0.00'),
-(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', 'discount', '0.00');
-
 -- --------------------------------------------------------
 
 --
@@ -442,13 +291,6 @@ CREATE TABLE IF NOT EXISTS `leadquotation` (
   `service_include` varchar(300) NOT NULL,
   PRIMARY KEY (`ref_num`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `leadquotation`
---
-
-INSERT INTO `leadquotation` (`ref_num`, `service_include`) VALUES
-('VBSPL_GN293_HH_0916', 'jhjhg');
 
 -- --------------------------------------------------------
 
@@ -475,22 +317,6 @@ CREATE TABLE IF NOT EXISTS `leadsalesdiv` (
   `survey_area_name` varchar(255) NOT NULL,
   PRIMARY KEY (`lead_id`,`sales_div`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `leadsalesdiv`
---
-
-INSERT INTO `leadsalesdiv` (`lead_id`, `sales_div`, `survey_area`, `survey_area_name`) VALUES
-(164389514, 'sales1|365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111', '', ''),
-(164389514, 'sales2|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111', '', ''),
-(367598110, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', ''),
-(367598110, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', ''),
-(382715999, 'sales1|39 Cambridge Rd #1-1 S210039', '', ''),
-(382715999, 'sales2|864 Yishun Ave 4, Block 864 #11-11 S760864', '', ''),
-(386815461, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', ''),
-(386815461, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', ''),
-(872011880, 'sales1|241 Yishun Ring Rd #1-1 S760241', '', ''),
-(872011880, 'sales2|242 Yishun Ring Rd, Block 242 #2-2 S760242', '', '');
 
 -- --------------------------------------------------------
 
@@ -559,31 +385,6 @@ CREATE TABLE IF NOT EXISTS `operations_assigned` (
   PRIMARY KEY (`lead_id`,`carplate_no`,`dom`,`start_datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `operations_assigned`
---
-
-INSERT INTO `operations_assigned` (`lead_id`, `ss_owner`, `supervisor`, `carplate_no`, `address_tag`, `address`, `dom`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
-(164389514, 'S9344895B', '', 'SFX6729B', 'from|to|', '365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111|', '2016-09-23', '2016-09-23 13:00:00', '2016-09-23 13:30:00', '1300 - 1500', '', 'Confirmed'),
-(164389514, 'S9344895B', '', 'SFX6729B', 'from|to|', '365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111|', '2016-09-23', '2016-09-23 13:30:00', '2016-09-23 14:00:00', '1300 - 1500', '', 'Confirmed'),
-(164389514, 'S9344895B', '', 'SFX6729B', 'from|to|', '365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111|', '2016-09-23', '2016-09-23 14:00:00', '2016-09-23 14:30:00', '1300 - 1500', '', 'Confirmed'),
-(164389514, 'S9344895B', '', 'SFX6729B', 'from|to|', '365 W Craig Rd #111, North Las Vegas, NV 89032 #1-1 S111|3698 Diane Ave SW, Canton, OH 44706 #11-11 S1111|', '2016-09-23', '2016-09-23 14:30:00', '2016-09-23 15:00:00', '1300 - 1500', '', 'Confirmed'),
-(367598110, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-25', '2016-09-25 12:00:00', '2016-09-25 12:30:00', '1200 - 1330', '', 'Booked'),
-(367598110, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-25', '2016-09-25 12:30:00', '2016-09-25 13:00:00', '1200 - 1330', '', 'Booked'),
-(367598110, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-25', '2016-09-25 13:00:00', '2016-09-25 13:30:00', '1200 - 1330', '', 'Booked'),
-(382715999, 'S9344895B', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:00:00', '2016-09-15 13:30:00', '1300 - 1400', '', 'Confirmed'),
-(382715999, 'S9344895B', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-15', '2016-09-15 13:30:00', '2016-09-15 14:00:00', '1300 - 1400', '', 'Confirmed'),
-(382715999, 'S9289374H', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 12:30:00', '2016-09-16 13:00:00', '1230 - 1330', '', 'Confirmed'),
-(382715999, 'S9289374H', '1234567', 'SFX6729B', 'from|to|', '39 Cambridge Rd #1-1 S210039|864 Yishun Ave 4, Block 864 #11-11 S760864|', '2016-09-16', '2016-09-16 13:00:00', '2016-09-16 13:30:00', '1230 - 1330', '', 'Confirmed'),
-(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 10:30:00', '2016-09-24 11:00:00', '1030 - 1300', '', 'Confirmed'),
-(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 11:00:00', '2016-09-24 11:30:00', '1030 - 1300', '', 'Confirmed'),
-(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 11:30:00', '2016-09-24 12:00:00', '1030 - 1300', '', 'Confirmed'),
-(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 12:00:00', '2016-09-24 12:30:00', '1030 - 1300', '', 'Confirmed'),
-(386815461, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-24', '2016-09-24 12:30:00', '2016-09-24 13:00:00', '1030 - 1300', '', 'Confirmed'),
-(872011880, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-22', '2016-09-22 13:00:00', '2016-09-22 13:30:00', '1300 - 1430', '', 'Confirmed'),
-(872011880, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-22', '2016-09-22 13:30:00', '2016-09-22 14:00:00', '1300 - 1430', '', 'Confirmed'),
-(872011880, 'S9344895B', '', 'SFX6729B', 'from|to|', '241 Yishun Ring Rd #1-1 S760241|242 Yishun Ring Rd, Block 242 #2-2 S760242|', '2016-09-22', '2016-09-22 14:00:00', '2016-09-22 14:30:00', '1300 - 1430', '', 'Confirmed');
-
 -- --------------------------------------------------------
 
 --
@@ -598,15 +399,6 @@ CREATE TABLE IF NOT EXISTS `operations_attendance` (
   `duration` int(11) NOT NULL,
   PRIMARY KEY (`supervisor`,`assigned_mover`,`dom`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `operations_attendance`
---
-
-INSERT INTO `operations_attendance` (`supervisor`, `assigned_mover`, `dom`, `attendance`, `duration`) VALUES
-('S9382938D', '1234567', '2016-09-24', 'Assigned', 0),
-('S9384873Z', '1234567', '2016-09-22', 'Absent', 0),
-('S9384873Z', '1234567', '2016-09-23', 'Assigned', 0);
 
 -- --------------------------------------------------------
 
@@ -630,16 +422,6 @@ CREATE TABLE IF NOT EXISTS `payslips` (
   `employer_cpf` double NOT NULL,
   PRIMARY KEY (`payslip_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `payslips`
---
-
-INSERT INTO `payslips` (`payslip_id`, `nric`, `payment_mode`, `start_date`, `end_date`, `payment_date`, `basic`, `allowance`, `deduction`, `overtime_hr`, `overtime`, `additional`, `employer_cpf`) VALUES
-(21003844, 'S9887362K', 'Cheque', '2016-08-01', '2016-08-31', '2016-08-31', 3000, 0, 600, 0, 0, 0, 510),
-(22530242, 'S9289374H', 'Cheque', '2016-08-01', '2016-08-31', '2016-08-31', 3000, 0, 600, 0, 0, 0, 510),
-(72599972, '1234567', 'Cheque', '2016-08-01', '2016-08-31', '2016-08-31', 1234, 0, 315.36, 0, 0, 100, 209.78),
-(88547686, 'S9344895B', 'Cheque', '2016-08-01', '2016-08-31', '2016-08-31', 6000, 0, 1200, 0, 0, 0, 1020);
 
 -- --------------------------------------------------------
 
@@ -667,13 +449,6 @@ CREATE TABLE IF NOT EXISTS `payslips_apbd` (
   PRIMARY KEY (`payslip_id`,`description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `payslips_apbd`
---
-
-INSERT INTO `payslips_apbd` (`payslip_id`, `description`, `breakdown`) VALUES
-(72599972, 'trfswd', 100);
-
 -- --------------------------------------------------------
 
 --
@@ -686,17 +461,6 @@ CREATE TABLE IF NOT EXISTS `payslips_dbd` (
   `breakdown` double NOT NULL,
   PRIMARY KEY (`payslip_id`,`description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `payslips_dbd`
---
-
-INSERT INTO `payslips_dbd` (`payslip_id`, `description`, `breakdown`) VALUES
-(21003844, 'Employee''s CPF Deduction', 600),
-(22530242, 'Employee''s CPF Deduction', 600),
-(72599972, 'Absent - 1 day(s)', 68.56),
-(72599972, 'Employee''s CPF Deduction', 246.8),
-(88547686, 'Employee''s CPF Deduction', 1200);
 
 -- --------------------------------------------------------
 
@@ -717,18 +481,6 @@ CREATE TABLE IF NOT EXISTS `sitesurvey_assigned` (
   `status` varchar(20) NOT NULL,
   PRIMARY KEY (`lead_id`,`start_datetime`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `sitesurvey_assigned`
---
-
-INSERT INTO `sitesurvey_assigned` (`lead_id`, `ss_owner`, `ss_user`, `address_tag`, `address`, `start_datetime`, `end_datetime`, `timeslot`, `remarks`, `status`) VALUES
-(382715999, 'S9344895B', 'S9289374H', 'from|', '39 Cambridge Rd #1-1 S210039|', '2016-09-15 13:30:00', '2016-09-15 14:00:00', '1330 - 1430', '', 'Completed'),
-(382715999, 'S9344895B', 'S9289374H', 'from|', '39 Cambridge Rd #1-1 S210039|', '2016-09-15 14:00:00', '2016-09-15 14:30:00', '1330 - 1430', '', 'Completed'),
-(386815461, 'S9344895B', 'S9289374H', 'to|from|', '242 Yishun Ring Rd, Block 242 #2-2 S760242|241 Yishun Ring Rd #1-1 S760241|', '2016-09-23 11:00:00', '2016-09-23 11:30:00', '1100 - 1300', '', 'Pending'),
-(386815461, 'S9344895B', 'S9289374H', 'to|from|', '242 Yishun Ring Rd, Block 242 #2-2 S760242|241 Yishun Ring Rd #1-1 S760241|', '2016-09-23 11:30:00', '2016-09-23 12:00:00', '1100 - 1300', '', 'Pending'),
-(386815461, 'S9344895B', 'S9289374H', 'to|from|', '242 Yishun Ring Rd, Block 242 #2-2 S760242|241 Yishun Ring Rd #1-1 S760241|', '2016-09-23 12:00:00', '2016-09-23 12:30:00', '1100 - 1300', '', 'Pending'),
-(386815461, 'S9344895B', 'S9289374H', 'to|from|', '242 Yishun Ring Rd, Block 242 #2-2 S760242|241 Yishun Ring Rd #1-1 S760241|', '2016-09-23 12:30:00', '2016-09-23 13:00:00', '1100 - 1300', '', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -855,10 +607,12 @@ CREATE TABLE IF NOT EXISTS `system_modules` (
 --
 
 INSERT INTO `system_modules` (`type`, `department`, `designation`, `modules`, `working_days`) VALUES
-('Full', 'IT', 'Manager', 'Admin', 5),
+('Full', 'HR', 'Manager', 'HR', 5),
 ('Full', 'Operations', 'Mover', 'Operation', 6),
 ('Full', 'Operations', 'Supervisor', 'Supervisor', 6),
+('Full', 'Sales', 'Sales', 'Sales', 5),
 ('Full', 'Sales', 'Surveyor', 'SiteSurvey', 5),
+('Full', 'Super', 'Admin', 'Admin', 5),
 ('Part', 'Admin', 'Part-Time Clerk', '', 5),
 ('Part', 'Operations', 'Part-Time Mover', '', 6);
 
@@ -1079,6 +833,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `license` varchar(255) NOT NULL,
   `department` varchar(100) NOT NULL,
   `designation` varchar(100) NOT NULL,
+  `modules` varchar(200) NOT NULL,
   `salary` int(10) NOT NULL,
   `type` varchar(5) NOT NULL,
   PRIMARY KEY (`nric`)
@@ -1088,14 +843,12 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`nric`, `first_name`, `last_name`, `date_joined`, `mailing_address`, `registered_address`, `license`, `department`, `designation`, `salary`, `type`) VALUES
-('1234567', 'test', 'test', '2016-08-16', 'TestingAgainOk', '', '', 'Operations', 'Mover', 1234, 'Full'),
-('S9289374H', 'SiteSurveyor', '1', '2016-08-12', 'Test', '', '', 'Sales', 'Surveyor', 3000, 'Full'),
-('S9344895B', 'Yu Sheng', 'Ngo', '2016-06-18', 'Yishun Ave 4 Blk 864 #11-37 S760864', '', '', 'IT', 'Manager', 6000, 'Full'),
-('S93485983F', 'Ernest', 'Che', '2016-09-22', 'BLK 253', '', '', 'Operations', 'Mover', 560, 'Full'),
-('S9382938D', 'Yu Sheng', 'Ngo', '2016-09-22', 'BLK 241', '', '', 'Operations', 'Supervisor', 3000, 'Full'),
-('S9384873Z', 'Xuening', 'Loo', '2016-09-22', 'BLK 241', '', '', 'Operations', 'Supervisor', 3000, 'Full'),
-('S9887362K', 'SiteSurveyor', '2', '2016-08-12', 'Test', '', '', 'Sales', 'Surveyor', 3000, 'Full');
+INSERT INTO `users` (`nric`, `first_name`, `last_name`, `date_joined`, `mailing_address`, `registered_address`, `license`, `department`, `designation`, `modules`, `salary`, `type`) VALUES
+('S1234567A', 'Rena', 'Lim', '2016-09-27', 'RenaAddress', '', '', 'HR', 'Manager', 'HR', 3000, 'Full'),
+('S1234567B', 'Poh Teck', 'Lua', '2016-09-27', 'PohTeckAddress', '', '', 'Sales', 'Sales', 'Sales', 3000, 'Full'),
+('S1234567C', 'Jonathan', 'Goh', '2016-09-27', 'JonathanAddress', '', '', 'Sales', 'Surveyor', 'SiteSurvey', 3000, 'Full'),
+('S1234567D', 'Ahmad Hakim', 'Ahmad Zaini', '2016-09-27', 'HakimAddress', '', '', 'Super', 'Admin', 'Admin|SiteSurvey', 3000, 'Full'),
+('S9344895B', 'Admin', 'Super', '2016-06-18', 'AdminAddress', '', '', 'Super', 'Admin', 'Admin', 6000, 'Full');
 
 -- --------------------------------------------------------
 
@@ -1115,13 +868,11 @@ CREATE TABLE IF NOT EXISTS `users_account` (
 --
 
 INSERT INTO `users_account` (`nric`, `username`, `password`) VALUES
-('S9289374H', '1@sitesurvey.com', 'password'),
-('S9887362K', '2@sitesurvey.com', 'password'),
 ('S9344895B', 'admin', 'password'),
-('S93485983F', 'er@gmail.com', 'password'),
-('1234567', 'test@test.com', 'password'),
-('S9384873Z', 'xuening@gmail.com', 'password'),
-('S9382938D', 'ys@gmail', 'password');
+('S1234567D', 'hakim@super', 'password'),
+('S1234567C', 'jonathan@ss', 'password'),
+('S1234567B', 'pt@sales', 'password'),
+('S1234567A', 'rena@hr', 'password');
 
 -- --------------------------------------------------------
 
@@ -1136,16 +887,6 @@ CREATE TABLE IF NOT EXISTS `users_attendance_record` (
   `duration` int(11) NOT NULL,
   PRIMARY KEY (`nric`,`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `users_attendance_record`
---
-
-INSERT INTO `users_attendance_record` (`nric`, `date`, `status`, `duration`) VALUES
-('1234567', '2016-08-30', 'Absent', 0),
-('S9289374H', '2016-08-30', 'Present', 0),
-('S9344895B', '2016-08-30', 'Present', 0),
-('S9887362K', '2016-08-30', 'Present', 0);
 
 -- --------------------------------------------------------
 
@@ -1167,13 +908,11 @@ CREATE TABLE IF NOT EXISTS `users_bank` (
 --
 
 INSERT INTO `users_bank` (`nric`, `payment_mode`, `bank_name`, `account_name`, `account_no`) VALUES
-('1234567', 'Cheque', 'dewfwe', 'wefewf', '1245634'),
-('S9289374H', 'Cheque', 'DBS', 'site1-account', '123456789'),
-('S9344895B', 'Cheque', 'DBS', 'yusheng account', '123-4567-8'),
-('S93485983F', 'Cash', 'DBS', 'Savings', '9384'),
-('S9382938D', 'Cash', 'DBS', 'Savings', '9383463'),
-('S9384873Z', 'Cash', 'DBS', 'Savings', '94859854'),
-('S9887362K', 'Cheque', 'DBS', 'sitesurvey2-account', '123456789');
+('S1234567A', 'Cheque', 'DBS', 'RENA-ACCOUNT', '1234567'),
+('S1234567B', 'Cheque', 'DBS', 'POHTECK-ACCOUNT', '1234567'),
+('S1234567C', 'Cheque', 'DBS', 'JONATHAN-ACCOUNT', '1234567'),
+('S1234567D', 'Cheque', 'DBS', 'HAKIM-ACCOUNT', '1234567'),
+('S9344895B', 'Cheque', 'DBS', 'yusheng account', '123-4567-8');
 
 -- --------------------------------------------------------
 
@@ -1194,13 +933,11 @@ CREATE TABLE IF NOT EXISTS `users_contact` (
 --
 
 INSERT INTO `users_contact` (`nric`, `phone_no`, `fax_no`, `home_no`) VALUES
-('1234567', 12345678, 0, 0),
-('S9289374H', 12345678, 0, 0),
-('S9344895B', 97312965, 0, 67384625),
-('S93485983F', 945839485, 0, 0),
-('S9382938D', 93485873, 0, 0),
-('S9384873Z', 92384873, 0, 0),
-('S9887362K', 12345678, 0, 0);
+('S1234567A', 99999999, 0, 0),
+('S1234567B', 99999999, 0, 0),
+('S1234567C', 99999999, 0, 0),
+('S1234567D', 99999999, 0, 0),
+('S9344895B', 99999999, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1222,13 +959,11 @@ CREATE TABLE IF NOT EXISTS `users_emergency` (
 --
 
 INSERT INTO `users_emergency` (`nric`, `name`, `relationship`, `contact_no`, `office_no`) VALUES
-('1234567', 'test', 'etst', 12344567, 0),
-('S9289374H', 'Mother', 'mother', 12345678, 0),
-('S9344895B', 'Phua Kuee Hoy', 'Mother', 85732675, 0),
-('S93485983F', 'Pamlea', 'Frien', 945896968, 0),
-('S9382938D', 'Pamela', 'Friend', 93845893, 0),
-('S9384873Z', 'Pamela', 'Friedn', 92384982, 0),
-('S9887362K', 'Mother', 'mother', 12345678, 0);
+('S1234567A', 'Person1', 'Mother', 99999999, 0),
+('S1234567B', 'Person1', 'Mother', 99999999, 0),
+('S1234567C', 'Person1', 'Mother', 99999999, 0),
+('S1234567D', 'Person1', 'Mother', 99999999, 0),
+('S9344895B', 'Person1', 'Mother', 99999999, 0);
 
 -- --------------------------------------------------------
 
@@ -1251,13 +986,11 @@ CREATE TABLE IF NOT EXISTS `users_leave` (
 --
 
 INSERT INTO `users_leave` (`nric`, `date_joined`, `leave`, `mc`, `used_leave`, `used_mc`) VALUES
-('1234567', '2016-08-16', 56, 14, 0, 0),
-('S9289374H', '2016-08-12', 56, 14, 0, 0),
-('S9344895B', '2016-06-18', 56, 14, 0, 5),
-('S93485983F', '2016-09-22', 56, 14, 0, 0),
-('S9382938D', '2016-09-22', 56, 14, 0, 0),
-('S9384873Z', '2016-09-22', 56, 14, 0, 0),
-('S9887362K', '2016-08-12', 56, 14, 0, 0);
+('S1234567A', '2016-09-27', 56, 14, 0, 0),
+('S1234567B', '2016-09-27', 56, 14, 0, 0),
+('S1234567C', '2016-09-27', 56, 14, 0, 0),
+('S1234567D', '2016-09-27', 56, 14, 0, 0),
+('S9344895B', '2016-06-18', 56, 14, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1275,13 +1008,6 @@ CREATE TABLE IF NOT EXISTS `users_leave_record` (
   `img` varchar(255) NOT NULL,
   PRIMARY KEY (`nric`,`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `users_leave_record`
---
-
-INSERT INTO `users_leave_record` (`leave_type`, `leave_name`, `nric`, `date`, `time_string`, `leave_duration`, `img`) VALUES
-('Paid', 'MC', 'S9344895B', '2016-09-16', '0900 - 1800', 9, '/images/MC/S9344895B-MC-16092016-17092016.png');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

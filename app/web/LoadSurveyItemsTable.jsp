@@ -21,7 +21,7 @@
                 String value = "Boxes||1";
     %>
     
-                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>'); return false;"><img src="/images/boxes.png" width="100%" height="200"><br><span>Boxes</span></td>
+                <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>'); return false;"><img src="/images/items/boxes.png" width="100%" height="200"><br><span>Boxes</span></td>
     
     <%
                 try {

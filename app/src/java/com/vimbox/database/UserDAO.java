@@ -28,10 +28,10 @@ public class UserDAO {
     private static final String GET_USERS = "SELECT * FROM users";
     private static final String GET_FULL_TIME_USERS = "SELECT * FROM users WHERE type='Full'";
     private static final String GET_FULL_TIME_USERS_BY_NAME = "SELECT * FROM users WHERE type='Full' AND (first_name LIKE ? OR last_name LIKE ? OR CONCAT(last_name, ' ', first_name) LIKE ?)";
-    private static final String GET_SITE_SURVEYORS_BY_NAME = "SELECT * FROM users WHERE type='Full' AND designation='Surveyor' AND (first_name LIKE ? OR last_name LIKE ? OR CONCAT(last_name, ' ', first_name) LIKE ?)";
+    private static final String GET_SITE_SURVEYORS_BY_NAME = "SELECT * FROM users WHERE type='Full' AND modules LIKE '%SiteSurvey%' AND (first_name LIKE ? OR last_name LIKE ? OR CONCAT(last_name, ' ', first_name) LIKE ?)";
     private static final String GET_FT_USERS_BY_KEYWORD = "SELECT * FROM users WHERE (nric like ? OR first_name like ? OR last_name like ? OR CONCAT(last_name, ' ', first_name) LIKE ? OR date_joined like ? OR department like ? OR designation like ?) AND type='Full'";
     private static final String GET_PT_USERS_BY_KEYWORD = "SELECT * FROM users WHERE (nric like ? OR first_name like ? OR last_name like ? OR CONCAT(last_name, ' ', first_name) LIKE ? OR date_joined like ? OR department like ? OR designation like ?) AND type='Part'";
-    private static final String CREATE_USER = "INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String CREATE_USER = "INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String CREATE_USER_CONTACT = "INSERT INTO users_contact VALUES (?,?,?,?)";
     private static final String CREATE_USER_EMERGENCY = "INSERT INTO users_emergency VALUES (?,?,?,?,?)";
     private static final String CREATE_USER_ACCOUNT = "INSERT INTO users_account VALUES (?,?,?)";
@@ -45,9 +45,10 @@ public class UserDAO {
     private static final String UPDATE_USER_ACCOUNT = "UPDATE users_account SET nric=? WHERE nric=?";
     private static final String UPDATE_USER_LEAVE = "UPDATE users_leave SET used_leave=? WHERE nric=?";
     private static final String UPDATE_USER_MC = "UPDATE users_leave SET used_mc=? WHERE nric=?";
-    private static final String GET_ALL_SURVEYORS = "SELECT * FROM users where designation = 'Surveyor'";
+    private static final String GET_ALL_SURVEYORS = "SELECT * FROM users WHERE type='Full' AND modules LIKE '%SiteSurvey%'";
     private static final String GET_ALL_FULL_TIME_MOVERS = "SELECT * FROM users where type='Full' AND designation = 'Mover'";
     private static final String GET_MOVERS_BY_TYPE = "SELECT * FROM users WHERE designation = ? AND TYPE = ?";
+    private static final String GET_ACCESS_CONTROL_BY_MODULE = "SELECT * FROM access_control WHERE modules LIKE ?";
 
     public static boolean checkNric(String nric){
         Connection con = null;
@@ -160,7 +161,18 @@ public class UserDAO {
                     String designation = rs.getString("designation");
                     int salary = rs.getInt("salary");
                     String type = rs.getString("type");
-                    ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                    String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rs = ps.executeQuery();
+                    while(rs.next()){
+                        permittedPages.add(rs.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                     double leave = 0;
                     double used_leave = 0;
@@ -239,7 +251,18 @@ public class UserDAO {
                     String designation = rs.getString("designation");
                     int salary = rs.getInt("salary");
                     String type = rs.getString("type");
-                    ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                    String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rs = ps.executeQuery();
+                    while(rs.next()){
+                        permittedPages.add(rs.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                     double leave = 0;
                     double used_leave = 0;
@@ -330,7 +353,18 @@ public class UserDAO {
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
                 String type = rs.getString("type");
-                ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rsInner = ps.executeQuery();
+                    while(rsInner.next()){
+                        permittedPages.add(rsInner.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                 double leave = 0;
                 double used_leave = 0;
@@ -417,7 +451,18 @@ public class UserDAO {
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
                 String type = rs.getString("type");
-                ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rsInner = ps.executeQuery();
+                    while(rsInner.next()){
+                        permittedPages.add(rsInner.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                 double leave = 0;
                 double used_leave = 0;
@@ -501,7 +546,18 @@ public class UserDAO {
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
                 String type = rs.getString("type");
-                ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rsInner = ps.executeQuery();
+                    while(rsInner.next()){
+                        permittedPages.add(rsInner.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                 double leave = 0;
                 double used_leave = 0;
@@ -578,8 +634,9 @@ public class UserDAO {
             ps.setString(7, license);
             ps.setString(8, department);
             ps.setString(9, designation);
-            ps.setInt(10, salary);
-            ps.setString(11, employeeType);
+            ps.setString(10, UserPopulationDAO.getUserModules(department, designation));
+            ps.setInt(11, salary);
+            ps.setString(12, employeeType);
             ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();
@@ -736,7 +793,18 @@ public class UserDAO {
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
                 String type = rs.getString("type");
-                ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rsInner = ps.executeQuery();
+                    while(rsInner.next()){
+                        permittedPages.add(rsInner.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                 double leave = 0;
                 double used_leave = 0;
@@ -827,7 +895,18 @@ public class UserDAO {
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
                 String type = rs.getString("type");
-                ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rsInner = ps.executeQuery();
+                    while(rsInner.next()){
+                        permittedPages.add(rsInner.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                 Account account = null;
 
@@ -989,7 +1068,18 @@ public class UserDAO {
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
                 String type = rs.getString("type");
-                ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rsInner = ps.executeQuery();
+                    while(rsInner.next()){
+                        permittedPages.add(rsInner.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                 double leave = 0;
                 double used_leave = 0;
@@ -1073,7 +1163,18 @@ public class UserDAO {
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
                 String type = rs.getString("type");
-                ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rsInner = ps.executeQuery();
+                    while(rsInner.next()){
+                        permittedPages.add(rsInner.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                 double leave = 0;
                 double used_leave = 0;
@@ -1163,7 +1264,18 @@ public class UserDAO {
                 String designation = rs.getString("designation");
                 int salary = rs.getInt("salary");
                 String type = rs.getString("type");
-                ArrayList<Module> modules = UserPopulationDAO.getUserModules(department, designation);
+                String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rsInner = ps.executeQuery();
+                    while(rsInner.next()){
+                        permittedPages.add(rsInner.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
 
                 double leave = 0;
                 double used_leave = 0;
