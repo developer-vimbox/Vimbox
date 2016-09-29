@@ -72,7 +72,7 @@
                                                         <tbody><tr height="8%">
                                                                 <td>
                                                                     <input type="hidden" id="complete_status" name="complete" value="no">
-                                                                    <button class="btn loading-button btn-primary" style="width:100%;height:100%;" onclick="confirmComplete();
+                                                                    <button id="completeBtn" class="btn loading-button btn-primary" style="width:100%;height:100%;" onclick="confirmComplete();
             return false;">Complete</button>
                                                                 </td>
                                                             </tr>
