@@ -109,7 +109,18 @@
         #startsurvey_areatable{table-layout: fixed;}
         #header-nav-custom{margin-top: 2%}
     }
-    @media all and (device-width: 1024px) and (device-height: 768px) and (orientation:landscape) {
+    @media only screen and (min-device-width: 768px) and (max-device-width: 946px)and (orientation:portrait){
+        #startsurvey_sidebar{ width:20%; } 
+        #startsurvey_areatable{table-layout: fixed;}
+        #header-nav-custom{margin-top: 2%}
+    }
+    @media only screen and (device-width: 1024px) and (device-height: 768px) and (orientation:landscape) {
+        #startsurvey_sidebar{ width:20%; }
+        #startsurvey_areatable{table-layout: fixed;}
+        #header-nav-custom{margin-top: 2% important;}
+        #header-nav-right{margin: 0 0 0 0 important; margin-top: 2% important; }
+    }
+       @media only screen and (device-width: 1024px) and (device-height: 690px) and (orientation:landscape) {
         #startsurvey_sidebar{ width:20%; }
         #startsurvey_areatable{table-layout: fixed;}
         #header-nav-custom{margin-top: 2% important;}
