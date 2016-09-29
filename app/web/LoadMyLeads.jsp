@@ -6,66 +6,66 @@
 <%@page import="com.vimbox.database.LeadDAO"%>
 <%@page import="java.util.ArrayList"%>
 <style type="text/css"> .javascript { display: none; } </style>
- <div class="javascript">
-<script type="text/javascript" src="assets/widgets/datatable/datatable.js"></script>
-<script type="text/javascript" src="assets/widgets/datatable/datatable-bootstrap.js"></script>
-<script type="text/javascript" src="assets/widgets/datatable/datatable-tabletools.js"></script>
-<script type="text/javascript">
+<div class="javascript">
+    <script type="text/javascript" src="assets/widgets/datatable/datatable.js"></script>
+    <script type="text/javascript" src="assets/widgets/datatable/datatable-bootstrap.js"></script>
+    <script type="text/javascript" src="assets/widgets/datatable/datatable-tabletools.js"></script>
+    <script type="text/javascript">
 
-    /* Datatables basic */
+        /* Datatables basic */
 
-    $(document).ready(function() {
-        $('#pendingTable').dataTable();
-        $('#confirmedTable').dataTable();
-        $('#rejectedTable').dataTable();
-    });
+        $(document).ready(function () {
+            $('#pendingTable').dataTable();
+            $('#confirmedTable').dataTable();
+            $('#rejectedTable').dataTable();
+        });
 
-    /* Datatables hide columns */
+        /* Datatables hide columns */
 
-    $(document).ready(function() {
-        var table = $('#datatable-hide-columns').DataTable( {
-            "scrollY": "300px",
-            "paging": false
-        } );
+        $(document).ready(function () {
+            var table = $('#datatable-hide-columns').DataTable({
+                "scrollY": "300px",
+                "paging": false
+            });
 
-        $('#datatable-hide-columns_filter').hide();
+            $('#datatable-hide-columns_filter').hide();
 
-        $('a.toggle-vis').on( 'click', function (e) {
-            e.preventDefault();
+            $('a.toggle-vis').on('click', function (e) {
+                e.preventDefault();
 
-            // Get the column API object
-            var column = table.column( $(this).attr('data-column') );
+                // Get the column API object
+                var column = table.column($(this).attr('data-column'));
 
-            // Toggle the visibility
-            column.visible( ! column.visible() );
-        } );
-    } );
+                // Toggle the visibility
+                column.visible(!column.visible());
+            });
+        });
 
-    /* Datatable row highlight */
+        /* Datatable row highlight */
 
-    $(document).ready(function() {
-        var table = $('#datatable-row-highlight').DataTable();
+        $(document).ready(function () {
+            var table = $('#datatable-row-highlight').DataTable();
 
-        $('#datatable-row-highlight tbody').on( 'click', 'tr', function () {
-            $(this).toggleClass('tr-selected');
-        } );
-    });
+            $('#datatable-row-highlight tbody').on('click', 'tr', function () {
+                $(this).toggleClass('tr-selected');
+            });
+        });
 
 
 
-    $(document).ready(function() {
-        $('.dataTables_filter input').attr("placeholder", "Search...");
-    });
+        $(document).ready(function () {
+            $('.dataTables_filter input').attr("placeholder", "Search...");
+        });
 
-</script>
- </div>
-<%            
+    </script>
+</div>
+<%
     String keyword = request.getParameter("keyword");
     String nric = request.getParameter("nric");
     String type = request.getParameter("type");
-    
+
     ArrayList<Lead> myLeads = LeadDAO.getLeadsByOwnerUser(keyword, nric, type);
-    
+
     if (!keyword.isEmpty()) {
         if (myLeads.size() > 1) {
             out.println(myLeads.size() + " results found");
@@ -76,7 +76,7 @@
         }
         out.println("<br><br>");
     }
-    
+
     String tableID = "";
     if (type.equals("Pending")) {
         tableID = "pendingTable";
@@ -110,13 +110,13 @@
             for (Lead lead : myLeads) {
                 String status = lead.getStatus();
                 String leadType = lead.getType();
-                
+
                 String url = "window.location.href='EditLead.jsp?lId=" + lead.getId() + "'";
                 out.println("<tr>");
                 out.println("<td align='center'>" + Converter.convertDate(lead.getDt()) + "</td>");
                 out.println("<td align='center'>" + lead.getId() + "</td>");
                 out.println("<td align='center'>" + lead.getType() + "</td>");
-                
+
                 Customer customer = lead.getCustomer();
                 String cust = "";
                 if (customer != null) {
@@ -132,30 +132,30 @@
         <%
             if (status.equals("Pending")) {
         %>
-            <input class="btn btn-default" type='button' value='Edit' onclick="<%=url%>">
-            <button class="btn btn-default" onclick="addFollowup('<%=lead.getId()%>')">Follow-Up</button>
-            <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
+        <input class="btn btn-default" type='button' value='Edit' onclick="<%=url%>">
+        <button class="btn btn-default" onclick="addFollowup('<%=lead.getId()%>')">Follow-Up</button>
+        <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
         <%
-                if(leadType.equals("Sales")){
+            if (leadType.equals("Sales")) {
         %>
-            <button class="btn btn-default" onclick="confirmLead('<%=lead.getId()%>')">Confirm</button>
+        <button class="btn btn-default" onclick="confirmLead('<%=lead.getId()%>')">Confirm</button>
         <%
-                } 
-            }else if (status.equals("Confirmed")){
+            }
+        } else if (status.equals("Confirmed")) {
         %>
-            <button class="btn btn-default" onclick="amountCheck('<%=lead.getId()%>')">Amount</button>
-            <form method="post" class="btn" style="
-    padding-left: 0px;
-    padding-right: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-    border-top-width: 0px;
-    border-bottom-width: 0px;
-">
-                <input type="hidden" name="leadId" value="<%=lead.getId()%>">
-                <input class='btn btn-default' type="submit" value="Email" formaction="emails/<%=lead.getId()%>" formtarget="_blank">
-            </form>
-            <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
+        <button class="btn btn-default" onclick="amountCheck('<%=lead.getId()%>')">Amount</button>
+        <form method="post" class="btn" style="
+              padding-left: 0px;
+              padding-right: 0px;
+              border-left-width: 0px;
+              border-right-width: 0px;
+              border-top-width: 0px;
+              border-bottom-width: 0px;
+              ">
+            <input type="hidden" name="leadId" value="<%=lead.getId()%>">
+            <input class='btn btn-default' type="submit" value="Email" formaction="emails/<%=lead.getId()%>" formtarget="_blank">
+        </form>
+        <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
         <%
             }
         %>
@@ -169,11 +169,11 @@
 
                     String refNum = "VBSPL_";
                     String lastName = customer.getLast_name();
-                    if(!lastName.isEmpty()){
+                    if (!lastName.isEmpty()) {
                         refNum += lastName.charAt(0);
                     }
                     String firstName = customer.getLast_name();
-                    if(!firstName.isEmpty()){
+                    if (!firstName.isEmpty()) {
                         refNum += firstName.charAt(firstName.length() - 1);
                     }
                     int custContact = customer.getContact() % 1000;
@@ -216,44 +216,42 @@
                 </div>
                 <div class="modal-body">        
                     <form method="post" class="btn">
-                        <div class="form-horizontal">
+                        <div class="form-inline">
+                            <label class="col-sm-3 control-label"> The cost of moving service includes: </label>
+                            <br>
                             <div class="form-group">
-                                <label class="col-sm-2"></label>
-                                <div class="col-sm-8">
-                                    The cost of moving service includes:<br>
+
+                                <div class="col-sm-4">
                                     <textarea rows="4" cols="41" class="form-control" name="serviceIncludes"><%=qService%></textarea>
                                     <input type="hidden" name="leadId" value="<%=lead.getId()%>">
                                     <input type="hidden" name="refNum" value="<%=refNum%>">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-2"></label>
-                                <div class="col-sm-8">
-                                    <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
-                                </div>
+                                <br><br>
+                            <div class="form-group text-center">
+                                 <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
+                               
                             </div>
-                            <div>
-
-                            </div>
+                          
                         </div>
                     </form>
                 </div>
             </div>
         </div>
         <%
-                }else{
+        } else {
         %>
-            <form method="post" class="btn" style="
-    padding-left: 0px;
-    padding-right: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-    border-top-width: 0px;
-    border-bottom-width: 0px;
-">
-                <input type="hidden" name="leadId" value="<%=lead.getId()%>">
-                <input class='btn btn-default' type="submit" value="Invoice" formaction="invoices/<%=lead.getId()%>" formtarget="_blank">
-            </form>
+        <form method="post" class="btn" style="
+              padding-left: 0px;
+              padding-right: 0px;
+              border-left-width: 0px;
+              border-right-width: 0px;
+              border-top-width: 0px;
+              border-bottom-width: 0px;
+              ">
+            <input type="hidden" name="leadId" value="<%=lead.getId()%>">
+            <input class='btn btn-default' type="submit" value="Invoice" formaction="invoices/<%=lead.getId()%>" formtarget="_blank">
+        </form>
         <%
                 }
             }
@@ -268,13 +266,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Reason: </label>
-                        <div class="col-sm-7">
-                            <textarea id="reason" name="reason" class="form-control textarea-autosize" disabled><%=lead.getReason()%></textarea>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Reason: </label>
+                            <div class="col-sm-7">
+                                <textarea id="reason" name="reason" class="form-control textarea-autosize" disabled><%=lead.getReason()%></textarea>
 
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
