@@ -93,34 +93,7 @@
             </div>
         </div>
 
-        <div id="confirmLeadModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-body">
-                    <span class="close" onclick="closeModal('confirmLeadModal')">×</span>
-                    <h3>Lead Confirmation</h3>
-                    <label id="cfmMessage"></label>
-                    <form action="ConfirmLeadController" id="confirm_form" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="cfmuId" id="cfmuId" value="<%=user.getNric()%>">
-                        <table>
-                            <tr>
-                                <td>Lead ID :</td>
-                                <td><label id="cfmleadIdLbl"></label><input type="hidden" name="cfmlId" id="cfmlId" /></td>
-                            </tr> 
-                            <tr>
-                                <td>Amount Collected :</td>
-                                <td>S$ <input type="number" min="0" step="0.01" name="amountCollected"/></td>
-                            </tr> 
-                            <tr>
-                                <td>Confirmation Email</td>
-                                <td><input type="file" name="file"/></td>
-                            </tr>
-                        </table>
-                        <input type="submit" value="Confirm Lead"/>
-                    </form>
-                </div>
-            </div>
-        </div>
+
 
         <div id="lead_error_modal" class="modal">
             <div class="error-modal-content">

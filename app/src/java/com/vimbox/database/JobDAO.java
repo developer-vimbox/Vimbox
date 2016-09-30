@@ -26,6 +26,7 @@ public class JobDAO {
     private static final String GET_CONFIRMED_JOBS_BY_KEYWORD = "SELECT * FROM operations_assigned WHERE (lead_id like ? OR start_datetime LIKE ? OR end_datetime LIKE ? OR timeslot LIKE ?) AND status = 'Confirmed' ORDER BY DATE(start_datetime) DESC, carplate_no";
     private static final String GET_JOBS_BY_TRUCK_DATE = "SELECT * FROM operations_assigned WHERE carplate_no=? AND start_datetime LIKE ? AND status != 'Cancelled' ORDER BY start_datetime";
     private static final String CANCEL_JOB = "UPDATE operations_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
+    private static final String OVERRIDE_JOB = "UPDATE operations_assigned SET status='Cancelled' WHERE start_datetime LIKE ? AND timeslot = ? AND status='Booked'";
     private static final String CANCEL_SALES_JOB = "UPDATE operations_assigned SET status='Cancelled' WHERE lead_id = ?";
     private static final String CONFIRM_SALES_JOB = "UPDATE operations_assigned SET status='Confirmed' WHERE lead_id = ?";
     private static final String GET_ALL_NON_CANCELLED_JOBS = "SELECT * FROM operations_assigned where status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
@@ -75,7 +76,7 @@ public class JobDAO {
         }
     }
     
-    public static void createOperationAssignment(int leadId, String owner, ArrayList<String> adds, ArrayList<String> addsTags, String date, HashMap<String,ArrayList<String>> times, HashMap<String,String> timeslot, String remarks, String status){
+    public static void createOperationAssignment(int leadId, String owner, ArrayList<String> adds, ArrayList<String> addsTags, String date, HashMap<String,ArrayList<String>> times, HashMap<String,String> timeslot, String remarks, String status, String action){
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -96,7 +97,11 @@ public class JobDAO {
                     String endTime = time.substring(time.lastIndexOf(" ") + 1);
                     String startDate = date + " " + startTime.substring(0, 2) + ":" + startTime.substring(2) + ":00";
                     String endDate = date + " " + endTime.substring(0, 2) + ":" + endTime.substring(2) + ":00";
-
+                    
+                    if(action.equals("confirm")){
+                        overrideJob(date,timeslot.get(cp));
+                    }
+                    
                     ps = con.prepareStatement(CREATE_OPERATION_ASSIGNMENT);
                     ps.setInt(1, leadId);
                     ps.setString(2, owner);
@@ -510,6 +515,22 @@ public class JobDAO {
             ps.setInt(1, leadId);
             ps.setString(2, "%" + date + "%");
             ps.setString(3, timeslot);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void overrideJob(String date, String timeslot) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(OVERRIDE_JOB);
+            ps.setString(1, "%" + date + "%");
+            ps.setString(2, timeslot);
             ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();

@@ -1093,25 +1093,29 @@ function cancelLead(leadId) {
     modal.style.display = "block";
 }
 
-function confirmLead(leadId) {
-    var errorModal = document.getElementById("lead_error_modal");
-    var errorStatus = document.getElementById("lead_error_status");
-    var errorMessage = document.getElementById("lead_error_message");
-
+function confirmSalesLead() {
     var modal = document.getElementById("confirmLeadModal");
-    $('#cfmlId').val(leadId);
-    document.getElementById('cfmleadIdLbl').innerHTML = leadId;
-    $.getJSON("RetrieveLeadConfirmationDetails", {leadId: leadId})
-            .done(function (data) {
-                document.getElementById("cfmMessage").innerHTML = Number(data.total) * (Number(data.deposit) / 100);
-                modal.style.display = "block";
-            })
-            .fail(function (error) {
-                errorStatus.innerHTML = "ERROR";
-                errorMessage.innerHTML = error;
-                errorModal.style.display = "block";
-            });
+    var leadTotal = 0;
+    $('.tabcontent').each(function () {
+        var divId = this.id;
+        leadTotal += Number($("#" + divId + "_totalPrice").val());
+    });
+    console.log(leadTotal);
+    $.getJSON("RetrieveDepositPercentage", {})
+        .done(function (data) {
+            console.log(Number(data.deposit) / 100);
+            document.getElementById("cfmMessage").innerHTML = leadTotal * (Number(data.deposit) / 100);
+            modal.style.display = "block";
+        });
+}
 
+function confirmSales() {
+    $("#leadStatus").val("confirm");
+}
+
+function confirmLead() {
+    var modal = document.getElementById("confirmLeadModal");
+    modal.style.display = "block";
 }
 
 function viewCancelReason() {
@@ -2226,13 +2230,10 @@ function amountCheck(leadId) {
             });
 }
 
-function viewDom(leadId) {
+function viewDom(leadId, nric) {
     var modal = document.getElementById("view_dom_modal");
-    $.get("LoadViewDOM.jsp", {leadId: leadId}, function (data) {
+    $.get("LoadViewDOM.jsp", {leadId: leadId, nric: nric}, function (data) {
         document.getElementById('dom_content').innerHTML = data;
-        $.get("LoadViewLeadDOM.jsp", {leadId: leadId}, function (data) {
-            document.getElementById('lead_dom').innerHTML = data;
-        });
 
         $('#site_dom_form').ajaxForm({
             dataType: 'json',
@@ -2248,12 +2249,15 @@ function viewDom(leadId) {
                         viewDom(leadId);
                         errmodal.style.display = "none";
                     }, 500);
+                }else{
+                    $("#leadStatus").val("save");
                 }
             },
             error: function (data) {
                 var errmodal = document.getElementById("salesModal");
                 var status = document.getElementById("salesStatus");
                 var message = document.getElementById("salesMessage");
+                $("#leadStatus").val("save");
                 status.innerHTML = "ERROR";
                 message.innerHTML = data;
                 errmodal.style.display = "block";
@@ -2261,12 +2265,6 @@ function viewDom(leadId) {
         });
     });
     modal.style.display = "block";
-}
-
-function domRefresh(leadId) {
-    $.get("LoadViewLeadDOM.jsp", {leadId: leadId}, function (data) {
-        document.getElementById('lead_dom').innerHTML = data;
-    });
 }
 
 function viewSalesPortion(leadId) {

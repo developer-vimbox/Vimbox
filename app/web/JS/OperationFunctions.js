@@ -281,6 +281,7 @@ function viewChangeDOMDaySchedule(date, details) {
                 if (data.status === "SUCCESS") {
                     setTimeout(function () {
                         sales_operation_setup();
+                        viewDom(details.split("|")[0]);
                         errmodal.style.display = "none";
                         document.getElementById("change_dom_cal_modal").style.display = "none";
                         document.getElementById("change_dom_schedule_modal").style.display = "none";

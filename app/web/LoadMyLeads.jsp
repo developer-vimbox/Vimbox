@@ -168,13 +168,17 @@
                 if (status.equals("Pending")) {
 
                     String refNum = "VBSPL_";
-                    String lastName = customer.getLast_name();
-                    if (!lastName.isEmpty()) {
-                        refNum += lastName.charAt(0);
-                    }
-                    String firstName = customer.getLast_name();
-                    if (!firstName.isEmpty()) {
-                        refNum += firstName.charAt(firstName.length() - 1);
+                    if (customer != null) {
+                        String lastName = customer.getLast_name();
+                        if (!lastName.isEmpty()) {
+                            refNum += lastName.charAt(0);
+                        }
+                        String firstName = customer.getLast_name();
+                        if (!firstName.isEmpty()) {
+                            refNum += firstName.charAt(firstName.length() - 1);
+                        }
+                        int custContact = customer.getContact() % 1000;
+                        refNum += Integer.toString(custContact) + "_";
                     }
                     int custContact = customer.getContact() % 1000;
                     refNum += Integer.toString(custContact) + "_";

@@ -138,7 +138,7 @@
                     out.println("<button class='btn btn-default' onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', '')\">Continue Survey</button>");
                 }else{
                     out.println("<button class='btn btn-default' onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
-                    out.println("<button class='btn btn-default' onclick=\"viewDom('" + leadId + "')\">DOM</button>");
+                    out.println("<button class='btn btn-default' onclick=\"viewDom('" + leadId + "', '" + userId + "')\">DOM</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -174,7 +174,7 @@
                     out.println("<button class='btn btn-default' onclick=\"startSurvey('" + leadId + "', '" + date + "', '" + timeslot + "', '')\">Continue Survey</button>");
                 }else{
                     out.println("<button class='btn btn-default' onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
-                    out.println("<button class='btn btn-default' onclick=\"viewDom('" + leadId + "')\">DOM</button>");
+                    out.println("<button class='btn btn-default' onclick=\"viewDom('" + leadId + "', '" + userId + "')\">DOM</button>");
                 }
                 out.println("</td>");
                 out.println("</tr>");

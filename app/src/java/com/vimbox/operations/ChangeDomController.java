@@ -89,6 +89,10 @@ public class ChangeDomController extends HttpServlet {
             JobDAO.deleteJobByIdDateTimeslot(leadId, dDate, dTimeslot);
             String remark = domRemark;
             String stts = dStatus;
+            String action = "";
+            if(dStatus.equals("Confirmed")){
+                action = "confirm";
+            }
             HashMap<String, ArrayList<String>> times = new HashMap<String, ArrayList<String>>();
             ArrayList<String> adds = new ArrayList<String>();
             ArrayList<String> addsTags = new ArrayList<String>();
@@ -133,7 +137,7 @@ public class ChangeDomController extends HttpServlet {
                 }
 
             }
-            JobDAO.createOperationAssignment(leadId, owner.getNric(), adds, addsTags, domDate, times, timest, remark, stts);
+            JobDAO.createOperationAssignment(leadId, owner.getNric(), adds, addsTags, domDate, times, timest, remark, stts, action);
 
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "DOM changed!");

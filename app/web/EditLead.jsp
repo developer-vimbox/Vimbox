@@ -71,18 +71,6 @@
                 </div>
             </div>
         </div>
-        <div id="salesModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content" style="width: 400px;">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('salesModal')">×</span>
-                    <center><h3><div id="salesStatus"></div></h3></center>
-                </div>
-                <div class="modal-body">
-                    <div id="salesMessage"></div>
-                </div>
-            </div>
-        </div>
         <div id="saModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
@@ -275,7 +263,63 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div class="form-horizontal">
-                                <form method="POST" action="EditLeadController" autocomplete="on" id="edit_lead_form">
+                                <form method="POST" action="EditLeadController" autocomplete="on" id="edit_lead_form" enctype="multipart/form-data">
+                                    <div id="confirmLeadModal" class="modal">
+                                        <!-- Modal content -->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('confirmLeadModal')">×</span>
+                                                <center><h2>Lead Confirmation</h2></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">Deposit to be collected: </label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon">S$</span>
+                                                                <label class="form-control" id="cfmMessage" disabled></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">Amount Collected: </label>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon">S$</span>
+                                                                <input class="form-control" type="number" min="0" step="0.01" name="amountCollected"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">Confirmation Email: </label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" type="file" name="file"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label"> </label>
+                                                        <div class="col-sm-6 text-center">
+                                                            <button data-loading-text="Loading..." class="btn loading-button btn-primary" onclick="confirmSales()">Confirm</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="salesModal" class="modal">
+                                        <!-- Modal content -->
+                                        <div class="modal-content" style="width: 400px;">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('salesModal')">×</span>
+                                                <center><h3><div id="salesStatus"></div></h3></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="salesMessage"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="leadStatus" id="leadStatus" value="save"/>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Lead ID: </label>
                                         <div class="col-sm-4" style="padding-top: 7px;">
@@ -559,7 +603,7 @@
                                                         }
 
                                                         if (!j.equals(jj)) {
-                                                            
+
                                                 %>
                                                 <hr>
                                                 <div class="form-horizontal">
@@ -570,19 +614,19 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                       <label class="col-sm-3 control-label">Truck(s): </label>
+                                                        <label class="col-sm-3 control-label">Truck(s): </label>
                                                         <div class="col-sm-3" style="padding-top: 7px;">
                                                             <%
-                                                            for (Map.Entry<String, ArrayList<String>> entry : timeslots.entrySet()) {
-                                                                String cp = entry.getKey();
-                                                                ArrayList<String> list = entry.getValue();
-                                                                out.println("<div><div class='col-sm-7' style='padding-left: 0px;'>" + cp + "</div>");
-                                                                out.println("<div class='col-sm-5'>");
-                                                                for (int k = 0; k < list.size(); k++) {
-                                                                    out.println(list.get(k) + "<br>");
+                                                                for (Map.Entry<String, ArrayList<String>> entry : timeslots.entrySet()) {
+                                                                    String cp = entry.getKey();
+                                                                    ArrayList<String> list = entry.getValue();
+                                                                    out.println("<div><div class='col-sm-7' style='padding-left: 0px;'>" + cp + "</div>");
+                                                                    out.println("<div class='col-sm-5'>");
+                                                                    for (int k = 0; k < list.size(); k++) {
+                                                                        out.println(list.get(k) + "<br>");
+                                                                    }
+                                                                    out.println("</div></div><br>");
                                                                 }
-                                                                out.println("</div></div><br>");
-                                                            }
                                                             %>
                                                         </div>
                                                     </div>
@@ -590,9 +634,9 @@
                                                         <label class="col-sm-3 control-label">From: </label>
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
-                                                            for (int k = 0; k < addressesFr.size(); k++) {
-                                                                out.println(addressesFr.get(k) + "<br>");
-                                                            }
+                                                                for (int k = 0; k < addressesFr.size(); k++) {
+                                                                    out.println(addressesFr.get(k) + "<br>");
+                                                                }
                                                             %>
                                                         </div>
                                                     </div>
@@ -600,9 +644,9 @@
                                                         <label class="col-sm-3 control-label">To: </label>
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
-                                                            for (int k = 0; k < addressesTo.size(); k++) {
-                                                                out.println(addressesTo.get(k) + "<br>");
-                                                            }
+                                                                for (int k = 0; k < addressesTo.size(); k++) {
+                                                                    out.println(addressesTo.get(k) + "<br>");
+                                                                }
                                                             %>
                                                         </div>
                                                     </div>
@@ -621,41 +665,41 @@
                                                 </div>
                                                 <%
 
-                                                            jj = j;
-                                                            jRem = job.getRemarks();
-                                                            jStatus = job.getStatus();
-                                                            timeslots = new HashMap<String, ArrayList<String>>();
-                                                            addressesFr = new ArrayList<String>();
-                                                            addressesTo = new ArrayList<String>();
-                                                        }
+                                                        jj = j;
+                                                        jRem = job.getRemarks();
+                                                        jStatus = job.getStatus();
+                                                        timeslots = new HashMap<String, ArrayList<String>>();
+                                                        addressesFr = new ArrayList<String>();
+                                                        addressesTo = new ArrayList<String>();
+                                                    }
 
-                                                        ArrayList<String> slots = timeslots.get(jTruck);
-                                                        if (slots == null) {
-                                                            slots = new ArrayList<String>();
+                                                    ArrayList<String> slots = timeslots.get(jTruck);
+                                                    if (slots == null) {
+                                                        slots = new ArrayList<String>();
+                                                        slots.add(job.getTimeSlot());
+                                                        timeslots.put(jTruck, slots);
+                                                    } else {
+                                                        if (!slots.contains(job.getTimeSlot())) {
                                                             slots.add(job.getTimeSlot());
-                                                            timeslots.put(jTruck, slots);
+                                                        }
+                                                    }
+
+                                                    HashMap<String, String> addresses = job.getAddresses();
+                                                    for (Map.Entry<String, String> entry : addresses.entrySet()) {
+                                                        String key = entry.getKey();
+                                                        String value = entry.getValue();
+                                                        if (value.equals("from")) {
+                                                            if (!addressesFr.contains(key)) {
+                                                                addressesFr.add(key);
+                                                            }
                                                         } else {
-                                                            if (!slots.contains(job.getTimeSlot())) {
-                                                                slots.add(job.getTimeSlot());
+                                                            if (!addressesTo.contains(key)) {
+                                                                addressesTo.add(key);
                                                             }
                                                         }
+                                                    }
 
-                                                        HashMap<String, String> addresses = job.getAddresses();
-                                                        for (Map.Entry<String, String> entry : addresses.entrySet()) {
-                                                            String key = entry.getKey();
-                                                            String value = entry.getValue();
-                                                            if (value.equals("from")) {
-                                                                if (!addressesFr.contains(key)) {
-                                                                    addressesFr.add(key);
-                                                                }
-                                                            } else {
-                                                                if (!addressesTo.contains(key)) {
-                                                                    addressesTo.add(key);
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (i == jobs.size() - 1) {
+                                                    if (i == jobs.size() - 1) {
                                                 %>
                                                 <hr>
                                                 <div class="form-horizontal">
@@ -666,19 +710,19 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                       <label class="col-sm-3 control-label">Truck(s): </label>
+                                                        <label class="col-sm-3 control-label">Truck(s): </label>
                                                         <div class="col-sm-3" style="padding-top: 7px;">
                                                             <%
-                                                            for (Map.Entry<String, ArrayList<String>> entry : timeslots.entrySet()) {
-                                                                String cp = entry.getKey();
-                                                                ArrayList<String> list = entry.getValue();
-                                                                out.println("<div><div class='col-sm-7' style='padding-left: 0px;'>" + cp + "</div>");
-                                                                out.println("<div class='col-sm-5'>");
-                                                                for (int k = 0; k < list.size(); k++) {
-                                                                    out.println(list.get(k) + "<br>");
+                                                                for (Map.Entry<String, ArrayList<String>> entry : timeslots.entrySet()) {
+                                                                    String cp = entry.getKey();
+                                                                    ArrayList<String> list = entry.getValue();
+                                                                    out.println("<div><div class='col-sm-7' style='padding-left: 0px;'>" + cp + "</div>");
+                                                                    out.println("<div class='col-sm-5'>");
+                                                                    for (int k = 0; k < list.size(); k++) {
+                                                                        out.println(list.get(k) + "<br>");
+                                                                    }
+                                                                    out.println("</div></div><br>");
                                                                 }
-                                                                out.println("</div></div><br>");
-                                                            }
                                                             %>
                                                         </div>
                                                     </div>
@@ -686,9 +730,9 @@
                                                         <label class="col-sm-3 control-label">From: </label>
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
-                                                            for (int k = 0; k < addressesFr.size(); k++) {
-                                                                out.println(addressesFr.get(k) + "<br>");
-                                                            }
+                                                                for (int k = 0; k < addressesFr.size(); k++) {
+                                                                    out.println(addressesFr.get(k) + "<br>");
+                                                                }
                                                             %>
                                                         </div>
                                                     </div>
@@ -696,9 +740,9 @@
                                                         <label class="col-sm-3 control-label">To: </label>
                                                         <div class="col-sm-4" style="padding-top: 7px;">
                                                             <%
-                                                            for (int k = 0; k < addressesTo.size(); k++) {
-                                                                out.println(addressesTo.get(k) + "<br>");
-                                                            }
+                                                                for (int k = 0; k < addressesTo.size(); k++) {
+                                                                    out.println(addressesTo.get(k) + "<br>");
+                                                                }
                                                             %>
                                                         </div>
                                                     </div>
@@ -715,7 +759,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <%
                                                         }
                                                     }
@@ -1346,7 +1390,7 @@
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <%
                                                                                             String charge = others.get("storeyCharge");
-                                                                                            if(charge == null){
+                                                                                            if (charge == null) {
                                                                                                 charge = "0.00";
                                                                                             }
                                                                                         %>
@@ -1366,7 +1410,7 @@
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <%
                                                                                             charge = others.get("pushCharge");
-                                                                                            if(charge == null){
+                                                                                            if (charge == null) {
                                                                                                 charge = "0.00";
                                                                                             }
                                                                                         %>
@@ -1387,7 +1431,7 @@
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <%
                                                                                             charge = others.get("detourCharge");
-                                                                                            if(charge == null){
+                                                                                            if (charge == null) {
                                                                                                 charge = "0.00";
                                                                                             }
                                                                                         %>
@@ -1408,7 +1452,7 @@
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <%
                                                                                             charge = others.get("materialCharge");
-                                                                                            if(charge == null){
+                                                                                            if (charge == null) {
                                                                                                 charge = "0.00";
                                                                                             }
                                                                                         %>
@@ -1429,7 +1473,7 @@
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <%
                                                                                             charge = others.get("markup");
-                                                                                            if(charge == null){
+                                                                                            if (charge == null) {
                                                                                                 charge = "0.00";
                                                                                             }
                                                                                         %>
@@ -1450,7 +1494,7 @@
                                                                                         <span class="input-group-addon">$</span>
                                                                                         <%
                                                                                             charge = others.get("discount");
-                                                                                            if(charge == null){
+                                                                                            if (charge == null) {
                                                                                                 charge = "0.00";
                                                                                             }
                                                                                         %>
@@ -1676,7 +1720,9 @@
                                             <td></td>
                                             <td>
                                                 <div class="bg-default text-center">
-                                                    <button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary">Save</button></div>
+                                                    <button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary">Save</button>
+                                                    <button data-loading-text="Loading..." class="btn loading-button btn-primary" onclick="confirmSalesLead();
+                                                        return false;">Confirm</button></div>
                                                 <!--<input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">-->
                                                 <!--<button onclick="return checkEmail();">Email Quotation</button>-->
                                                 <!--<button onclick="cancelLead(lead.getId());
@@ -1707,12 +1753,15 @@
                         setTimeout(function () {
                             window.location.href = "MyLeads.jsp";
                         }, 500);
+                    }else{
+                        $("#leadStatus").val("save");
                     }
                 },
                 error: function (data) {
                     var modal = document.getElementById("lead_error_modal");
                     var status = document.getElementById("lead_error_status");
                     var message = document.getElementById("lead_error_message");
+                    $("#leadStatus").val("save");
                     status.innerHTML = "ERROR";
                     message.innerHTML = data;
                     modal.style.display = "block";
@@ -1723,12 +1772,12 @@
                 var element = document.activeElement.parentNode;
                 var tag = element.tagName;
                 var tableClassName = $(element).attr('class');
-                while (tag !== 'TABLE'){
+                while (tag !== 'TABLE') {
                     element = element.parentNode;
                     tag = element.tagName;
                     tableClassName = $(element).attr('class');
                 }
-                
+
                 var activeElement = document.activeElement.parentNode;
                 var tagname = activeElement.tagName;
                 var classname = $(activeElement).attr('class');

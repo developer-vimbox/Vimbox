@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 29, 2016 at 04:52 AM
+-- Generation Time: Sep 29, 2016 at 12:50 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -146,7 +146,14 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `contact` int(20) NOT NULL,
   `email` varchar(100) NOT NULL,
   PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`customer_id`, `salutation`, `first_name`, `last_name`, `contact`, `email`) VALUES
+(1, 'Mr', 'Test', 'Test', 99999999, '');
 
 -- --------------------------------------------------------
 
@@ -656,6 +663,25 @@ CREATE TABLE IF NOT EXISTS `system_payment_modes` (
 INSERT INTO `system_payment_modes` (`mode`) VALUES
 ('Cash'),
 ('Cheque');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `system_percentage`
+--
+
+CREATE TABLE IF NOT EXISTS `system_percentage` (
+  `name` varchar(100) NOT NULL,
+  `percentage` double NOT NULL,
+  PRIMARY KEY (`name`,`percentage`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `system_percentage`
+--
+
+INSERT INTO `system_percentage` (`name`, `percentage`) VALUES
+('Deposit', 40);
 
 -- --------------------------------------------------------
 
