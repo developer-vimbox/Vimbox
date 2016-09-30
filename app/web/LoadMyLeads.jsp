@@ -180,8 +180,7 @@
                         int custContact = customer.getContact() % 1000;
                         refNum += Integer.toString(custContact) + "_";
                     }
-                    int custContact = customer.getContact() % 1000;
-                    refNum += Integer.toString(custContact) + "_";
+                    
                     String toms = lead.getTom();
                     System.out.println(toms);
                     System.out.println(toms.contains("|"));

@@ -634,7 +634,11 @@ public class UserDAO {
             ps.setString(7, license);
             ps.setString(8, department);
             ps.setString(9, designation);
-            ps.setString(10, UserPopulationDAO.getUserModules(department, designation));
+            String modules = UserPopulationDAO.getUserModules(department, designation);
+            if(modules == null){
+                modules = "";
+            }
+            ps.setString(10, modules);
             ps.setInt(11, salary);
             ps.setString(12, employeeType);
             ps.executeUpdate();
