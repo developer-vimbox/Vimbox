@@ -385,6 +385,16 @@
                                                             out.println(customer.getSalutation());
                                                         }%></label>
                                                 </div>
+                                                <label class="col-sm-2 control-label"></label>
+                                                <div class="col-sm-3"  style="padding-top: 7px;" id="cust_btn_input">
+                                                    <%
+                                                        if (customer != null) {
+                                                    %>
+                                                        <button onclick="editCustomer('<%=customer.getCustomer_id()%>','Lead'); return false;" class="btn btn-default">Edit</button>
+                                                    <%
+                                                        }
+                                                    %>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">First Name: </label>
@@ -418,7 +428,18 @@
                                                         }%></label>
                                                 </div>
                                             </div>
-                                        </div >      
+                                        </div>
+                                        <div id="lead_customer_error_modal" class="modal">
+                                            <div class="error-modal-content">
+                                                <div class="modal-header">
+                                                    <span class="close" onclick="closeModal('lead_customer_error_modal')">×</span>
+                                                    <center><h2><div id="lead_customer_error_status"></div></h2></center>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="lead_customer_error_message"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </fieldset>
                                     <br>
                                     <fieldset>
@@ -1722,7 +1743,7 @@
                                                 <div class="bg-default text-center">
                                                     <button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary">Save</button>
                                                     <button data-loading-text="Loading..." class="btn loading-button btn-primary" onclick="confirmSalesLead();
-                                                        return false;">Confirm</button></div>
+                                                            return false;">Confirm</button></div>
                                                 <!--<input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">-->
                                                 <!--<button onclick="return checkEmail();">Email Quotation</button>-->
                                                 <!--<button onclick="cancelLead(lead.getId());
@@ -1753,7 +1774,7 @@
                         setTimeout(function () {
                             window.location.href = "MyLeads.jsp";
                         }, 500);
-                    }else{
+                    } else {
                         $("#leadStatus").val("save");
                     }
                 },

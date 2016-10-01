@@ -136,12 +136,12 @@
         <button class="btn btn-default" onclick="addFollowup('<%=lead.getId()%>')">Follow-Up</button>
         <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
         <%
-            if (leadType.equals("Sales")) {
+                if (leadType.equals("Sales")) {
         %>
-        <button class="btn btn-default" onclick="confirmLead('<%=lead.getId()%>')">Confirm</button>
+        <button class="btn btn-default" onclick="confirmLeadSM('<%=lead.getId()%>')">Confirm</button>
         <%
-            }
-        } else if (status.equals("Confirmed")) {
+                }
+            } else if (status.equals("Confirmed")) {
         %>
         <button class="btn btn-default" onclick="amountCheck('<%=lead.getId()%>')">Amount</button>
         <form method="post" class="btn" style="
@@ -157,6 +157,10 @@
         </form>
         <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
         <%
+            } else {
+        %>
+            <button class="btn btn-default" onclick="reopenLead('<%=lead.getId()%>','<%=nric%>')">Reopen</button>
+        <%
             }
         %>
     </td>
@@ -170,11 +174,11 @@
                     String refNum = "VBSPL_";
                     if (customer != null) {
                         String lastName = customer.getLast_name();
-                        if (!lastName.isEmpty()) {
+                        if (!lastName.trim().isEmpty()) {
                             refNum += lastName.charAt(0);
                         }
                         String firstName = customer.getLast_name();
-                        if (!firstName.isEmpty()) {
+                        if (!firstName.trim().isEmpty()) {
                             refNum += firstName.charAt(firstName.length() - 1);
                         }
                         int custContact = customer.getContact() % 1000;

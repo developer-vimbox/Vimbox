@@ -918,6 +918,8 @@ function viewCal() {
         document.getElementById("cal_content").innerHTML = data;
     });
     var d = new Date();
+    utc = d.getTime() + (d.getTimezoneOffset() * 60000),
+    d = new Date(utc + (3600000 * 8));
     var m = d.getMonth();
     var y = d.getFullYear();
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -978,6 +980,8 @@ function viewMovCal(type) {
         }
     });
     var d = new Date();
+    utc = d.getTime() + (d.getTimezoneOffset() * 60000),
+    d = new Date(utc + (3600000 * 8));
     var m = d.getMonth();
     var y = d.getFullYear();
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -1102,11 +1106,11 @@ function confirmSalesLead() {
     });
     console.log(leadTotal);
     $.getJSON("RetrieveDepositPercentage", {})
-        .done(function (data) {
-            console.log(Number(data.deposit) / 100);
-            document.getElementById("cfmMessage").innerHTML = leadTotal * (Number(data.deposit) / 100);
-            modal.style.display = "block";
-        });
+            .done(function (data) {
+                console.log(Number(data.deposit) / 100);
+                document.getElementById("cfmMessage").innerHTML = (leadTotal * (Number(data.deposit) / 100)).toFixed(2);
+                modal.style.display = "block";
+            });
 }
 
 function confirmSales() {
@@ -1116,6 +1120,26 @@ function confirmSales() {
 function confirmLead() {
     var modal = document.getElementById("confirmLeadModal");
     modal.style.display = "block";
+}
+function confirmLeadSM(leadId) {
+    var errorModal = document.getElementById("lead_error_modal");
+    var errorStatus = document.getElementById("lead_error_status");
+    var errorMessage = document.getElementById("lead_error_message");
+
+    var modal = document.getElementById("confirmLeadModal");
+    $('#cfmlId').val(leadId);
+    document.getElementById('cfmleadIdLbl').innerHTML = leadId;
+    $.getJSON("RetrieveLeadConfirmationDetails", {leadId: leadId})
+            .done(function (data) {
+                document.getElementById("cfmMessage").innerHTML = (Number(data.total) * (Number(data.deposit) / 100)).toFixed(2);
+                modal.style.display = "block";
+            })
+            .fail(function (error) {
+                errorStatus.innerHTML = "ERROR";
+                errorMessage.innerHTML = error;
+                errorModal.style.display = "block";
+            });
+
 }
 
 function viewCancelReason() {
@@ -2249,7 +2273,7 @@ function viewDom(leadId, nric) {
                         viewDom(leadId);
                         errmodal.style.display = "none";
                     }, 500);
-                }else{
+                } else {
                     $("#leadStatus").val("save");
                 }
             },
@@ -2385,6 +2409,18 @@ function showYearReport() {
 function viewQuotation(refNum) {
     var s = "quotation_modal_" + refNum;
     document.getElementById(s).style.display = "block";
+}
+
+function reopenLead(leadId, nric) {
+    $.get("ReopenLeadController", {leadId: leadId}, function (data) {
+        document.getElementById('lead_error_status').innerHTML = data.status;
+        document.getElementById('lead_error_message').innerHTML = data.message;
+        document.getElementById('lead_error_modal').style.display = "block";
+        my_leads_setup(nric);
+        setTimeout(function () {
+            document.getElementById("lead_error_modal").style.display = "none";
+        }, 1000);
+    });
 }
 
 

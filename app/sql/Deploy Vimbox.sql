@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 29, 2016 at 12:50 PM
+-- Generation Time: Oct 01, 2016 at 01:19 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -146,14 +146,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `contact` int(20) NOT NULL,
   `email` varchar(100) NOT NULL,
   PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `customers`
---
-
-INSERT INTO `customers` (`customer_id`, `salutation`, `first_name`, `last_name`, `contact`, `email`) VALUES
-(1, 'Mr', 'Test', 'Test', 99999999, '');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -506,6 +499,7 @@ CREATE TABLE IF NOT EXISTS `system_enquiries` (
 
 INSERT INTO `system_enquiries` (`enquiry`) VALUES
 ('Material Prices'),
+('Operation Availability'),
 ('Site Survey availability');
 
 -- --------------------------------------------------------
@@ -699,6 +693,7 @@ CREATE TABLE IF NOT EXISTS `system_referrals` (
 --
 
 INSERT INTO `system_referrals` (`source`) VALUES
+('Facebook'),
 ('Friend'),
 ('Magazine'),
 ('Website');
@@ -938,6 +933,7 @@ INSERT INTO `users_bank` (`nric`, `payment_mode`, `bank_name`, `account_name`, `
 ('S1234567B', 'Cheque', 'DBS', 'POHTECK-ACCOUNT', '1234567'),
 ('S1234567C', 'Cheque', 'DBS', 'JONATHAN-ACCOUNT', '1234567'),
 ('S1234567D', 'Cheque', 'DBS', 'HAKIM-ACCOUNT', '1234567'),
+('S1234567P', 'Cheque', 'dbs', 'account', '1234567'),
 ('S9344895B', 'Cheque', 'DBS', 'yusheng account', '123-4567-8');
 
 -- --------------------------------------------------------
@@ -963,6 +959,7 @@ INSERT INTO `users_contact` (`nric`, `phone_no`, `fax_no`, `home_no`) VALUES
 ('S1234567B', 99999999, 0, 0),
 ('S1234567C', 99999999, 0, 0),
 ('S1234567D', 99999999, 0, 0),
+('S1234567P', 99999999, 0, 0),
 ('S9344895B', 99999999, 0, 0);
 
 -- --------------------------------------------------------
@@ -989,6 +986,7 @@ INSERT INTO `users_emergency` (`nric`, `name`, `relationship`, `contact_no`, `of
 ('S1234567B', 'Person1', 'Mother', 99999999, 0),
 ('S1234567C', 'Person1', 'Mother', 99999999, 0),
 ('S1234567D', 'Person1', 'Mother', 99999999, 0),
+('S1234567P', 'Mother', 'mother', 99999999, 0),
 ('S9344895B', 'Person1', 'Mother', 99999999, 0);
 
 -- --------------------------------------------------------

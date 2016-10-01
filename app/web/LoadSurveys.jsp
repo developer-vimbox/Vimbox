@@ -1,3 +1,8 @@
+<%@page import="com.vimbox.database.LeadPopulationDAO"%>
+<%@page import="com.vimbox.database.OperationsDAO"%>
+<%@page import="com.vimbox.customer.Customer"%>
+<%@page import="com.vimbox.sales.Lead"%>
+<%@page import="com.vimbox.database.LeadDAO"%>
 <%@page import="com.vimbox.sitesurvey.SiteSurvey"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.vimbox.database.SiteSurveyDAO"%>
@@ -139,6 +144,82 @@
                 }else{
                     out.println("<button class='btn btn-default' onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
                     out.println("<button class='btn btn-default' onclick=\"viewDom('" + leadId + "', '" + userId + "')\">DOM</button>");
+                    Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
+                    String refNum = "VBSPL_";
+                    Customer customer = lead.getCustomer();
+                    if (customer != null) {
+                        String lastName = customer.getLast_name();
+                        if (!lastName.trim().isEmpty()) {
+                            refNum += lastName.charAt(0);
+                        }
+                        String firstName = customer.getLast_name();
+                        if (!firstName.trim().isEmpty()) {
+                            refNum += firstName.charAt(firstName.length() - 1);
+                        }
+                        int custContact = customer.getContact() % 1000;
+                        refNum += Integer.toString(custContact) + "_";
+                    }
+                    
+                    String toms = lead.getTom();
+                    System.out.println(toms);
+                    System.out.println(toms.contains("|"));
+                    if (toms.contains("|")) {
+                        String[] tomSplit = lead.getTom().split("\\|");
+                        for (int k = 0; k < tomSplit.length; k++) {
+                            refNum += LeadPopulationDAO.getMoveTypeAbb(tomSplit[k]);
+                        }
+                    } else {
+                        refNum += LeadPopulationDAO.getMoveTypeAbb(toms);
+                    }
+
+                    ArrayList<String[]> dateOfMove = OperationsDAO.getDOMbyLeadID(lead.getId());
+                    // always get the last dom, sql already sorted by descending order. just get(0) will do.
+                    if (!dateOfMove.isEmpty()) {
+                        String[] dts = dateOfMove.get(0);
+                        String dd = dts[0];
+                        if (dd != "") {
+                            int index = dd.indexOf("-");
+                            String yy = dd.substring(index - 2, index);
+                            String mm = dd.substring(index + 1, index + 3);
+                            refNum += "_" + mm + yy;
+                        }
+                    }
+
+                    refNum = refNum.toUpperCase();
+                    String qService = LeadDAO.getQuotationService(refNum);
+        %>
+        <button class="btn btn-default" onclick="viewQuotation('<%=refNum%>')">Quotation</button>
+        <div id="quotation_modal_<%=refNum%>" class="modal">
+            <div class="modal-content" style="width: 430px; min-height: 330px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('quotation_modal_<%=refNum%>')">×</span>
+                    <center><h2>Input for Quotation Generation</h2></center>
+                </div>
+                <div class="modal-body">        
+                    <form method="post" class="btn">
+                        <div class="form-inline">
+                            <label class="col-sm-3 control-label"> The cost of moving service includes: </label>
+                            <br>
+                            <div class="form-group">
+
+                                <div class="col-sm-4">
+                                    <textarea rows="4" cols="41" class="form-control" name="serviceIncludes"><%=qService%></textarea>
+                                    <input type="hidden" name="leadId" value="<%=lead.getId()%>">
+                                    <input type="hidden" name="refNum" value="<%=refNum%>">
+                                </div>
+                            </div>
+                                <br><br>
+                            <div class="form-group text-center">
+                                 <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
+                               
+                            </div>
+                          
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <%
                 }
                 out.println("</td>");
                 out.println("</tr>");
@@ -175,6 +256,82 @@
                 }else{
                     out.println("<button class='btn btn-default' onclick=\"viewSurvey('" + leadId + "', '" + date + "', '" + timeslot + "')\">View Survey</button>");
                     out.println("<button class='btn btn-default' onclick=\"viewDom('" + leadId + "', '" + userId + "')\">DOM</button>");
+                    Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
+                    String refNum = "VBSPL_";
+                    Customer customer = lead.getCustomer();
+                    if (customer != null) {
+                        String lastName = customer.getLast_name();
+                        if (!lastName.trim().isEmpty()) {
+                            refNum += lastName.charAt(0);
+                        }
+                        String firstName = customer.getLast_name();
+                        if (!firstName.trim().isEmpty()) {
+                            refNum += firstName.charAt(firstName.length() - 1);
+                        }
+                        int custContact = customer.getContact() % 1000;
+                        refNum += Integer.toString(custContact) + "_";
+                    }
+                    
+                    String toms = lead.getTom();
+                    System.out.println(toms);
+                    System.out.println(toms.contains("|"));
+                    if (toms.contains("|")) {
+                        String[] tomSplit = lead.getTom().split("\\|");
+                        for (int k = 0; k < tomSplit.length; k++) {
+                            refNum += LeadPopulationDAO.getMoveTypeAbb(tomSplit[k]);
+                        }
+                    } else {
+                        refNum += LeadPopulationDAO.getMoveTypeAbb(toms);
+                    }
+
+                    ArrayList<String[]> dateOfMove = OperationsDAO.getDOMbyLeadID(lead.getId());
+                    // always get the last dom, sql already sorted by descending order. just get(0) will do.
+                    if (!dateOfMove.isEmpty()) {
+                        String[] dts = dateOfMove.get(0);
+                        String dd = dts[0];
+                        if (dd != "") {
+                            int index = dd.indexOf("-");
+                            String yy = dd.substring(index - 2, index);
+                            String mm = dd.substring(index + 1, index + 3);
+                            refNum += "_" + mm + yy;
+                        }
+                    }
+
+                    refNum = refNum.toUpperCase();
+                    String qService = LeadDAO.getQuotationService(refNum);
+        %>
+        <button class="btn btn-default" onclick="viewQuotation('<%=refNum%>')">Quotation</button>
+        <div id="quotation_modal_<%=refNum%>" class="modal">
+            <div class="modal-content" style="width: 430px; min-height: 330px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('quotation_modal_<%=refNum%>')">×</span>
+                    <center><h2>Input for Quotation Generation</h2></center>
+                </div>
+                <div class="modal-body">        
+                    <form method="post" class="btn">
+                        <div class="form-inline">
+                            <label class="col-sm-3 control-label"> The cost of moving service includes: </label>
+                            <br>
+                            <div class="form-group">
+
+                                <div class="col-sm-4">
+                                    <textarea rows="4" cols="41" class="form-control" name="serviceIncludes"><%=qService%></textarea>
+                                    <input type="hidden" name="leadId" value="<%=lead.getId()%>">
+                                    <input type="hidden" name="refNum" value="<%=refNum%>">
+                                </div>
+                            </div>
+                                <br><br>
+                            <div class="form-group text-center">
+                                 <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
+                               
+                            </div>
+                          
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <%
                 }
                 out.println("</td>");
                 out.println("</tr>");

@@ -1089,6 +1089,8 @@ function showWeeklySch(selopt) {
         var modal = document.getElementById("cal_modal");
         $("#cal_content").load("MyScheduleCalendar.jsp");
         var d = new Date();
+        utc = d.getTime() + (d.getTimezoneOffset() * 60000),
+        d = new Date(utc + (3600000 * 8));
         var m = d.getMonth();
         var y = d.getFullYear();
         var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -1107,6 +1109,8 @@ function showWeeklySch(selopt) {
         chdatelbl.style.visibility = 'visible';
         chdate.value
         var today = new Date();
+        utc = d.getTime() + (d.getTimezoneOffset() * 60000),
+        today = new Date(utc + (3600000 * 8));
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
         var yyyy = today.getFullYear();

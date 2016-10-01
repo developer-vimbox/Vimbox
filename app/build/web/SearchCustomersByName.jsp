@@ -136,7 +136,7 @@
                         <%
                         } else {
                         %>
-                        <button onclick="editCustomer(<%=custId%>)" class="btn btn-default">Edit</button>
+                        <button onclick="editCustomer('<%=custId%>','<%=module%>')" class="btn btn-default">Edit</button>
                         <button onclick="viewLeadsHistory('<%=custId%>')" class="btn btn-default">VS</button>
                         <button onclick="viewTicketsHistory('<%=custId%>')" class="btn btn-default">VT</button>
                         <%

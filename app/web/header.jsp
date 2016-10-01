@@ -271,7 +271,7 @@
         String designation = user.getDesignation();
     %>
 
-    
+
     <div id="page-wrapper">
         <div id="page-header" class="bg-gradient-9">
             <div id="mobile-navigation">
@@ -310,7 +310,7 @@
                     </div>
                 </div>
 
-                
+
             </div>
             <style>                                  
                 .searchbar {
@@ -344,44 +344,44 @@
             <div id="header-nav-right">
                 <script src="JS/AdminFunctions.js"></script>
                 <style type="text/css">
-        .htooltip {
-            position: relative;
-            z-index: 999;
-        }
+                    .htooltip {
+                        position: relative;
+                        z-index: 999;
+                    }
 
-        .htooltip .htooltiptext {
-            visibility: hidden;
-            width: 180px;
-            background-color: black;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px 0;
-            position: absolute;
-            z-index: 1;
-            top: 115%;
-            left: -147%;
-        }
+                    .htooltip .htooltiptext {
+                        visibility: hidden;
+                        width: 180px;
+                        background-color: black;
+                        color: #fff;
+                        text-align: center;
+                        border-radius: 6px;
+                        padding: 5px 0;
+                        position: absolute;
+                        z-index: 1;
+                        top: 115%;
+                        left: -147%;
+                    }
 
-        .htooltip .htooltiptext::after {
-            content: "";
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent transparent black transparent;
-        }
+                    .htooltip .htooltiptext::after {
+                        content: "";
+                        position: absolute;
+                        bottom: 100%;
+                        left: 50%;
+                        margin-left: -5px;
+                        border-width: 5px;
+                        border-style: solid;
+                        border-color: transparent transparent black transparent;
+                    }
 
-        .htooltip:hover .htooltiptext {
-            visibility: visible;
-            display: block;
-            z-index: 1;
-        }
-    </style>
-                
-                
+                    .htooltip:hover .htooltiptext {
+                        visibility: visible;
+                        display: block;
+                        z-index: 1;
+                    }
+                </style>
+
+
                 <div class="dropdown">
                     <input type="text" id="customer_search_header" class="searchbar" placeholder="Search Customer">
                     <button class="btn btn-round btn-primary" onclick='customerSearchHeader("crm")' data-toggle="modal" data-target=".bs-example-modal-lg" style=" margin-right: 10px">
@@ -412,7 +412,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div id="leadsHistoryModal" class="modal">
                                         <div class="modal-content" style="width: 80%;">
                                             <div class="modal-header">
@@ -421,6 +420,17 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div id="leadsHistoryContent"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="customer_error_modal" class="modal">
+                                        <div class="error-modal-content">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('customer_error_modal')">×</span>
+                                                <center><h2><div id="customer_error_status"></div></h2></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="customer_error_message"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -444,7 +454,7 @@
                     </div>
                 </div>
                 <%
-                    if(moduleNames.contains("Admin")){
+                    if (moduleNames.contains("Admin")) {
                 %>
                 <div class="htooltip dropdown">
                     <a onclick="admViewCal()"><i class="glyph-icon icon-calendar-o"></i></a>
@@ -458,7 +468,7 @@
                         View Operation Schedules
                     </span>
                 </div>
-               
+
                 <div id="cal_modal" class="modal">
                     <div class="modal-content" style="width: 90%;">
                         <div class="modal-body">
@@ -599,7 +609,7 @@
             <div class="scroll-sidebar">
                 <ul id="sidebar-menu">
                     <%
-                        if(moduleNames.contains("Admin") || moduleNames.contains("HR")){
+                        if (moduleNames.contains("Admin") || moduleNames.contains("HR")) {
                     %>
                     <li>
                         <a href="#" title="Human Resource">
@@ -620,9 +630,9 @@
                     <%
                         }
                     %>
-                    
+
                     <%
-                            if(moduleNames.contains("Admin") || moduleNames.contains("Sales")){
+                        if (moduleNames.contains("Admin") || moduleNames.contains("Sales")) {
                     %>
                     <li>
                         <a href="#" title="Sales">
@@ -643,9 +653,9 @@
                     <%
                         }
                     %>
-                    
+
                     <%
-                        if(moduleNames.contains("Admin") || moduleNames.contains("SiteSurvey")){
+                        if (moduleNames.contains("Admin") || moduleNames.contains("SiteSurvey")) {
                     %>
                     <li>
                         <a href="#" title="Site Surveys">
@@ -663,9 +673,9 @@
                     <%
                         }
                     %>
-                    
+
                     <%
-                        if(moduleNames.contains("Admin") || moduleNames.contains("Supervisor")){
+                        if (moduleNames.contains("Admin") || moduleNames.contains("Supervisor")) {
                     %>
                     <li>
                         <a href="#" title="Operations">
@@ -675,10 +685,10 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <%
-                                    if(moduleNames.contains("Admin")) {
+                                    if (moduleNames.contains("Admin")) {
                                 %>
                                 <li><a href="AssignJobs.jsp" title="Assign Jobs"><span>Assign Jobs</span></a></li>
-                                <% } %>
+                                    <% } %>
                                 <li><a href="SupervisorJobs.jsp" title="Supervisor Jobs"><span>Supervisor Jobs</span></a></li>
                                 <li><a href="SupervisorTakeAttendance.jsp" title="Supervisor Take Attendance"><span>Take Attendance</span></a></li>
                             </ul>
@@ -688,7 +698,7 @@
                     <%
                         }
                     %>
-                    
+
                     <li>
                         <a href="#" title="Tickets">
                             <i class="glyph-icon icon-ticket"></i>
@@ -703,9 +713,9 @@
 
                         </div><!-- .sidebar-submenu -->
                     </li>
-                    
+
                     <%
-                        if(moduleNames.contains("Admin")){
+                        if (moduleNames.contains("Admin")) {
                     %>
                     <li>
                         <a href="#" title="Admin">

@@ -261,10 +261,22 @@ public class CreateLeadController extends HttpServlet {
             ArrayList<String> addFrom = new ArrayList<String>();
             if (addressFrom != null) {
                 for (int i = 0; i < addressFrom.length; i += 4) {
-                    String address = addressFrom[i];
-                    String level = addressFrom[i + 1];
-                    String unit = addressFrom[i + 2];
-                    String postal = addressFrom[i + 3];
+                    String address = addressFrom[i].trim();
+                    String level = addressFrom[i + 1].trim();
+                    String unit = addressFrom[i + 2].trim();
+                    String postal = addressFrom[i + 3].trim();
+                    if(address.isEmpty()){
+                        address = " ";
+                    }
+                    if(level.isEmpty()){
+                        level = " ";
+                    }
+                    if(unit.isEmpty()){
+                        unit = " ";
+                    }
+                    if(postal.isEmpty()){
+                        postal = " ";
+                    }
                     String add = address + "_" + level + "_" + unit + "_" + postal;
                     addressFromSet.add(address + " #" + level + "-" + unit + " S" + postal);
                     for (String salesDiv : salesDivs) {
@@ -309,10 +321,22 @@ public class CreateLeadController extends HttpServlet {
             ArrayList<String> addTo = new ArrayList<String>();
             if (addressTo != null) {
                 for (int i = 0; i < addressTo.length; i += 4) {
-                    String address = addressTo[i];
-                    String level = addressTo[i + 1];
-                    String unit = addressTo[i + 2];
-                    String postal = addressTo[i + 3];
+                    String address = addressTo[i].trim();
+                    String level = addressTo[i + 1].trim();
+                    String unit = addressTo[i + 2].trim();
+                    String postal = addressTo[i + 3].trim();
+                    if(address.isEmpty()){
+                        address = " ";
+                    }
+                    if(level.isEmpty()){
+                        level = " ";
+                    }
+                    if(unit.isEmpty()){
+                        unit = " ";
+                    }
+                    if(postal.isEmpty()){
+                        postal = " ";
+                    }
                     String add = address + "_" + level + "_" + unit + "_" + postal;
                     addressToSet.add(address + " #" + level + "-" + unit + " S" + postal);
                     for (String salesDiv : salesDivs) {
@@ -504,26 +528,44 @@ public class CreateLeadController extends HttpServlet {
                         String[] otherCharges = new String[6];
 
                         String otherCharge0 = request.getParameter(divId + "_storeyCharge");
+                        if(otherCharge0.isEmpty()){
+                            otherCharge0 = "0";
+                        }
                         otherCharges[0] = otherCharge0;
                         total += Double.parseDouble(otherCharge0);
 
                         String otherCharge1 = request.getParameter(divId + "_pushCharge");
+                        if(otherCharge1.isEmpty()){
+                            otherCharge1 = "0";
+                        }
                         otherCharges[1] = otherCharge1;
                         total += Double.parseDouble(otherCharge1);
 
                         String otherCharge2 = request.getParameter(divId + "_detourCharge");
+                        if(otherCharge2.isEmpty()){
+                            otherCharge2 = "0";
+                        }
                         otherCharges[2] = otherCharge2;
                         total += Double.parseDouble(otherCharge2);
 
                         String otherCharge3 = request.getParameter(divId + "_materialCharge");
+                        if(otherCharge3.isEmpty()){
+                            otherCharge3 = "0";
+                        }
                         otherCharges[3] = otherCharge3;
                         total += Double.parseDouble(otherCharge3);
 
                         String otherCharge4 = request.getParameter(divId + "_markup");
+                        if(otherCharge4.isEmpty()){
+                            otherCharge4 = "0";
+                        }
                         otherCharges[4] = otherCharge4;
                         total += Double.parseDouble(otherCharge4);
 
                         String otherCharge5 = request.getParameter(divId + "_discount");
+                        if(otherCharge5.isEmpty()){
+                            otherCharge5 = "0";
+                        }
                         otherCharges[5] = otherCharge5;
                         total += Double.parseDouble(otherCharge5);
 

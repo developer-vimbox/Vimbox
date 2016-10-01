@@ -74,6 +74,7 @@ public class LeadDAO {
     private static final String UPDATE_LEAD_CONFIRMATION_COLLECTED = "UPDATE leadconfirmation SET collected_amount=? WHERE lead_id=?";
     private static final String CONFIRM_LEAD = "UPDATE leadconfirmation SET confirmed_user=?, collected_amount=?, email_path=? WHERE lead_id=?";
     private static final String CONFIRM_LEAD_STATUS = "UPDATE leadinfo SET status='Confirmed' WHERE lead_id=?";
+    private static final String REOPEN_LEAD_STATUS = "UPDATE leadinfo SET status='Pending' WHERE lead_id=?";
     private static final String UPDATE_LEAD_CONFIRMATION = "UPDATE leadconfirmation SET total_amount=? WHERE lead_id=?";
     private static final String UPDATE_ADDRESS = "UPDATE leadmove SET storeys=?, pushing=? WHERE lead_id=? AND sales_div=?";
     private static final String UPDATE_LEAD_OTHER = "UPDATE leadother SET charge=? WHERE lead_id=? AND sales_div=? AND other=?";
@@ -1425,6 +1426,21 @@ public class LeadDAO {
             ps.executeUpdate();
 
             JobDAO.confirmSalesJob(leadId);
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void reopenLead(int leadId){
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(REOPEN_LEAD_STATUS);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {

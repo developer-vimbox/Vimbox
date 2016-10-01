@@ -249,6 +249,9 @@
                                             <div class="col-sm-4" style="padding-top: 7px;">
                                                 <label id="customer_salutation"></label>
                                             </div>
+                                            <label class="col-sm-2 control-label"></label>
+                                            <div class="col-sm-3"  style="padding-top: 7px;" id="cust_btn_input">
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">First Name: </label>
@@ -274,7 +277,29 @@
                                                 <label id="customer_email"></label>
                                             </div>
                                         </div>
-                                    </div>        
+                                    </div>    
+                                    <div id="lead_edit_customer_modal" class="modal">
+                                        <div class="modal-content" style="width: 70%;">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('lead_edit_customer_modal')">×</span>
+                                                <center><h2>Edit Customer</h2></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="lead_edit_customer_content"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="lead_customer_error_modal" class="modal">
+                                        <div class="error-modal-content">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('lead_customer_error_modal')">×</span>
+                                                <center><h2><div id="lead_customer_error_status"></div></h2></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="lead_customer_error_message"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </fieldset>
                                 <br>
                                 <fieldset>

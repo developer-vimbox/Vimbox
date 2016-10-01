@@ -428,7 +428,7 @@
                                             <td align="right" style="width: 60%;">
                                                 <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_storeyCharge" class="storeyCharge" name="<%=divId%>_storeyCharge" value="0.00">
+                            <input class='form-control storeyCharge' type="number" step="0.01" min="0" id="<%=divId%>_storeyCharge" name="<%=divId%>_storeyCharge" value="0.00">
                                     </div>
                                                 </td>
                                         </tr>
@@ -443,7 +443,7 @@
                                             <td align="right" style="width: 60%;">
                                                  <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input class='form-control'  type="number" step="0.01" min="0" id="<%=divId%>_pushCharge" class="pushCharge" name="<%=divId%>_pushCharge" value="0.00">
+                            <input class='form-control pushCharge'  type="number" step="0.01" min="0" id="<%=divId%>_pushCharge" name="<%=divId%>_pushCharge" value="0.00">
                                     </div>
                                         </tr>
                                     </table>
@@ -457,7 +457,7 @@
                                             <td align="right" style="width: 60%;">
                                                   <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_detourCharge" class="detourCharge" name="<%=divId%>_detourCharge" value="0.00">
+                            <input class='form-control detourCharge' type="number" step="0.01" min="0" id="<%=divId%>_detourCharge" name="<%=divId%>_detourCharge" value="0.00">
                                     </div>
                                                </td>
                                         </tr>
@@ -472,7 +472,7 @@
                                             <td align="right" style="width: 60%;">
                                                    <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_materialCharge" class="materialCharge" name="<%=divId%>_materialCharge" value="0.00">
+                            <input class='form-control materialCharge' type="number" step="0.01" min="0" id="<%=divId%>_materialCharge" name="<%=divId%>_materialCharge" value="0.00">
                                     </div>
                                                 </td>
                                         </tr>
@@ -487,7 +487,7 @@
                                             <td align="right" style="width: 60%;">
                                                  <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_markup" class="markup" name="<%=divId%>_markup" value="0.00">
+                            <input class='form-control markup' type="number" step="0.01" min="0" id="<%=divId%>_markup" name="<%=divId%>_markup" value="0.00">
                                     </div> </td>
                                         </tr>
                                     </table>
@@ -501,7 +501,7 @@
                                             <td align="right" style="width: 60%;">
                                                     <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input class='form-control' type="number" step="0.01" min="0" id="<%=divId%>_discount" class="discount" name="<%=divId%>_discount" value="0.00">
+                            <input class='form-control discount' type="number" step="0.01" min="0" id="<%=divId%>_discount" name="<%=divId%>_discount" value="0.00">
                                     </div>
                                         </tr>
                                     </table>

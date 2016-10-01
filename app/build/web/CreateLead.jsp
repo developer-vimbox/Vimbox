@@ -46,6 +46,9 @@
                 color: #4b5056;
             }
         </style>
+        <%            int leadId = new Random().nextInt(900000000) + 100000000;
+        %>
+
         <div id="cal_modal" class="modal">
             <div class="modal-content" style="width: 90%;">
                 <div class="modal-body">
@@ -124,8 +127,7 @@
                 </div>
             </div>
         </div>
-        <%            int leadId = new Random().nextInt(900000000) + 100000000;
-        %>
+
         <div id="page-content-wrapper">
 
             <div id="page-content">
@@ -137,7 +139,63 @@
                         <div class="panel-body">
 
 
-                            <form class='form-horizontal' method="POST" action="CreateLeadController" autocomplete="on" id="create_lead_form">
+                            <form class='form-horizontal' method="POST" action="CreateLeadController" autocomplete="on" id="create_lead_form" enctype="multipart/form-data">
+                                <div id="confirmLeadModal" class="modal">
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <span class="close" onclick="closeModal('confirmLeadModal')">×</span>
+                                            <center><h2>Lead Confirmation</h2></center>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Deposit to be collected: </label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">S$</span>
+                                                            <label class="form-control" id="cfmMessage" disabled></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Amount Collected: </label>
+                                                    <div class="col-sm-6">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">S$</span>
+                                                            <input class="form-control" type="number" min="0" step="0.01" name="amountCollected"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">Confirmation Email: </label>
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control" type="file" name="file"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label"> </label>
+                                                    <div class="col-sm-6 text-center">
+                                                        <button data-loading-text="Loading..." class="btn loading-button btn-primary" onclick="confirmSales()">Confirm</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="salesModal" class="modal">
+                                    <!-- Modal content -->
+                                    <div class="modal-content" style="width: 400px;">
+                                        <div class="modal-header">
+                                            <span class="close" onclick="closeModal('salesModal')">×</span>
+                                            <center><h3><div id="salesStatus"></div></h3></center>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="salesMessage"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="leadStatus" id="leadStatus" value="save"/>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Lead ID: </label>
                                     <div class="col-sm-4" style="padding-top: 7px;">
@@ -191,6 +249,9 @@
                                             <div class="col-sm-4" style="padding-top: 7px;">
                                                 <label id="customer_salutation"></label>
                                             </div>
+                                            <label class="col-sm-2 control-label"></label>
+                                            <div class="col-sm-3"  style="padding-top: 7px;" id="cust_btn_input">
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">First Name: </label>
@@ -216,7 +277,29 @@
                                                 <label id="customer_email"></label>
                                             </div>
                                         </div>
-                                    </div>        
+                                    </div>    
+                                    <div id="lead_edit_customer_modal" class="modal">
+                                        <div class="modal-content" style="width: 70%;">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('lead_edit_customer_modal')">×</span>
+                                                <center><h2>Edit Customer</h2></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="lead_edit_customer_content"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="lead_customer_error_modal" class="modal">
+                                        <div class="error-modal-content">
+                                            <div class="modal-header">
+                                                <span class="close" onclick="closeModal('lead_customer_error_modal')">×</span>
+                                                <center><h2><div id="lead_customer_error_status"></div></h2></center>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="lead_customer_error_message"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </fieldset>
                                 <br>
                                 <fieldset>
@@ -350,7 +433,9 @@
                                         <td></td>
                                         <td>
                                             <div class="bg-default text-center">
-                                                <button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary">Save</button></div>
+                                                <button type="submit" data-loading-text="Loading..." class="btn loading-button btn-primary">Save</button>
+                                                <button data-loading-text="Loading..." class="btn loading-button btn-primary" onclick="confirmSalesLead();
+                                                        return false;">Confirm</button></div>
                                             <!--<input type="submit" value="Generate Quotation" formaction="new_lead_pdf.pdf" formtarget="_blank">-->
                                             <!--<button onclick="return checkEmail();">Email Quotation</button>-->
                                         </td>
@@ -379,12 +464,15 @@
                         setTimeout(function () {
                             window.location.href = "MyLeads.jsp";
                         }, 500);
+                    }else{
+                        $("#leadStatus").val("save");
                     }
                 },
                 error: function (data) {
                     var modal = document.getElementById("salesModal");
                     var status = document.getElementById("salesStatus");
                     var message = document.getElementById("salesMessage");
+                    $("#leadStatus").val("save");
                     status.innerHTML = "ERROR";
                     message.innerHTML = data;
                     modal.style.display = "block";

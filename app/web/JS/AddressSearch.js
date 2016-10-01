@@ -1,8 +1,8 @@
 var counter = 1;
 var moveDiv = 0;
 function searchAddressFrom() {
-    var googleAPI = "http://maps.googleapis.com/maps/api/geocode/json?";
-    var postalcode = document.getElementById("postalfrom").value;
+    var googleAPI = "https://maps.googleapis.com/maps/api/geocode/json?";
+    var postalcode = document.getElementById("postalfrom").value.trim();
     var newdiv = document.createElement('div');
     var stringDiv = "";
     var address = "";
@@ -13,124 +13,204 @@ function searchAddressFrom() {
         counter++;
     }
 
-    //query the API for latlng
-    $.getJSON(googleAPI, {address: postalcode, sensor: "true"})
-            .done(function (data) {
-                try {
-                    latlng = (data.results[0].geometry.location.lat + "," + data.results[0].geometry.location.lng);
-                    $.getJSON(googleAPI, {latlng: latlng, sensor: "true"})
-                            .done(function (data) {
-                                var results = data.results;
-                                for (i = 0; i < results.length; i++) {
-                                    var street = false;
-                                    var route = false;
-                                    var postal = false;
-                                    var result = results[i];
-                                    var components = result.address_components;
-                                    for (j = 0; j < components.length; j++) {
-                                        var component = components[j];
-                                        var string = component.types[0];
-                                        switch (string) {
-                                            case "street_number":
-                                                street = true;
-                                                break;
-                                            case "route":
-                                                route = true;
-                                                break;
-                                            case "postal_code":
-                                                postal = true;
+    if (!postalcode) {
+        stringDiv += "<div class='address-box' id='from" + counter + "'>";
+        stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+        stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+        stringDiv += "<div class ='col-sm-4'>";
+        stringDiv += "<input type='text' class='addressInput form-control'  name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
+        stringDiv += "</div>"; //close col-sm-4
+        stringDiv += "<div class ='col-sm-6'>";
+        stringDiv += "<div class='input-group'>";
+        stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+        stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='2'>";
+        stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+        stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='3'>";
+        stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+        stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='5' value='" + postalcode + "'>";
+        stringDiv += " </div>";// close input group
+        stringDiv += "</div>";//close col-sm-6
+        stringDiv += "</div>"; //close form-group row
+        stringDiv += "</div></div>"; // col-sm-8, form group
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+        stringDiv += "<div class ='col-sm-4'>";
+        stringDiv += "<input type='text' name='storeysfrom' size='5' class='form-control'>";
+        stringDiv += "</div>"; //close col-sm-4
+        stringDiv += "</div>"; //close form group
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+        stringDiv += "<div class ='col-sm-4'>";
+        stringDiv += "<div class='input-group'>";
+        stringDiv += "<input type='text' name='distancefrom' size='5' class='form-control'> ";
+        stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+        stringDiv += "</div></div>"; //close input group, col-sm-4
+        stringDiv += "</div>"; //close form group
+        stringDiv += "</div>"; //close div id tag
+        newdiv.innerHTML = stringDiv;
+        document.getElementById("from").appendChild(newdiv);
+        addSalesDiv(counter, addressLbl);
+        counter++;
+    } else {
+        //query the API for latlng
+        $.getJSON(googleAPI, {address: postalcode, sensor: "true"})
+                .done(function (data) {
+                    try {
+                        latlng = (data.results[0].geometry.location.lat + "," + data.results[0].geometry.location.lng);
+                        $.getJSON(googleAPI, {latlng: latlng, sensor: "true"})
+                                .done(function (data) {
+                                    var results = data.results;
+                                    for (i = 0; i < results.length; i++) {
+                                        var street = false;
+                                        var route = false;
+                                        var postal = false;
+                                        var result = results[i];
+                                        var components = result.address_components;
+                                        for (j = 0; j < components.length; j++) {
+                                            var component = components[j];
+                                            var string = component.types[0];
+                                            switch (string) {
+                                                case "street_number":
+                                                    street = true;
+                                                    break;
+                                                case "route":
+                                                    route = true;
+                                                    break;
+                                                case "postal_code":
+                                                    postal = true;
+                                            }
+                                        }
+                                        if (street && route && postal) {
+                                            address = result.formatted_address;
+                                            addressLbl = address.substring(0, address.lastIndexOf(",")) + " # -  S" + postalcode;
+                                            break;
                                         }
                                     }
-                                    if (street && route && postal) {
-                                        address = result.formatted_address;
-                                        addressLbl = address.substring(0, address.lastIndexOf(",")) + " # -  S" + postalcode;
-                                        break;
-                                    }
-                                }
-                                stringDiv += "<div class='address-box' id='from" + counter + "'>";
-                                stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
-                                stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<input type='text' class='addressInput form-control'  name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
-                                stringDiv += "</div>"; //close col-sm-4
-                                stringDiv += "<div class ='col-sm-6'>";
-                                stringDiv += "<div class='input-group'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                                stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='2'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                                stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='3'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                                stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='5' value='" + postalcode + "'>";
-                                stringDiv += " </div>";// close input group
-                                stringDiv += "</div>";//close col-sm-6
-                                stringDiv += "</div>"; //close form-group row
-                                stringDiv += "</div></div>"; // col-sm-8, form group
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<input type='text' name='storeysfrom' size='5' class='form-control'>";
-                                stringDiv += "</div>"; //close col-sm-4
-                                stringDiv += "</div>"; //close form group
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<div class='input-group'>";
-                                stringDiv += "<input type='text' name='distancefrom' size='5' class='form-control'> ";
-                                stringDiv += "<span class='input-group-addon bg-black'>M</span>";
-                                stringDiv += "</div></div>"; //close input group, col-sm-4
-                                stringDiv += "</div>"; //close form group
-                                stringDiv += "</div>"; //close div id tag
-                                newdiv.innerHTML = stringDiv;
-                                document.getElementById("from").appendChild(newdiv);
-                                addSalesDiv(counter, addressLbl);
-                                counter++;
-                                calculateDetourCharge();
-                            })
-                            .fail(function (error) {
-                                console.log(error);
-                                document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
-                                document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
-                                var modal = document.getElementById("saModal");
-                                modal.style.display = "block";
-                                stringDiv += "<div class='address-box' id='from" + counter + "'>";
-                                stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
-                                stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<input type='text' class='addressInput form-control'  name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
-                                stringDiv += "</div>"; //close col-sm-4
-                                stringDiv += "<div class ='col-sm-6'>";
-                                stringDiv += "<div class='input-group'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                                stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='2'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                                stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='3'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                                stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='5' value='" + postalcode + "'>";
-                                stringDiv += " </div>";// close input group
-                                stringDiv += "</div>";//close col-sm-6
-                                stringDiv += "</div>"; //close form-group row
-                                stringDiv += "</div></div>"; // col-sm-8, form group
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<input type='text' name='storeysfrom' size='5' class='form-control'>";
-                                stringDiv += "</div>"; //close col-sm-4
-                                stringDiv += "</div>"; //close form group
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<div class='input-group'>";
-                                stringDiv += "<input type='text' name='distancefrom' size='5' class='form-control'> ";
-                                stringDiv += "<span class='input-group-addon bg-black'>M</span>";
-                                stringDiv += "</div></div>"; //close input group, col-sm-4
-                                stringDiv += "</div>"; //close form group
-                                stringDiv += "</div>"; //close div id tag
-                                newdiv.innerHTML = stringDiv;
-                                document.getElementById("from").appendChild(newdiv);
-                                addSalesDiv(counter, addressLbl);
-                                counter++;
-                                calculateDetourCharge();
-                            });
-                } catch (err) {
-                    console.log(err);
+                                    stringDiv += "<div class='address-box' id='from" + counter + "'>";
+                                    stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+                                    stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<input type='text' class='addressInput form-control'  name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
+                                    stringDiv += "</div>"; //close col-sm-4
+                                    stringDiv += "<div class ='col-sm-6'>";
+                                    stringDiv += "<div class='input-group'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+                                    stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='2'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+                                    stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='3'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+                                    stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='5' value='" + postalcode + "'>";
+                                    stringDiv += " </div>";// close input group
+                                    stringDiv += "</div>";//close col-sm-6
+                                    stringDiv += "</div>"; //close form-group row
+                                    stringDiv += "</div></div>"; // col-sm-8, form group
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<input type='text' name='storeysfrom' size='5' class='form-control'>";
+                                    stringDiv += "</div>"; //close col-sm-4
+                                    stringDiv += "</div>"; //close form group
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<div class='input-group'>";
+                                    stringDiv += "<input type='text' name='distancefrom' size='5' class='form-control'> ";
+                                    stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+                                    stringDiv += "</div></div>"; //close input group, col-sm-4
+                                    stringDiv += "</div>"; //close form group
+                                    stringDiv += "</div>"; //close div id tag
+                                    newdiv.innerHTML = stringDiv;
+                                    document.getElementById("from").appendChild(newdiv);
+                                    addSalesDiv(counter, addressLbl);
+                                    counter++;
+                                })
+                                .fail(function (error) {
+                                    console.log(error);
+                                    document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
+                                    document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
+                                    var modal = document.getElementById("saModal");
+                                    modal.style.display = "block";
+                                    stringDiv += "<div class='address-box' id='from" + counter + "'>";
+                                    stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+                                    stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<input type='text' class='addressInput form-control'  name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
+                                    stringDiv += "</div>"; //close col-sm-4
+                                    stringDiv += "<div class ='col-sm-6'>";
+                                    stringDiv += "<div class='input-group'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+                                    stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='2'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+                                    stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='3'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+                                    stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='5' value='" + postalcode + "'>";
+                                    stringDiv += " </div>";// close input group
+                                    stringDiv += "</div>";//close col-sm-6
+                                    stringDiv += "</div>"; //close form-group row
+                                    stringDiv += "</div></div>"; // col-sm-8, form group
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<input type='text' name='storeysfrom' size='5' class='form-control'>";
+                                    stringDiv += "</div>"; //close col-sm-4
+                                    stringDiv += "</div>"; //close form group
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<div class='input-group'>";
+                                    stringDiv += "<input type='text' name='distancefrom' size='5' class='form-control'> ";
+                                    stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+                                    stringDiv += "</div></div>"; //close input group, col-sm-4
+                                    stringDiv += "</div>"; //close form group
+                                    stringDiv += "</div>"; //close div id tag
+                                    newdiv.innerHTML = stringDiv;
+                                    document.getElementById("from").appendChild(newdiv);
+                                    addSalesDiv(counter, addressLbl);
+                                    counter++;
+                                });
+                    } catch (err) {
+                        console.log(err);
+                        document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
+                        document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
+                        var modal = document.getElementById("saModal");
+                        modal.style.display = "block";
+                        stringDiv += "<div class='address-box' id='from" + counter + "'>";
+                        stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
+                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+                        stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+                        stringDiv += "<div class ='col-sm-4'>";
+                        stringDiv += "<input type='text' class='addressInput form-control'  name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
+                        stringDiv += "</div>"; //close col-sm-4
+                        stringDiv += "<div class ='col-sm-6'>";
+                        stringDiv += "<div class='input-group'>";
+                        stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+                        stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='2'>";
+                        stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+                        stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='3'>";
+                        stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+                        stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='5' value='" + postalcode + "'>";
+                        stringDiv += " </div>";// close input group
+                        stringDiv += "</div>";//close col-sm-6
+                        stringDiv += "</div>"; //close form-group row
+                        stringDiv += "</div></div>"; // col-sm-8, form group
+                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+                        stringDiv += "<div class ='col-sm-4'>";
+                        stringDiv += "<input type='text' name='storeysfrom' size='5' class='form-control'>";
+                        stringDiv += "</div>"; //close col-sm-4
+                        stringDiv += "</div>"; //close form group
+                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+                        stringDiv += "<div class ='col-sm-4'>";
+                        stringDiv += "<div class='input-group'>";
+                        stringDiv += "<input type='text' name='distancefrom' size='5' class='form-control'> ";
+                        stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+                        stringDiv += "</div></div>"; //close input group, col-sm-4
+                        stringDiv += "</div>"; //close form group
+                        stringDiv += "</div>"; //close div id tag
+                        newdiv.innerHTML = stringDiv;
+                        document.getElementById("from").appendChild(newdiv);
+                        addSalesDiv(counter, addressLbl);
+                        counter++;
+                    }
+                })
+                .fail(function (error) {
+                    console.log(error);
                     document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
                     document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
                     var modal = document.getElementById("saModal");
@@ -171,59 +251,15 @@ function searchAddressFrom() {
                     document.getElementById("from").appendChild(newdiv);
                     addSalesDiv(counter, addressLbl);
                     counter++;
-                    calculateDetourCharge();
-                }
-            })
-            .fail(function (error) {
-                console.log(error);
-                document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
-                document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
-                var modal = document.getElementById("saModal");
-                modal.style.display = "block";
-                stringDiv += "<div class='address-box' id='from" + counter + "'>";
-                stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
-                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
-                stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
-                stringDiv += "<div class ='col-sm-4'>";
-                stringDiv += "<input type='text' class='addressInput form-control'  name='addressfrom' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
-                stringDiv += "</div>"; //close col-sm-4
-                stringDiv += "<div class ='col-sm-6'>";
-                stringDiv += "<div class='input-group'>";
-                stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='2'>";
-                stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='3'>";
-                stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                stringDiv += "<input type='text' class='addressInput form-control' name='addressfrom' size='5' value='" + postalcode + "'>";
-                stringDiv += " </div>";// close input group
-                stringDiv += "</div>";//close col-sm-6
-                stringDiv += "</div>"; //close form-group row
-                stringDiv += "</div></div>"; // col-sm-8, form group
-                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
-                stringDiv += "<div class ='col-sm-4'>";
-                stringDiv += "<input type='text' name='storeysfrom' size='5' class='form-control'>";
-                stringDiv += "</div>"; //close col-sm-4
-                stringDiv += "</div>"; //close form group
-                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
-                stringDiv += "<div class ='col-sm-4'>";
-                stringDiv += "<div class='input-group'>";
-                stringDiv += "<input type='text' name='distancefrom' size='5' class='form-control'> ";
-                stringDiv += "<span class='input-group-addon bg-black'>M</span>";
-                stringDiv += "</div></div>"; //close input group, col-sm-4
-                stringDiv += "</div>"; //close form group
-                stringDiv += "</div>"; //close div id tag
-                newdiv.innerHTML = stringDiv;
-                document.getElementById("from").appendChild(newdiv);
-                addSalesDiv(counter, addressLbl);
-                counter++;
-                calculateDetourCharge();
-            });
+                });
+    }
+
     $('#postalfrom').val('');
 }
 
 function searchAddressTo() {
-    var googleAPI = "http://maps.googleapis.com/maps/api/geocode/json?";
-    var postalcode = document.getElementById("postalto").value;
+    var googleAPI = "https://maps.googleapis.com/maps/api/geocode/json?";
+    var postalcode = document.getElementById("postalto").value.trim();
     var newdiv = document.createElement('div');
     var stringDiv = "";
     var address = "";
@@ -234,124 +270,202 @@ function searchAddressTo() {
         counter++;
     }
 
-    //query the API for latlng
-    $.getJSON(googleAPI, {address: postalcode, sensor: "true"})
-            .done(function (data) {
-                try {
-                    latlng = (data.results[0].geometry.location.lat + "," + data.results[0].geometry.location.lng);
-                    $.getJSON(googleAPI, {latlng: latlng, sensor: "true"})
-                            .done(function (data) {
-                                var results = data.results;
-                                for (i = 0; i < results.length; i++) {
-                                    var street = false;
-                                    var route = false;
-                                    var postal = false;
-                                    var result = results[i];
-                                    var components = result.address_components;
-                                    for (j = 0; j < components.length; j++) {
-                                        var component = components[j];
-                                        var string = component.types[0];
-                                        switch (string) {
-                                            case "street_number":
-                                                street = true;
-                                                break;
-                                            case "route":
-                                                route = true;
-                                                break;
-                                            case "postal_code":
-                                                postal = true;
+    if (!postalcode) {
+        stringDiv += "<div class='address-box' id='to" + counter + "'>";
+        stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+        stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+        stringDiv += "<div class ='col-sm-4'>";
+        stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
+        stringDiv += "</div>"; //close col-sm-4
+        stringDiv += "<div class ='col-sm-6'>";
+        stringDiv += "<div class='input-group'>";
+        stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+        stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='2'>";
+        stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+        stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='3'>";
+        stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+        stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='5' value='" + postalcode + "'>";
+        stringDiv += " </div>";// close input group
+        stringDiv += "</div>";//close col-sm-6
+        stringDiv += "</div>"; //close form-group row
+        stringDiv += "</div></div>"; // col-sm-8, form group
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+        stringDiv += "<div class ='col-sm-4'>";
+        stringDiv += "<input type='text' name='storeysto' size='5' class='form-control'>";
+        stringDiv += "</div>"; //close col-sm-4
+        stringDiv += "</div>"; //close form group
+        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+        stringDiv += "<div class ='col-sm-4'>";
+        stringDiv += "<div class='input-group'>";
+        stringDiv += "<input type='text' name='distanceto' size='5' class='form-control'> ";
+        stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+        stringDiv += "</div></div>"; //close input group, col-sm-4
+        stringDiv += "</div>"; //close form group
+        stringDiv += "</div>"; //close div id tag
+        newdiv.innerHTML = stringDiv;
+        document.getElementById("to").appendChild(newdiv);
+        counter++;
+    } else {
+        //query the API for latlng
+        $.getJSON(googleAPI, {address: postalcode, sensor: "true"})
+                .done(function (data) {
+                    try {
+                        latlng = (data.results[0].geometry.location.lat + "," + data.results[0].geometry.location.lng);
+                        $.getJSON(googleAPI, {latlng: latlng, sensor: "true"})
+                                .done(function (data) {
+                                    var results = data.results;
+                                    for (i = 0; i < results.length; i++) {
+                                        var street = false;
+                                        var route = false;
+                                        var postal = false;
+                                        var result = results[i];
+                                        var components = result.address_components;
+                                        for (j = 0; j < components.length; j++) {
+                                            var component = components[j];
+                                            var string = component.types[0];
+                                            switch (string) {
+                                                case "street_number":
+                                                    street = true;
+                                                    break;
+                                                case "route":
+                                                    route = true;
+                                                    break;
+                                                case "postal_code":
+                                                    postal = true;
+                                            }
+                                        }
+                                        if (street && route && postal) {
+                                            address = result.formatted_address;
+                                            addressLbl = address.substring(0, address.lastIndexOf(",")) + " # -  S" + postalcode;
+                                            break;
                                         }
                                     }
-                                    if (street && route && postal) {
-                                        address = result.formatted_address;
-                                        addressLbl = address.substring(0, address.lastIndexOf(",")) + " # -  S" + postalcode;
-                                        break;
-                                    }
-                                }
 
-                                stringDiv += "<div class='address-box' id='to" + counter + "'>";
-                                stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
-                                stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
-                                stringDiv += "</div>"; //close col-sm-4
-                                stringDiv += "<div class ='col-sm-6'>";
-                                stringDiv += "<div class='input-group'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='2'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='3'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='5' value='" + postalcode + "'>";
-                                stringDiv += " </div>";// close input group
-                                stringDiv += "</div>";//close col-sm-6
-                                stringDiv += "</div>"; //close form-group row
-                                stringDiv += "</div></div>"; // col-sm-8, form group
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<input type='text' name='storeysto' size='5' class='form-control'>";
-                                stringDiv += "</div>"; //close col-sm-4
-                                stringDiv += "</div>"; //close form group
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<div class='input-group'>";
-                                stringDiv += "<input type='text' name='distanceto' size='5' class='form-control'> ";
-                                stringDiv += "<span class='input-group-addon bg-black'>M</span>";
-                                stringDiv += "</div></div>"; //close input group, col-sm-4
-                                stringDiv += "</div>"; //close form group
-                                stringDiv += "</div>"; //close div id tag
-                                newdiv.innerHTML = stringDiv;
-                                document.getElementById("to").appendChild(newdiv);
-                                addSalesDiv(counter, addressLbl);
-                                counter++;
-                                calculateDetourCharge();
-                            })
-                            .fail(function (error) {
-                                console.log(error);
-                                document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
-                                document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
-                                var modal = document.getElementById("saModal");
-                                modal.style.display = "block";
-                                stringDiv += "<div class='address-box' id='to" + counter + "'>";
-                                stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
-                                stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
-                                stringDiv += "</div>"; //close col-sm-4
-                                stringDiv += "<div class ='col-sm-6'>";
-                                stringDiv += "<div class='input-group'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='2'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='3'>";
-                                stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='5' value='" + postalcode + "'>";
-                                stringDiv += " </div>";// close input group
-                                stringDiv += "</div>";//close col-sm-6
-                                stringDiv += "</div>"; //close form-group row
-                                stringDiv += "</div></div>"; // col-sm-8, form group
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<input type='text' name='storeysto' size='5' class='form-control'>";
-                                stringDiv += "</div>"; //close col-sm-4
-                                stringDiv += "</div>"; //close form group
-                                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
-                                stringDiv += "<div class ='col-sm-4'>";
-                                stringDiv += "<div class='input-group'>";
-                                stringDiv += "<input type='text' name='distanceto' size='5' class='form-control'> ";
-                                stringDiv += "<span class='input-group-addon bg-black'>M</span>";
-                                stringDiv += "</div></div>"; //close input group, col-sm-4
-                                stringDiv += "</div>"; //close form group
-                                stringDiv += "</div>"; //close div id tag
-                                newdiv.innerHTML = stringDiv;
-                                document.getElementById("to").appendChild(newdiv);
-                                counter++;
-                                calculateDetourCharge();
-                            });
-                } catch (err) {
-                    console.log(err);
+                                    stringDiv += "<div class='address-box' id='to" + counter + "'>";
+                                    stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+                                    stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
+                                    stringDiv += "</div>"; //close col-sm-4
+                                    stringDiv += "<div class ='col-sm-6'>";
+                                    stringDiv += "<div class='input-group'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+                                    stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='2'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+                                    stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='3'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+                                    stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='5' value='" + postalcode + "'>";
+                                    stringDiv += " </div>";// close input group
+                                    stringDiv += "</div>";//close col-sm-6
+                                    stringDiv += "</div>"; //close form-group row
+                                    stringDiv += "</div></div>"; // col-sm-8, form group
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<input type='text' name='storeysto' size='5' class='form-control'>";
+                                    stringDiv += "</div>"; //close col-sm-4
+                                    stringDiv += "</div>"; //close form group
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<div class='input-group'>";
+                                    stringDiv += "<input type='text' name='distanceto' size='5' class='form-control'> ";
+                                    stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+                                    stringDiv += "</div></div>"; //close input group, col-sm-4
+                                    stringDiv += "</div>"; //close form group
+                                    stringDiv += "</div>"; //close div id tag
+                                    newdiv.innerHTML = stringDiv;
+                                    document.getElementById("to").appendChild(newdiv);
+                                    addSalesDiv(counter, addressLbl);
+                                    counter++;
+                                })
+                                .fail(function (error) {
+                                    console.log(error);
+                                    document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
+                                    document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
+                                    var modal = document.getElementById("saModal");
+                                    modal.style.display = "block";
+                                    stringDiv += "<div class='address-box' id='to" + counter + "'>";
+                                    stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+                                    stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
+                                    stringDiv += "</div>"; //close col-sm-4
+                                    stringDiv += "<div class ='col-sm-6'>";
+                                    stringDiv += "<div class='input-group'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+                                    stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='2'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+                                    stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='3'>";
+                                    stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+                                    stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='5' value='" + postalcode + "'>";
+                                    stringDiv += " </div>";// close input group
+                                    stringDiv += "</div>";//close col-sm-6
+                                    stringDiv += "</div>"; //close form-group row
+                                    stringDiv += "</div></div>"; // col-sm-8, form group
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<input type='text' name='storeysto' size='5' class='form-control'>";
+                                    stringDiv += "</div>"; //close col-sm-4
+                                    stringDiv += "</div>"; //close form group
+                                    stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+                                    stringDiv += "<div class ='col-sm-4'>";
+                                    stringDiv += "<div class='input-group'>";
+                                    stringDiv += "<input type='text' name='distanceto' size='5' class='form-control'> ";
+                                    stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+                                    stringDiv += "</div></div>"; //close input group, col-sm-4
+                                    stringDiv += "</div>"; //close form group
+                                    stringDiv += "</div>"; //close div id tag
+                                    newdiv.innerHTML = stringDiv;
+                                    document.getElementById("to").appendChild(newdiv);
+                                    counter++;
+                                });
+                    } catch (err) {
+                        console.log(err);
+                        document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
+                        document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
+                        var modal = document.getElementById("saModal");
+                        modal.style.display = "block";
+                        stringDiv += "<div class='address-box' id='to" + counter + "'>";
+                        stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
+                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
+                        stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
+                        stringDiv += "<div class ='col-sm-4'>";
+                        stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
+                        stringDiv += "</div>"; //close col-sm-4
+                        stringDiv += "<div class ='col-sm-6'>";
+                        stringDiv += "<div class='input-group'>";
+                        stringDiv += "<span class='input-group-addon bg-black'>#</span>";
+                        stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='2'>";
+                        stringDiv += "<span class='input-group-addon bg-black'>-</span>";
+                        stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='3'>";
+                        stringDiv += "<span class='input-group-addon bg-black'>S</span>";
+                        stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='5' value='" + postalcode + "'>";
+                        stringDiv += " </div>";// close input group
+                        stringDiv += "</div>";//close col-sm-6
+                        stringDiv += "</div>"; //close form-group row
+                        stringDiv += "</div></div>"; // col-sm-8, form group
+                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
+                        stringDiv += "<div class ='col-sm-4'>";
+                        stringDiv += "<input type='text' name='storeysto' size='5' class='form-control'>";
+                        stringDiv += "</div>"; //close col-sm-4
+                        stringDiv += "</div>"; //close form group
+                        stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
+                        stringDiv += "<div class ='col-sm-4'>";
+                        stringDiv += "<div class='input-group'>";
+                        stringDiv += "<input type='text' name='distanceto' size='5' class='form-control'> ";
+                        stringDiv += "<span class='input-group-addon bg-black'>M</span>";
+                        stringDiv += "</div></div>"; //close input group, col-sm-4
+                        stringDiv += "</div>"; //close form group
+                        stringDiv += "</div>"; //close div id tag
+                        newdiv.innerHTML = stringDiv;
+                        document.getElementById("to").appendChild(newdiv);
+                        counter++;
+                    }
+                })
+                .fail(function (error) {
+                    console.log(error);
                     document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
                     document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
                     var modal = document.getElementById("saModal");
@@ -391,64 +505,10 @@ function searchAddressTo() {
                     newdiv.innerHTML = stringDiv;
                     document.getElementById("to").appendChild(newdiv);
                     counter++;
-                    calculateDetourCharge();
-                }
-            })
-            .fail(function (error) {
-                console.log(error);
-                document.getElementById("saMessage").innerHTML = "Unable to find address.<br>Please enter the address manually.";
-                document.getElementById("saStatus").innerHTML = "<b>ERROR</b>";
-                var modal = document.getElementById("saModal");
-                modal.style.display = "block";
-                stringDiv += "<div class='address-box' id='to" + counter + "'>";
-                stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
-                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
-                stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
-                stringDiv += "<div class ='col-sm-4'>";
-                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='30' value='" + address.substring(0, address.lastIndexOf(",")) + "'>";
-                stringDiv += "</div>"; //close col-sm-4
-                stringDiv += "<div class ='col-sm-6'>";
-                stringDiv += "<div class='input-group'>";
-                stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='2'>";
-                stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='3'>";
-                stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='5' value='" + postalcode + "'>";
-                stringDiv += " </div>";// close input group
-                stringDiv += "</div>";//close col-sm-6
-                stringDiv += "</div>"; //close form-group row
-                stringDiv += "</div></div>"; // col-sm-8, form group
-                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Storeys: </label>";
-                stringDiv += "<div class ='col-sm-4'>";
-                stringDiv += "<input type='text' name='storeysto' size='5' class='form-control'>";
-                stringDiv += "</div>"; //close col-sm-4
-                stringDiv += "</div>"; //close form group
-                stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Pushing Distance: </label>";
-                stringDiv += "<div class ='col-sm-4'>";
-                stringDiv += "<div class='input-group'>";
-                stringDiv += "<input type='text' name='distanceto' size='5' class='form-control'> ";
-                stringDiv += "<span class='input-group-addon bg-black'>M</span>";
-                stringDiv += "</div></div>"; //close input group, col-sm-4
-                stringDiv += "</div>"; //close form group
-                stringDiv += "</div>"; //close div id tag
-                newdiv.innerHTML = stringDiv;
-                document.getElementById("to").appendChild(newdiv);
-                counter++;
-                calculateDetourCharge();
-            });
-    $('#postalto').val('');
-}
-
-function calculateDetourCharge() {
-    moveDiv += 1;
-    var add = moveDiv - 2;
-    if (add > 0) {
-        var charges = add * 50;
-        $('#detourCharge').val(charges);
-    } else {
-        $('#detourCharge').val("0.00");
+                });
     }
+
+    $('#postalto').val('');
 }
 
 function removeAddress(id, divId) {

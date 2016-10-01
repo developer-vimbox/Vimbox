@@ -4,9 +4,9 @@ function customerSearch(module) {
     var content = document.getElementById("customer_content");
     $.get("SearchCustomersByName.jsp", {getName: name, getAction: module}, function (data) {
         content.innerHTML = data;
-        $('.javascript').each(function() {
-      eval($(this).text());
-    });
+        $('.javascript').each(function () {
+            eval($(this).text());
+        });
     });
     modal.style.display = "block";
 }
@@ -17,9 +17,9 @@ function customerSearchHeader(module) {
     var content = document.getElementById("customer_content_header");
     $.get("SearchCustomersByName.jsp", {getName: name, getAction: module}, function (data) {
         content.innerHTML = data;
-        $('.javascript').each(function() {
-      eval($(this).text());
-    });
+        $('.javascript').each(function () {
+            eval($(this).text());
+        });
     });
     modal.style.display = "block";
 }
@@ -76,29 +76,49 @@ function selectCustomer(customer_id, customer_salutation, customer_first_name, c
     $("#customer_contact").html(customer_contact);
     $("#customer_email").html(customer_email);
     $("#customer_name").html(customer_salutation + " " + customer_first_name + " " + customer_last_name)
+    document.getElementById("cust_btn_input").innerHTML = "<button onclick=\"editCustomer('" + customer_id + "','Lead'); return false;\" class=\"btn btn-default\">Edit</button>";
     document.getElementById("customer_information_table").style.display = "block";
 }
 
-function editCustomer(customer_id){
-    var modal = document.getElementById("edit_customer_modal");
-    var content = document.getElementById("edit_customer_content");
-    $.get("EditCustomer.jsp", {getId: customer_id}, function (data) {
+function editCustomer(customer_id, module) {
+    var modal;
+    if (module === "Lead") {
+        modal = document.getElementById("lead_edit_customer_modal");
+    } else {
+        modal = document.getElementById("edit_customer_modal");
+    }
+    var content;
+    if (module === "Lead") {
+        content = document.getElementById("lead_edit_customer_content");
+    } else {
+        content = document.getElementById("edit_customer_content");
+    }
+    $.get("EditCustomer.jsp", {getId: customer_id, module: module}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
 }
 
-function updateCustomer(){
+function updateCustomer(module) {
     var customer_id = $('#customer_id').val();
     var edit_salutation = $('#edit_salutation').val();
     var edit_first_name = $('#edit_first_name').val();
     var edit_last_name = $('#edit_last_name').val();
     var edit_contact = $('#edit_contact').val();
     var edit_email = $('#edit_email').val();
-    
-    var errorModal = document.getElementById("customer_error_modal");
-    var errorStatus = document.getElementById("customer_error_status");
-    var errorMessage = document.getElementById("customer_error_message");
+
+    var errorModal;
+    var errorStatus;
+    var errorMessage;
+    if (module === "Lead") {
+        errorModal = document.getElementById("lead_customer_error_modal");
+        errorStatus = document.getElementById("lead_customer_error_status");
+        errorMessage = document.getElementById("lead_customer_error_message");
+    } else {
+        errorModal = document.getElementById("customer_error_modal");
+        errorStatus = document.getElementById("customer_error_status");
+        errorMessage = document.getElementById("customer_error_message");
+    }
     $.getJSON("EditCustomerController", {customer_id: customer_id, salutation: edit_salutation, firstName: edit_first_name, lastName: edit_last_name, contact: edit_contact, email: edit_email})
             .done(function (data) {
                 var status = data.status;
@@ -107,11 +127,33 @@ function updateCustomer(){
                 errorMessage.innerHTML = errorMsg;
                 errorModal.style.display = "block";
                 if (status === "SUCCESS") {
-                    document.getElementById("edit_customer_modal").style.display = "none";
-                    window.onbeforeunload = function() {
-                        sessionStorage.setItem("customer_search", $('#customer_search').val());
+                    if (module === "Lead") {
+                        document.getElementById("lead_edit_customer_modal").style.display = "none";
+                        $('#customer_id').val(customer_id);
+                        $("#customer_salutation").html(edit_salutation);
+                        $("#customer_first_name").html(edit_first_name);
+                        $("#customer_last_name").html(edit_last_name);
+                        $("#customer_contact").html(edit_contact);
+                        $("#customer_email").html(edit_email);
+                        $("#customer_name").html(edit_salutation + " " + edit_first_name + " " + edit_last_name)
+                        document.getElementById("cust_btn_input").innerHTML = "<button onclick=\"editCustomer('" + customer_id + "','Lead'); return false;\" class=\"btn btn-default\">Edit</button>";
+                    } else {
+                        document.getElementById("edit_customer_modal").style.display = "none";
+                        window.onbeforeunload = function () {
+                            sessionStorage.setItem("customer_search", $('#customer_search').val());
+                        }
+                        $.get("SearchCustomersByName.jsp", {getName: "", getAction: module}, function (data) {
+                            var content = document.getElementById("customer_content_header");
+                            content.innerHTML = data;
+                            $('.javascript').each(function () {
+                                eval($(this).text());
+                            });
+                        });
                     }
-                    setTimeout(function() {location.reload()},500);
+
+                    setTimeout(function () {
+                        errorModal.style.display = "none";
+                    }, 500);
                 }
             })
             .fail(function (error) {
@@ -121,9 +163,9 @@ function updateCustomer(){
             });
 }
 
-function reload(){
+function reload() {
     var customer_search = sessionStorage.getItem("customer_search");
-    if (customer_search !== null){
+    if (customer_search !== null) {
         $('#customer_search').val(customer_search);
         sessionStorage.removeItem("customer_search");
         customerSearch("crm");

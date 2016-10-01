@@ -10,6 +10,7 @@
     <body>
         <%
             int customer_id = Integer.parseInt(request.getParameter("getId"));
+            String module = request.getParameter("module");
             Customer customer = CustomerDAO.getCustomerById(customer_id);
             String contact = "";
             if (customer.getContact() > 0) {
@@ -62,7 +63,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"></label>
                 <div class="col-sm-6 text-center">
-                    <button onclick="updateCustomer(); return false;" class="btn btn-primary">Edit</button>
+                    <button onclick="updateCustomer('<%=module%>'); return false;" class="btn btn-primary">Edit</button>
                 </div>
             </div>
         </div>
