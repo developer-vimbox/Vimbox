@@ -191,8 +191,8 @@ public class InvoicePDFGenerator extends HttpServlet {
             LineSeparator line = new LineSeparator();
             line.setOffset(-7);
             
-            table = new PdfPTable(4);
-            String[] tHeaders = {"Activity", "Remarks", "Qty", "Amount"};
+            table = new PdfPTable(1);
+            String[] tHeaders = {"Activity"};
             for (int i = 0; i < tHeaders.length; i++) {
                 String tHeader = tHeaders[i];
                 cell = new PdfPCell(new Phrase(tHeader, normalFont));
@@ -209,17 +209,18 @@ public class InvoicePDFGenerator extends HttpServlet {
             
             // Services //
             ArrayList<String[]> services = LeadDAO.getServicesByLeadId(leadId);
-            table = new PdfPTable(4);
-            double totalCharges = 0;
+            table = new PdfPTable(1);
+            double totalCharges =  LeadDAO.getLeadConfirmedTotal(Integer.parseInt(leadId)) ;
             if (services != null) {
                 for (String[] s : services) {
                     String serviceName = s[0];
-                    String serviceCharge = s[1];
-                    String serviceMp = s[2];
-                    String serviceRm = s[3];
+//                    String serviceCharge = s[1];
+//                    String serviceMp = s[2];
+//                    String serviceRm = s[3];
                     String[] tempDescName = serviceName.split(" ");
                     String svcDescription = LeadPopulationDAO.getSelectedServiceDesc(tempDescName[0], tempDescName[1]);
                     String qty = "";
+                    
                     // Title //
 
                     cell = new PdfPCell();
@@ -229,27 +230,27 @@ public class InvoicePDFGenerator extends HttpServlet {
                     cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
                     table.addCell(cell);
                     //Remarks
-                    cell = new PdfPCell(new Phrase(serviceRm, tNormalFont));
-                    cell.setBorder(Rectangle.NO_BORDER);
-                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
-                    table.addCell(cell);
-
-                    //Qty
-                    cell = new PdfPCell(new Phrase(qty, tNormalFont));
-                    cell.setBorder(Rectangle.NO_BORDER);
-                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
-                    table.addCell(cell);
-
-                    //charges
-                    if (serviceCharge != null) {
-                        double sCharge = Double.parseDouble(serviceCharge);
-                        totalCharges += sCharge;
-                        String svcCharge = df.format(sCharge);
-                        cell = new PdfPCell(new Phrase(svcCharge, tNormalFont));
-                        cell.setBorder(Rectangle.NO_BORDER);
-                        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
-                        table.addCell(cell);
-                    }
+//                    cell = new PdfPCell(new Phrase(serviceRm, tNormalFont));
+//                    cell.setBorder(Rectangle.NO_BORDER);
+//                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+//                    table.addCell(cell);
+//
+//                    //Qty
+//                    cell = new PdfPCell(new Phrase(qty, tNormalFont));
+//                    cell.setBorder(Rectangle.NO_BORDER);
+//                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+//                    table.addCell(cell);
+//
+//                    //charges
+//                    if (serviceCharge != null) {
+//                        double sCharge = Double.parseDouble(serviceCharge);
+//                        totalCharges += sCharge;
+//                        String svcCharge = df.format(sCharge);
+//                        cell = new PdfPCell(new Phrase(svcCharge, tNormalFont));
+//                        cell.setBorder(Rectangle.NO_BORDER);
+//                        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+//                        table.addCell(cell);
+//                    }
                 }
                 
                 table.setSpacingBefore(10);
