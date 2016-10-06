@@ -262,6 +262,16 @@
                     </div>
                     <div class="panel">
                         <div class="panel-body">
+                             <div id="loading-submit"  style="display:none">
+                                <div id="loadingsubmit">
+                                    <!--<img src="assets/image-resources/spin.gif">-->
+                                    <div class="spinner">
+                                        <div class="bounce1"></div>
+                                        <div class="bounce2"></div>
+                                        <div class="bounce3"></div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-horizontal">
                                 <form method="POST" action="EditLeadController" autocomplete="on" id="edit_lead_form" enctype="multipart/form-data">
                                     <div id="confirmLeadModal" class="modal">
@@ -1773,7 +1783,13 @@
         <script>
             $('#edit_lead_form').ajaxForm({
                 dataType: 'json',
+                  beforeSend: function () {
+                    var div = document.getElementById("loading-submit");
+                    div.style.display = "block";
+                },
                 success: function (data) {
+                     var div = document.getElementById("loading-submit");
+                    div.style.display = "none";
                     var modal = document.getElementById("lead_error_modal");
                     var status = document.getElementById("lead_error_status");
                     var message = document.getElementById("lead_error_message");
@@ -1790,6 +1806,8 @@
                     }
                 },
                 error: function (data) {
+                     var div = document.getElementById("loading-submit");
+                    div.style.display = "none";
                     var modal = document.getElementById("lead_error_modal");
                     var status = document.getElementById("lead_error_status");
                     var message = document.getElementById("lead_error_message");

@@ -358,27 +358,27 @@
                                                                 HashMap<String, String> otherCharges = leadDiv.getOtherCharges();
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Storey Charges :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>  <input class='form-control' type='number' name='" + divId + "_storeyCharge' step='0.01' min='0' value='" + otherCharges.get("storeyCharge") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>  <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' name='" + divId + "_storeyCharge' step='0.01' min='0' value='" + otherCharges.get("storeyCharge") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Pushing Charges :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>  <input class='form-control' type='number' name='" + divId + "_pushCharge' step='0.01' min='0' value='" + otherCharges.get("pushCharge") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>  <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' name='" + divId + "_pushCharge' step='0.01' min='0' value='" + otherCharges.get("pushCharge") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Detour Charges :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' name='" + divId + "_detourCharge' step='0.01' min='0' value='" + otherCharges.get("detourCharge") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' name='" + divId + "_detourCharge' step='0.01' min='0' value='" + otherCharges.get("detourCharge") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Material Charges :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' id='" + divId + "_materialCharge' name='" + divId + "_materialCharge' step='0.01' min='0' value='" + otherCharges.get("materialCharge") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' id='" + divId + "_materialCharge' name='" + divId + "_materialCharge' step='0.01' min='0' value='" + otherCharges.get("materialCharge") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Discount :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' name='" + divId + "_discount' step='0.01' min='0' value='" + otherCharges.get("discount") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' name='" + divId + "_discount' step='0.01' min='0' value='" + otherCharges.get("discount") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
@@ -405,7 +405,7 @@
                                                                                     }
                                                                                 }
 
-                                                                                tr += "<tr height='10%'><td>" + svc[0] + " - " + secSvc + "<input type='hidden' name='" + divId + "_serviceName' value='" + service[0] + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='" + divId + "_serviceCharge' value='" + service[1] + "'><input type='hidden' value='" + service[2] + "'></td></tr>";
+                                                                                tr += "<tr height='10%'><td>" + svc[0] + " - " + secSvc + "<input type='hidden' name='" + divId + "_serviceName' value='" + service[0] + "'></td><td align='right'>$ <input type='number' min='0' inputmode='numeric' pattern='[0-9]*' step='0.01' min='0' name='" + divId + "_serviceCharge' value='" + service[1] + "'><input type='hidden' value='" + service[2] + "'></td></tr>";
                                                                                 tr += "</table></td></tr>";
                                                                                 out.println(tr);
                                                                             }
@@ -708,27 +708,27 @@
                                                                 HashMap<String, String> otherCharges = leadDiv.getOtherCharges();
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Storey Charges :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' name='" + divId + "_storeyCharge' step='0.01' min='0' value='" + otherCharges.get("storeyCharge") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' name='" + divId + "_storeyCharge' step='0.01' min='0' value='" + otherCharges.get("storeyCharge") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Pushing Charges :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' name='" + divId + "_pushCharge' step='0.01' min='0' value='" + otherCharges.get("pushCharge") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' name='" + divId + "_pushCharge' step='0.01' min='0' value='" + otherCharges.get("pushCharge") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Detour Charges :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' name='" + divId + "_detourCharge' step='0.01' min='0' value='" + otherCharges.get("detourCharge") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' name='" + divId + "_detourCharge' step='0.01' min='0' value='" + otherCharges.get("detourCharge") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Material Charges :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' id='" + divId + "_materialCharge' name='" + divId + "_materialCharge' step='0.01' min='0' value='" + otherCharges.get("materialCharge") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' id='" + divId + "_materialCharge' name='" + divId + "_materialCharge' step='0.01' min='0' value='" + otherCharges.get("materialCharge") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
                                                                 out.println("<td align='right'><b>Discount :</b></td>");
-                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' name='" + divId + "_discount' step='0.01' min='0' value='" + otherCharges.get("discount") + "'></div></td>");
+                                                                out.println("<td><div class='input-group'><span class='input-group-addon'>$</span>   <input class='form-control' type='number' min='0' inputmode='numeric' pattern='[0-9]*' name='" + divId + "_discount' step='0.01' min='0' value='" + otherCharges.get("discount") + "'></div></td>");
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
@@ -755,7 +755,7 @@
                                                                                     }
                                                                                 }
 
-                                                                                tr += "<tr height='10%'><td>" + svc[0] + " - " + secSvc + "<input type='hidden' name='" + divId + "_serviceName' value='" + service[0] + "'></td><td align='right'>$ <input type='number' step='0.01' min='0' name='" + divId + "_serviceCharge' value='" + service[1] + "'><input type='hidden' value='" + service[2] + "'></td></tr>";
+                                                                                tr += "<tr height='10%'><td>" + svc[0] + " - " + secSvc + "<input type='hidden' name='" + divId + "_serviceName' value='" + service[0] + "'></td><td align='right'>$ <input type='number' min='0' inputmode='numeric' pattern='[0-9]*' step='0.01' min='0' name='" + divId + "_serviceCharge' value='" + service[1] + "'><input type='hidden' value='" + service[2] + "'></td></tr>";
                                                                                 tr += "</table></td></tr>";
                                                                                 out.println(tr);
                                                                             }

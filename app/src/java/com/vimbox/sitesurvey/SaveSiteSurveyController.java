@@ -111,23 +111,20 @@ public class SaveSiteSurveyController extends HttpServlet {
 
                     String otherCharge2 = request.getParameter(salesDiv + "_detourCharge");
                     otherCharges[2] = otherCharge2;
-                    total += Double.parseDouble(otherCharge2);
                     if (otherCharge2.matches("-?\\d+(\\.\\d+)?")) {
                         total += Double.parseDouble(otherCharge2);
                     }
 
                     String otherCharge3 = request.getParameter(salesDiv + "_materialCharge");
                     otherCharges[3] = otherCharge3;
-                    total += Double.parseDouble(otherCharge3);
                     if (otherCharge3.matches("-?\\d+(\\.\\d+)?")) {
                         total += Double.parseDouble(otherCharge3);
                     }
 
                     String otherCharge4 = request.getParameter(salesDiv + "_discount");
                     otherCharges[4] = otherCharge4;
-                    total += Double.parseDouble(otherCharge4);
                     if (otherCharge4.matches("-?\\d+(\\.\\d+)?")) {
-                        total += Double.parseDouble(otherCharge4);
+                        total -= Double.parseDouble(otherCharge4);
                     }
                     
 

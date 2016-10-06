@@ -490,6 +490,15 @@ textarea[readonly] {
     top: 0;
     background: #fff;
 }
+#loadingsubmit{
+    z-index: 5555;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color:rgba(0, 0, 0, 0.5);
+}
 .fade {
     -webkit-transition: opacity .15s linear;
     transition: opacity .15s linear;
