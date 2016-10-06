@@ -14,6 +14,7 @@ function searchAddressFrom() {
     }
 
     if (!postalcode) {
+        addressLbl = " # -  S";
         stringDiv += "<div class='address-box' id='from" + counter + "'>";
         stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
         stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
@@ -84,6 +85,9 @@ function searchAddressFrom() {
                                             addressLbl = address.substring(0, address.lastIndexOf(",")) + " # -  S" + postalcode;
                                             break;
                                         }
+                                    }
+                                    if (!addressLbl) {
+                                        addressLbl = " # -  S" + postalcode;
                                     }
                                     stringDiv += "<div class='address-box' id='from" + counter + "'>";
                                     stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('from" + counter + "', '" + counter + "');\">×</span><hr>";
@@ -271,6 +275,7 @@ function searchAddressTo() {
     }
 
     if (!postalcode) {
+        addressLbl = " # -  S";
         stringDiv += "<div class='address-box' id='to" + counter + "'>";
         stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
         stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
@@ -305,6 +310,7 @@ function searchAddressTo() {
         stringDiv += "</div>"; //close div id tag
         newdiv.innerHTML = stringDiv;
         document.getElementById("to").appendChild(newdiv);
+        addSalesDiv(counter, addressLbl);
         counter++;
     } else {
         //query the API for latlng
@@ -342,6 +348,9 @@ function searchAddressTo() {
                                         }
                                     }
 
+                                    if (!addressLbl) {
+                                        addressLbl = " # -  S" + postalcode;
+                                    }
                                     stringDiv += "<div class='address-box' id='to" + counter + "'>";
                                     stringDiv += "<input type='hidden' id='tagId' value='sales" + counter + "_lbl'><span class='close' onClick=\"removeAddress('to" + counter + "', '" + counter + "');\">×</span><hr>";
                                     stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
@@ -461,6 +470,7 @@ function searchAddressTo() {
                         stringDiv += "</div>"; //close div id tag
                         newdiv.innerHTML = stringDiv;
                         document.getElementById("to").appendChild(newdiv);
+                        addSalesDiv(counter, addressLbl);
                         counter++;
                     }
                 })
@@ -504,6 +514,7 @@ function searchAddressTo() {
                     stringDiv += "</div>"; //close div id tag
                     newdiv.innerHTML = stringDiv;
                     document.getElementById("to").appendChild(newdiv);
+                    addSalesDiv(counter, addressLbl);
                     counter++;
                 });
     }
@@ -571,6 +582,23 @@ $(document).on('change keyup paste', '.addressInput', function (event) {
     var lbl = document.getElementById(divId);
     var addresses = activeElement.getElementsByClassName("addressInput");
     var input = document.getElementById(divId.split("_")[0] + "_" + "divId");
-    input.value = divId.split("_")[0] + "|" + addresses[0].value + " #" + addresses[1].value + "-" + addresses[2].value + " S" + addresses[3].value;
-    lbl.innerHTML = addresses[0].value + " #" + addresses[1].value + "-" + addresses[2].value + " S" + addresses[3].value;
+    var add = addresses[0].value;
+    if(!add){
+        add = " ";
+    }
+    var lvl = addresses[1].value;
+    if(!lvl){
+        lvl = " ";
+    }
+    var unit = addresses[2].value;
+    if(!unit){
+        unit = " ";
+    }
+    var postal = addresses[3].value;
+    if(!postal){
+        postal = " ";
+    }
+    
+    input.value = divId.split("_")[0] + "|" + add + " #" + lvl + "-" + unit + " S" + postal;
+    lbl.innerHTML = add + " #" + lvl + "-" + unit + " S" + postal;
 });

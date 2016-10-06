@@ -34,9 +34,25 @@ public class JobDAO {
     private static final String UPDATE_JOB_SUPERVISOR = "UPDATE operations_assigned SET supervisor=? WHERE lead_id=?";
     private static final String GET_JOBS_BY_SUPERVISOR = "SELECT * FROM operations_assigned WHERE supervisor =? AND status != 'Cancelled' group by lead_id, dom";
     private static final String GET_JOBS_BY_SUPERVISOR_AND_DATE = "SELECT * FROM operations_assigned WHERE supervisor = ? AND dom = ? AND status != 'Cancelled'";
+    private static final String REMOVE_JOBS_BY_LEAD_ID = "DELETE FROM operations_assigned WHERE lead_id = ?";
     private static final String DELETE_JOBS_BY_LEAD_ID_DATE_TIMESLOT = "DELETE FROM operations_assigned WHERE lead_id = ? AND dom = ? AND timeslot = ?";
     private static final String GET_JOBS_FOR_SUPERVISORS = "SELECT * FROM operations_assigned where status = 'Confirmed' group by lead_id, dom";
     private static final String GET_JOBS_BY_DOM = "SELECT * FROM operations_assigned WHERE dom = ? AND status != 'Cancelled'";
+    
+    public static void removeJobsByLeadId(int leadId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(REMOVE_JOBS_BY_LEAD_ID);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
     
     public static boolean checkBookedJobsByLeadId(int leadId){
         Connection con = null;

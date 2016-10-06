@@ -7,7 +7,9 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,35 +31,53 @@ public class LicensePDFGenerator extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/pdf");
-        try {
-            // Document Settings //
-            Document document = new Document();
-            PdfWriter.getInstance(document, response.getOutputStream());
-            document.open();
+        String fileName = request.getParameter("license_name");
+        String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+        String path = System.getProperty("user.dir") + "/documents/licenses/" + fileName;
+        path = path.replaceAll("%20", " ");
+        if (ext.equalsIgnoreCase("pdf")) {
+            FileInputStream baos = new FileInputStream(path);
 
-            // Loading MC //
-            PdfPTable table = new PdfPTable(1);
-            table.setWidthPercentage(100);
-            // the cell object
-            PdfPCell cell;
+            OutputStream os = response.getOutputStream();
 
-            String fileName = request.getParameter("license_name");
-            String path = System.getProperty("user.dir") + "/documents/licenses/" + fileName;
-            path = path.replaceAll("%20", " ");
-            Image img = Image.getInstance(path);
-            int indentation = 0;
-            float scaler = ((document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin() - indentation) / img.getWidth()) * 100;
-            img.scalePercent(scaler);
-            //img.scaleAbsolute(80f, 80f);
-            cell = new PdfPCell(img);
-            cell.setBorder(Rectangle.NO_BORDER);
-            table.addCell(cell);
-            document.add(table);
-            //-----------------------------------//
-            document.close();
-        } catch (DocumentException de) {
-            throw new IOException(de.getMessage());
+            byte buffer[] = new byte[8192];
+            int bytesRead;
+
+            while ((bytesRead = baos.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+
+            os.flush();
+            os.close();
+        } else {
+            try {
+                // Document Settings //
+                Document document = new Document();
+                PdfWriter.getInstance(document, response.getOutputStream());
+                document.open();
+
+                // Loading MC //
+                PdfPTable table = new PdfPTable(1);
+                table.setWidthPercentage(100);
+                // the cell object
+                PdfPCell cell;
+
+                Image img = Image.getInstance(path);
+                int indentation = 0;
+                float scaler = ((document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin() - indentation) / img.getWidth()) * 100;
+                img.scalePercent(scaler);
+                //img.scaleAbsolute(80f, 80f);
+                cell = new PdfPCell(img);
+                cell.setBorder(Rectangle.NO_BORDER);
+                table.addCell(cell);
+                document.add(table);
+                //-----------------------------------//
+                document.close();
+            } catch (DocumentException de) {
+                throw new IOException(de.getMessage());
+            }
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -23,7 +23,7 @@ function admViewCal() {
 
 function admViewMovCal() {
     var modal = document.getElementById("cal_modal");
-    $.get("MovingCalendar.jsp", {}, function (data) {
+    $.get("MovingCalendar.jsp", {type:'Admin'}, function (data) {
         document.getElementById("cal_content").innerHTML = data;
     });
     var d = new Date();

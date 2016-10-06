@@ -35,7 +35,7 @@ public class LeadDAO {
     private static final String CREATE_QUOTATION_REF = "INSERT INTO leadquotation VALUES (?,?)";
 
     private static final String GET_ALL_LEAD_INFO_BY_KEYWORD = "SELECT * FROM (SELECT  * FROM leadinfo ldi left outer join customers cust USING (customer_id)) joined, users urs WHERE joined.owner_user = urs.nric AND (CONCAT(joined.last_name, ' ', joined.first_name) LIKE ? OR CONCAT(urs.last_name, ' ', urs.first_name) LIKE ? OR contact LIKE ? OR email LIKE ? OR lead_id LIKE ? OR status LIKE ? OR datetime_of_creation LIKE ?)  ORDER BY datetime_of_creation DESC";
-    private static final String GET_LEAD_INFO_USER = "SELECT * FROM leadinfo left outer join customers USING (customer_id) WHERE (CONCAT(last_name, ' ', first_name) LIKE ? OR type LIKE ? OR contact LIKE ? OR lead_id LIKE ? OR datetime_of_creation LIKE ?) AND owner_user=? AND status=? ORDER BY datetime_of_creation DESC";
+    private static final String GET_LEAD_INFO_USER = "SELECT * FROM leadinfo left outer join customers USING (customer_id) WHERE (CONCAT(last_name, ' ', first_name) LIKE ? OR type LIKE ? OR contact LIKE ? OR lead_id LIKE ? OR datetime_of_creation LIKE ?) AND status=? ORDER BY datetime_of_creation DESC";
     private static final String GET_LEAD_ENQUIRY = "SELECT * FROM leadenquiry WHERE lead_id=?";
     private static final String GET_LEAD_INFO_BY_ID = "SELECT * FROM leadinfo WHERE lead_id=?";
     private static final String GET_LEAD_MOVE_FROM = "SELECT * FROM leadmove WHERE lead_id=? AND type='from'";
@@ -68,6 +68,7 @@ public class LeadDAO {
     private static final String DELETE_LEAD_COMMENT = "DELETE FROM leadcomment WHERE lead_id=?";
     private static final String DELETE_LEAD_REMARK = "DELETE FROM leadremark WHERE lead_id=?";
     private static final String DELETE_LEAD_SALES_DIV = "DELETE FROM leadsalesdiv WHERE lead_id=?";
+    private static final String DELETE_LEAD_CONFIRMATION = "DELETE FROM leadconfirmation WHERE lead_id=?";
     private static final String CANCEL_LEAD = "UPDATE leadinfo SET status=?, reason=? WHERE lead_id=?";
     private static final String DELETE_SITE_LEAD_COMMENT = "DELETE FROM leadcomment WHERE lead_id=? AND sales_div=?";
 
@@ -119,8 +120,59 @@ public class LeadDAO {
             ps.executeUpdate();
             ps = con.prepareStatement(DELETE_LEAD_SALES_DIV);
             ps.setInt(1, leadId);
-            ps.executeUpdate();
+            ps.executeUpdate();            
             SiteSurveyDAO.deleteSiteSurveysByLeadId(leadId);
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void removeLead(int leadId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(DELETE_LEAD_INFO);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_ENQUIRY);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_MOVE);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_CUST_ITEM);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_VIMBOX_ITEM);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_MATERIAL);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_SERVICE);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_OTHER);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_COMMENT);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_REMARK);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_SALES_DIV);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            ps = con.prepareStatement(DELETE_LEAD_CONFIRMATION);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+            JobDAO.removeJobsByLeadId(leadId);
+            SiteSurveyDAO.removeSiteSurveysByLeadId(leadId);
+            CustomerHistoryDAO.deleteCustomerHistory(leadId);
         } catch (SQLException se) {
             se.printStackTrace();
         } finally {
@@ -443,14 +495,14 @@ public class LeadDAO {
         return results;
     }
 
-    public static ArrayList<Lead> getLeadsByOwnerUser(String keyword, String nric, String queryStatus) {
+    public static ArrayList<Lead> getLeadsByOwnerUser(String keyword, String queryStatus) {
         ArrayList<Lead> results = new ArrayList<Lead>();
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         ResultSet rs1 = null;
-        User user = UserDAO.getUserByNRIC(nric);
+        
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_LEAD_INFO_USER);
@@ -459,13 +511,13 @@ public class LeadDAO {
             ps.setString(3, "%" + keyword + "%");
             ps.setString(4, "%" + keyword + "%");
             ps.setString(5, "%" + keyword + "%");
-            ps.setString(6, nric);
-            ps.setString(7, queryStatus);
+            ps.setString(6, queryStatus);
 
             rs = ps.executeQuery();
             while (rs.next()) {
                 // Lead Info //
                 int leadId = Integer.parseInt(rs.getString("lead_id"));
+                User user = UserDAO.getUserByNRIC(rs.getString("owner_user"));
                 String type = rs.getString("type");
                 int custId = rs.getInt("customer_id");
                 Customer customer = CustomerDAO.getCustomerById(custId);

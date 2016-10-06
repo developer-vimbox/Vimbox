@@ -65,7 +65,7 @@ public class ConfirmLeadController extends HttpServlet {
             if (filePart != null) {
                 boolean fileCheck = fileValidation(filePart);
                 if (!fileCheck) {
-                    errorMsg += "Please upload a valid image (png, jpg or bmp)<br>";
+                    errorMsg += "Please upload a valid file (png, jpg, bmp or pdf)<br>";
                 } else {
                     String fName = filePart.getSubmittedFileName();
                     String fileExt = fName.substring(fName.lastIndexOf("."));
@@ -121,7 +121,7 @@ public class ConfirmLeadController extends HttpServlet {
         if (fName != null && !fName.isEmpty()) {
             String fileExt = fName.substring(fName.lastIndexOf("."));
             // Checks file for file extension //
-            if (!(fileExt.matches(".png|.jpg|.bmp"))) {
+            if (!(fileExt.matches(".png|.jpg|.bmp|.pdf"))) {
                 return false;
             } else {
                 return true;

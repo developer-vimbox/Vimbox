@@ -307,18 +307,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="salesModal" class="modal">
-                                        <!-- Modal content -->
-                                        <div class="modal-content" style="width: 400px;">
-                                            <div class="modal-header">
-                                                <span class="close" onclick="closeModal('salesModal')">×</span>
-                                                <center><h3><div id="salesStatus"></div></h3></center>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div id="salesMessage"></div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <input type="hidden" name="leadStatus" id="leadStatus" value="save"/>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Lead ID: </label>
@@ -390,7 +378,8 @@
                                                     <%
                                                         if (customer != null) {
                                                     %>
-                                                        <button onclick="editCustomer('<%=customer.getCustomer_id()%>','Lead'); return false;" class="btn btn-default">Edit</button>
+                                                    <button onclick="editCustomer('<%=customer.getCustomer_id()%>', 'Lead');
+                                                            return false;" class="btn btn-default">Edit</button>
                                                     <%
                                                         }
                                                     %>
@@ -429,6 +418,17 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div id="lead_edit_customer_modal" class="modal">
+                                            <div class="modal-content" style="width: 70%;">
+                                                <div class="modal-header">
+                                                    <span class="close" onclick="closeModal('lead_edit_customer_modal')">×</span>
+                                                    <center><h2>Edit Customer</h2></center>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="lead_edit_customer_content"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div id="lead_customer_error_modal" class="modal">
                                             <div class="error-modal-content">
                                                 <div class="modal-header">
@@ -462,7 +462,7 @@
                                                 <%
                                                     ArrayList<String[]> addressFrom = lead.getAddressFrom();
                                                     for (String[] addFrom : addressFrom) {
-                                                        String[] address = addFrom[0].split("_");
+                                                        String[] address = addFrom[0].split("_", -1);
                                                         String storeys = addFrom[1];
                                                         String pushingDistance = addFrom[2];
                                                         String stringDiv = "";
@@ -473,16 +473,16 @@
                                                             stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
                                                             stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
                                                             stringDiv += "<div class ='col-sm-4'>";
-                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='30' value='" + address[0] + "'>";
+                                                            stringDiv += "<input type='text' class='form-control addressInput' name='addressfrom' size='30' value='" + address[0] + "'>";
                                                             stringDiv += "</div>"; //close col-sm-4
                                                             stringDiv += "<div class ='col-sm-6'>";
                                                             stringDiv += "<div class='input-group'>";
                                                             stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='2' value='" + address[1] + "'>";
+                                                            stringDiv += "<input type='text' class='form-control addressInput' name='addressfrom' size='2' value='" + address[1] + "'>";
                                                             stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='3' value='" + address[2] + "'>";
+                                                            stringDiv += "<input type='text' class='form-control addressInput' name='addressfrom' size='3' value='" + address[2] + "'>";
                                                             stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressfrom' size='5' value='" + address[3] + "'>";
+                                                            stringDiv += "<input type='text' class='form-control addressInput' name='addressfrom' size='5' value='" + address[3] + "'>";
                                                             stringDiv += " </div>";// close input group
                                                             stringDiv += "</div>";//close col-sm-6
                                                             stringDiv += "</div>"; //close form-group row
@@ -527,7 +527,7 @@
                                                 <%
                                                     ArrayList<String[]> addressTo = lead.getAddressTo();
                                                     for (String[] addTo : addressTo) {
-                                                        String[] address = addTo[0].split("_");
+                                                        String[] address = addTo[0].split("_", -1);
                                                         String storeys = addTo[1];
                                                         String pushingDistance = addTo[2];
                                                         String stringDiv = "";
@@ -538,16 +538,16 @@
                                                             stringDiv += "<div class='form-group'><label class='col-sm-3 control-label'>Address: </label>";
                                                             stringDiv += " <div class='col-sm-8'><div class='form-group row'>";
                                                             stringDiv += "<div class ='col-sm-4'>";
-                                                            stringDiv += "<input class='form-control addressFromInput' type='text' name='addressto' size='30' value='" + address[0] + "'>";
+                                                            stringDiv += "<input class='form-control addressInput' type='text' name='addressto' size='30' value='" + address[0] + "'>";
                                                             stringDiv += "</div>"; //close col-sm-4
                                                             stringDiv += "<div class ='col-sm-6'>";
                                                             stringDiv += "<div class='input-group'>";
                                                             stringDiv += "<span class='input-group-addon bg-black'>#</span>";
-                                                            stringDiv += "<input class='form-control addressFromInput' type='text' name='addressto' size='2' value='" + address[1] + "''>";
+                                                            stringDiv += "<input class='form-control addressInput' type='text' name='addressto' size='2' value='" + address[1] + "''>";
                                                             stringDiv += "<span class='input-group-addon bg-black'>-</span>";
-                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressto' size='3' value='" + address[2] + "'>";
+                                                            stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='3' value='" + address[2] + "'>";
                                                             stringDiv += "<span class='input-group-addon bg-black'>S</span>";
-                                                            stringDiv += "<input type='text' class='form-control addressFromInput' name='addressto' size='5' value='" + address[3] + "'>";
+                                                            stringDiv += "<input type='text' class='form-control addressInput' name='addressto' size='5' value='" + address[3] + "'>";
                                                             stringDiv += " </div>";// close input group
                                                             stringDiv += "</div>";//close col-sm-6
                                                             stringDiv += "</div>"; //close form-group row
@@ -1686,7 +1686,7 @@
                                                                 if (!selected) {%>
 
                                                             <%
-                                                                    out.println("<input class='form-control' type='text' name='enquiryOthers' value='" + enq + "' />");
+                                                                    out.println("<input class='form-control' type='text' name='referralOthers' value='" + enq + "' />");
                                                                 }
                                                             %>
                                                         </div>
@@ -1758,7 +1758,18 @@
                 </div>
             </div>
         </div>
-
+        <div id="salesModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content" style="width: 400px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('salesModal')">×</span>
+                    <center><h3><div id="salesStatus"></div></h3></center>
+                </div>
+                <div class="modal-body">
+                    <div id="salesMessage"></div>
+                </div>
+            </div>
+        </div>        
         <script>
             $('#edit_lead_form').ajaxForm({
                 dataType: 'json',
@@ -1772,7 +1783,7 @@
 
                     if (data.status === "SUCCESS") {
                         setTimeout(function () {
-                            window.location.href = "MyLeads.jsp";
+                            window.location.href = "AllLeads.jsp";
                         }, 500);
                     } else {
                         $("#leadStatus").val("save");

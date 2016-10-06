@@ -899,6 +899,36 @@ function selectService(divId) {
 }
 //--------------------------------End-----------------------------------//
 
+function confirmDelete(leadId){
+    var modal = document.getElementById("lead_error_modal");
+    var status = document.getElementById("lead_error_status");
+    var message = document.getElementById("lead_error_message");
+    status.innerHTML = "Delete Confirmation";
+    message.innerHTML = "<table width='100%'><tr><td colspan='2'>Delete this lead record? All pending/completed site surveys and booked/confirmed DOMs of this lead will be cancelled and deleted. Changes cannot be reverted.</td></tr><tr><td></br></td></tr><tr><td align='center'><button class='btn btn-primary' onclick=\"deleteLead('" + leadId + "')\">Yes</button></td><td align='center'><button class='btn btn-danger' onclick=\"closeModal('lead_error_modal')\">No</button></td></tr></table>";
+    modal.style.display = "block";
+}
+
+function deleteLead(leadId){
+    var modal = document.getElementById("lead_error_modal");
+    var status = document.getElementById("lead_error_status");
+    var message = document.getElementById("lead_error_message");
+    $.getJSON("DeleteLeadController", {leadId: leadId})
+            .done(function (data) {
+                status.innerHTML = data.status;
+                message.innerHTML = data.message;
+                modal.style.display = "block";
+                setTimeout(function () {
+                    my_leads_setup();
+                    modal.style.display = "none";
+                }, 500);
+            })
+            .fail(function (error) {
+                status.innerHTML = "ERROR";
+                message.innerHTML = error;
+                modal.style.display = "block";
+            });
+}
+
 function confirmCancel() {
     var modal = document.getElementById("lead_error_modal");
     var status = document.getElementById("lead_error_status");
@@ -937,7 +967,7 @@ function viewCal() {
         addressTo += toArray[i].value + "|";
     }
 
-    $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo})
+    $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo, type:"site"})
             .done(function (data) {
                 if (data.status !== "SUCCESS") {
                     errorStatus.innerHTML = "WARNING";
@@ -1000,7 +1030,7 @@ function viewMovCal(type) {
         addressTo += toArray[i].value + "|";
     }
 
-    $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo})
+    $.getJSON("ValidateDates", {addressFrom: addressFrom, addressTo: addressTo, type:"move"})
             .done(function (data) {
                 if (data.status !== "SUCCESS") {
                     errorStatus.innerHTML = "WARNING";
@@ -1076,7 +1106,7 @@ function cancelLeadForm() {
 
                 if (data.status === "SUCCESS") {
                     setTimeout(function () {
-                        my_leads_setup($('#uId').val());
+                        my_leads_setup();
                         document.getElementById("cancelLeadModal").style.display = "none";
                         modal.style.display = "none";
                     }, 500);
@@ -2214,14 +2244,14 @@ function invalidDate() {
     }, 1300);
 }
 
-function my_leads_setup(nric) {
-    load_leads('', nric, "Pending");
-    load_leads('', nric, "Confirmed");
-    load_leads('', nric, "Rejected");
+function my_leads_setup() {
+    load_leads('', "Pending");
+    load_leads('', "Confirmed");
+    load_leads('', "Rejected");
 }
 
-function load_leads(keyword, nric, type) {
-    $.get("LoadMyLeads.jsp", {keyword: keyword, nric: nric, type: type}, function (data) {
+function load_leads(keyword, type) {
+    $.get("LoadAllLeads.jsp", {keyword: keyword, type: type}, function (data) {
         document.getElementById(type).innerHTML = data;
         $('.javascript').each(function () {
             eval($(this).text());
@@ -2411,12 +2441,12 @@ function viewQuotation(refNum) {
     document.getElementById(s).style.display = "block";
 }
 
-function reopenLead(leadId, nric) {
+function reopenLead(leadId) {
     $.get("ReopenLeadController", {leadId: leadId}, function (data) {
         document.getElementById('lead_error_status').innerHTML = data.status;
         document.getElementById('lead_error_message').innerHTML = data.message;
         document.getElementById('lead_error_modal').style.display = "block";
-        my_leads_setup(nric);
+        my_leads_setup();
         setTimeout(function () {
             document.getElementById("lead_error_modal").style.display = "none";
         }, 1000);

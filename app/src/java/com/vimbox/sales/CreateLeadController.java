@@ -109,7 +109,7 @@ public class CreateLeadController extends HttpServlet {
             if (filePart != null) {
                 boolean fileCheck = fileValidation(filePart);
                 if (!fileCheck) {
-                    errorMsg += "Please upload a valid image (png, jpg or bmp)<br>";
+                    errorMsg += "Please upload a valid image (png, jpg, bmp or pdf)<br>";
                 } else {
                     String fName = filePart.getSubmittedFileName();
                     String fileExt = fName.substring(fName.lastIndexOf("."));
@@ -265,17 +265,11 @@ public class CreateLeadController extends HttpServlet {
                     String level = addressFrom[i + 1].trim();
                     String unit = addressFrom[i + 2].trim();
                     String postal = addressFrom[i + 3].trim();
-                    if(address.isEmpty()){
-                        address = " ";
-                    }
                     if(level.isEmpty()){
                         level = " ";
                     }
                     if(unit.isEmpty()){
                         unit = " ";
-                    }
-                    if(postal.isEmpty()){
-                        postal = " ";
                     }
                     String add = address + "_" + level + "_" + unit + "_" + postal;
                     addressFromSet.add(address + " #" + level + "-" + unit + " S" + postal);
@@ -325,17 +319,11 @@ public class CreateLeadController extends HttpServlet {
                     String level = addressTo[i + 1].trim();
                     String unit = addressTo[i + 2].trim();
                     String postal = addressTo[i + 3].trim();
-                    if(address.isEmpty()){
-                        address = " ";
-                    }
                     if(level.isEmpty()){
                         level = " ";
                     }
                     if(unit.isEmpty()){
                         unit = " ";
-                    }
-                    if(postal.isEmpty()){
-                        postal = " ";
                     }
                     String add = address + "_" + level + "_" + unit + "_" + postal;
                     addressToSet.add(address + " #" + level + "-" + unit + " S" + postal);
@@ -640,7 +628,7 @@ public class CreateLeadController extends HttpServlet {
         if (fName != null && !fName.isEmpty()) {
             String fileExt = fName.substring(fName.lastIndexOf("."));
             // Checks file for file extension //
-            if (!(fileExt.matches(".png|.jpg|.bmp"))) {
+            if (!(fileExt.matches(".png|.jpg|.bmp|.pdf"))) {
                 return false;
             } else {
                 return true;

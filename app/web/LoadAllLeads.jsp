@@ -61,10 +61,9 @@
 </div>
 <%
     String keyword = request.getParameter("keyword");
-    String nric = request.getParameter("nric");
     String type = request.getParameter("type");
 
-    ArrayList<Lead> myLeads = LeadDAO.getLeadsByOwnerUser(keyword, nric, type);
+    ArrayList<Lead> myLeads = LeadDAO.getLeadsByOwnerUser(keyword, type);
 
     if (!keyword.isEmpty()) {
         if (myLeads.size() > 1) {
@@ -88,11 +87,11 @@
 %>
 <table class="table table-hover" id="<%=tableID%>">
     <col width="10%">
-    <col width="10%">  
+    <col width="5%">  
     <col width="5%">
     <col width="15%">
     <col width="10%">
-    <col width="25%">
+    <col width="30%">
     <col width="25%">
     <thead>
         <tr>
@@ -135,6 +134,7 @@
         <input class="btn btn-default" type='button' value='Edit' onclick="<%=url%>">
         <button class="btn btn-default" onclick="addFollowup('<%=lead.getId()%>')">Follow-Up</button>
         <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
+        <button class="btn btn-default" onclick="confirmDelete('<%=lead.getId()%>')">Delete</button>
         <%
                 if (leadType.equals("Sales")) {
         %>
@@ -159,7 +159,7 @@
         <%
             } else {
         %>
-            <button class="btn btn-default" onclick="reopenLead('<%=lead.getId()%>','<%=nric%>')">Reopen</button>
+            <button class="btn btn-default" onclick="reopenLead('<%=lead.getId()%>')">Reopen</button>
         <%
             }
         %>

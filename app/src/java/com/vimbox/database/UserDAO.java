@@ -731,12 +731,7 @@ public class UserDAO {
             ps = con.prepareStatement(CREATE_USER_LEAVE);
             ps.setString(1, nric);
             ps.setDate(2, new java.sql.Date(dj.getTime()));
-            int days = Converter.getTotalDaysBetweenTwoDates(dj, new Date());
-            int leave = ((days / 365) + 7) * 8;
-            if (leave > (14*8)) {
-                leave = (14*8);
-            }
-            ps.setDouble(3, leave);
+            ps.setDouble(3, 14*8);
             ps.setInt(4, 14);
             ps.setDouble(5, 0);
             ps.setInt(6, 0);

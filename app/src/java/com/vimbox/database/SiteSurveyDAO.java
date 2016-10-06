@@ -25,10 +25,11 @@ public class SiteSurveyDAO {
     private static final String CANCEL_SITE_SURVEY = "UPDATE sitesurvey_assigned SET status='Cancelled' WHERE lead_id = ? AND start_datetime LIKE ? AND timeslot = ?";
     private static final String CANCEL_LEAD_SITE_SURVEY = "UPDATE sitesurvey_assigned SET status='Cancelled' WHERE lead_id = ? AND status!='Completed'";
     private static final String DELETE_SITE_SURVEYS_BY_LEAD_ID = "DELETE FROM sitesurvey_assigned WHERE lead_id = ? AND status='Pending'";
+    private static final String REMOVE_SITE_SURVEYS_BY_LEAD_ID = "DELETE FROM sitesurvey_assigned WHERE lead_id = ?";
     private static final String GET_SITE_SURVEYS_BY_USER_STARTDATE = "SELECT * FROM sitesurvey_assigned where ss_user = ? and date(start_datetime) = ? AND status != 'Cancelled' ORDER BY start_datetime";
     private static final String GET_SITE_SURVEYS_BY_STARTDATE = "SELECT * FROM sitesurvey_assigned where date(start_datetime) = ? AND status != 'Cancelled' ORDER BY start_datetime";
-    private static final String GET_ALL_NON_CANCELLED_SITE_SURVEYS = "SELECT * FROM sitesurvey_assigned where status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
-    private static final String GET_NON_CANCELLED_SITE_SURVEYS_BY_USER = "SELECT * FROM vimbox.sitesurvey_assigned where ss_user = ? AND status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10);";
+    private static final String GET_ALL_NON_CANCELLED_SITE_SURVEYS = "SELECT * FROM sitesurvey_assigned where status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10)";
+    private static final String GET_NON_CANCELLED_SITE_SURVEYS_BY_USER = "SELECT * FROM sitesurvey_assigned where ss_user = ? AND status != 'Cancelled' group by lead_id, SUBSTRING(start_datetime, 1, 10)";
 
     public static void deleteSiteSurveysByLeadId(int leadId) {
         Connection con = null;
@@ -36,6 +37,22 @@ public class SiteSurveyDAO {
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(DELETE_SITE_SURVEYS_BY_LEAD_ID);
+            ps.setInt(1, leadId);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    // removes ALL site surveys // 
+    public static void removeSiteSurveysByLeadId(int leadId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(REMOVE_SITE_SURVEYS_BY_LEAD_ID);
             ps.setInt(1, leadId);
             ps.executeUpdate();
         } catch (SQLException se) {

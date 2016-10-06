@@ -115,7 +115,7 @@ public class EditEmployeeController extends HttpServlet {
                 String fName = filePart.getSubmittedFileName();
                 String fileExt = fName.substring(fName.lastIndexOf("."));
                 if (!fileCheck) {
-                    errorMsg += "Please upload a valid image (png, jpg or bmp)<br>";
+                    errorMsg += "Please upload a valid image (png, jpg, bmp or pdf)<br>";
                 } else {
                     fileName = user_nric + "-driver-license" + fileExt;
                     path = System.getProperty("user.dir") + "/documents/licenses/" + fileName;
@@ -247,7 +247,7 @@ public class EditEmployeeController extends HttpServlet {
         if (fName != null && !fName.isEmpty()) {
             String fileExt = fName.substring(fName.lastIndexOf("."));
             // Checks file for file extension //
-            if (!(fileExt.matches(".png|.jpg|.bmp"))) {
+            if (!(fileExt.matches(".png|.jpg|.bmp|.pdf"))) {
                 return false;
             } else {
                 return true;

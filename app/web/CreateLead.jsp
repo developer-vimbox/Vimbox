@@ -68,18 +68,6 @@
                 </div>
             </div>
         </div>
-        <div id="salesModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content" style="width: 400px;">
-                <div class="modal-header">
-                    <span class="close" onclick="closeModal('salesModal')">×</span>
-                    <center><h3><div id="salesStatus"></div></h3></center>
-                </div>
-                <div class="modal-body">
-                    <div id="salesMessage"></div>
-                </div>
-            </div>
-        </div>
         <div id="saModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
@@ -180,18 +168,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="salesModal" class="modal">
-                                    <!-- Modal content -->
-                                    <div class="modal-content" style="width: 400px;">
-                                        <div class="modal-header">
-                                            <span class="close" onclick="closeModal('salesModal')">×</span>
-                                            <center><h3><div id="salesStatus"></div></h3></center>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div id="salesMessage"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -447,7 +423,18 @@
                 </div>
             </div>
         </div>
-
+        <div id="salesModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content" style="width: 400px;">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal('salesModal')">×</span>
+                    <center><h3><div id="salesStatus"></div></h3></center>
+                </div>
+                <div class="modal-body">
+                    <div id="salesMessage"></div>
+                </div>
+            </div>
+        </div>                                                
 
         <script>
             $('#create_lead_form').ajaxForm({
@@ -462,9 +449,9 @@
 
                     if (data.status === "SUCCESS") {
                         setTimeout(function () {
-                            window.location.href = "MyLeads.jsp";
+                            window.location.href = "AllLeads.jsp";
                         }, 500);
-                    }else{
+                    } else {
                         $("#leadStatus").val("save");
                     }
                 },

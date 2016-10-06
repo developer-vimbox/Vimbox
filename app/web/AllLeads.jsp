@@ -8,7 +8,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>My Leads</title>
+        <title>All Leads</title>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
         <script src="http://malsup.github.com/jquery.form.js"></script> 
@@ -82,7 +82,7 @@
         </script>
     </head>
     <%@include file="header.jsp"%>
-    <body onload="my_leads_setup('<%=user.getNric()%>')">
+    <body onload="my_leads_setup()">
         <!-- The Modal -->
         <div id="cancelLeadModal" class="modal">
             <!-- Modal content -->
@@ -292,7 +292,7 @@
             <div id="page-content">
                 <div class="container">
                     <div id="page-title">
-                        <h2>My Leads</h2> <br>
+                        <h2>All Leads</h2> <br>
                     </div>
                     <div class="panel">
                         <div class="panel-body">

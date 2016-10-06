@@ -54,6 +54,7 @@ function createCustomer() {
                     $("#customer_last_name").html(data.customer_last_name);
                     $("#customer_contact").html(data.customer_contact);
                     $("#customer_email").html(data.customer_email);
+                    document.getElementById("cust_btn_input").innerHTML = "<button onclick=\"editCustomer('" + data.customer_id + "','Lead'); return false;\" class=\"btn btn-default\">Edit</button>";
                     document.getElementById("customer_information_table").style.display = "block";
                 }
                 errorStatus.innerHTML = status;

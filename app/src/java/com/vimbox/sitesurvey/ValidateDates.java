@@ -32,27 +32,56 @@ public class ValidateDates extends HttpServlet {
 
         String addressFrom = request.getParameter("addressFrom");
         String addressTo = request.getParameter("addressTo");
+        String type = request.getParameter("type");
 
-        if (addressTo.isEmpty() || addressFrom.isEmpty()) {
-            errorMsg += "Please ensure that both the moving from and to addresses are correctly filled<br>";
-        }else{
-            addressFrom = addressFrom.substring(0, addressFrom.length() - 1);
-            String[] arrays = addressFrom.split("\\|", -1);
-            for (String array : arrays) {
-                if (array.trim().isEmpty()) {
-                    errorMsg += "Please ensure that the moving from addresses are correctly filled<br>";
-                    break;
+        switch (type) {
+            case "site":
+                if (addressTo.isEmpty() && addressFrom.isEmpty()) {
+                    errorMsg += "Please ensure that either the moving from or to addresses are correctly filled<br>";
+                }else{
+                    if(!addressTo.isEmpty()){
+                        addressTo = addressTo.substring(0, addressTo.length() - 1);
+                        String[] arrays = addressTo.split("\\|");
+                        for (String array : arrays) {
+                            if (array.trim().isEmpty()) {
+                                errorMsg += "Please ensure that the moving to addresses are correctly filled<br>";
+                                break;
+                            }
+                        }
+                    }else if(!addressFrom.isEmpty()){
+                        addressFrom = addressFrom.substring(0, addressFrom.length() - 1);
+                        String[] arrays = addressFrom.split("\\|", -1);
+                        for (String array : arrays) {
+                            if (array.trim().isEmpty()) {
+                                errorMsg += "Please ensure that the moving from addresses are correctly filled<br>";
+                                break;
+                            }
+                        }
+                    }
                 }
-            }
+                break;
+            case "move":
+                if (addressTo.isEmpty() || addressFrom.isEmpty()) {
+                    errorMsg += "Please ensure that both the moving from and to addresses are correctly filled<br>";
+                } else {
+                    addressFrom = addressFrom.substring(0, addressFrom.length() - 1);
+                    String[] arrays = addressFrom.split("\\|", -1);
+                    for (String array : arrays) {
+                        if (array.trim().isEmpty()) {
+                            errorMsg += "Please ensure that the moving from addresses are correctly filled<br>";
+                            break;
+                        }
+                    }
 
-            addressTo = addressTo.substring(0, addressTo.length() - 1);
-            arrays = addressTo.split("\\|");
-            for (String array : arrays) {
-                if (array.trim().isEmpty()) {
-                    errorMsg += "Please ensure that the moving to addresses are correctly filled<br>";
-                    break;
+                    addressTo = addressTo.substring(0, addressTo.length() - 1);
+                    arrays = addressTo.split("\\|");
+                    for (String array : arrays) {
+                        if (array.trim().isEmpty()) {
+                            errorMsg += "Please ensure that the moving to addresses are correctly filled<br>";
+                            break;
+                        }
+                    }
                 }
-            }
         }
 
         if (errorMsg.isEmpty()) {

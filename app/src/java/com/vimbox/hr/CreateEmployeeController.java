@@ -139,7 +139,7 @@ public class CreateEmployeeController extends HttpServlet {
                 if(fName != null){
                     boolean fileCheck = fileValidation(filePart);
                     if (!fileCheck) {
-                        errorMsg += "Please upload a valid image (png, jpg or bmp)<br>";
+                        errorMsg += "Please upload a valid file (png, jpg, bmp or pdf)<br>";
                     } else {
                         String fileExt = fName.substring(fName.lastIndexOf("."));
                         fileName = user_nric + "-driver-license" + fileExt;
@@ -168,39 +168,17 @@ public class CreateEmployeeController extends HttpServlet {
             }
 
             String emergency_name = request.getParameter("emergency_name");
-            if (emergency_name.isEmpty()) {
-                errorMsg += "Please enter an emergency contact name<br>";
-            }
 
             String emergency_relationship = request.getParameter("emergency_relationship");
-            if (emergency_relationship.isEmpty()) {
-                errorMsg += "Please enter the relationship of the employee and emergency contact<br>";
-            }
 
-            boolean eContactEmpty = false;
             String emergency_contact = request.getParameter("emergency_contact");
             if (emergency_contact.isEmpty()) {
-                eContactEmpty = true;
                 emergency_contact = "0";
-            } else {
-                if (emergency_contact.length() < 8) {
-                    errorMsg += "Please enter a valid emergency contact number<br>";
-                }
             }
 
-            boolean eOfficeEmpty = false;
             String emergency_office = request.getParameter("emergency_office");
             if (emergency_office.isEmpty()) {
-                eOfficeEmpty = true;
                 emergency_office = "0";
-            } else {
-                if (emergency_office.length() < 8) {
-                    errorMsg += "Please enter a valid emergency office number<br>";
-                }
-            }
-
-            if (eContactEmpty && eOfficeEmpty) {
-                errorMsg += "Please enter either an emergency office or contact number<br>";
             }
 
             String user_username = null;
@@ -290,7 +268,7 @@ public class CreateEmployeeController extends HttpServlet {
         if (fName != null) {
             String fileExt = fName.substring(fName.lastIndexOf("."));
             // Checks file for file extension //
-            if (!(fileExt.matches(".png|.jpg|.bmp"))) {
+            if (!(fileExt.matches(".png|.jpg|.bmp|.pdf"))) {
                 return false;
             } else {
                 return true;
