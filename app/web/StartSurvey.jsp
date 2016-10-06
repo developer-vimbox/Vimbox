@@ -69,17 +69,17 @@
                                             <tr>
                                                 <td id="startsurvey_sidebar" style="padding-top: 10px;">
                                                     <table class="table table-bordered" style="width:90%;height:100%;;" border="1">
-                                                        <tbody><tr height="8%">
+                                                        <tbody><tr>
                                                                 <td>
                                                                     <input type="hidden" id="complete_status" name="complete" value="no">
                                                                     <button id="completeBtn" class="btn loading-button btn-primary" style="width:100%;height:100%;" onclick="confirmComplete();
             return false;">Complete</button>
                                                                 </td>
                                                             </tr>
-                                                            <tr height="8%">
+                                                            <tr>
                                                                 <td class="selected" id="siteInfo_tab" onclick='displaySiteInfo()'><center>Site Info</center></td>
                                             </tr>
-                                            <tr height="10%">
+                                            <tr>
                                                 <td><center>FROM</center></td>
                                             </tr>
                                             <tr>
@@ -116,7 +116,7 @@
                                                     %>
                                                 </td>
                                             </tr>
-                                            <tr height="10%">
+                                            <tr>
                                                 <td><center>TO</center></td>
                                             </tr>
                                             <tr>
