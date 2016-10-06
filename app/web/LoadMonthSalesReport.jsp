@@ -190,7 +190,6 @@
         double totalAmt = Double.parseDouble(rec[1]);
         total += totalAmt;
         String mthName = rec[2];
-        System.out.println("MTH " + mthName);
         switch (mthName) {
             case "January":
                 jan++;

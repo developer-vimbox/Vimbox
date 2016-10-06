@@ -161,8 +161,6 @@
                     }
                     
                     String toms = lead.getTom();
-                    System.out.println(toms);
-                    System.out.println(toms.contains("|"));
                     if (toms.contains("|")) {
                         String[] tomSplit = lead.getTom().split("\\|");
                         for (int k = 0; k < tomSplit.length; k++) {
@@ -273,8 +271,6 @@
                     }
                     
                     String toms = lead.getTom();
-                    System.out.println(toms);
-                    System.out.println(toms.contains("|"));
                     if (toms.contains("|")) {
                         String[] tomSplit = lead.getTom().split("\\|");
                         for (int k = 0; k < tomSplit.length; k++) {

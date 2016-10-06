@@ -238,7 +238,7 @@
                                                             }
                                                             out.println("</ul></td>");
                                                             out.println("<td align='center'>" + timeslot + "</td>");
-                                                            out.println("<td align='center'><button class='btn btn-default' onclick=\"viewSalesPortion('" + leadId + "')\">VS</button></td>");
+                                                            out.println("<td align='center'><button class='btn btn-default' onclick=\"viewLead('" + leadId + "')\">VS</button></td>");
                                                             out.println("</tr>");
 
                                                             jj = j;
@@ -304,7 +304,7 @@
                                                             }
                                                             out.println("</ul></td>");
                                                             out.println("<td align='center'>" + timeslot + "</td>");
-                                                            out.println("<td align='center'><button class='btn btn-default' onclick=\"viewSalesPortion('" + leadId + "')\">VS</button></td>");
+                                                            out.println("<td align='center'><button class='btn btn-default' onclick=\"viewLead('" + leadId + "')\">VS</button></td>");
                                                             out.println("</tr>");
                                                         }
                                                     }

@@ -1124,7 +1124,6 @@ public class LeadDAO {
         Connection con = null;
         PreparedStatement ps = null;
         try {
-            System.out.println(surveyArea);
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(DELETE_SITE_LEAD_CUST_ITEM);
             ps.setInt(1, leadId);
@@ -1209,7 +1208,6 @@ public class LeadDAO {
             ps1 = con.prepareStatement(CREATE_LEAD_VIMBOX_ITEM);
             ps2 = con.prepareStatement(CREATE_LEAD_MATERIAL);
             for (int i = 0; i < vimboxItemNames.length; i++) {
-                System.out.println(vimboxItemNames[i]);
                 String itemName = vimboxItemNames[i];
                 String itemRemark = vimboxItemRemarks[i];
                 String itemCharge = vimboxItemCharges[i];

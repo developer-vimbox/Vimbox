@@ -251,7 +251,6 @@ public class LeadPopulationDAO {
             ps.executeUpdate();
             ps.close();
             con.close();
-            System.out.println(DEL_MOVE_TYPE);
         } catch (SQLException se) {
             se.printStackTrace();
         }

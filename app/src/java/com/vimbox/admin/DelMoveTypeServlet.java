@@ -38,7 +38,6 @@ public class DelMoveTypeServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
                     // Retrieves the entered movetype //
         String moveType = request.getParameter("moveType");
-        System.out.println("DelMoveTypeServlet: " + moveType);
         LeadPopulationDAO.delMoveType(moveType);
         JsonObject jsonOutput = new JsonObject();
 

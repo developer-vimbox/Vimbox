@@ -115,7 +115,6 @@ public class CreatePayslipController extends HttpServlet {
             String[] arrayD = dbd_desc.split("\\|");
             for(int i=0; i<arrayD.length; i++){
                 String string = arrayD[i];
-                System.out.println(string);
                 dbd_description.add(string);
             }
             String[] arrayA = dbd_amt.split("\\|");

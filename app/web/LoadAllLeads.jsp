@@ -186,12 +186,9 @@
                     }
                     
                     String toms = lead.getTom();
-                    System.out.println(toms);
-                    System.out.println(toms.contains("|"));
                     if (toms.contains("|")) {
                         String[] tomSplit = lead.getTom().split("\\|");
                         for (int i = 0; i < tomSplit.length; i++) {
-                            System.out.println(tomSplit[i]);
                             refNum += LeadPopulationDAO.getMoveTypeAbb(tomSplit[i]);
                         }
                     } else {

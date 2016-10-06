@@ -37,8 +37,6 @@ public class DelSvcTypeServlet extends HttpServlet {
         String values = request.getParameter("svcType");
         String primary = values.substring(0, values.indexOf('@'));
         String secondary = values.substring(values.indexOf('@')+1, values.length());
-        System.out.println(primary);
-        System.out.println(secondary);
         LeadPopulationDAO.delSvcType(primary, secondary);
         JsonObject jsonOutput = new JsonObject();
 
