@@ -187,7 +187,6 @@ public class InvoicePDFGenerator extends HttpServlet {
             //----------------------------------------//
 
             // Services and breakdown //
-            float[] contentColWidths = new float[]{40f, 40f, 10f, 10f};
             LineSeparator line = new LineSeparator();
             line.setOffset(-7);
             
@@ -198,12 +197,8 @@ public class InvoicePDFGenerator extends HttpServlet {
                 cell = new PdfPCell(new Phrase(tHeader, normalFont));
                 cell.setBorder(Rectangle.NO_BORDER);
                 cell.setBackgroundColor(tHeaderColor);
-                if (i == tHeaders.length - 1) {
-                    cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-                }
                 table.addCell(cell);
             }
-            table.setWidths(contentColWidths);
             table.setWidthPercentage(100);
             document.add(table);
             
@@ -254,7 +249,6 @@ public class InvoicePDFGenerator extends HttpServlet {
                 }
                 
                 table.setSpacingBefore(10);
-                table.setWidths(contentColWidths);
                 table.setWidthPercentage(100);
                 document.add(table);
                 LineSeparator line2 = new LineSeparator();

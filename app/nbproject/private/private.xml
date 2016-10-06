@@ -4,19 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/database/LeadDAO.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sales/DeleteLeadController.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/MovingCalendarPopulate.jsp</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/AdminFunctions.js</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/header.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sales/InvoicePDFGenerator.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sales/CreateLeadController.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/database/SiteSurveyDAO.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/LoadAllLeads.jsp</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/AllLeads.jsp</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/LeadFunctions.js</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sales/ConfirmLeadController.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/database/CustomerHistoryDAO.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/MovingCalendar.jsp</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/database/JobDAO.java</file>
         </group>
     </open-files>
 </project-private>
