@@ -10,35 +10,6 @@
         <script src="http://malsup.github.com/jquery.form.js"></script> 
         <script src="JS/SiteSurveyFunctions.js"></script>
         <script src="JS/OperationFunctions.js"></script>
-        <script>
-        $('#confirm_form').ajaxForm({
-            dataType: 'json',
-            success: function (data) {
-                var modal = document.getElementById("lead_error_modal");
-                var status = document.getElementById("lead_error_status");
-                var message = document.getElementById("lead_error_message");
-                status.innerHTML = data.status;
-                message.innerHTML = data.message;
-                modal.style.display = "block";
-
-                if (data.status === "SUCCESS") {
-                    setTimeout(function () {
-                        my_leads_setup($('#cfmuId').val());
-                        document.getElementById("confirmLeadModal").style.display = "none";
-                        modal.style.display = "none";
-                    }, 500);
-                }
-            },
-            error: function (data) {
-                var modal = document.getElementById("lead_error_modal");
-                var status = document.getElementById("lead_error_status");
-                var message = document.getElementById("lead_error_message");
-                status.innerHTML = "ERROR";
-                message.innerHTML = data;
-                modal.style.display = "block";
-            }
-        });
-        </script>
         <div id="view_dom_modal" class="modal">
             <!-- Modal content -->
             <div class="message-modal-content" style="width: 50%;">
