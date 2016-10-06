@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="com.vimbox.database.LeadPopulationDAO"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
@@ -246,6 +247,8 @@
         </div>
         <%
             }
+            
+            DecimalFormat df = new DecimalFormat("#.00");
         %>
         <form method="POST" action="SiteDomController" id="site_dom_form" enctype="multipart/form-data">
             <input type="hidden" name="leadId" value="<%=leadId%>">
@@ -268,7 +271,7 @@
                                 <div class="col-sm-6">
                                     <div class="input-group">
                                         <span class="input-group-addon">S$</span>
-                                        <label class="form-control" id="cfmMessage" disabled><%=total * (deposit / 100)%></label>
+                                        <label class="form-control" id="cfmMessage" disabled><%=df.format(total * (deposit / 100))%></label>
                                     </div>
                                 </div>
                             </div>
