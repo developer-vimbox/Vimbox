@@ -68,7 +68,7 @@
                                             <col width="250">
                                             <tr>
                                                 <td id="startsurvey_sidebar" style="padding-top: 10px;">
-                                                    <table class="table table-bordered" style="width:90%;height:100%;;" border="1">
+                                                    <table class="table table-bordered" style="width:90%;" border="1">
                                                         <tbody><tr>
                                                                 <td>
                                                                     <input type="hidden" id="complete_status" name="complete" value="no">
