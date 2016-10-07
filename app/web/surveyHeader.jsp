@@ -105,16 +105,18 @@
         to {opacity: 1;}
     }
     @media only screen and (min-device-width: 768px) and (max-device-height: 1024px)and (orientation:portrait){
-        #startsurvey_sidebar{ width:20%; } 
-         #startsurvey_sidebar td{ height: 2%; }
+        #startsurvey_sidebar{ width:20%;
+            table-layout: fixed;} 
+         #startsurvey_sidebar td{ height: 1px; }
         #startsurvey_areatable{table-layout: fixed;}
         #header-nav-custom{margin-top: 2%}
         #completeBtn{width: 120px !important;
     height: 50px !important;}
     }
         @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation:landscape) {
-        #startsurvey_sidebar{ width:20%; }
-         #startsurvey_sidebar td{ height: 2%; }
+        #startsurvey_sidebar{ width:20%;
+            table-layout: fixed;}
+         #startsurvey_sidebar td{ height: 1px; }
         #startsurvey_areatable{table-layout: fixed;}
         #header-nav-custom{margin-top: 2% important;}
         #header-nav-right{margin: 0 0 0 0 important; margin-top: 2% important; 
@@ -125,12 +127,12 @@
         
         
         @media (orientation: landscape) and (min-device-height:1000px), all and (min-width:1000px){
-            #startsurvey_sidebar{ width:20%;  } 
-             #startsurvey_sidebar td{ height: 2%; }
+            #startsurvey_sidebar{ width:20%;     table-layout: fixed; } 
+             #startsurvey_sidebar td{ height: 1%; }
         #startsurvey_areatable{table-layout: fixed;}
         #header-nav-custom{margin-top: 2%}
-/*        #completeBtn{width: 120px !important;
-    height: 50px !important;}  */
+        #completeBtn{width: 120px !important;
+    height: 50px !important;}  
         }
     </style>
 
