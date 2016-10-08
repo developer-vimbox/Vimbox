@@ -123,7 +123,7 @@ function editEmployee(empId) {
     modal.style.display = "block";
 }
 
-function confirmDelete(id, action) {
+function confirmDeletePayslip(id, action) {
     var method = action.charAt(0).toUpperCase() + action.slice(1);
     var modal = document.getElementById(action + "_error_modal");
     var status = document.getElementById(action + "_error_status");

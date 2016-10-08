@@ -1,12 +1,14 @@
+var formulaCount;
+
 function admViewCal() {
     var modal = document.getElementById("cal_modal");
-    $.get("SiteSurveyCalendar.jsp",{type:"Admin"}, function (data) {
+    $.get("SiteSurveyCalendar.jsp", {type: "Admin"}, function (data) {
         document.getElementById("cal_content").innerHTML = data;
     });
     var d = new Date();
     utc = d.getTime() + (d.getTimezoneOffset() * 60000),
-    d = new Date(utc + (3600000 * 8));
-    
+            d = new Date(utc + (3600000 * 8));
+
     var m = d.getMonth();
     var y = d.getFullYear();
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -15,7 +17,7 @@ function admViewCal() {
     $("#dYear").html(y);
 
     var content = document.getElementById("ssCalTable");
-    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss", type:"Admin"}, function (data) {
+    $.get("SiteSurveyCalendarPopulate.jsp", {getYear: y, getMonth: m, getSS: "allss", type: "Admin"}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
@@ -23,13 +25,13 @@ function admViewCal() {
 
 function admViewMovCal() {
     var modal = document.getElementById("cal_modal");
-    $.get("MovingCalendar.jsp", {type:'Admin'}, function (data) {
+    $.get("MovingCalendar.jsp", {type: 'Admin'}, function (data) {
         document.getElementById("cal_content").innerHTML = data;
     });
     var d = new Date();
     utc = d.getTime() + (d.getTimezoneOffset() * 60000),
-    d = new Date(utc + (3600000 * 8));
-    
+            d = new Date(utc + (3600000 * 8));
+
     var m = d.getMonth();
     var y = d.getFullYear();
     var m_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -38,7 +40,7 @@ function admViewMovCal() {
     $("#dYear").html(y);
 
     var content = document.getElementById("ssCalTable");
-    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt", type:'Admin'}, function (data) {
+    $.get("MovingCalendarPopulate.jsp", {getYear: y, getMonth: m, getTT: "alltt", type: 'Admin'}, function (data) {
         content.innerHTML = data;
     });
     modal.style.display = "block";
@@ -51,36 +53,36 @@ function admLeads_setup() {
 function admLeads_search(keyword) {
     $.get("LoadAdminLeads.jsp", {keyword: keyword}, function (data) {
         document.getElementById("admLeadsTable").innerHTML = data;
-        $('.javascript').each(function() {
-      eval($(this).text());
-    });
+        $('.javascript').each(function () {
+            eval($(this).text());
+        });
     });
 }
 
 function viewMoveType() {
     $.get("LoadMoveType.jsp", function (data) {
         document.getElementById('moveType_table').innerHTML = data;
-        $('.javascriptMove').each(function() {
-      eval($(this).text());
-    });
+        $('.javascriptMove').each(function () {
+            eval($(this).text());
+        });
     });
 }
 
 function viewRefType() {
-   $.get("LoadRefType.jsp", function (data) {
+    $.get("LoadRefType.jsp", function (data) {
         document.getElementById('refType_table').innerHTML = data;
-        $('.javascriptRef').each(function() {
-      eval($(this).text());
-    });
+        $('.javascriptRef').each(function () {
+            eval($(this).text());
+        });
     });
 }
 
 function viewSvcType() {
     $.get("LoadSvcType.jsp", function (data) {
         document.getElementById('svcType_table').innerHTML = data;
-        $('.javascriptSvc').each(function() {
-      eval($(this).text());
-    });
+        $('.javascriptSvc').each(function () {
+            eval($(this).text());
+        });
     });
 }
 
@@ -132,10 +134,10 @@ function addRefType() {
                 msgStatus.innerHTML = status;
                 msgContent.innerHTML = errorMsg;
                 modal.style.display = "block";
-                    setTimeout(function () {
-                        modal.style.display = "none";
-                    }, 800);
-                    viewRefType();
+                setTimeout(function () {
+                    modal.style.display = "none";
+                }, 800);
+                viewRefType();
                 if (status === "SUCCESS") {
                     document.getElementById("refType").value = "";
                 }
@@ -145,8 +147,8 @@ function addRefType() {
                 msgContent.innerHTML = error;
                 modal.style.display = "block";
                 setTimeout(function () {
-                        modal.style.display = "none";
-                    }, 800);
+                    modal.style.display = "none";
+                }, 800);
                 document.getElementById("refType").value = "";
             });
 }
@@ -157,7 +159,7 @@ function addSvcType() {
     var msgContent = document.getElementById("error-content");
     var svcType_primary = $('#svcType_primary').val();
     var svcType_secondary = $('#svcType_secondary').val();
-    var svcType_formula = $('#svcType_formula').val();
+    var svcType_formula = document.getElementById('svcType_formula').innerHTML;
     var svcType_description = $('#svcType_description').val();
 
     $.getJSON("AddSvcTypeServlet", {svcType_primary: svcType_primary, svcType_secondary: svcType_secondary, svcType_formula: svcType_formula, svcType_description: svcType_description})
@@ -167,16 +169,17 @@ function addSvcType() {
                 msgStatus.innerHTML = status;
                 msgContent.innerHTML = errorMsg;
                 modal.style.display = "block";
-                    setTimeout(function () {
-                        modal.style.display = "none";
-                        document.getElementById("messageModal3").style.display = "none";
-                    }, 800);
+                setTimeout(function () {
+                    modal.style.display = "none";
+                    document.getElementById("messageModal3").style.display = "none";
+                }, 800);
                 viewSvcType();
-                if(status === "SUCCESS") {
+                if (status === "SUCCESS") {
                     document.getElementById("svcType_primary").value = "";
                     document.getElementById("svcType_secondary").value = "";
-                    document.getElementById("svcType_formula").value = "";
+                    document.getElementById("svcType_formula").innerHTML = "";
                     document.getElementById("svcType_description").value = "";
+                    document.getElementById("formula-btn").innerHTML = "Formula";
                 }
             })
             .fail(function (error) {
@@ -184,12 +187,13 @@ function addSvcType() {
                 msgContent.innerHTML = error;
                 modal.style.display = "block";
                 setTimeout(function () {
-                        modal.style.display = "none";
-                    }, 800);
+                    modal.style.display = "none";
+                }, 800);
                 document.getElementById("svcType_primary").value = "";
                 document.getElementById("svcType_secondary").value = "";
-                document.getElementById("svcType_formula").value = "";
+                document.getElementById("svcType_formula").innerHTML = "";
                 document.getElementById("svcType_description").value = "";
+                document.getElementById("formula-btn").innerHTML = "Formula";
             });
 }
 
@@ -264,8 +268,131 @@ function deleteSvcType(del_svcType) {
             })
 }
 
+function serviceFormula() {
+    var svcType_formula = document.getElementById('svcType_formula').innerHTML;
+    if(!svcType_formula){
+        formulaCount = "";
+    }else{
+        var last = svcType_formula.substring(svcType_formula.lastIndexOf(" ")+1);
+        if(isNaN(last)){
+            formulaCount = "V";
+        }else{
+            formulaCount = "N";
+        }
+    }
+    $.get("LoadFormulaTable.jsp", {formula: svcType_formula}, function (data) {
+        document.getElementById("formula-content").innerHTML = data;
+        document.getElementById("formulaModal").style.display = "block";
+    });
+}
+
+function formulaRemove(){
+    var fmlLbl = document.getElementById("formulaLbl").innerHTML;
+    fmlLbl = fmlLbl.substring(0, fmlLbl.lastIndexOf(" "));
+    $('#hidFormula').val(fmlLbl);
+    document.getElementById("formulaLbl").innerHTML = fmlLbl;
+    var last = fmlLbl.substring(fmlLbl.lastIndexOf(" ")+1);
+    if(isNaN(last)){
+        if (last.match(/^(B|MP|AC|U)$/)) {
+            formulaCount = "V";
+        }else{
+            formulaCount = "O";
+        }
+    }else{
+        formulaCount = "N";
+    }
+}
+
+function formulaNumber(){
+    var number = $('#number_entry').val();
+    var fmlLbl = document.getElementById("formulaLbl").innerHTML;
+    if(!fmlLbl){
+        formulaCount = "N";
+        document.getElementById("formulaLbl").innerHTML = number;
+        $('#hidFormula').val(number);
+    }else{
+        if(formulaCount === "N" || formulaCount === "V"){
+            var modal = document.getElementById("errorModal");
+            var msgStatus = document.getElementById("error-status");
+            var msgContent = document.getElementById("error-content");
+            msgStatus.innerHTML = "ERROR";
+            msgContent.innerHTML = "Please enter an operator after a number or variable";
+            modal.style.display = "block";
+        }else{
+            document.getElementById("formulaLbl").innerHTML = fmlLbl + " " + number;
+            $('#hidFormula').val(fmlLbl + " " + number);
+            formulaCount = "N";
+        }
+    }
+    $('#number_entry').val('');
+}
+
+function formulaOperator(operator){
+    var fmlLbl = document.getElementById("formulaLbl").innerHTML;
+    var modal = document.getElementById("errorModal");
+    var msgStatus = document.getElementById("error-status");
+    var msgContent = document.getElementById("error-content");
+    if(!fmlLbl){
+        msgStatus.innerHTML = "ERROR";
+        msgContent.innerHTML = "Please enter a number or variable before an operator";
+        modal.style.display = "block";
+    }else{
+        if(formulaCount === "O"){
+            msgStatus.innerHTML = "ERROR";
+            msgContent.innerHTML = "Please enter a number or variable after an operator";
+            modal.style.display = "block";
+        }else{
+            document.getElementById("formulaLbl").innerHTML = fmlLbl + " " + operator;
+            $('#hidFormula').val(fmlLbl + " " + operator);
+            formulaCount = "O";
+        }
+    }
+}
+
+function formulaVariable(variable){
+    var fmlLbl = document.getElementById("formulaLbl").innerHTML;
+    var modal = document.getElementById("errorModal");
+    var msgStatus = document.getElementById("error-status");
+    var msgContent = document.getElementById("error-content");
+    if(!fmlLbl){
+        formulaCount = "V";
+        document.getElementById("formulaLbl").innerHTML = variable;
+        $('#hidFormula').val(variable);
+    }else{
+        if(formulaCount === "V" || formulaCount === "N"){
+            msgStatus.innerHTML = "ERROR";
+            msgContent.innerHTML = "Please enter an operator after a number or variable";
+            modal.style.display = "block";
+        }else{
+            document.getElementById("formulaLbl").innerHTML = fmlLbl + " " + variable;
+            $('#hidFormula').val(fmlLbl + " " + variable);
+            formulaCount = "V";
+        }
+    }
+}
+
+function enterFormula(){
+    if(formulaCount === "O"){
+        var modal = document.getElementById("errorModal");
+        var msgStatus = document.getElementById("error-status");
+        var msgContent = document.getElementById("error-content");
+        msgStatus.innerHTML = "ERROR";
+        msgContent.innerHTML = "Formula cannot end with an operator";
+        modal.style.display = "block";
+    }else{
+        var fml = $('#hidFormula').val();
+        document.getElementById("svcType_formula").innerHTML = fml;
+        if(!fml){
+            document.getElementById("formula-btn").innerHTML = "Formula";
+        }else{
+            document.getElementById("formula-btn").innerHTML = "Edit";
+        }
+        document.getElementById("formulaModal").style.display = "none";
+    }
+}
+
 function loadValueSetupTables() {
-     viewMoveType();
-     viewRefType();
-     viewSvcType();
+    viewMoveType();
+    viewRefType();
+    viewSvcType();
 }

@@ -58,10 +58,6 @@ public class AddSvcTypeServlet extends HttpServlet {
             error = true;
             errorMsg += "Please enter formula<br>";
         }
-        if(description.isEmpty()) {
-            error = true;
-            errorMsg += "Please enter description<br>";
-        }
         
         JsonObject jsonOutput = new JsonObject();
         if(error) {

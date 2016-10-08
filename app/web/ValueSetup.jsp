@@ -16,14 +16,14 @@
                         <h2>Value Setup</h2> <br>
                         <div class="panel">
                             <div class="panel-body">
-                                <div id="errorModal" class="modal">
+                                <div id="formulaModal" class="modal">
                                     <div class="modal-content" style="width: 400px;">
                                         <div class="modal-header">
-                                            <span class="close" onclick="closeModal('errorModal')">×</span>
-                                            <center><h2><div id="error-status"></div></h2></center>
+                                            <span class="close" onclick="closeModal('formulaModal')">×</span>
+                                            <center><h2>FORMULA ENTRY</h2></center>
                                         </div>
                                         <div class="modal-body">
-                                            <div id="error-content"></div>
+                                            <div id="formula-content"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -35,6 +35,17 @@
                                         </div>
                                         <div class="modal-body">
                                             <div id="del-content"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="errorModal" class="modal">
+                                    <div class="modal-content" style="width: 400px;">
+                                        <div class="modal-header">
+                                            <span class="close" onclick="closeModal('errorModal')">×</span>
+                                            <center><h2><div id="error-status"></div></h2></center>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="error-content"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -111,7 +122,8 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label">Formula: </label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" class="form-control" id="svcType_formula" required>
+                                                        <label class="col-sm-4" id="svcType_formula"></label>
+                                                        <button onclick="serviceFormula()" class="btn btn-primary" id="formula-btn">Formula</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
