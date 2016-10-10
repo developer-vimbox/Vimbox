@@ -13,11 +13,11 @@ public class LeadPopulationDAO {
     private static final String GET_ENQUIRIES = "SELECT * FROM system_enquiries";
     private static final String GET_SOURCES = "SELECT * FROM system_sources";
     private static final String GET_REFERRALS = "SELECT * FROM system_referrals";
-    private static final String GET_EXISTING_ITEMS = "SELECT * FROM system_items";
-    private static final String GET_EXISTING_ITEMS_SITE_SURVEY = "SELECT * FROM system_items WHERE name LIKE ? OR description LIKE ?";
-    private static final String GET_EXISTING_SPECIAL_ITEMS_SITE_SURVEY = "SELECT * FROM system_special_items WHERE name LIKE ?";
-    private static final String GET_EXISTING_VIMBOX_MATERIALS_SITE_SURVEY = "SELECT * FROM system_vimbox_materials WHERE name LIKE ?";
-    private static final String GET_EXISTING_SPECIAL_ITEMS = "SELECT * FROM system_special_items";
+    private static final String GET_EXISTING_ITEMS = "SELECT * FROM system_items WHERE item_type='Normal' ORDER BY name";
+    private static final String GET_EXISTING_ITEMS_SITE_SURVEY = "SELECT * FROM system_items WHERE item_type='Normal' AND (name LIKE ? OR description LIKE ?) ORDER BY name";
+    private static final String GET_EXISTING_SPECIAL_ITEMS_SITE_SURVEY = "SELECT * FROM system_items WHERE item_type='Special' AND name LIKE ? ORDER BY name";
+    private static final String GET_EXISTING_VIMBOX_MATERIALS_SITE_SURVEY = "SELECT * FROM system_vimbox_materials WHERE name LIKE ? ORDER BY name";
+    private static final String GET_EXISTING_SPECIAL_ITEMS = "SELECT * FROM system_items WHERE item_type='Special' ORDER BY name";
     private static final String GET_ALL_SERVICES = "SELECT * FROM system_services";
     private static final String GET_PRIMARY_SERVICES = "SELECT DISTINCT primary_service FROM system_services";
     private static final String GET_SECONDARY_SERVICES = "SELECT secondary_service FROM system_services where primary_service=?";
@@ -30,8 +30,12 @@ public class LeadPopulationDAO {
     private static final String DEL_REF_TYPE = "DELETE FROM system_referrals WHERE source=?";
     private static final String DEL_SVC_TYPE = "DELETE FROM system_services WHERE primary_service=? AND secondary_service=?";
     private static final String GET_DEPOSIT_PERCENTAGE = "SELECT * FROM system_percentage WHERE name='Deposit'";
-     private static final String GET_SELECTED_SERVICE_DESCRIPTION = "SELECT description FROM system_services WHERE primary_service=? AND secondary_service=?";
-
+    private static final String GET_SELECTED_SERVICE_DESCRIPTION = "SELECT description FROM system_services WHERE primary_service=? AND secondary_service=?";
+    private static final String UPDATE_ITEM = "UPDATE system_items SET name=?, description=?, dimensions=?, units=?, img=? WHERE item_id=?";
+    private static final String CREATE_NORMAL_ITEM = "INSERT INTO system_items(name, description, dimensions, units, img, item_type) VALUES (?,?,?,?,?,'Normal')";
+    private static final String CREATE_SPECIAL_ITEM = "INSERT INTO system_items(name, description, dimensions, units, img, item_type) VALUES (?,?,?,?,?,'Special')";
+    private static final String CREATE_MATERIAL = "INSERT INTO system_vimbox_materials(name, img) VALUES (?,?)";
+    
     public static ArrayList<String> getAllServices() {
         ArrayList<String> results = new ArrayList<String>();
         Connection con = null;
@@ -452,7 +456,7 @@ public class LeadPopulationDAO {
             ps.setString(2, "%" + keyword + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
-                String[] data = new String[]{rs.getString("name"), rs.getString("description"), rs.getString("dimensions"), rs.getString("units"), rs.getString("img")};
+                String[] data = new String[]{rs.getString("name"), rs.getString("description"), rs.getString("dimensions"), rs.getString("units"), rs.getString("img"), rs.getInt("item_id") + ""};
                 results.add(data);
             }
         } catch (SQLException se) {
@@ -474,7 +478,7 @@ public class LeadPopulationDAO {
             ps.setString(1, "%" + keyword + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
-                String[] data = new String[]{"Special - " + rs.getString("name"), "", "", "", rs.getString("img"), "Special"};
+                String[] data = new String[]{rs.getString("name"), rs.getString("description"), rs.getString("dimensions"), rs.getString("units"), rs.getString("img"), rs.getInt("item_id") + "", "Special"};
                 results.add(data);
             }
         } catch (SQLException se) {
@@ -496,7 +500,7 @@ public class LeadPopulationDAO {
             ps.setString(1, "%" + keyword + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
-                String[] data = new String[]{"Material - " + rs.getString("name"), "", "", "", rs.getString("img"), "Material"};
+                String[] data = new String[]{rs.getString("name"), rs.getString("img"), rs.getInt("material_id") + "", "Material"};
                 results.add(data);
             }
         } catch (SQLException se) {
@@ -505,5 +509,80 @@ public class LeadPopulationDAO {
             ConnectionManager.close(con, ps, rs);
         }
         return results;
+    }
+    
+    public static void editItem(String itemValues, String itemName, String itemDescription, String itemDimensions, String itemUnits, String img){
+        Connection con = null;
+        PreparedStatement ps = null;
+        String[] valuesArr = itemValues.split("\\|");
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(UPDATE_ITEM);
+            ps.setString(1, itemName);
+            ps.setString(2, itemDescription);
+            ps.setString(3, itemDimensions);
+            ps.setString(4, itemUnits);
+            ps.setString(5, img);
+            ps.setInt(6, Integer.parseInt(valuesArr[5]));
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void createNormalItem(String itemName, String itemDescription, String itemDimensions, String itemUnits, String fileName){
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(CREATE_NORMAL_ITEM);
+            ps.setString(1, itemName);
+            ps.setString(2, itemDescription);
+            ps.setString(3, itemDimensions);
+            ps.setString(4, itemUnits);
+            ps.setString(5, fileName);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void createSpecialItem(String itemName, String itemDescription, String itemDimensions, String itemUnits, String fileName){
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(CREATE_SPECIAL_ITEM);
+            ps.setString(1, itemName);
+            ps.setString(2, itemDescription);
+            ps.setString(3, itemDimensions);
+            ps.setString(4, itemUnits);
+            ps.setString(5, fileName);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void createMaterial(String itemName, String fileName){
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(CREATE_MATERIAL);
+            ps.setString(1, itemName);
+            ps.setString(2, fileName);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
     }
 }

@@ -86,6 +86,15 @@ function viewSvcType() {
     });
 }
 
+function viewAdmItems() {
+    $.get("LoadAdminCustomerItems.jsp", function (data) {
+        document.getElementById('customer_table').innerHTML = data;
+    });
+    $.get("LoadAdminVimboxItems.jsp", function (data) {
+        document.getElementById('vimbox_table').innerHTML = data;
+    });
+}
+
 function addMoveType() {
     var modal = document.getElementById("errorModal");
     var msgStatus = document.getElementById("error-status");
@@ -270,13 +279,13 @@ function deleteSvcType(del_svcType) {
 
 function serviceFormula() {
     var svcType_formula = document.getElementById('svcType_formula').innerHTML;
-    if(!svcType_formula){
+    if (!svcType_formula) {
         formulaCount = "";
-    }else{
-        var last = svcType_formula.substring(svcType_formula.lastIndexOf(" ")+1);
-        if(isNaN(last)){
+    } else {
+        var last = svcType_formula.substring(svcType_formula.lastIndexOf(" ") + 1);
+        if (isNaN(last)) {
             formulaCount = "V";
-        }else{
+        } else {
             formulaCount = "N";
         }
     }
@@ -286,39 +295,39 @@ function serviceFormula() {
     });
 }
 
-function formulaRemove(){
+function formulaRemove() {
     var fmlLbl = document.getElementById("formulaLbl").innerHTML;
     fmlLbl = fmlLbl.substring(0, fmlLbl.lastIndexOf(" "));
     $('#hidFormula').val(fmlLbl);
     document.getElementById("formulaLbl").innerHTML = fmlLbl;
-    var last = fmlLbl.substring(fmlLbl.lastIndexOf(" ")+1);
-    if(isNaN(last)){
+    var last = fmlLbl.substring(fmlLbl.lastIndexOf(" ") + 1);
+    if (isNaN(last)) {
         if (last.match(/^(B|MP|AC|U)$/)) {
             formulaCount = "V";
-        }else{
+        } else {
             formulaCount = "O";
         }
-    }else{
+    } else {
         formulaCount = "N";
     }
 }
 
-function formulaNumber(){
+function formulaNumber() {
     var number = $('#number_entry').val();
     var fmlLbl = document.getElementById("formulaLbl").innerHTML;
-    if(!fmlLbl){
+    if (!fmlLbl) {
         formulaCount = "N";
         document.getElementById("formulaLbl").innerHTML = number;
         $('#hidFormula').val(number);
-    }else{
-        if(formulaCount === "N" || formulaCount === "V"){
+    } else {
+        if (formulaCount === "N" || formulaCount === "V") {
             var modal = document.getElementById("errorModal");
             var msgStatus = document.getElementById("error-status");
             var msgContent = document.getElementById("error-content");
             msgStatus.innerHTML = "ERROR";
             msgContent.innerHTML = "Please enter an operator after a number or variable";
             modal.style.display = "block";
-        }else{
+        } else {
             document.getElementById("formulaLbl").innerHTML = fmlLbl + " " + number;
             $('#hidFormula').val(fmlLbl + " " + number);
             formulaCount = "N";
@@ -327,21 +336,21 @@ function formulaNumber(){
     $('#number_entry').val('');
 }
 
-function formulaOperator(operator){
+function formulaOperator(operator) {
     var fmlLbl = document.getElementById("formulaLbl").innerHTML;
     var modal = document.getElementById("errorModal");
     var msgStatus = document.getElementById("error-status");
     var msgContent = document.getElementById("error-content");
-    if(!fmlLbl){
+    if (!fmlLbl) {
         msgStatus.innerHTML = "ERROR";
         msgContent.innerHTML = "Please enter a number or variable before an operator";
         modal.style.display = "block";
-    }else{
-        if(formulaCount === "O"){
+    } else {
+        if (formulaCount === "O") {
             msgStatus.innerHTML = "ERROR";
             msgContent.innerHTML = "Please enter a number or variable after an operator";
             modal.style.display = "block";
-        }else{
+        } else {
             document.getElementById("formulaLbl").innerHTML = fmlLbl + " " + operator;
             $('#hidFormula').val(fmlLbl + " " + operator);
             formulaCount = "O";
@@ -349,21 +358,21 @@ function formulaOperator(operator){
     }
 }
 
-function formulaVariable(variable){
+function formulaVariable(variable) {
     var fmlLbl = document.getElementById("formulaLbl").innerHTML;
     var modal = document.getElementById("errorModal");
     var msgStatus = document.getElementById("error-status");
     var msgContent = document.getElementById("error-content");
-    if(!fmlLbl){
+    if (!fmlLbl) {
         formulaCount = "V";
         document.getElementById("formulaLbl").innerHTML = variable;
         $('#hidFormula').val(variable);
-    }else{
-        if(formulaCount === "V" || formulaCount === "N"){
+    } else {
+        if (formulaCount === "V" || formulaCount === "N") {
             msgStatus.innerHTML = "ERROR";
             msgContent.innerHTML = "Please enter an operator after a number or variable";
             modal.style.display = "block";
-        }else{
+        } else {
             document.getElementById("formulaLbl").innerHTML = fmlLbl + " " + variable;
             $('#hidFormula').val(fmlLbl + " " + variable);
             formulaCount = "V";
@@ -371,20 +380,20 @@ function formulaVariable(variable){
     }
 }
 
-function enterFormula(){
-    if(formulaCount === "O"){
+function enterFormula() {
+    if (formulaCount === "O") {
         var modal = document.getElementById("errorModal");
         var msgStatus = document.getElementById("error-status");
         var msgContent = document.getElementById("error-content");
         msgStatus.innerHTML = "ERROR";
         msgContent.innerHTML = "Formula cannot end with an operator";
         modal.style.display = "block";
-    }else{
+    } else {
         var fml = $('#hidFormula').val();
         document.getElementById("svcType_formula").innerHTML = fml;
-        if(!fml){
+        if (!fml) {
             document.getElementById("formula-btn").innerHTML = "Formula";
-        }else{
+        } else {
             document.getElementById("formula-btn").innerHTML = "Edit";
         }
         document.getElementById("formulaModal").style.display = "none";
@@ -395,4 +404,65 @@ function loadValueSetupTables() {
     viewMoveType();
     viewRefType();
     viewSvcType();
+    viewAdmItems();
+}
+
+function editItem(value, type) {
+    var errmodal = document.getElementById("errorModal");
+    var status = document.getElementById("error-status");
+    var message = document.getElementById("error-content");
+
+    $('#itemValues').val(value);
+    var valueArr = value.split("|");
+    $('#itemName').val(valueArr[0]);
+    if(type === "item"){
+        document.getElementById("itemDescription").disabled = false;
+        document.getElementById("itemDimensions").disabled = false;
+        document.getElementById("itemUnits").disabled = false;
+        $('#itemDescription').val(valueArr[1]);
+        $('#itemDimensions').val(valueArr[2]);
+        $('#itemUnits').val(valueArr[3]);
+    }else{
+        document.getElementById("itemDescription").disabled = true;
+        document.getElementById("itemDimensions").disabled = true;
+        document.getElementById("itemUnits").disabled = true;
+    }
+    
+    document.getElementById("imageLbl").innerHTML = valueArr[4];
+    $('#edit_item_form').ajaxForm({
+        dataType: 'json',
+        success: function (data) {
+            status.innerHTML = data.status;
+            message.innerHTML = data.message;
+            errmodal.style.display = "block";
+
+            if (data.status === "SUCCESS") {
+                setTimeout(function () {
+                    document.getElementById("itemModal").style.display = "none";
+                    errmodal.style.display = "none";
+                }, 500);
+                viewAdmItems();
+            }
+        },
+        error: function (data) {
+            status.innerHTML = "ERROR";
+            message.innerHTML = data;
+            errmodal.style.display = "block";
+        }
+    });
+    document.getElementById("itemModal").style.display = "block";
+}
+
+function changeItemType(){
+    var e = document.getElementById("entry_itemType");
+    var selected = e.options[e.selectedIndex].value;
+    if(selected === "material"){
+        document.getElementById("entry_itemDescription").style.display = "none";
+        document.getElementById("entry_itemDimensions").style.display = "none";
+        document.getElementById("entry_itemUnits").style.display = "none";
+    }else{
+        document.getElementById("entry_itemDescription").style.display = "block";
+        document.getElementById("entry_itemDimensions").style.display = "block";
+        document.getElementById("entry_itemUnits").style.display = "block";
+    }
 }
