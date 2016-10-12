@@ -3,9 +3,11 @@ package com.vimbox.sitesurvey;
 import com.google.gson.JsonObject;
 import com.vimbox.database.JobDAO;
 import com.vimbox.database.LeadDAO;
+import com.vimbox.database.UserDAO;
 import com.vimbox.operations.Job;
 import com.vimbox.sales.Lead;
 import com.vimbox.user.User;
+import com.vimbox.util.Converter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.catalina.core.ApplicationPart;
+import org.joda.time.DateTime;
 
 @WebServlet(name = "SiteDOMController", urlPatterns = {"/SiteDomController"})
 @MultipartConfig
@@ -216,8 +219,16 @@ public class SiteDomController extends HttpServlet {
                             out.write(bytes, 0, read);
                         }
                     }
-                    jsonOutput.addProperty("status", "SUCCESS");
-                    jsonOutput.addProperty("message", "Lead confirmed!");
+                    ArrayList<User> supervisors = UserDAO.getAllSupervisors();
+                    String userStr = "";
+                    for (int i = 0; i < supervisors.size(); i++) {
+                        User user = supervisors.get(i);
+                        userStr += user.getNric();
+                        if (i < supervisors.size() - 1) {
+                            userStr += ",";
+                        }
+                    }
+                    jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move confirmed for lead " + leadId);
                 } catch (FileNotFoundException fne) {
                     System.out.println("File errorrr: " + fne);
                     errorMsg += "Error reading uploaded image<br>";

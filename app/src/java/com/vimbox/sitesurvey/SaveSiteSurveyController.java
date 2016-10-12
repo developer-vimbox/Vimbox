@@ -3,6 +3,9 @@ package com.vimbox.sitesurvey;
 import com.google.gson.JsonObject;
 import com.vimbox.database.LeadDAO;
 import com.vimbox.database.SiteSurveyDAO;
+import com.vimbox.sales.Lead;
+import com.vimbox.user.User;
+import com.vimbox.util.Converter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -11,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.joda.time.DateTime;
 
 @WebServlet(name = "SaveSiteSurveyController", urlPatterns = {"/SaveSiteSurveyController"})
 public class SaveSiteSurveyController extends HttpServlet {
@@ -212,6 +216,9 @@ public class SaveSiteSurveyController extends HttpServlet {
             if (completed.equals("yes")) {
                 SiteSurveyDAO.completeSiteSurvey(leadId, date, timeslot);
                 jsonOutput.addProperty("completed", "YES");
+                Lead thisLead = LeadDAO.getLeadById(leadId);
+                User user = thisLead.getOwner();
+                jsonOutput.addProperty("notification", user.getNric() + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been completed");
                 message = "Survey completed!";
             } else {
                 jsonOutput.addProperty("completed", "NO");

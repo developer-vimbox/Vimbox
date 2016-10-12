@@ -46,6 +46,7 @@ public class UserDAO {
     private static final String UPDATE_USER_LEAVE = "UPDATE users_leave SET used_leave=? WHERE nric=?";
     private static final String UPDATE_USER_MC = "UPDATE users_leave SET used_mc=? WHERE nric=?";
     private static final String GET_ALL_SURVEYORS = "SELECT * FROM users WHERE type='Full' AND modules LIKE '%SiteSurvey%'";
+    private static final String GET_ALL_SUPERVISORS = "SELECT * FROM users WHERE type='Full' AND department='Operations' and designation = 'Supervisor'";
     private static final String GET_ALL_FULL_TIME_MOVERS = "SELECT * FROM users where type='Full' AND designation = 'Mover'";
     private static final String GET_MOVERS_BY_TYPE = "SELECT * FROM users WHERE designation = ? AND TYPE = ?";
     private static final String GET_ACCESS_CONTROL_BY_MODULE = "SELECT * FROM access_control WHERE modules LIKE ?";
@@ -1054,6 +1055,101 @@ public class UserDAO {
         try {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(GET_ALL_SURVEYORS);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String nric = rs.getString("nric");
+                String first_name = rs.getString("first_name");
+                String last_name = rs.getString("last_name");
+                DateTime date_joined = new DateTime(rs.getDate("date_joined"));
+                String mailing_address = rs.getString("mailing_address");
+                String registered_address = rs.getString("registered_address");
+                String license = rs.getString("license");
+                String department = rs.getString("department");
+                String designation = rs.getString("designation");
+                int salary = rs.getInt("salary");
+                String type = rs.getString("type");
+                String[] mods = rs.getString("modules").split("\\|");
+                ArrayList<Module> modules = new ArrayList<Module>();
+                for (String mod : mods) {
+                    ArrayList<String> permittedPages = new ArrayList<String>();
+                    ps = con.prepareStatement(GET_ACCESS_CONTROL_BY_MODULE);
+                    ps.setString(1, "%" + mod + "%");
+                    rsInner = ps.executeQuery();
+                    while(rsInner.next()){
+                        permittedPages.add(rsInner.getString("page"));
+                    }
+                    modules.add(new Module(mod, permittedPages));
+                }
+
+                double leave = 0;
+                double used_leave = 0;
+                int mc = 0;
+                int used_mc = 0;
+                ps = con.prepareStatement(GET_USER_LEAVEMC_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    leave = rsInner.getDouble("leave");
+                    mc = rsInner.getInt("mc");
+                    used_leave = rsInner.getDouble("used_leave");
+                    used_mc = rsInner.getInt("used_mc");
+                }
+
+                Account account = null;
+                ps = con.prepareStatement(GET_USER_ACCOUNT_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    account = new Account(rsInner.getString("username"), rsInner.getString("password"));
+                }
+
+                Contact contact = null;
+                ps = con.prepareStatement(GET_USER_CONTACT_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    contact = new Contact(rsInner.getInt("phone_no"), rsInner.getInt("fax_no"), rsInner.getInt("home_no"));
+                }
+
+                Emergency emergency = null;
+                ps = con.prepareStatement(GET_USER_EMERGENCY_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    emergency = new Emergency(rsInner.getString("name"), rsInner.getString("relationship"), rsInner.getInt("contact_no"), rsInner.getInt("office_no"));
+                }
+
+                Bank bank = null;
+                ps = con.prepareStatement(GET_USER_BANK_BY_NRIC);
+                ps.setString(1, nric);
+                rsInner = ps.executeQuery();
+                if (rsInner.next()) {
+                    bank = new Bank(rsInner.getString("payment_mode"), rsInner.getString("bank_name"), rsInner.getString("account_name"), rsInner.getString("account_no"));
+                }
+
+                users.add(new User(nric, first_name, last_name, leave, mc, used_leave, used_mc, account, type, date_joined, mailing_address, registered_address, license, contact, emergency, department, designation, salary, modules, bank));
+            }
+
+            if (rsInner != null) {
+                rsInner.close();
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return users;
+    }
+    
+    public static ArrayList<User> getAllSupervisors() {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ResultSet rsInner = null;
+        ArrayList<User> users = new ArrayList<User>();
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_ALL_SUPERVISORS);
             rs = ps.executeQuery();
             while (rs.next()) {
                 String nric = rs.getString("nric");

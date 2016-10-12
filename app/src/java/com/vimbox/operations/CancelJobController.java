@@ -2,14 +2,18 @@ package com.vimbox.operations;
 
 import com.google.gson.JsonObject;
 import com.vimbox.database.JobDAO;
-import com.vimbox.database.SiteSurveyDAO;
+import com.vimbox.database.UserDAO;
+import com.vimbox.user.User;
+import com.vimbox.util.Converter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.joda.time.DateTime;
 
 @WebServlet(name = "CancelJobController", urlPatterns = {"/CancelJobController"})
 public class CancelJobController extends HttpServlet {
@@ -37,6 +41,16 @@ public class CancelJobController extends HttpServlet {
         JobDAO.cancelJob(leadId, date, timeslot);
         jsonOutput.addProperty("status", "SUCCESS");
         jsonOutput.addProperty("message", "Job assignment cancelled!");
+        ArrayList<User> supervisors = UserDAO.getAllSupervisors();
+        String userStr = "";
+        for (int i = 0; i < supervisors.size(); i++) {
+            User user = supervisors.get(i);
+            userStr += user.getNric();
+            if (i < supervisors.size() - 1) {
+                userStr += ",";
+            }
+        }
+        jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move for lead " + leadId + " has been canceled");
         jsonOut.println(jsonOutput);
     }
 

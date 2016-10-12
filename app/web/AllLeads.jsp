@@ -9,10 +9,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>All Leads</title>
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+    </head>
+    <%@include file="header.jsp"%>
+    <body onload="my_leads_setup()">
         <script src="http://malsup.github.com/jquery.form.js"></script> 
-        <script src="JS/ModalFunctions.js"></script>
         <script>
             $('#confirm_form').ajaxForm({
                 dataType: 'json',
@@ -30,6 +30,9 @@
                             document.getElementById("confirmLeadModal").style.display = "none";
                             modal.style.display = "none";
                         }, 500);
+                        if (data.notification != null) {
+                            sendNotification(data.notification);
+                        }
                     }
                 },
                 error: function (data) {
@@ -80,9 +83,6 @@
                 }
             });
         </script>
-    </head>
-    <%@include file="header.jsp"%>
-    <body onload="my_leads_setup()">
         <!-- The Modal -->
         <div id="cancelLeadModal" class="modal">
             <!-- Modal content -->

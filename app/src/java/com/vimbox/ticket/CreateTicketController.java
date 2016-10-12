@@ -32,53 +32,62 @@ public class CreateTicketController extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
         PrintWriter out = response.getWriter();
-        
+
         // Validating fields //
         String errorMsg = "";
- 
+
         String subject = request.getParameter("subject");
-        if(subject.isEmpty()){
-            errorMsg+="Please enter a subject title<br>";
+        if (subject.isEmpty()) {
+            errorMsg += "Please enter a subject title<br>";
         }
-        
+
         String assigned_users = Converter.convertDuplicates(request.getParameter("assigned_users"));
-        
-        
+
         String description = request.getParameter("description");
-        if(description.isEmpty()){
-            errorMsg+="Please enter a ticket description<br>";
+        if (description.isEmpty()) {
+            errorMsg += "Please enter a ticket description<br>";
         }
-        
+
         String c_id = request.getParameter("customer_id");
         int customer_id = 0;
-        try{
+        try {
             customer_id = Integer.parseInt(c_id);
-        }catch(NumberFormatException nfe){
-            errorMsg+="Please choose or add a customer<br>";
-        }    
-        
+        } catch (NumberFormatException nfe) {
+            errorMsg += "Please choose or add a customer<br>";
+        }
+
         JsonObject jsonOutput = new JsonObject();
-        if(errorMsg.isEmpty()){
+        if (errorMsg.isEmpty()) {
             // Generate 8 digit Ticket ID //
             int ticket_id = new Random().nextInt(90000000) + 10000000;
-            
+
             CustomerHistoryDAO.updateCustomerHistory(customer_id, ticket_id);
-            
+
             // Retrieve user owner //
             User owner = (User) request.getSession().getAttribute("session");
             String owner_user = owner.getNric();
-            
+
             // Retrieve date time of ticket creation // 
             DateTime dt = new DateTime();
-            
+
             TicketDAO.createTicket(ticket_id, owner_user, assigned_users, customer_id, dt, dt, subject, description, "Pending");
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "Ticket submitted!");
-        }else{
+            String[] assigned_usersArr = assigned_users.split("\\|");
+            String assUserStr = "";
+            for (int i = 0; i < assigned_usersArr.length; i++) {
+                String assignee = assigned_usersArr[i];
+                assUserStr += assignee;
+                if (i < assigned_usersArr.length - 1) {
+                    assUserStr += ",";
+                }
+            }
+            jsonOutput.addProperty("notification", assUserStr + "|" + Converter.convertDate(new DateTime()) + " : You have been assigned ticket " + ticket_id);
+        } else {
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);
         }
-        
+
         out.println(jsonOutput);
     }
 

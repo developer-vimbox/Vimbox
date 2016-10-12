@@ -119,6 +119,9 @@
                                             <div class="col-sm-5">
                                                 <label class="form-control" id="customer_name"></label>
                                             </div>
+                                            <label class="col-sm-2 control-label"></label>
+                                            <div class="col-sm-3"  style="padding-top: 7px;" id="cust_btn_input">
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Customer's Contact: </label>

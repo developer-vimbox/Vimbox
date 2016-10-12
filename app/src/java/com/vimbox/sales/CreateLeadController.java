@@ -5,6 +5,7 @@ import com.vimbox.database.CustomerHistoryDAO;
 import com.vimbox.database.JobDAO;
 import com.vimbox.database.LeadDAO;
 import com.vimbox.database.SiteSurveyDAO;
+import com.vimbox.database.UserDAO;
 import com.vimbox.user.User;
 import com.vimbox.util.Converter;
 import java.io.File;
@@ -47,6 +48,7 @@ public class CreateLeadController extends HttpServlet {
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
         String errorMsg = "";
+        ArrayList<String> notificationList = new ArrayList<String>();
 
         // Set-up the timetable schedule //
         HashMap<String, Integer> ts = new HashMap<String, Integer>();
@@ -378,6 +380,7 @@ public class CreateLeadController extends HttpServlet {
                 String[] statuses = request.getParameterValues("siteSurvey_status");
 
                 if (surveyDates != null) {
+                    ArrayList<String> assignedSurveyors = new ArrayList<String>();
                     for (String surveyDate : surveyDates) {
                         String surveyorId = "";
                         String remark = "";
@@ -412,6 +415,9 @@ public class CreateLeadController extends HttpServlet {
                         for (String sur : surveyors) {
                             if (sur.contains(surveyDate)) {
                                 surveyorId = sur.split("\\|")[1];
+                                if(!assignedSurveyors.contains(surveyorId)){
+                                    assignedSurveyors.add(surveyorId);
+                                }
                             }
                         }
 
@@ -442,6 +448,16 @@ public class CreateLeadController extends HttpServlet {
                         }
                         SiteSurveyDAO.createSiteSurveyAssignment(leadId, owner.getNric(), surveyorId, surveyDate, times, adds, addsTags, timeslot, remark, stts);
                     }
+                    
+                    String surveyorStr = "";
+                    for (int i = 0; i < assignedSurveyors.size(); i++) {
+                        String assignee = assignedSurveyors.get(i);
+                        surveyorStr += assignee;
+                        if (i < assignedSurveyors.size() - 1) {
+                            surveyorStr += ",";
+                        }
+                    }
+                    notificationList.add(surveyorStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey assigned for lead " + leadId);
                 }
 
                 if (salesDivs != null) {
@@ -591,8 +607,16 @@ public class CreateLeadController extends HttpServlet {
                                 out.write(bytes, 0, read);
                             }
                         }
-                        jsonOutput.addProperty("status", "SUCCESS");
-                        jsonOutput.addProperty("message", "Lead confirmed!");
+                        ArrayList<User> supervisors = UserDAO.getAllSupervisors();
+                        String userStr = "";
+                        for (int i = 0; i < supervisors.size(); i++) {
+                            User user = supervisors.get(i);
+                            userStr += user.getNric();
+                            if (i < supervisors.size() - 1) {
+                                userStr += ",";
+                            }
+                        }
+                        notificationList.add(userStr + "|" + Converter.convertDate(new DateTime()) + " : Move confirmed for lead " + leadId);
                     } catch (FileNotFoundException fne) {
                         System.out.println("File errorrr: " + fne);
                         errorMsg += "Error reading uploaded image<br>";
@@ -611,6 +635,17 @@ public class CreateLeadController extends HttpServlet {
                 msg = "Lead saved!";
             } else {
                 msg = "Lead confirmed!";
+            }
+            if(!notificationList.isEmpty()){
+                String notificationStr = "";
+                for (int i = 0; i < notificationList.size(); i++) {
+                    String notification = notificationList.get(i);
+                    notificationStr += notification;
+                    if (i < notificationList.size() - 1) {
+                        notificationStr += "}{";
+                    }
+                }
+                jsonOutput.addProperty("notification", notificationStr);
             }
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", msg);

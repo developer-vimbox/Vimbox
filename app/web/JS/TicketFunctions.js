@@ -48,6 +48,7 @@ function submitTicket() {
                     setTimeout(function () {
                         window.location = "MyTickets.jsp"
                     }, 500);
+                    sendNotification(data.notification);
                 }
             })
             .fail(function (error) {
@@ -93,6 +94,7 @@ function updateTicket() {
                     setTimeout(function () {
                         location.reload()
                     }, 500);
+                    sendNotification(data.notification);
                 }
             })
             .fail(function (error) {
@@ -134,6 +136,7 @@ function resolveTicket(ticket_id) {
                     setTimeout(function () {
                         location.reload()
                     }, 500);
+                    sendNotification(data.notification);
                 }
             })
             .fail(function (error) {

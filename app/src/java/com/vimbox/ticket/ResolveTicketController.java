@@ -2,14 +2,19 @@ package com.vimbox.ticket;
 
 import com.google.gson.JsonObject;
 import com.vimbox.database.TicketDAO;
+import com.vimbox.user.User;
+import com.vimbox.util.Converter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.joda.time.DateTime;
 
 @WebServlet(name = "ResolveTicketController", urlPatterns = {"/ResolveTicketController"})
 public class ResolveTicketController extends HttpServlet {
@@ -42,6 +47,20 @@ public class ResolveTicketController extends HttpServlet {
             TicketDAO.resolveTicket(ticket_id, solution);
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "Ticket resolved!");
+            
+            Ticket ticket = TicketDAO.getTicketById(ticket_id);
+            ArrayList<User> assigned_usersArr = ticket.getAssigned_users();
+            String assUserStr = "";
+            for (int i = 0; i < assigned_usersArr.size(); i++) {
+                User assignee = assigned_usersArr.get(i);
+                assUserStr += assignee.getNric() + ",";
+            }
+            assUserStr += ticket.getOwner_user().getNric();
+            
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("session");
+            
+            jsonOutput.addProperty("notification", assUserStr + "|" + Converter.convertDate(new DateTime()) + " : Ticket " + ticket_id + " has been resolved by " + user);
         }else{
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);

@@ -115,6 +115,7 @@ function jobCancel(leadId, date, timeslot) {
         setTimeout(function () {
             modal.style.display = "none";
         }, 500);
+        sendNotification(data.notification);
     });
 }
 
@@ -290,6 +291,9 @@ function viewChangeDOMDaySchedule(date, details) {
                         document.getElementById("change_dom_cal_modal").style.display = "none";
                         document.getElementById("change_dom_schedule_modal").style.display = "none";
                     }, 500);
+                    if(data.notification != null){
+                        sendNotification(data.notification);
+                    }
                 }
             },
             error: function (data) {

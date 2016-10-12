@@ -2,13 +2,17 @@ package com.vimbox.sitesurvey;
 
 import com.google.gson.JsonObject;
 import com.vimbox.database.SiteSurveyDAO;
+import com.vimbox.user.User;
+import com.vimbox.util.Converter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.joda.time.DateTime;
 
 @WebServlet(name = "CancelSiteSurveyController", urlPatterns = {"/CancelSiteSurveyController"})
 public class CancelSiteSurveyController extends HttpServlet {
@@ -32,10 +36,28 @@ public class CancelSiteSurveyController extends HttpServlet {
         int leadId = Integer.parseInt(request.getParameter("leadId"));
         String date = request.getParameter("date");
         String timeslot = request.getParameter("timeslot");
+        ArrayList<SiteSurvey> surveys = SiteSurveyDAO.getSiteSurveysByLeadIdDateTimeslot(leadId, date, timeslot);
+        ArrayList<String> users = new ArrayList<String>();
+        for(SiteSurvey survey : surveys){
+            User user = survey.getSiteSurveyor();
+            if(!users.contains(user.getNric())){
+                users.add(user.getNric());
+            }
+        }
         
         SiteSurveyDAO.cancelSiteSurvey(leadId, date, timeslot);
+        
+        String userStr = "";
+        for (int i = 0; i < users.size(); i++) {
+            String user = users.get(i);
+            userStr += user;
+            if (i < users.size() - 1) {
+                userStr += ",";
+            }
+        }
         jsonOutput.addProperty("status", "SUCCESS");
         jsonOutput.addProperty("message", "Site survey cancelled!");
+        jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been canceled");
         jsonOut.println(jsonOutput);
     }
 

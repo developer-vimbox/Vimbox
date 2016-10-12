@@ -186,9 +186,11 @@ function initSurvey() {
 
 function startSurvey(leadId, date, timeslot, type) {
     if (type === 'Start') {
-        $.get("StartSiteSurveyController", {leadId: leadId, date: date, timeslot: timeslot}, function (data) {
-            window.location.href = "StartSurvey.jsp?leadId=" + leadId + "&date=" + date + "&timeslot=" + timeslot;
-        });
+        $.getJSON("StartSiteSurveyController", {leadId: leadId, date: date, timeslot: timeslot})
+            .done(function (data) {
+                window.location.href = "StartSurvey.jsp?leadId=" + leadId + "&date=" + date + "&timeslot=" + timeslot;
+                sendNotification(data.notification);
+            });
     } else {
         window.location.href = "StartSurvey.jsp?leadId=" + leadId + "&date=" + date + "&timeslot=" + timeslot + "&type=continue";
     }
@@ -984,6 +986,7 @@ function complete() {
                 setTimeout(function () {
                     window.location.href = "MySites.jsp";
                 }, 500);
+                sendNotification(response.notification);
             }
         },
         error: function (response) {
@@ -1013,7 +1016,7 @@ function loadSalesSurveys(keyword, type) {
     });
 }
 
-function confirmCancel(leadId, date, timeslot) {
+function confirmSiteCancel(leadId, date, timeslot) {
     var modal = document.getElementById("survey_error_modal");
     var status = document.getElementById("survey_error_status");
     var message = document.getElementById("survey_error_message");
@@ -1038,6 +1041,7 @@ function cancel(leadId, date, timeslot) {
         setTimeout(function () {
             modal.style.display = "none";
         }, 500);
+        sendNotification(data.notification);
     });
 }
 function showSch(tdydate) {

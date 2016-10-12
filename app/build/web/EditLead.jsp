@@ -1801,6 +1801,9 @@
                         setTimeout(function () {
                             window.location.href = "AllLeads.jsp";
                         }, 500);
+                        if(data.notification != null){
+                            sendNotification(data.notification);
+                        }
                     } else {
                         $("#leadStatus").val("save");
                     }

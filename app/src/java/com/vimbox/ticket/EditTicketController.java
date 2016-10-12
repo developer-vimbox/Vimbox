@@ -79,6 +79,16 @@ public class EditTicketController extends HttpServlet {
             TicketDAO.createTicket(ticket_id, owner_user, assigned_users, customer_id, dt, edt, subject, description, "Pending");
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "Ticket updated!");
+            String[] assigned_usersArr = assigned_users.split("\\|");
+            String assUserStr = "";
+            for (int i = 0; i < assigned_usersArr.length; i++) {
+                String assignee = assigned_usersArr[i];
+                assUserStr += assignee;
+                if (i < assigned_usersArr.length - 1) {
+                    assUserStr += ",";
+                }
+            }
+            jsonOutput.addProperty("notification", assUserStr + "|" + Converter.convertDate(new DateTime()) + " : You have been assigned ticket " + ticket_id);
         }else{
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);

@@ -1,22 +1,17 @@
-package com.vimbox.sitesurvey;
+package com.vimbox.admin;
 
-import com.google.gson.JsonObject;
-import com.vimbox.database.LeadDAO;
-import com.vimbox.database.SiteSurveyDAO;
-import com.vimbox.sales.Lead;
+import com.vimbox.database.NotificationDAO;
 import com.vimbox.user.User;
-import com.vimbox.util.Converter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.joda.time.DateTime;
+import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "StartSiteSurveyController", urlPatterns = {"/StartSiteSurveyController"})
-public class StartSiteSurveyController extends HttpServlet {
+@WebServlet(name = "ViewNotificationsController", urlPatterns = {"/ViewNotificationsController"})
+public class ViewNotificationsController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,21 +24,9 @@ public class StartSiteSurveyController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        response.setHeader("Cache-Control", "no-cache");
-        JsonObject jsonOutput = new JsonObject();
-        PrintWriter jsonOut = response.getWriter();
-        
-        int leadId = Integer.parseInt(request.getParameter("leadId"));
-        String date = request.getParameter("date");
-        String timeslot = request.getParameter("timeslot");
-        
-        SiteSurveyDAO.startSiteSurvey(leadId, date, timeslot);
-        Lead lead = LeadDAO.getLeadById(leadId);
-        User user = lead.getOwner();
-        jsonOutput.addProperty("notification", user.getNric() + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been started");
-        
-        jsonOut.println(jsonOutput);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("session");
+        NotificationDAO.viewNotification(user.getNric());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

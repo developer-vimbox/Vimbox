@@ -2,14 +2,20 @@ package com.vimbox.sales;
 
 import com.google.gson.JsonObject;
 import com.vimbox.database.LeadDAO;
+import com.vimbox.database.UserDAO;
+import com.vimbox.operations.Job;
+import com.vimbox.sitesurvey.SiteSurvey;
+import com.vimbox.user.User;
+import com.vimbox.util.Converter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.joda.time.DateTime;
 
 @WebServlet(name = "CancelLeadController", urlPatterns = {"/CancelLeadController"})
 public class CancelLeadController extends HttpServlet {
@@ -29,24 +35,80 @@ public class CancelLeadController extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache");
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
-        
+
         int leadId = Integer.parseInt(request.getParameter("lId"));
         String reason = request.getParameter("reason");
         String errorMsg = "";
-        
-        if(reason.isEmpty()){
+
+        if (reason.isEmpty()) {
             errorMsg += "Please give a reason for cancellation<br>";
         }
-        
-        if(errorMsg.isEmpty()){
-            LeadDAO.cancelLead(leadId,reason);
+
+        if (errorMsg.isEmpty()) {
+            ArrayList<String> notificationList = new ArrayList<String>();
+            Lead lead = LeadDAO.getLeadById(leadId);
+            ArrayList<SiteSurvey> surveys = lead.getSiteSurveys();
+            ArrayList<String> surveyors = new ArrayList<String>();
+            if (!surveys.isEmpty()) {
+                for (SiteSurvey survey : surveys) {
+                    User user = survey.getSiteSurveyor();
+                    if (!surveyors.contains(user.getNric())) {
+                        surveyors.add(user.getNric());
+                    }
+                }
+                String surveyorStr = "";
+                for (int i = 0; i < surveyors.size(); i++) {
+                    String assignee = surveyors.get(i);
+                    surveyorStr += assignee;
+                    if (i < surveyors.size() - 1) {
+                        surveyorStr += ",";
+                    }
+                }
+                notificationList.add(surveyorStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been canceled");
+            }
+            
+            ArrayList<Job> jobs = lead.getJobs();
+            if (!jobs.isEmpty()) {
+                boolean confirmed = false;
+                for (Job job : jobs) {
+                    if (job.getStatus().equals("Confirmed")) {
+                      confirmed = true;
+                      break;
+                    }
+                }
+                if(confirmed){
+                    ArrayList<User> supervisors = UserDAO.getAllSupervisors();
+                    String userStr = "";
+                    for (int i = 0; i < supervisors.size(); i++) {
+                        User user = supervisors.get(i);
+                        userStr += user.getNric();
+                        if (i < supervisors.size() - 1) {
+                            userStr += ",";
+                        }
+                        notificationList.add(userStr + "|" + Converter.convertDate(new DateTime()) + " : Move for lead " + leadId + " has been canceled");
+                    }
+                }
+            }
+
+            LeadDAO.cancelLead(leadId, reason);
+            if(!notificationList.isEmpty()){
+                String notificationStr = "";
+                for (int i = 0; i < notificationList.size(); i++) {
+                    String notification = notificationList.get(i);
+                    notificationStr += notification;
+                    if (i < notificationList.size() - 1) {
+                        notificationStr += "}{";
+                    }
+                }
+                jsonOutput.addProperty("notification", notificationStr);
+            }
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "Lead rejected!");
-        }else{
+        } else {
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);
         }
-        
+
         jsonOut.println(jsonOutput);
     }
 

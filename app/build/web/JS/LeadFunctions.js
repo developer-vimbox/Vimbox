@@ -921,6 +921,9 @@ function deleteLead(leadId){
                     my_leads_setup();
                     modal.style.display = "none";
                 }, 500);
+                if(data.notification != null){
+                    sendNotification(data.notification);
+                }
             })
             .fail(function (error) {
                 status.innerHTML = "ERROR";
@@ -1110,6 +1113,9 @@ function cancelLeadForm() {
                         document.getElementById("cancelLeadModal").style.display = "none";
                         modal.style.display = "none";
                     }, 500);
+                    if(data.notification != null){
+                        sendNotification(data.notification);
+                    }
                 }
 
             })
@@ -2303,6 +2309,9 @@ function viewDom(leadId, nric) {
                         viewDom(leadId);
                         errmodal.style.display = "none";
                     }, 500);
+                    if(data.notification != null){
+                        sendNotification(data.notification);
+                    }
                 } else {
                     $("#leadStatus").val("save");
                 }

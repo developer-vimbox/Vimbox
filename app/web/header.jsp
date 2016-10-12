@@ -1,5 +1,8 @@
+<%@page import="com.vimbox.admin.Notification"%>
+<%@page import="com.vimbox.database.NotificationDAO"%>
 <%@page import="com.vimbox.user.User"%>
 <%@include file="ValidateLogin.jsp"%>
+<script src="JS/WebSocket.js"></script>
 <script src="JS/CustomerFunctions.js"></script>
 <script src="JS/LeadFunctions.js"></script>
 <script src="JS/TicketFunctions.js"></script>
@@ -491,115 +494,46 @@
                 <%
                     }
                 %>
-                <div class="dropdown" id="notifications-btn">
-                    <a data-toggle="dropdown" href="#">
-                        <span class="small-badge bg-yellow"></span>
+                
+                <%
+                    ArrayList<Notification> notifications = NotificationDAO.getUserNotifications(user.getNric());
+                    boolean notificationCheck = false;
+                    for(Notification notification : notifications){
+                        if(notification.getStatus().equals("New")){
+                            notificationCheck = true;
+                            break;
+                        }
+                    }
+                %>
+                <div class="dropdown" id="notifications-btn" onclick="viewNotifications()">
+                    <a data-toggle="dropdown" href="#" id="notifications-a">
+                        <%
+                            if(notificationCheck){
+                        %>
+                            <span class="small-badge bg-yellow" id="notifications-tag"></span>
+                        <%
+                            }
+                        %>
                         <i class="glyph-icon icon-linecons-megaphone"></i>
                     </a>
                     <div class="dropdown-menu box-md float-right">
-
                         <div class="popover-title display-block clearfix pad10A">
                             Notifications
-                            <a class="text-transform-cap font-primary font-normal btn-link float-right" href="#" title="View more options">
-                                More options...
-                            </a>
+                            <button class="text-transform-cap font-primary font-normal btn-link float-right" onclick="clearNotifications()">Clear all</button>
                         </div>
                         <div class="scrollable-content scrollable-slim-box">
-                            <ul class="no-border notifications-box">
-                                <li>
-                                    <span class="bg-danger icon-notification glyph-icon icon-bullhorn"></span>
-                                    <span class="notification-text">This is an error notification</span>
-                                    <div class="notification-time">
-                                        a few seconds ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="bg-warning icon-notification glyph-icon icon-users"></span>
-                                    <span class="notification-text font-blue">This is a warning notification</span>
-                                    <div class="notification-time">
-                                        <b>15</b> minutes ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="bg-green icon-notification glyph-icon icon-sitemap"></span>
-                                    <span class="notification-text font-green">A success message example.</span>
-                                    <div class="notification-time">
-                                        <b>2 hours</b> ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="bg-azure icon-notification glyph-icon icon-random"></span>
-                                    <span class="notification-text">This is an error notification</span>
-                                    <div class="notification-time">
-                                        a few seconds ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="bg-warning icon-notification glyph-icon icon-ticket"></span>
-                                    <span class="notification-text">This is a warning notification</span>
-                                    <div class="notification-time">
-                                        <b>15</b> minutes ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
+                            <ul class="no-border notifications-box" id="notifications-section">
+                                <%
+                                    for(Notification notification : notifications){
+                                %>
                                 <li>
                                     <span class="bg-blue icon-notification glyph-icon icon-user"></span>
-                                    <span class="notification-text font-blue">Alternate notification styling.</span>
-                                    <div class="notification-time">
-                                        <b>2 hours</b> ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
+                                    <span class="notification-text font-blue"><%=notification.getMessage()%></span>
                                 </li>
-                                <li>
-                                    <span class="bg-purple icon-notification glyph-icon icon-user"></span>
-                                    <span class="notification-text">This is an error notification</span>
-                                    <div class="notification-time">
-                                        a few seconds ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="bg-warning icon-notification glyph-icon icon-user"></span>
-                                    <span class="notification-text">This is a warning notification</span>
-                                    <div class="notification-time">
-                                        <b>15</b> minutes ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="bg-green icon-notification glyph-icon icon-user"></span>
-                                    <span class="notification-text font-green">A success message example.</span>
-                                    <div class="notification-time">
-                                        <b>2 hours</b> ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="bg-purple icon-notification glyph-icon icon-user"></span>
-                                    <span class="notification-text">This is an error notification</span>
-                                    <div class="notification-time">
-                                        a few seconds ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <span class="bg-warning icon-notification glyph-icon icon-user"></span>
-                                    <span class="notification-text">This is a warning notification</span>
-                                    <div class="notification-time">
-                                        <b>15</b> minutes ago
-                                        <span class="glyph-icon icon-clock-o"></span>
-                                    </div>
-                                </li>
+                                <%
+                                    }
+                                %>
                             </ul>
-                        </div>
-                        <div class="pad10A button-pane button-pane-alt text-center">
-                            <a href="#" class="btn btn-primary" title="View all notifications">
-                                View all notifications
-                            </a>
                         </div>
                     </div>
                 </div>
