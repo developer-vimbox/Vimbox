@@ -25,7 +25,7 @@
     %>
 
     <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>');
-            return false;"><img src="/images/items/boxes.png" width="100%" height="200"><br><span>Boxes</span></td>
+            return false;"><img src="/images/items/boxes.png" width="100%" height="150"><br><span>Boxes</span></td>
 
     <%
         try {
@@ -37,7 +37,7 @@
     %>
 
     <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>');
-            return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+            return false;"><img src="<%=result[4]%>" width="100%" height="150"><br><span><%=result[0] + " " + result[1]%></span></td>
 
     <%
         } catch (Exception e) {
@@ -53,7 +53,7 @@
     %>
 
     <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>');
-            return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+            return false;"><img src="<%=result[4]%>" width="100%" height="150"><br><span><%=result[0] + " " + result[1]%></span></td>
 
     <%
         } catch (Exception e) {
@@ -72,7 +72,7 @@
     %>
 
     <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>');
-            return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+            return false;"><img src="<%=result[4]%>" width="100%" height="150"><br><span><%=result[0] + " " + result[1]%></span></td>
 
     <%
         try {
@@ -84,7 +84,7 @@
     %>
 
     <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>');
-            return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+            return false;"><img src="<%=result[4]%>" width="100%" height="150"><br><span><%=result[0] + " " + result[1]%></span></td>
 
     <%
         } catch (Exception e) {
@@ -100,7 +100,7 @@
     %>
 
     <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>');
-            return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+            return false;"><img src="<%=result[4]%>" width="100%" height="150"><br><span><%=result[0] + " " + result[1]%></span></td>
 
     <%
             } catch (Exception e) {
@@ -121,7 +121,7 @@
     %>
 
     <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>');
-            return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+            return false;"><img src="<%=result[4]%>" width="100%" height="150"><br><span><%=result[0] + " " + result[1]%></span></td>
 
     <%
         try {
@@ -133,7 +133,7 @@
     %>
 
     <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>');
-            return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+            return false;"><img src="<%=result[4]%>" width="100%" height="150"><br><span><%=result[0] + " " + result[1]%></span></td>
 
     <%
         } catch (Exception e) {
@@ -149,7 +149,7 @@
     %>
 
     <td align="center" valign="top" style="word-wrap:break-word;" onclick="enterItem('<%=value%>', '<%=address%>', '<%=areaCounter%>', 'SelectedItemsTable', '<%=salesDiv%>');
-            return false;"><img src="<%=result[4]%>" width="100%" height="200"><br><span><%=result[0] + " " + result[1]%></span></td>
+            return false;"><img src="<%=result[4]%>" width="100%" height="150"><br><span><%=result[0] + " " + result[1]%></span></td>
 
     <%
                     } catch (Exception e) {

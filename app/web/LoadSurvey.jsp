@@ -4,19 +4,25 @@
     String salesDiv = request.getParameter("fullAddr");
 %>
 <table class='table table-bordered' width="100%" border="1" height="100%">
-    <col width="40%">
+    <col width="10%">
+    <col width="100%">
     <tr height="20">
+        <td>
+            <a class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="height: 38px; margin-right: 7px;" onclick='expandSideBar()'>    Toggle Side Bar</a>
+                                             
+        </td>
         <td><center>
-                                                        <button id="completeBtn" class="btn loading-button btn-primary" style="width: 100%; height: 100%; margin-right: 7px;" onclick="confirmComplete();
+            
+                                                        <button class="btn loading-button btn-primary" style="width: 45%; height: 38px; margin-right: 10px;" onclick="confirmComplete();
             return false;">Complete</button>
-                                                        <input id="completeBtn" class='btn loading-button btn-info' type="submit" style="width:100%;height:100%;" value="Save">
+                                                        <input class='btn loading-button btn-info' type="submit" style="width: 45%; height: 38px;" value="Save">
     </center></td>
-        <td colspan="2">
+        <td colspan="1">
             <input type="hidden" class="lblId" value="<%=address%>_lbl_<%=areaCounter%>|<%=salesDiv%>">
             <div class="form-group" style="margin-bottom: 0px;">
-                <label class="col-sm-3 control-label">Area Name: </label>
-                <div class="col-sm-5">
-                    <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=address%>_<%=areaCounter%>+siteAreaName" value="Area" autofocus>
+                <label class="col-sm-4 control-label">Area Name: </label>
+                <div class="col-sm-7">
+                    <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=address%>_<%=areaCounter%>+siteAreaName" value="Area">
                 </div>
                 <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=address%>', '<%=areaCounter%>');" style="padding-right: 15px;">×</span>
             </div>
@@ -29,7 +35,7 @@
                 <tr>
                     <td colspan="3">
                         <div class="form-group" style='margin-left:10%!important'>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div style="width: 300%;" class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                     <input type="text" id="<%=address%>_<%=areaCounter%>_search"  placeholder="Search Item Name" class="form-control" style="color:black;">
                                     <span class="input-group-btn">
@@ -61,8 +67,8 @@
         </td>
         <!-- Item List -->
         <td>
-            <div style="overflow:auto;height:480px;">
-                <table class='table' width="100%" height="480px">
+            <div style="overflow:auto;height:550px;">
+                <table class='table' width="100%">
                     <col width="20%">
                     <col width="45%">
                     <col width="10%">
