@@ -13,10 +13,10 @@
     </center></td>
         <td colspan="2">
             <input type="hidden" class="lblId" value="<%=address%>_lbl_<%=areaCounter%>|<%=salesDiv%>">
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 0px;">
                 <label class="col-sm-3 control-label">Area Name: </label>
                 <div class="col-sm-5">
-                    <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=address%>_<%=areaCounter%>+siteAreaName" value="Area">
+                    <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=address%>_<%=areaCounter%>+siteAreaName" value="Area" autofocus>
                 </div>
                 <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=address%>', '<%=areaCounter%>');" style="padding-right: 15px;">×</span>
             </div>
@@ -48,8 +48,8 @@
                             return false;"><b style='color:black'>VIMBOX</b></td>
                 </tr>
                 <tr>
-                    <td colspan="3" height="690">
-                        <div style="overflow:auto;height:100%;" id="<%=address%>_<%=areaCounter%>_ItemsDiv">
+                    <td colspan="3" height="480">
+                        <div style="overflow:auto;height:480px;" id="<%=address%>_<%=areaCounter%>_ItemsDiv">
 
                         </div>
                         <div style="overflow:auto;height:100%;display:none;" id="<%=address%>_<%=areaCounter%>_VimboxDiv">
@@ -61,8 +61,8 @@
         </td>
         <!-- Item List -->
         <td>
-            <div style="overflow:auto;height:100%;">
-                <table class='table' width="100%">
+            <div style="overflow:auto;height:480px;">
+                <table class='table' width="100%" height="480px">
                     <col width="20%">
                     <col width="45%">
                     <col width="10%">
@@ -122,12 +122,12 @@
         </td>
     </tr>
     <tr height="20">
-        <td colspan="2">
-            <a class="btn btn-border btn-alt border-green btn-link font-green" style="width: 49%; margin-right: 6px;" onclick="addNew('<%=address%>', '<%=areaCounter%>', '');
+        <td colspan="2"><center>
+            <a class="btn btn-border btn-alt border-green btn-link font-green" style="width: 45%; margin-right: 6px;" onclick="addNew('<%=address%>', '<%=areaCounter%>', '');
                 return false;">New</a>
-            <a class="btn btn-border btn-alt border-purple btn-link font-purple" style="width: 49%;" onclick="addNew('<%=address%>', '<%=areaCounter%>', 'Special');
+            <a class="btn btn-border btn-alt border-purple btn-link font-purple" style="width: 45%;" onclick="addNew('<%=address%>', '<%=areaCounter%>', 'Special');
                 return false;">Special</a>
-        </td>
+                </center></td>
         <td>
             Total Units : <label id="<%=address%>_<%=areaCounter%>_total">0</label>
         </td>

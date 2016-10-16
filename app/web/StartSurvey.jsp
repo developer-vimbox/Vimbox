@@ -59,7 +59,7 @@
                                     <form action="SaveSiteSurveyController" id="siteSurvey_form">
                                         <input type="hidden" name="lead" value="<%=leadId%>|<%=date%>|<%=timeslot%>">
                                         <table class='table table-bordered' width="100%" height="100%">
-                                            <a class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px; width: 200px;" onclick='expandSideBar()'>    Toggle Side Bar</a>
+                                            <a id="togglesidebutton" class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px; width: 200px;" onclick='expandSideBar()'>    Toggle Side Bar</a>
                                             <col width="250">
                                             <tr>
                                                 <td id="startsurvey_sidebar">
@@ -897,10 +897,10 @@
                                                     <td colspan="2">
                                                         <input type="hidden" class="lblId" value="<%=aT%>_lbl_<%=areaCounter%>|<%=salesDiv%>">
                                                         <!--Area Name : <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=aT%>_<%=areaCounter%>+siteAreaName" value="<%=leadName%>">-->
-                                                        <div class="form-group">
+                                                        <div class="form-group" style="margin-bottom: 0px;">
                                                             <label class="col-sm-3 control-label">Area Name: </label>
                                                             <div class="col-sm-6">
-                                                                <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=aT%>_<%=areaCounter%>+siteAreaName" value="<%=leadName%>">
+                                                                <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=aT%>_<%=areaCounter%>+siteAreaName" value="<%=leadName%>" autofocus>
                                                             </div>
                                                             <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=aT%>', '<%=areaCounter%>');" style="padding-right: 15px;">×</span>
                                                         </div>
@@ -941,8 +941,8 @@
                                                                         return false;"><b>VIMBOX</b></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="3" height="690">
-                                                                    <div style="overflow:auto;height:100%;" id="<%=aT%>_<%=areaCounter%>_ItemsDiv">
+                                                                <td colspan="3" height="480">
+                                                                    <div style="overflow:auto;height:480px;" id="<%=aT%>_<%=areaCounter%>_ItemsDiv">
 
                                                                     </div>
                                                                     <div style="overflow:auto;height:100%;display:none;" id="<%=aT%>_<%=areaCounter%>_VimboxDiv">
@@ -954,8 +954,8 @@
                                                     </td>
                                                     <!-- Item List -->
                                                     <td>
-                                                        <div style="overflow:auto;height:100%;">
-                                                            <table class='table table-bordered' width="100%">
+                                                        <div style="overflow:auto;height:480px;">
+                                                            <table class='table table-bordered' width="100%" height="480px">
                                                                 <col width="20%">
                                                                 <col width="45%">
                                                                 <col width="10%">
@@ -1071,12 +1071,12 @@
                                                     </td>
                                                 </tr>
                                                 <tr height="20">
-                                                    <td colspan="2">
-                                                        <a class="btn btn-border btn-alt border-green btn-link font-green" style="width: 49%; margin-right: 6px;" onclick="addNew('<%=aT%>', '<%=areaCounter%>', '');
+                                                    <td colspan="2"><center>
+                                                        <a class="btn btn-border btn-alt border-green btn-link font-green" style="width: 45%; margin-right: 6px;" onclick="addNew('<%=aT%>', '<%=areaCounter%>', '');
                                                             return false;">New</a>
-                                                        <a class="btn btn-border btn-alt border-purple btn-link font-purple" style="width: 49%;" onclick="addNew('<%=aT%>', '<%=areaCounter%>', 'Special');
+                                                        <a class="btn btn-border btn-alt border-purple btn-link font-purple" style="width: 45%;" onclick="addNew('<%=aT%>', '<%=areaCounter%>', 'Special');
                                                             return false;">Special</a>     
-                                                    </td>
+                                                </center></td>
                                                     <td>
                                                         Total Units : <label id="<%=aT%>_<%=areaCounter%>_total">0</label>
                                                         
