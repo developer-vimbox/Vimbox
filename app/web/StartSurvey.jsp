@@ -55,29 +55,22 @@
             }
             String col = "<col width='20%'><col width='45%'><col width='10%'><col width='10%'><col width='10%'><col width='5%'>";
         %>
-        <div id="page-content-wrapper">
-            <div id="page-content-custom">
-                <div class="container">
-                    <div id="page-title">
-                        <div class="panel">
-                            <div class="panel-body">
                                 <div class="form-horizontal">
                                     <form action="SaveSiteSurveyController" id="siteSurvey_form">
                                         <input type="hidden" name="lead" value="<%=leadId%>|<%=date%>|<%=timeslot%>">
                                         <table class='table table-bordered' width="100%" height="100%">
+                                            <a class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px; width: 200px;" onclick='expandSideBar()'>    Toggle Side Bar</a>
                                             <col width="250">
                                             <tr>
-                                                <td id="startsurvey_sidebar" style="padding-top: 10px;">
-                                                    <table class="table table-bordered" style="width:90%;" border="1">
+                                                <td id="startsurvey_sidebar">
+                                                    <table class="table table-bordered" style="width:100%;">
                                                         <tbody><tr>
                                                                 <td>
                                                                     <input type="hidden" id="complete_status" name="complete" value="no">
-                                                                    <button id="completeBtn" class="btn loading-button btn-primary" style="width:100%;height:100%;" onclick="confirmComplete();
-            return false;">Complete</button>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="selected" id="siteInfo_tab" onclick='displaySiteInfo()'><center>Site Info</center></td>
+                                                                <td class="selected" id="siteInfo_tab" onclick='displaySiteInfo()'><center><b>Site Info</b></center></td>
                                             </tr>
                                             <tr>
                                                 <td><center>FROM</center></td>
@@ -162,7 +155,9 @@
                                                             <td><%=lead.getId()%></td>
                                                         </tr>
                                                     </table>
-                                                    <input class="btn loading-button btn-primary" type="submit" value="SAVE" style="float: right;">
+                                                        <button class="btn loading-button btn-primary" style="float: right; margin-right: 7px;" onclick="confirmComplete();
+            return false;">Complete</button>
+                                                    <input class="btn loading-button btn-info" type="submit" value="Save" style="float: right; margin-right: 7px;">
                                                     <br>
 
                                                     <ul class="nav-responsive nav nav-tabs">
@@ -183,7 +178,7 @@
                                                                     out.println("<fieldset  id='" + divId + "'>");
                                                                     out.println("<legend><b>" + address + "</b></legend>");
                                                                     out.println("<table class='table table-bordered' width='100%' border='1'>");
-                                                                    out.println("<col width='50%'>");
+                                                                    out.println("<col width='60%'>");
 
                                                                     out.println("<tr>");
                                                                     out.println("<td valign='top'>");
@@ -209,7 +204,7 @@
                                                                     out.println("</tr>");
 
                                                                     out.println("<tr>");
-                                                                    out.println("<td valign='top' height='150' colspan='6'>");
+                                                                    out.println("<td valign='top' height='300' colspan='6'>");
                                                             %>
                                                             <div style="overflow:auto;height:100%;">
                                                                 <table id="<%=divId%>_CustomerItemTable" valign="top" width="100%">
@@ -274,7 +269,7 @@
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
-                                                                out.println("<td valign='top' height='150' colspan='6'>");
+                                                                out.println("<td valign='top' height='200' colspan='6'>");
                                                             %>
                                                             <div style="overflow:auto;height:100%;">
                                                                 <table  id="<%=divId%>_VimboxItemTable" valign="top" width="100%">
@@ -892,23 +887,24 @@
                                                             out.println("<div id='" + aT + "_div_" + areaCounter + "' class='survey_area_div' style='display:none'>");
                                             %>
                                             <table class='table table-bordered' width="100%" border="1" height="100%">
-                                                <col width="33%">
-                                                <col width="33%">
+                                                <col width="25%">
                                                 <tr height="20">
+                                                    <td>
+                                                        <button id="completeBtn" class="btn loading-button btn-primary" style="width: 100%; height: 100%; margin-right: 7px;" onclick="confirmComplete();
+            return false;">Complete</button>
+                                                        <input id="completeBtn" class='btn loading-button btn-info' type="submit" style="width:100%;height:100%;" value="Save">
+                                                    </td>
                                                     <td colspan="2">
                                                         <input type="hidden" class="lblId" value="<%=aT%>_lbl_<%=areaCounter%>|<%=salesDiv%>">
                                                         <!--Area Name : <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=aT%>_<%=areaCounter%>+siteAreaName" value="<%=leadName%>">-->
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">Area Name: </label>
-                                                            <div class="col-sm-5">
+                                                            <div class="col-sm-6">
                                                                 <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=aT%>_<%=areaCounter%>+siteAreaName" value="<%=leadName%>">
                                                             </div>
+                                                            <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=aT%>', '<%=areaCounter%>');" style="padding-right: 15px;">×</span>
                                                         </div>
-
-                                                    </td>
-                                                    <td style="width: 10%;">
-                                                        Total Units : <label id="<%=aT%>_<%=areaCounter%>_total">0</label>
-                                                        <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=aT%>', '<%=areaCounter%>');">×</span>
+                                     
                                                     </td>
                                                 </tr>
                                                 <tr height="100">
@@ -1075,12 +1071,15 @@
                                                     </td>
                                                 </tr>
                                                 <tr height="20">
-                                                    <td align="center" onclick="addNew('<%=aT%>', '<%=areaCounter%>', '');
-                                                            return false;">New</td>
-                                                    <td align="center" onclick="addNew('<%=aT%>', '<%=areaCounter%>', 'Special');
-                                                            return false;">Special</td>
+                                                    <td colspan="2">
+                                                        <a class="btn btn-border btn-alt border-green btn-link font-green" style="width: 49%; margin-right: 6px;" onclick="addNew('<%=aT%>', '<%=areaCounter%>', '');
+                                                            return false;">New</a>
+                                                        <a class="btn btn-border btn-alt border-purple btn-link font-purple" style="width: 49%;" onclick="addNew('<%=aT%>', '<%=areaCounter%>', 'Special');
+                                                            return false;">Special</a>     
+                                                    </td>
                                                     <td>
-                                                        <input class='btn loading-button btn-primary' type="submit" style="width:100%;" value="SAVE">
+                                                        Total Units : <label id="<%=aT%>_<%=areaCounter%>_total">0</label>
+                                                        
                                                     </td>
                                                 </tr>
                                             </table>
@@ -1098,12 +1097,7 @@
                                         </table>
                                     </form>        
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            
         <div id="item_details_modal" class="modal">
             <!-- Modal content -->
             <div class="item-details-modal-content" style="width: 50%;height: auto;">

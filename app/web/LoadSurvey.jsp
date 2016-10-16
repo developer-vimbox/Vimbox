@@ -3,23 +3,23 @@
     String areaCounter = request.getParameter("areaCounter");
     String salesDiv = request.getParameter("fullAddr");
 %>
-<table id="startsurvey_areatable" style='width:100%;height:100%;' class='table table-bordered' border="1">
-    <col width="33%">
-    <col width="33%">
+<table class='table table-bordered' width="100%" border="1" height="100%">
+    <col width="25%">
     <tr height="20">
+        <td>
+                                                        <button id="completeBtn" class="btn loading-button btn-primary" style="width: 100%; height: 100%; margin-right: 7px;" onclick="confirmComplete();
+            return false;">Complete</button>
+                                                        <input id="completeBtn" class='btn loading-button btn-info' type="submit" style="width:100%;height:100%;" value="Save">
+                                                    </td>
         <td colspan="2">
-            &nbsp;
             <input type="hidden" class="lblId" value="<%=address%>_lbl_<%=areaCounter%>|<%=salesDiv%>">
             <div class="form-group">
                 <label class="col-sm-3 control-label">Area Name: </label>
                 <div class="col-sm-5">
                     <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=address%>_<%=areaCounter%>+siteAreaName" value="Area">
                 </div>
+                <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=address%>', '<%=areaCounter%>');" style="padding-right: 15px;">×</span>
             </div>
-        </td>
-        <td>
-            Total Units : <label id="<%=address%>_<%=areaCounter%>_total">0</label>
-            <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=address%>', '<%=areaCounter%>');">×</span>
         </td>
     </tr>
     <tr height="100">
@@ -33,8 +33,8 @@
                                 <div style="width: 300%;" class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                     <input type="text" id="<%=address%>_<%=areaCounter%>_search"  placeholder="Search Item Name" class="form-control" style="color:black;">
                                     <span class="input-group-btn">
-                                   <button class="btn btn-default  bootstrap-touchspin-up" onclick="loadSurveyItemsTable($('#<%=address%>_<%=areaCounter%>_search').val(), '<%=address%>', '<%=areaCounter%>', '<%=salesDiv%>');
-                                return false;">Search</button>
+                                        <button class="btn btn-default  bootstrap-touchspin-up" onclick="loadSurveyItemsTable($('#<%=address%>_<%=areaCounter%>_search').val(), '<%=address%>', '<%=areaCounter%>', '<%=salesDiv%>');
+                                                return false;">Search</button>
                                     </span>
                                 </div>
                             </div>
@@ -122,12 +122,14 @@
         </td>
     </tr>
     <tr height="20">
-        <td align="center" onclick="addNew('<%=address%>', '<%=areaCounter%>', '');
-                return false;">New</td>
-        <td align="center" onclick="addNew('<%=address%>', '<%=areaCounter%>', 'Special');
-                return false;">Special</td>
+        <td colspan="2">
+            <a class="btn btn-border btn-alt border-green btn-link font-green" style="width: 49%; margin-right: 6px;" onclick="addNew('<%=address%>', '<%=areaCounter%>', '');
+                return false;">New</a>
+            <a class="btn btn-border btn-alt border-purple btn-link font-purple" style="width: 49%;" onclick="addNew('<%=address%>', '<%=areaCounter%>', 'Special');
+                return false;">Special</a>
+        </td>
         <td>
-            <input class='btn btn-primary' type="submit" style="width:100%;" value="SAVE">
+            Total Units : <label id="<%=address%>_<%=areaCounter%>_total">0</label>
         </td>
     </tr>
 </table>

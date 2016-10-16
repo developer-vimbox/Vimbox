@@ -200,6 +200,10 @@ function expandAddressTab(e) {
     $(e).nextUntil('tr.survey_address_tab').slideToggle();
 }
 
+function expandSideBar() {
+    $(startsurvey_sidebar).slideToggle();
+}
+
 function addArea(address, fullAddr) {
     var divId = (fullAddr.split("|"))[0];
     var areaCounter = 1;
