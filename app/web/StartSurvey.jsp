@@ -887,13 +887,13 @@
                                                             out.println("<div id='" + aT + "_div_" + areaCounter + "' class='survey_area_div' style='display:none'>");
                                             %>
                                             <table class='table table-bordered' width="100%" border="1" height="100%">
-                                                <col width="25%">
+                                                <col width="40%">
                                                 <tr height="20">
-                                                    <td>
+                                                    <td><center>
                                                         <button id="completeBtn" class="btn loading-button btn-primary" style="width: 100%; height: 100%; margin-right: 7px;" onclick="confirmComplete();
             return false;">Complete</button>
                                                         <input id="completeBtn" class='btn loading-button btn-info' type="submit" style="width:100%;height:100%;" value="Save">
-                                                    </td>
+                                                </center></td>
                                                     <td colspan="2">
                                                         <input type="hidden" class="lblId" value="<%=aT%>_lbl_<%=areaCounter%>|<%=salesDiv%>">
                                                         <!--Area Name : <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=aT%>_<%=areaCounter%>+siteAreaName" value="<%=leadName%>">-->
