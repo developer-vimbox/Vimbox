@@ -34,8 +34,8 @@ function viewNotifications() {
 }
 
 function clearNotifications() {
+    document.getElementById("notifications-section").innerHTML = "";
     $.get("ClearNotificationsController", {}, function (data) {
-        document.getElementById("notifications-section").innerHTML = "";
     });
 }
 

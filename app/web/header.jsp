@@ -2,7 +2,8 @@
 <%@page import="com.vimbox.database.NotificationDAO"%>
 <%@page import="com.vimbox.user.User"%>
 <%@include file="ValidateLogin.jsp"%>
-<script src="JS/WebSocket.js"></script>
+<!--<script src="JS/WebSocket.js"></script>-->
+<script src="JS/EmailFunctions.js"></script>
 <script src="JS/CustomerFunctions.js"></script>
 <script src="JS/LeadFunctions.js"></script>
 <script src="JS/TicketFunctions.js"></script>
@@ -542,6 +543,23 @@
         <div id="page-sidebar">
             <div class="scroll-sidebar">
                 <ul id="sidebar-menu">
+                    <li>
+                        <a href="#" title="Sales">
+                            <i class="glyph-icon icon-linecons-mail"></i>
+                            <span>Mailbox</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li><a href="NewMessage.jsp" title="Compose New Message"><span>Compose New Message</span></a></li>
+                                <li><a href="Inbox.jsp" title="Inbox"><span>Inbox</span></a></li>
+                                <li><a href="Sentmail.jsp" title="Sent Mail"><span>Sent Mail</span></a></li>
+                                <li><a href="Drafts.jsp" title="Drafts"><span>Drafts</span></a></li>
+                                <li><a href="Spam.jsp" title="Spam"><span>Spam</span></a></li>
+                                <li><a href="Trash.jsp" title="Trash"><span>Trash</span></a></li>
+                            </ul>
+
+                        </div><!-- .sidebar-submenu -->
+                    </li>
                     <%
                         if (moduleNames.contains("Admin") || moduleNames.contains("HR")) {
                     %>

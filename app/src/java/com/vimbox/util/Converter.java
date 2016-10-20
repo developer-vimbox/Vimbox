@@ -14,6 +14,68 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class Converter {
     
+    public static String getTime(DateTime datetime){
+        LocalDateTime ldt = datetime.toLocalDateTime();
+        int hr = ldt.getHourOfDay();
+            boolean pm = false;
+            String hour = hr + "";
+            if(hr < 10) {
+            hour = "0" + hour;
+        } else if (hr >= 12) {
+            if (hr > 12) {
+                hour = hr - 12 + "";
+            }
+            pm = true;
+        }
+
+        int min = ldt.getMinuteOfHour();
+        String minute = min + "";
+        if (min < 10) {
+            minute = "0" + min;
+        }
+
+        if (pm) {
+            return hour + ":" + minute + " pm";
+        } else {
+            return hour + ":" + minute + " am";
+        }
+    }
+    public static String convertMailDate(Date date){
+        DateTime datetime = new DateTime(date);
+        LocalDateTime ldt = datetime.toLocalDateTime();
+        int d = ldt.getDayOfMonth();
+        int m = ldt.getMonthOfYear();
+        int year = ldt.getYear();
+        
+        DateTime now = new DateTime();
+        LocalDateTime nowldt = now.toLocalDateTime();
+        int nowd = nowldt.getDayOfMonth();
+        int nowm = nowldt.getMonthOfYear();
+        int nowyear = nowldt.getYear();
+        
+        if(nowd == d && nowm == m && nowyear == year){
+            return getTime(datetime);
+        }else{
+            return d + " " + datetime.toString("MMMM").substring(0,3) + " " + year;
+        }
+    }
+    
+    public static String convertMailTableDate(Date date){
+        DateTime datetime = new DateTime(date);
+        LocalDateTime ldt = datetime.toLocalDateTime();
+        
+        String day = datetime.dayOfWeek().getAsText().substring(0,3);
+        
+        String month = datetime.toString("MMMM").substring(0,3);
+        int d = ldt.getDayOfMonth();
+        
+        int year = ldt.getYear();
+        
+        String time = getTime(datetime);
+        
+        return day + ", " + month + " " + d + ", " + year + " at " + time;
+    }
+    
     public static String convertDateHtml(DateTime datetime) {
         String datetimeString = "";
         LocalDateTime ldt = datetime.toLocalDateTime();
