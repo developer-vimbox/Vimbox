@@ -200,6 +200,10 @@ function expandAddressTab(e) {
     $(e).nextUntil('tr.survey_address_tab').slideToggle();
 }
 
+function expandSideBar() {
+    $(startsurvey_sidebar).slideToggle();
+}
+
 function addArea(address, fullAddr) {
     var divId = (fullAddr.split("|"))[0];
     var areaCounter = 1;
@@ -236,6 +240,8 @@ function addArea(address, fullAddr) {
     document.getElementById("siteInfo").style.display = "none";
     $('#siteInfo_tab').removeClass('selected');
     div.style.display = "block";
+    
+    $(startsurvey_sidebar).slideToggle();
 }
 
 function addAreaTable(divId, address, areaCounter) {
@@ -282,6 +288,8 @@ function displaySiteDiv(e, siteId) {
 
     div.style.display = "block";
     $(e).addClass('selected');
+    
+    $(startsurvey_sidebar).slideToggle();
 }
 
 function confirmRemoveArea(salesDiv, address, areaCounter) {

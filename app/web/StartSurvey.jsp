@@ -55,29 +55,22 @@
             }
             String col = "<col width='20%'><col width='45%'><col width='10%'><col width='10%'><col width='10%'><col width='5%'>";
         %>
-        <div id="page-content-wrapper">
-            <div id="page-content-custom">
-                <div class="container">
-                    <div id="page-title">
-                        <div class="panel">
-                            <div class="panel-body">
                                 <div class="form-horizontal">
                                     <form action="SaveSiteSurveyController" id="siteSurvey_form">
                                         <input type="hidden" name="lead" value="<%=leadId%>|<%=date%>|<%=timeslot%>">
-                                        <table class='table table-bordered' width="100%" height="100%">
+                                        <table class='table table-bordered' width="100%" height="100%" style="margin-bottom: 0px;border-top-width: 0px;border-bottom-width: 0px;border-left-width: 0px;">
                                             <col width="250">
                                             <tr>
-                                                <td id="startsurvey_sidebar" style="padding-top: 10px;">
-                                                    <table class="table table-bordered" style="width:90%;" border="1">
+                                                <td id="startsurvey_sidebar">
+                                                    <table class="table table-bordered" style="width:100%;">
                                                         <tbody><tr>
-                                                                <td>
+                                                                <td><center>
                                                                     <input type="hidden" id="complete_status" name="complete" value="no">
-                                                                    <button id="completeBtn" class="btn loading-button btn-primary" style="width:100%;height:100%;" onclick="confirmComplete();
-            return false;">Complete</button>
-                                                                </td>
+                                                                    <b>Lead ID : <%=lead.getId()%></b>
+                                                        </center></td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="selected" id="siteInfo_tab" onclick='displaySiteInfo()'><center>Site Info</center></td>
+                                                                <td class="selected" id="siteInfo_tab" onclick='displaySiteInfo()'><center><b>Site Info</b></center></td>
                                             </tr>
                                             <tr>
                                                 <td><center>FROM</center></td>
@@ -97,7 +90,8 @@
                                                             out.println("<td><center>" + address + "<input type='hidden' name='salesDiv' value='" + salesDiv + "|" + address + "'></center></td>");
                                                             out.println("</tr>");
                                                             out.println("<tr>");
-                                                            out.println("<td  onclick=\"addArea('addressTab" + counter + "', '" + salesDiv + "')\"><center>Add New Area</center></td>");
+                                                            out.println("<td><a style='width: 100%;' class='btn btn-default' onclick=\"addArea('addressTab" + counter + "', '" + salesDiv + "')\">Add New Area</a></td>");
+                                                           
                                                             out.println("</tr>");
                                                             ArrayList<LeadArea> leadAreas = sD.getLeadAreas();
                                                             for (LeadArea leadArea : leadAreas) {
@@ -131,7 +125,8 @@
                                                             out.println("<td><center>" + address + "<input type='hidden' name='salesDiv' value='" + salesDiv + "|" + address + "'></center></td>");
                                                             out.println("</tr>");
                                                             out.println("<tr>");
-                                                            out.println("<td onclick=\"addArea('addressTab" + counter + "', '" + salesDiv + "')\"><center>Add New Area</center></td>");
+                                                            out.println("<td><a style='width: 100%;' class='btn btn-default' onclick=\"addArea('addressTab" + counter + "', '" + salesDiv + "')\">Add New Area</a></td>");
+                                                           
                                                             out.println("</tr>");
                                                             ArrayList<LeadArea> leadAreas = sD.getLeadAreas();
                                                             for (LeadArea leadArea : leadAreas) {
@@ -155,16 +150,12 @@
                                         <td>
                                             <div id='content'>
                                                 <div id='siteInfo' style='display:block;height:auto;'>
-                                                    <table  width='100%'>
-                                                        <col width='165'>
-                                                        <tr>
-                                                            <td align='right' style='width:40%'><b>Lead ID :</b></td>
-                                                            <td><%=lead.getId()%></td>
-                                                        </tr>
-                                                    </table>
-                                                    <input class="btn loading-button btn-primary" type="submit" value="SAVE" style="float: right;">
-                                                    <br>
-
+                                                    <a class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="float: right; margin-right: 7px;z-index: 1;" onclick='expandSideBar()'>    Toggle Side Bar</a>
+                                             
+                                                        <button class="btn loading-button btn-primary" style="float: right; margin-right: 7px;z-index: 1;" onclick="confirmComplete();
+            return false;">Complete</button>
+                                                    <input class="btn loading-button btn-info" type="submit" value="Save" style="float: right; margin-right: 7px;z-index: 1;">
+                                                   
                                                     <ul class="nav-responsive nav nav-tabs">
                                                         <li class="active"><a href="#from" data-toggle="tab">From</a></li>
                                                         <li><a href="#to" data-toggle="tab">To</a></li>
@@ -183,7 +174,7 @@
                                                                     out.println("<fieldset  id='" + divId + "'>");
                                                                     out.println("<legend><b>" + address + "</b></legend>");
                                                                     out.println("<table class='table table-bordered' width='100%' border='1'>");
-                                                                    out.println("<col width='50%'>");
+                                                                    out.println("<col width='60%'>");
 
                                                                     out.println("<tr>");
                                                                     out.println("<td valign='top'>");
@@ -209,7 +200,7 @@
                                                                     out.println("</tr>");
 
                                                                     out.println("<tr>");
-                                                                    out.println("<td valign='top' height='150' colspan='6'>");
+                                                                    out.println("<td valign='top' height='300' colspan='6'>");
                                                             %>
                                                             <div style="overflow:auto;height:100%;">
                                                                 <table id="<%=divId%>_CustomerItemTable" valign="top" width="100%">
@@ -274,7 +265,7 @@
                                                                 out.println("</tr>");
 
                                                                 out.println("<tr>");
-                                                                out.println("<td valign='top' height='150' colspan='6'>");
+                                                                out.println("<td valign='top' height='200' colspan='6'>");
                                                             %>
                                                             <div style="overflow:auto;height:100%;">
                                                                 <table  id="<%=divId%>_VimboxItemTable" valign="top" width="100%">
@@ -892,23 +883,30 @@
                                                             out.println("<div id='" + aT + "_div_" + areaCounter + "' class='survey_area_div' style='display:none'>");
                                             %>
                                             <table class='table table-bordered' width="100%" border="1" height="100%">
-                                                <col width="33%">
-                                                <col width="33%">
+                                                <col width="10%">
+                                                <col width="100%">
                                                 <tr height="20">
-                                                    <td colspan="2">
+                                                    <td>
+                                                        <a class="btn btn-border btn-alt border-blue-alt btn-link font-blue-alt glyph-icon icon-exchange" style="height: 38px; margin-right: 7px;" onclick='expandSideBar()'>    Toggle Side Bar</a>
+                                             
+                                                    </td>
+                                                    <td><center>
+                                                        
+                                                        <button class="btn loading-button btn-primary" style="width: 45%; height: 38px; margin-right: 10px;" onclick="confirmComplete();
+            return false;">Complete</button>
+                                                        <input class='btn loading-button btn-info' type="submit" style="width: 45%; height: 38px;" value="Save">
+                                                </center></td>
+                                                    <td>
                                                         <input type="hidden" class="lblId" value="<%=aT%>_lbl_<%=areaCounter%>|<%=salesDiv%>">
                                                         <!--Area Name : <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=aT%>_<%=areaCounter%>+siteAreaName" value="<%=leadName%>">-->
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">Area Name: </label>
-                                                            <div class="col-sm-5">
+                                                        <div class="form-group" style="margin-bottom: 0px;">
+                                                            <label class="col-sm-4 control-label">Area Name: </label>
+                                                            <div class="col-sm-7">
                                                                 <input class='form-control' type="text" id="siteArea_name" name="<%=salesDiv%>+<%=aT%>_<%=areaCounter%>+siteAreaName" value="<%=leadName%>">
                                                             </div>
+                                                            <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=aT%>', '<%=areaCounter%>');" style="padding-right: 15px;">×</span>
                                                         </div>
-
-                                                    </td>
-                                                    <td style="width: 10%;">
-                                                        Total Units : <label id="<%=aT%>_<%=areaCounter%>_total">0</label>
-                                                        <span class='close' onClick="confirmRemoveArea('<%=salesDiv%>', '<%=aT%>', '<%=areaCounter%>');">×</span>
+                                     
                                                     </td>
                                                 </tr>
                                                 <tr height="100">
@@ -919,7 +917,7 @@
 
                                                                 <td colspan="3">
                                                                     <div class="form-group" style="margin-left:10%!important">
-                                                                        <div class="col-sm-3">
+                                                                        <div class="col-sm-4">
                                                                             <div style="width: 300%;" class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
                                                                                 <input class='form-control' type="text" id="<%=aT%>_<%=areaCounter%>_search" placeholder="Search Item Name" style="color:black;">
                                                                                 <span class="input-group-btn">
@@ -945,8 +943,8 @@
                                                                         return false;"><b>VIMBOX</b></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="3" height="690">
-                                                                    <div style="overflow:auto;height:100%;" id="<%=aT%>_<%=areaCounter%>_ItemsDiv">
+                                                                <td colspan="3" height="480">
+                                                                    <div style="overflow:auto;height:480px;" id="<%=aT%>_<%=areaCounter%>_ItemsDiv">
 
                                                                     </div>
                                                                     <div style="overflow:auto;height:100%;display:none;" id="<%=aT%>_<%=areaCounter%>_VimboxDiv">
@@ -958,7 +956,7 @@
                                                     </td>
                                                     <!-- Item List -->
                                                     <td>
-                                                        <div style="overflow:auto;height:100%;">
+                                                        <div style="overflow:auto;height:550px;">
                                                             <table class='table table-bordered' width="100%">
                                                                 <col width="20%">
                                                                 <col width="45%">
@@ -1075,12 +1073,15 @@
                                                     </td>
                                                 </tr>
                                                 <tr height="20">
-                                                    <td align="center" onclick="addNew('<%=aT%>', '<%=areaCounter%>', '');
-                                                            return false;">New</td>
-                                                    <td align="center" onclick="addNew('<%=aT%>', '<%=areaCounter%>', 'Special');
-                                                            return false;">Special</td>
+                                                    <td colspan="2"><center>
+                                                        <a class="btn btn-border btn-alt border-green btn-link font-green" style="width: 45%; margin-right: 6px;" onclick="addNew('<%=aT%>', '<%=areaCounter%>', '');
+                                                            return false;">New</a>
+                                                        <a class="btn btn-border btn-alt border-purple btn-link font-purple" style="width: 45%;" onclick="addNew('<%=aT%>', '<%=areaCounter%>', 'Special');
+                                                            return false;">Special</a>     
+                                                </center></td>
                                                     <td>
-                                                        <input class='btn loading-button btn-primary' type="submit" style="width:100%;" value="SAVE">
+                                                        Total Units : <label id="<%=aT%>_<%=areaCounter%>_total">0</label>
+                                                        
                                                     </td>
                                                 </tr>
                                             </table>
@@ -1098,12 +1099,7 @@
                                         </table>
                                     </form>        
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            
         <div id="item_details_modal" class="modal">
             <!-- Modal content -->
             <div class="item-details-modal-content" style="width: 50%;height: auto;">
