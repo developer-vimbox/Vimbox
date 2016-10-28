@@ -114,7 +114,7 @@
         #startsurvey_areatable{table-layout: fixed;}
         #header-nav-custom{margin-top: 2%}
         #completeBtn{width: 120px !important;
-                     height: 50px !important;}
+                     height: 40px !important;}
     }
     @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation:landscape) {
         #startsurvey_sidebar{ width:20%;
@@ -124,7 +124,7 @@
         #header-nav-custom{margin-top: 2% important;}
         #header-nav-right{margin: 0 0 0 0 important; margin-top: 2% important; 
                           #completeBtn{width: 120px !important;
-                                       height: 50px !important;}
+                                       height: 40px !important;}
         }
     }
 
@@ -135,7 +135,7 @@
         #startsurvey_areatable{table-layout: fixed;}
         #header-nav-custom{margin-top: 2%}
         #completeBtn{width: 120px !important;
-                     height: 50px !important;}  
+                     height: 40px !important;}  
     }
 </style>
 

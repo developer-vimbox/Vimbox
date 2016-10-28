@@ -240,6 +240,8 @@ function addArea(address, fullAddr) {
     document.getElementById("siteInfo").style.display = "none";
     $('#siteInfo_tab').removeClass('selected');
     div.style.display = "block";
+    
+    $(startsurvey_sidebar).slideToggle();
 }
 
 function addAreaTable(divId, address, areaCounter) {
@@ -286,6 +288,8 @@ function displaySiteDiv(e, siteId) {
 
     div.style.display = "block";
     $(e).addClass('selected');
+    
+    $(startsurvey_sidebar).slideToggle();
 }
 
 function confirmRemoveArea(salesDiv, address, areaCounter) {
