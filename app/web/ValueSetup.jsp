@@ -180,8 +180,8 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label">Formula: </label>
                                                     <div class="col-sm-4">
-                                                        <label class="col-sm-4" id="svcType_formula"></label>
-                                                        <button onclick="serviceFormula()" class="btn btn-primary" id="formula-btn">Formula</button>
+                                                        <label class="col-sm-4" id="svcType_formula" style="padding-top: 7px;"></label>
+                                                        <button onclick="serviceFormula()" class="btn btn-default" id="formula-btn">Formula</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
