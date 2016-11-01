@@ -3,6 +3,8 @@ package com.vimbox.util;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sun.mail.imap.IMAPFolder;
+import com.vimbox.user.User;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -15,6 +17,7 @@ import javax.mail.Multipart;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,6 +41,8 @@ public class ViewMessageController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
+        HttpSession httpSession = request.getSession();
+        User user = (User) httpSession.getAttribute("session");
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
         long uid = Long.parseLong(request.getParameter("uid"));
@@ -49,7 +54,7 @@ public class ViewMessageController extends HttpServlet {
 
             IMAPFolder emailFolder = (IMAPFolder) session.getAttribute(type);
             Message message = emailFolder.getMessageByUID(uid);
-            
+
             jsonOutput.addProperty("subject", message.getSubject());
 
             jsonOutput.addProperty("from", (message.getFrom()[0]).toString());
@@ -58,15 +63,14 @@ public class ViewMessageController extends HttpServlet {
 
             JsonArray recipientArray = new JsonArray();
             Address[] recipients = message.getRecipients(Message.RecipientType.TO);
-            if(recipients != null){
+            if (recipients != null) {
                 for (Address recipient : recipients) {
-                JsonObject recipientJson = new JsonObject();
-                recipientJson.addProperty("email", recipient.toString());
-                recipientArray.add(recipientJson);
-            }
+                    JsonObject recipientJson = new JsonObject();
+                    recipientJson.addProperty("email", recipient.toString());
+                    recipientArray.add(recipientJson);
+                }
                 jsonOutput.add("to", recipientArray);
             }
-            
 
             Address[] ccs = message.getRecipients(Message.RecipientType.CC);
             if (ccs != null) {
@@ -87,8 +91,28 @@ public class ViewMessageController extends HttpServlet {
 
             if (message.isMimeType("multipart/mixed")) {
                 Multipart mp = (Multipart) message.getContent();
-                if (mp.getCount() > 1) {
-                    jsonOutput.addProperty("attachment", "YES");
+                String attachFiles = "";
+                if (mp.getCount() > 0) {
+                    String user_path = System.getProperty("user.dir");
+                    String directoryName = user_path.substring(0, user_path.lastIndexOf("/")) + "/app-root/runtime/dependencies/jbossews/webapps/attachments/" + user.getAccount().getUsername() + "/receive";
+                    //String directoryName = "C:\\Users\\NYuSheng\\Documents\\GitHub\\Vimbox\\app\\build\\web\\Images\\" + user.getAccount().getUsername() + "\\receive";
+                    File directory = new File(directoryName);
+                    if (!directory.exists()) {
+                        directory.mkdirs();
+                    }
+                    for (int i = 0; i < mp.getCount(); i++) {
+                        MimeBodyPart part = (MimeBodyPart) mp.getBodyPart(i);
+                        if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
+                            // this part is attachment
+                            // code to save attachment...
+                            String fileName = directoryName + File.separator + part.getFileName();
+                            part.saveFile(fileName);
+                            attachFiles += fileName + "|";
+                        }
+                    }
+                }
+                if(!attachFiles.isEmpty()){
+                    jsonOutput.addProperty("files", attachFiles);
                 }
             }
 

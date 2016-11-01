@@ -64,7 +64,7 @@ public class CancelLeadController extends HttpServlet {
                         surveyorStr += ",";
                     }
                 }
-                notificationList.add(surveyorStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been canceled");
+                notificationList.add(surveyorStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been canceled|MySites.jsp");
             }
             
             ArrayList<Job> jobs = lead.getJobs();
@@ -85,7 +85,7 @@ public class CancelLeadController extends HttpServlet {
                         if (i < supervisors.size() - 1) {
                             userStr += ",";
                         }
-                        notificationList.add(userStr + "|" + Converter.convertDate(new DateTime()) + " : Move for lead " + leadId + " has been canceled");
+                        notificationList.add(userStr + "|" + Converter.convertDate(new DateTime()) + " : Move for lead " + leadId + " has been canceled|SupervisorJobs.jsp");
                     }
                 }
             }

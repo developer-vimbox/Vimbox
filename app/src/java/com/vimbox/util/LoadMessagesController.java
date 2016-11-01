@@ -3,6 +3,7 @@ package com.vimbox.util;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sun.mail.imap.IMAPMessage;
+import com.vimbox.user.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
@@ -14,9 +15,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.jsoup.Jsoup;
 
 @WebServlet(name = "LoadMessagesController", urlPatterns = {"/LoadMessagesController"})
 public class LoadMessagesController extends HttpServlet {
+
+    private String username;
+    private String password;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,6 +36,10 @@ public class LoadMessagesController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
+        HttpSession httpSession = request.getSession();
+        User user = (User) httpSession.getAttribute("session");
+        username = user.getAccount().getUsername();
+        password = user.getAccount().getPassword();
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
         String type = request.getParameter("type");
@@ -47,12 +56,19 @@ public class LoadMessagesController extends HttpServlet {
                 properties.put("mail.smtp.port", "465");
                 properties.put("mail.smtp.starttls.enable", "true");
                 properties.put("mail.smtp.auth", "true");
-                Session emailSession = Session.getDefaultInstance(properties);
+                properties.put("mail.smtp.socketFactory.port", "465");
+                properties.put("mail.smtp.socketFactory.class",
+                        "javax.net.ssl.SSLSocketFactory");
+                Session emailSession = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
 
                 //create the POP3 store object and connect with the pop server
                 Store store = emailSession.getStore("imaps");
-                store.connect("smtp.gmail.com", "developer.vimbox@gmail.com", "dev@vimbox");
-                
+                store.connect("smtp.gmail.com", username, password);
+
                 //create the folder object and open it
                 emailFolder = store.getFolder(type);
                 emailFolder.open(Folder.READ_WRITE);
@@ -82,10 +98,10 @@ public class LoadMessagesController extends HttpServlet {
                 jsonMsg.addProperty("uid", ((UIDFolder) emailFolder).getUID(message));
 
                 jsonMsg.addProperty("subject", message.getSubject());
-                
+
                 Address[] froms = message.getFrom();
                 String from = "";
-                if(froms != null && froms.length > 0){
+                if (froms != null && froms.length > 0) {
                     from = (message.getFrom()[0]).toString();
                 }
                 jsonMsg.addProperty("from", from);
@@ -144,7 +160,7 @@ public class LoadMessagesController extends HttpServlet {
                 break; // without break same text appears twice in my tests
             } else if (bodyPart.isMimeType("text/html")) {
                 String html = (String) bodyPart.getContent();
-                result = result + "\n" + html;
+                result = result + "\n" + Jsoup.parse(html).text();
             } else if (bodyPart.getContent() instanceof MimeMultipart) {
                 result = result + getTextFromMimeMultipart((MimeMultipart) bodyPart.getContent());
             }

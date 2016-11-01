@@ -56,7 +56,7 @@ public class DeleteLeadController extends HttpServlet {
                     surveyorStr += ",";
                 }
             }
-            notificationList.add(surveyorStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been canceled");
+            notificationList.add(surveyorStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been canceled|MySites.jsp");
         }
 
         ArrayList<Job> jobs = lead.getJobs();

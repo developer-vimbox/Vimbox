@@ -88,7 +88,7 @@ public class EditTicketController extends HttpServlet {
                     assUserStr += ",";
                 }
             }
-            jsonOutput.addProperty("notification", assUserStr + "|" + Converter.convertDate(new DateTime()) + " : You have been assigned ticket " + ticket_id);
+            jsonOutput.addProperty("notification", assUserStr + "|" + Converter.convertDate(new DateTime()) + " : You have been assigned ticket " + ticket_id + "|MyTickets.jsp");
         }else{
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);

@@ -10,12 +10,13 @@ import java.util.ArrayList;
 
 public class NotificationDAO {
 
-    private static final String CREATE_NOTIFICATION = "INSERT INTO notifications (user_id, message, status) VALUES (?,?,'New')";
+    private static final String CREATE_NOTIFICATION = "INSERT INTO notifications (user_id, message, status, html) VALUES (?,?,'New',?)";
     private static final String VIEW_NOTIFICATION = "UPDATE notifications SET status='Viewed' WHERE user_id=?";
     private static final String CLEAR_NOTIFICATION = "DELETE FROM notifications WHERE user_id=?";
+    private static final String CLEAR_SINGLE_NOTIFICATION = "DELETE from notifications WHERE user_id=? AND message=?";
     private static final String GET_NOTIFICATION_BY_USERID = "SELECT * FROM notifications WHERE user_id = ? ORDER BY notification_id DESC";
 
-    public static void storeNotification(ArrayList<String> users, String message) {
+    public static void storeNotification(ArrayList<String> users, String message, String html) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -24,6 +25,7 @@ public class NotificationDAO {
             for (String user : users) {
                 ps.setString(1, user);
                 ps.setString(2, message);
+                ps.setString(3, html);
                 ps.executeUpdate();
             }
         } catch (SQLException se) {
@@ -40,6 +42,22 @@ public class NotificationDAO {
             con = ConnectionManager.getConnection();
             ps = con.prepareStatement(VIEW_NOTIFICATION);
             ps.setString(1, nric);
+            ps.executeUpdate();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, null);
+        }
+    }
+    
+    public static void clearSingleNotification(String nric, String message){
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(CLEAR_SINGLE_NOTIFICATION);
+            ps.setString(1, nric);
+            ps.setString(2, message);
             ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();
@@ -74,7 +92,7 @@ public class NotificationDAO {
             ps.setString(1, nric);
             rs = ps.executeQuery();
             while (rs.next()) {
-                results.add(new Notification(rs.getString("message"), rs.getString("status")));
+                results.add(new Notification(rs.getString("message"), rs.getString("status"), rs.getString("html")));
             }
         } catch (SQLException se) {
             se.printStackTrace();

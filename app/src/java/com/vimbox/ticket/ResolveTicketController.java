@@ -60,7 +60,7 @@ public class ResolveTicketController extends HttpServlet {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("session");
             
-            jsonOutput.addProperty("notification", assUserStr + "|" + Converter.convertDate(new DateTime()) + " : Ticket " + ticket_id + " has been resolved by " + user);
+            jsonOutput.addProperty("notification", assUserStr + "|" + Converter.convertDate(new DateTime()) + " : Ticket " + ticket_id + " has been resolved by " + user + "|TicketForum.jsp");
         }else{
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", errorMsg);

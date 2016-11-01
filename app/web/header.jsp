@@ -2,7 +2,7 @@
 <%@page import="com.vimbox.database.NotificationDAO"%>
 <%@page import="com.vimbox.user.User"%>
 <%@include file="ValidateLogin.jsp"%>
-<!--<script src="JS/WebSocket.js"></script>-->
+<script src="JS/WebSocket.js"></script>
 <script src="JS/EmailFunctions.js"></script>
 <script src="JS/CustomerFunctions.js"></script>
 <script src="JS/LeadFunctions.js"></script>
@@ -527,9 +527,10 @@
                                 <%
                                     for(Notification notification : notifications){
                                 %>
-                                <li>
+                                <li onclick="redirectNotification('<%=notification.getHtml()%>')">
                                     <span class="bg-blue icon-notification glyph-icon icon-user"></span>
                                     <span class="notification-text font-blue"><%=notification.getMessage()%></span>
+                                    <a onclick="clearSingleNotification('<%=notification.getMessage()%>', this)">x</a>
                                 </li>
                                 <%
                                     }

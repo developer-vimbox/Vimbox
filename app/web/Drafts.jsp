@@ -20,17 +20,6 @@
     </head>
     <body onload="loadMessages('[Gmail]/Drafts')">
         <%@include file="header.jsp"%>
-        <script type="text/javascript" src="assets/widgets/summernote-wysiwyg/summernote-wysiwyg.js"></script>
-        <script type="text/javascript">
-        /* WYSIWYG editor */
-
-        $(function () {
-            "use strict";
-            $('.wysiwyg-editor').summernote({
-                height: 150
-            });
-        });
-        </script>
         <div id="loading-submit"  style="display:none">
             <div id="loadingsubmit">
                 <!--<img src="assets/image-resources/spin.gif">-->
@@ -45,35 +34,29 @@
             <!-- Modal content -->
             <div class="modal-content">
                 <div class="modal-body">
-                    <span class="close" onclick="closeModal('viewMessageModal')">×</span>
-                    <div id="message-subject"></div> 
-                    <hr>
-                    <table width="100%">
-                        <tr>
-                            <td>
-                                <div id="message-from"></div>
-                            </td>
-                            <td align="right">
-                                <div id="message-date"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div id="message-recipients"></div>
-                            </td>
-                            <td></td>
-                        </tr>
-                    </table>
-                    <br>
-                    <div id="message-content"></div>
-                    <hr>
-                    <div class="pad15A">
+                    <span class="close" onclick="closeMessageModal('viewMessageModal', $('#message-files').val())">×</span>
+                    <script type="text/javascript" src="assets/widgets/summernote-wysiwyg/summernote-wysiwyg.js"></script>
+                    <script type="text/javascript">
+                                            /* WYSIWYG editor */
+
+                                            $(function () {
+                                                "use strict";
+                                                $('.wysiwyg-editor').summernote({
+                                                    height: 150
+                                                });
+                                            });
+                    </script>
+                    <div id="message">
+                    </div>
+                    <div style="width:100%;padding:10px 0px">
                         <div class="wysiwyg-editor"></div>
+                    </div>
+                    <div class="bg-default text-center">
+                        <button class="btn loading-button btn-primary" disabled id="send-btn" onclick="replyEmail()">Send</button>
                     </div>
                 </div>
             </div>
         </div>
-
         <div id="email_error_modal" class="modal">
             <div class="modal-content" style="width: 400px;">
                 <div class="modal-header">

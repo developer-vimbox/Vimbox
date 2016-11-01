@@ -218,7 +218,7 @@ public class SaveSiteSurveyController extends HttpServlet {
                 jsonOutput.addProperty("completed", "YES");
                 Lead thisLead = LeadDAO.getLeadById(leadId);
                 User user = thisLead.getOwner();
-                jsonOutput.addProperty("notification", user.getNric() + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been completed");
+                jsonOutput.addProperty("notification", user.getNric() + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been completed|AllLeads.jsp");
                 message = "Survey completed!";
             } else {
                 jsonOutput.addProperty("completed", "NO");

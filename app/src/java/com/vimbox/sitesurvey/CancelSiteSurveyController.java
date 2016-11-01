@@ -57,7 +57,7 @@ public class CancelSiteSurveyController extends HttpServlet {
         }
         jsonOutput.addProperty("status", "SUCCESS");
         jsonOutput.addProperty("message", "Site survey cancelled!");
-        jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been canceled");
+        jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey for lead " + leadId + " has been canceled|MySites.jsp");
         jsonOut.println(jsonOutput);
     }
 

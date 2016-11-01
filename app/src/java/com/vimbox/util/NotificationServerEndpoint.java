@@ -32,8 +32,10 @@ public class NotificationServerEndpoint {
             String[] msgArr = pl.split("\\|");
             ArrayList<String> users = retrieveUsers(msgArr[0]);
             String message = msgArr[1]; 
+            String html = msgArr[2];
             JsonObject jsonOutput = new JsonObject();
             jsonOutput.addProperty("message", message);
+            jsonOutput.addProperty("html", html);
 
             for(Session onlineUser : onlineUsers){
                 User user = (User) onlineUser.getUserProperties().get("user");
@@ -45,7 +47,7 @@ public class NotificationServerEndpoint {
                     }
                 }
             }
-            NotificationDAO.storeNotification(users, message);
+            NotificationDAO.storeNotification(users, message, html);
         }
     }
     

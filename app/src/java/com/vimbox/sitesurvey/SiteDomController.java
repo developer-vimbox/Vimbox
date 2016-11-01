@@ -228,7 +228,7 @@ public class SiteDomController extends HttpServlet {
                             userStr += ",";
                         }
                     }
-                    jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move confirmed for lead " + leadId);
+                    jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move confirmed for lead " + leadId + "|SupervisorJobs.jsp");
                 } catch (FileNotFoundException fne) {
                     System.out.println("File errorrr: " + fne);
                     errorMsg += "Error reading uploaded image<br>";

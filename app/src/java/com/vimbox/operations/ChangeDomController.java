@@ -151,7 +151,7 @@ public class ChangeDomController extends HttpServlet {
                     userStr += ",";
                 }
             }
-            jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move for lead " + leadId + " has been changed");
+            jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move for lead " + leadId + " has been changed|SupervisorJobs.jsp");
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "DOM changed!");
         } else {

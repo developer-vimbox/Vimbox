@@ -50,7 +50,7 @@ public class CancelJobController extends HttpServlet {
                 userStr += ",";
             }
         }
-        jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move for lead " + leadId + " has been canceled");
+        jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move for lead " + leadId + " has been canceled|SupervisorJobs.jsp");
         jsonOut.println(jsonOutput);
     }
 

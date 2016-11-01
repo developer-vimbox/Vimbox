@@ -103,7 +103,7 @@ public class ConfirmLeadController extends HttpServlet {
                             userStr += ",";
                         }
                     }
-                    jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move confirmed for lead " + leadId);
+                    jsonOutput.addProperty("notification", userStr + "|" + Converter.convertDate(new DateTime()) + " : Move confirmed for lead " + leadId + "|SupervisorJobs.jsp");
                     jsonOutput.addProperty("status", "SUCCESS");
                     jsonOutput.addProperty("message", "Lead confirmed!");
                 } catch (FileNotFoundException fne) {

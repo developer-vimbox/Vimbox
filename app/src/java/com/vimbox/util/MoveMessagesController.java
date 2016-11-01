@@ -2,6 +2,7 @@ package com.vimbox.util;
 
 import com.google.gson.JsonObject;
 import com.sun.mail.imap.IMAPFolder;
+import com.vimbox.user.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.servlet.ServletException;
@@ -22,6 +24,9 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "MoveMessagesController", urlPatterns = {"/MoveMessagesController"})
 public class MoveMessagesController extends HttpServlet {
+
+    private String username;
+    private String password;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,6 +41,10 @@ public class MoveMessagesController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
+        HttpSession httpSession = request.getSession();
+        User user = (User) httpSession.getAttribute("session");
+        username = user.getAccount().getUsername();
+        password = user.getAccount().getPassword();
         JsonObject jsonOutput = new JsonObject();
         PrintWriter jsonOut = response.getWriter();
         String type = request.getParameter("type");
@@ -53,11 +62,15 @@ public class MoveMessagesController extends HttpServlet {
                 properties.put("mail.smtp.port", "465");
                 properties.put("mail.smtp.starttls.enable", "true");
                 properties.put("mail.smtp.auth", "true");
-                Session emailSession = Session.getDefaultInstance(properties);
+                Session emailSession = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
 
                 //create the POP3 store object and connect with the pop server
                 Store store = emailSession.getStore("imaps");
-                store.connect("smtp.gmail.com", "developer.vimbox@gmail.com", "dev@vimbox");
+                store.connect("smtp.gmail.com", username, password);
 
                 //create the folder object and open it
                 emailFolder = (IMAPFolder) store.getFolder(type);
@@ -85,11 +98,15 @@ public class MoveMessagesController extends HttpServlet {
                 properties.put("mail.smtp.port", "465");
                 properties.put("mail.smtp.starttls.enable", "true");
                 properties.put("mail.smtp.auth", "true");
-                Session emailSession = Session.getDefaultInstance(properties);
+                Session emailSession = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
 
                 //create the POP3 store object and connect with the pop server
                 Store store = emailSession.getStore("imaps");
-                store.connect("smtp.gmail.com", "developer.vimbox@gmail.com", "dev@vimbox");
+                store.connect("smtp.gmail.com", username, password);
 
                 //create the folder object and open it
                 destFolder = store.getFolder(dest);
@@ -100,7 +117,6 @@ public class MoveMessagesController extends HttpServlet {
                 session.setAttribute(dest, destFolder);
             }
             emailFolder.copyMessages(tempMessageArray, destFolder);
-            
 
             emailFolder.setFlags(tempMessageArray, deleted, true);
             emailFolder.expunge();

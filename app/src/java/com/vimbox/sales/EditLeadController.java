@@ -468,7 +468,7 @@ public class EditLeadController extends HttpServlet {
                             surveyorStr += ",";
                         }
                     }
-                    notificationList.add(surveyorStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey assigned for lead " + leadId);
+                    notificationList.add(surveyorStr + "|" + Converter.convertDate(new DateTime()) + " : Site survey assigned for lead " + leadId + "|MySites.jsp");
                 }
 
                 if (salesDivs != null) {
@@ -626,7 +626,7 @@ public class EditLeadController extends HttpServlet {
                                 userStr += ",";
                             }
                         }
-                        notificationList.add(userStr + "|" + Converter.convertDate(new DateTime()) + " : Move confirmed for lead " + leadId);
+                        notificationList.add(userStr + "|" + Converter.convertDate(new DateTime()) + " : Move confirmed for lead " + leadId + "|SupervisorJobs.jsp");
                     } catch (FileNotFoundException fne) {
                         System.out.println("File errorrr: " + fne);
                         errorMsg += "Error reading uploaded image<br>";

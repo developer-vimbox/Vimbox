@@ -1,5 +1,8 @@
 .note-editor {
     border: 1px solid #bfc8d1;
+    width: 90%;
+    margin-left: auto ;
+    margin-right: auto ;
 }
 .note-editor .note-dropzone {
     position: absolute;
