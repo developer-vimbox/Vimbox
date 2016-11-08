@@ -195,23 +195,27 @@
                 </div>
                 <div class="modal-body">        
                     <form method="post" class="btn">
-                        <div class="form-inline">
-                            <label class="col-sm-3 control-label"> The cost of moving service includes: </label>
-                            <br>
-                            <div class="form-group">
-
-                                <div class="col-sm-4">
-                                    <textarea rows="4" cols="41" class="form-control" name="serviceIncludes"><%=qService%></textarea>
-                                    <input type="hidden" name="leadId" value="<%=lead.getId()%>">
-                                    <input type="hidden" name="refNum" value="<%=refNum%>">
-                                </div>
+                        <label class="col-sm-3 control-label"> The cost of moving service includes: </label>
+                        <br>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <textarea rows="4" cols="41" class="form-control" id="serviceIncludes" name="serviceIncludes"><%=qService%></textarea>
+                                <input type="hidden" name="leadId" id="leadId" value="<%=lead.getId()%>">
+                                <input type="hidden" name="refNum" id="refNum" value="<%=refNum%>">
                             </div>
-                                <br><br>
-                            <div class="form-group text-center">
-                                 <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
-                               
+                        </div>
+                        <br>
+                        <label class="col-sm-3 control-label"> Email Address: </label>
+                        <br>
+                        <div class="form-group">
+                            <div>
+                                <input type="text" class="form-control" id="quotationEmail" value="<%=email%>">
                             </div>
-                          
+                        </div>
+                        <br><br>
+                        <div class="form-group text-center">
+                            <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
+                            <button class='btn btn-primary' onclick="emailQuotation('quotation_modal_<%=refNum%>');return false;">Email</button>
                         </div>
                     </form>
                 </div>

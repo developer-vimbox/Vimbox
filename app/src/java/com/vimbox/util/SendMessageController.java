@@ -94,7 +94,7 @@ public class SendMessageController extends HttpServlet {
 
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("developer.vimbox@gmail.com"));
+            message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(to));
             message.setRecipients(Message.RecipientType.CC,

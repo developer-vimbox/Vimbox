@@ -136,12 +136,12 @@
         <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
         <button class="btn btn-default" onclick="confirmDelete('<%=lead.getId()%>')">Delete</button>
         <%
-                if (leadType.equals("Sales")) {
+            if (leadType.equals("Sales")) {
         %>
         <button class="btn btn-default" onclick="confirmLeadSM('<%=lead.getId()%>')">Confirm</button>
         <%
-                }
-            } else if (status.equals("Confirmed")) {
+            }
+        } else if (status.equals("Confirmed")) {
         %>
         <button class="btn btn-default" onclick="amountCheck('<%=lead.getId()%>')">Amount</button>
         <form method="post" class="btn" style="
@@ -157,9 +157,9 @@
         </form>
         <button class="btn btn-default" onclick="cancelLead('<%=lead.getId()%>')">Reject</button>
         <%
-            } else {
+        } else {
         %>
-            <button class="btn btn-default" onclick="reopenLead('<%=lead.getId()%>')">Reopen</button>
+        <button class="btn btn-default" onclick="reopenLead('<%=lead.getId()%>')">Reopen</button>
         <%
             }
         %>
@@ -172,6 +172,7 @@
                 if (status.equals("Pending")) {
 
                     String refNum = "VBSPL_";
+                    String email = "";
                     if (customer != null) {
                         String lastName = customer.getLast_name();
                         if (!lastName.trim().isEmpty()) {
@@ -183,8 +184,9 @@
                         }
                         int custContact = customer.getContact() % 1000;
                         refNum += Integer.toString(custContact) + "_";
+                        email = customer.getEmail();
                     }
-                    
+
                     String toms = lead.getTom();
                     if (toms.contains("|")) {
                         String[] tomSplit = lead.getTom().split("\\|");
@@ -213,35 +215,40 @@
         %>
         <button class="btn btn-default" onclick="viewQuotation('<%=refNum%>')">Quotation</button>
         <div id="quotation_modal_<%=refNum%>" class="modal">
-            <div class="modal-content" style="width: 430px; min-height: 330px;">
+            <div class="modal-content" style="width: 430px; min-height: 400px;">
                 <div class="modal-header">
                     <span class="close" onclick="closeModal('quotation_modal_<%=refNum%>')">×</span>
                     <center><h2>Input for Quotation Generation</h2></center>
                 </div>
                 <div class="modal-body">        
                     <form method="post" class="btn">
-                        <div class="form-inline">
-                            <label class="col-sm-3 control-label"> The cost of moving service includes: </label>
-                            <br>
-                            <div class="form-group">
-
-                                <div class="col-sm-4">
-                                    <textarea rows="4" cols="41" class="form-control" name="serviceIncludes"><%=qService%></textarea>
-                                    <input type="hidden" name="leadId" value="<%=lead.getId()%>">
-                                    <input type="hidden" name="refNum" value="<%=refNum%>">
-                                </div>
+                        <label class="col-sm-3 control-label"> The cost of moving service includes: </label>
+                        <br>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <textarea rows="4" cols="41" class="form-control" id="serviceIncludes" name="serviceIncludes"><%=qService%></textarea>
+                                <input type="hidden" name="leadId" id="leadId" value="<%=lead.getId()%>">
+                                <input type="hidden" name="refNum" id="refNum" value="<%=refNum%>">
                             </div>
-                                <br><br>
-                            <div class="form-group text-center">
-                                 <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
-                               
+                        </div>
+                        <br>
+                        <label class="col-sm-3 control-label"> Email Address: </label>
+                        <br>
+                        <div class="form-group">
+                            <div>
+                                <input type="text" class="form-control" id="quotationEmail" value="<%=email%>">
                             </div>
-                          
+                        </div>
+                        <br><br>
+                        <div class="form-group text-center">
+                            <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
+                            <button class='btn btn-primary' onclick="emailQuotation('quotation_modal_<%=refNum%>');return false;">Email</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
         <%
         } else {
         %>

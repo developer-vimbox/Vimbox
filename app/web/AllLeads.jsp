@@ -84,6 +84,16 @@
             });
         </script>
         <!-- The Modal -->
+        <div id="loading-submit"  style="display:none">
+            <div id="loadingsubmit">
+                <!--<img src="assets/image-resources/spin.gif">-->
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+            </div>
+        </div>
         <div id="cancelLeadModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">

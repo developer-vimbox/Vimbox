@@ -2450,6 +2450,51 @@ function viewQuotation(refNum) {
     document.getElementById(s).style.display = "block";
 }
 
+function emailQuotation(modalName){
+    var emailAdd = document.getElementById('quotationEmail').value;
+    if(!emailAdd){
+        document.getElementById('lead_error_status').innerHTML = "ERROR";
+        document.getElementById('lead_error_message').innerHTML = "Please enter an email address";
+        document.getElementById('lead_error_modal').style.display = "block";
+    }else{
+        var leadId = document.getElementById('leadId').value;
+        var refNum = document.getElementById('refNum').value;
+        var serviceIncludes = document.getElementById('serviceIncludes').value;
+        var div = document.getElementById("loading-submit");
+        jQuery.ajax({
+            url: "EmailQuotationController",
+            dataType: "json",
+            data: {
+                "email": emailAdd,
+                "leadId": leadId,
+                "refNum": refNum,
+                "serviceIncludes": serviceIncludes,                
+            },
+            beforeSend: function () {
+                div.style.display = "block";
+            },
+            success: function (data) {
+                div.style.display = "none";
+                document.getElementById('lead_error_status').innerHTML = data.status;
+                document.getElementById('lead_error_message').innerHTML = data.message;
+                document.getElementById('lead_error_modal').style.display = "block";
+                if(data.status === "SUCCESS"){
+                    setTimeout(function () {
+                        document.getElementById("lead_error_modal").style.display = "none";
+                        closeModal(modalName);
+                    }, 500);
+                }
+            },
+            error: function (data) {
+                div.style.display = "none";
+                document.getElementById('lead_error_status').innerHTML = data.status;
+                document.getElementById('lead_error_message').innerHTML = data.message;
+                document.getElementById('lead_error_modal').style.display = "block";
+            }
+        });
+    }
+}
+
 function reopenLead(leadId) {
     $.get("ReopenLeadController", {leadId: leadId}, function (data) {
         document.getElementById('lead_error_status').innerHTML = data.status;

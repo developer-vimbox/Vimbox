@@ -3,13 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/admin/ViewNotificationsController.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/database/NotificationDAO.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/admin/ClearNotificationsController.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sales/EmailQuotationController.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/EmailFunctions.js</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/LoadAllLeads.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sales/EmailPDFGenerator.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/AllLeads.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/util/SendMessageController.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/LoadSurveys.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/MySites.jsp</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/LeadFunctions.js</file>
             <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/header.jsp</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/TicketFunctions.js</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/WebSocket.js</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/Inbox.jsp</file>
         </group>
     </open-files>
 </project-private>
