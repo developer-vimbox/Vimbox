@@ -146,6 +146,7 @@
                     out.println("<button class='btn btn-default' onclick=\"viewDom('" + leadId + "', '" + userId + "')\">DOM</button>");
                     Lead lead = LeadDAO.getLeadById(Integer.parseInt(leadId));
                     String refNum = "VBSPL_";
+                    String email = ""; 
                     Customer customer = lead.getCustomer();
                     if (customer != null) {
                         String lastName = customer.getLast_name();
@@ -158,6 +159,7 @@
                         }
                         int custContact = customer.getContact() % 1000;
                         refNum += Integer.toString(custContact) + "_";
+                        email = customer.getEmail();
                     }
                     
                     String toms = lead.getTom();
