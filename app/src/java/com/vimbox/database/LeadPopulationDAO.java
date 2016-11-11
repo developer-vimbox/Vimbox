@@ -35,6 +35,9 @@ public class LeadPopulationDAO {
     private static final String CREATE_NORMAL_ITEM = "INSERT INTO system_items(name, description, dimensions, units, img, item_type) VALUES (?,?,?,?,?,'Normal')";
     private static final String CREATE_SPECIAL_ITEM = "INSERT INTO system_items(name, description, dimensions, units, img, item_type) VALUES (?,?,?,?,?,'Special')";
     private static final String CREATE_MATERIAL = "INSERT INTO system_vimbox_materials(name, img) VALUES (?,?)";
+    private static ArrayList<String[]> items = new ArrayList<String[]>();
+    private static ArrayList<String[]> specialItems = new ArrayList<String[]>();
+    private static ArrayList<String[]> vimboxItems = new ArrayList<String[]>();
     
     public static ArrayList<String> getAllServices() {
         ArrayList<String> results = new ArrayList<String>();
@@ -445,68 +448,95 @@ public class LeadPopulationDAO {
     }
 
     public static ArrayList<String[]> getExistingItemsSiteSurvey(String keyword) {
-        ArrayList<String[]> results = new ArrayList<String[]>();
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_EXISTING_ITEMS_SITE_SURVEY);
-            ps.setString(1, "%" + keyword + "%");
-            ps.setString(2, "%" + keyword + "%");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                String[] data = new String[]{rs.getString("name"), rs.getString("description"), rs.getString("dimensions"), rs.getString("units"), rs.getString("img"), rs.getInt("item_id") + ""};
-                results.add(data);
+        if (items.isEmpty() || items == null) {
+            //ArrayList<String[]> results = new ArrayList<String[]>();
+            Connection con = null;
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            try {
+                con = ConnectionManager.getConnection();
+                ps = con.prepareStatement(GET_EXISTING_ITEMS_SITE_SURVEY);
+                ps.setString(1, "%" + keyword + "%");
+                ps.setString(2, "%" + keyword + "%");
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    String[] data = new String[]{rs.getString("name"), rs.getString("description"), rs.getString("dimensions"), rs.getString("units"), rs.getString("img"), rs.getInt("item_id") + ""};
+                    items.add(data);
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            } finally {
+                ConnectionManager.close(con, ps, rs);
             }
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } finally {
-            ConnectionManager.close(con, ps, rs);
+            return items;
+        }
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        for(String[] s : items) {
+            if(s[0].toLowerCase().contains(keyword.toLowerCase()) || s[1].toLowerCase().contains(keyword.toLowerCase())) {
+                results.add(s);
+            }
         }
         return results;
     }
 
     public static ArrayList<String[]> getExistingSpecialItemsSiteSurvey(String keyword) {
-        ArrayList<String[]> results = new ArrayList<String[]>();
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_EXISTING_SPECIAL_ITEMS_SITE_SURVEY);
-            ps.setString(1, "%" + keyword + "%");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                String[] data = new String[]{rs.getString("name"), rs.getString("description"), rs.getString("dimensions"), rs.getString("units"), rs.getString("img"), rs.getInt("item_id") + "", "Special"};
-                results.add(data);
+        if (specialItems.isEmpty() || specialItems == null) {
+            //ArrayList<String[]> results = new ArrayList<String[]>();
+            Connection con = null;
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            try {
+                con = ConnectionManager.getConnection();
+                ps = con.prepareStatement(GET_EXISTING_SPECIAL_ITEMS_SITE_SURVEY);
+                ps.setString(1, "%" + keyword + "%");
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    String[] data = new String[]{"Special - " + rs.getString("name"), rs.getString("description"), rs.getString("dimensions"), rs.getString("units"), rs.getString("img"), rs.getInt("item_id") + "", "Special"};
+                    specialItems.add(data);
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            } finally {
+                ConnectionManager.close(con, ps, rs);
             }
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } finally {
-            ConnectionManager.close(con, ps, rs);
+            return specialItems;
+        }
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        for(String[] s : specialItems) {
+            if(s[0].toLowerCase().contains(keyword.toLowerCase()) || s[1].toLowerCase().contains(keyword.toLowerCase())) {
+                results.add(s);
+            }
         }
         return results;
     }
 
     public static ArrayList<String[]> getExistingVimboxMaterials(String keyword) {
-        ArrayList<String[]> results = new ArrayList<String[]>();
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = ConnectionManager.getConnection();
-            ps = con.prepareStatement(GET_EXISTING_VIMBOX_MATERIALS_SITE_SURVEY);
-            ps.setString(1, "%" + keyword + "%");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                String[] data = new String[]{rs.getString("name"), rs.getString("img"), rs.getInt("material_id") + "", "Material"};
-                results.add(data);
+        if (vimboxItems.isEmpty() || vimboxItems == null) {
+            //ArrayList<String[]> results = new ArrayList<String[]>();
+            Connection con = null;
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            try {
+                con = ConnectionManager.getConnection();
+                ps = con.prepareStatement(GET_EXISTING_VIMBOX_MATERIALS_SITE_SURVEY);
+                ps.setString(1, "%" + keyword + "%");
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    String[] data = new String[]{rs.getString("name"), rs.getString("img"), rs.getInt("material_id") + "", "Material"};
+                    vimboxItems.add(data);
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            } finally {
+                ConnectionManager.close(con, ps, rs);
             }
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } finally {
-            ConnectionManager.close(con, ps, rs);
+            return vimboxItems;
+        }
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        for(String[] s : vimboxItems) {
+            if(s[0].toLowerCase().contains(keyword.toLowerCase()) || s[1].toLowerCase().contains(keyword.toLowerCase())) {
+                results.add(s);
+            }
         }
         return results;
     }

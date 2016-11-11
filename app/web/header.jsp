@@ -526,12 +526,16 @@
                             <ul class="no-border notifications-box" id="notifications-section">
                                 <%
                                     for(Notification notification : notifications){
+                                        String fullMsg = notification.getMessage();
+                                        String[] s = fullMsg.split(" : ");
+                                        String notiDate = s[0];
+                                        String notiMsg = s[1];
                                 %>
                                 <li onclick="redirectNotification('<%=notification.getHtml()%>')">
-                                    <span class="bg-blue icon-notification glyph-icon icon-user"></span>
-                                    <span class="notification-text font-blue"><%=notification.getMessage()%></span>
-                                    <a onclick="clearSingleNotification('<%=notification.getMessage()%>', this)">x</a>
-                                </li>
+                                    <a style="float: right;" onclick="clearSingleNotification('<%=notification.getMessage()%>', this)">x</a>
+                                    <span><%=notiDate%></span> <br>
+                                    <span class="notification-text font-blue"><%=notiMsg%></span>
+                                    </li>
                                 <%
                                     }
                                 %>

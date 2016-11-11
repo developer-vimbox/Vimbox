@@ -7,9 +7,9 @@
     String salesDiv = request.getParameter("salesDiv");
     ArrayList<String[]> results = LeadPopulationDAO.getExistingItemsSiteSurvey(keyword);
     ArrayList<String[]> spcResults = LeadPopulationDAO.getExistingSpecialItemsSiteSurvey(keyword);
-    for (String[] spcResult : spcResults) {
-        spcResult[0] = "Special - " + spcResult[0];
-    }
+    //for (String[] spcResult : spcResults) {
+      //  spcResult[0] = "Special - " + spcResult[0];
+    //}
     spcResults.addAll(results);
     results = spcResults;
 %>

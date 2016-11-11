@@ -207,10 +207,10 @@
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div id="customer" class="tab-pane active">
-                                                        <div id="customer_table"></div>
+                                                        <div id="customer_table" style=" max-height: 485px; overflow: auto;"></div>
                                                     </div>
                                                     <div id="vimbox" class="tab-pane">
-                                                        <div id="vimbox_table"></div>
+                                                        <div id="vimbox_table" style=" max-height: 485px; overflow: auto;"></div>
                                                     </div>
                                                 </div>
                                             </div>
