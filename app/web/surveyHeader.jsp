@@ -674,7 +674,7 @@
                                 <li onclick="redirectNotification('<%=notification.getHtml()%>')">
                                     <a style="float: right;" onclick="clearSingleNotification('<%=notification.getMessage()%>', this)">x</a>
                                     <span><%=notiDate%></span> <br>
-                                    <span class="notification-text font-blue"><%=notiMsg%></span>
+                                    <span class="font-blue"><%=notiMsg%></span>
                                 </li>
                                 <%
                                     }
