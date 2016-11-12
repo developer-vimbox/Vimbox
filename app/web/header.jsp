@@ -103,6 +103,11 @@
         from {opacity: 0;}
         to {opacity: 1;}
     }
+    @media only screen and (max-width: 410px) {
+        #header-nav-left {
+            float: left;
+        }
+    }
 </style>
 
 <link rel="stylesheet" type="text/css" href="assets/bootstrap/css/bootstrap.css">
@@ -278,9 +283,8 @@
 
     <div id="page-wrapper">
         <div id="page-header" class="bg-gradient-9">
-            <div id="mobile-navigation">
+            <div id="mobile-navigation" style="padding-right: 0px; border-right-width: 0px;">
                 <button id="nav-toggle" class="collapsed" data-toggle="collapse" data-target="#page-sidebar"><span></span></button>
-                <a href="HomePage.jsp" class="logo-content-small" title="VIMBOX"></a>
             </div>
             <div id="header-logo" class="logo-bg">
                 <a href="HomePage.jsp" class="logo-content-big" title="VIMBOX">
@@ -291,15 +295,45 @@
                     <i class="glyph-icon icon-angle-left"></i>
                 </a>
             </div>
+            <style>
+                #des_mobile, #name_mobile, #search_btn {
+                    display: none;
+                }
+                @media only screen and (max-width: 700px) {
+                    #header-nav-left {
+                        float: left;
+                        margin-left: 5px;
+                        margin-right: 5px;
+                    }
+                    #header-nav-right {
+                        float: right;
+                        margin-right: 5px;
+                        margin-left: 5px;
+                    }
+                    #des_mobile, #name_mobile, #notifications-btn, #search_btn {
+                        display: inline;
+                    }
+                    #header_search {
+                        display: none;
+                    }
+                    .modal-content[style] {
+                        width: 100% !important;
+                    }
+                }
+            </style>
             <div id="header-nav-left">
-                <div class="user-account-btn dropdown">
+                <div class="user-account-btn dropdown" style="margin-right: 5px;">
                     <a href="#" title="My Account" class="user-profile clearfix" data-toggle="dropdown">
                         <span style="width: auto;"><%=name%></span>
                         <span><%=designation%></span>
                         <i class="glyph-icon icon-angle-down"></i>
                     </a>
-                    <div class="dropdown-menu float-left" style="left: 97px;">
+                    <div class="dropdown-menu float-left" style="width: 250px;">
                         <div class="box-sm" style="width: 250px;">  
+                            <center>
+                                <span id="name_mobile" style="width: auto;"><h3><%=name%></h3></span>
+                                <span id="des_mobile"><%=designation%></span>
+                            </center>
                             <div class="pad5A button-pane button-pane-alt text-center">
                                 <a href="ChangePassword.jsp" class="btn display-block font-normal btn-primary" style="margin-bottom: 5px">
                                     <i class="glyph-icon icon-unlock-alt"></i>
@@ -313,8 +347,19 @@
                         </div>
                     </div>
                 </div>
-
-
+                <div class="user-account-btn dropdown" id="search_btn">
+                    <a href="#" title="My Account" class="user-profile clearfix" data-toggle="dropdown">
+                        <i class="glyph-icon icon-search"></i>
+                    </a>
+                    <div class="dropdown-menu float-left" style="padding-bottom: 5px; width: 300px;">
+                       <div class="input-group">
+                            <input type="text" id="customer_search_header" class="form-control" placeholder="Search Customer">
+                            <span class="input-group-btn">
+                                <a class="btn btn-primary" onclick='customerSearchHeader("crm")'>Search</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <style>                                  
                 .searchbar {
@@ -329,7 +374,7 @@
                     border-radius: 0;
                     background: transparent;
                     color: white;
-                } 
+                }
 
                 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { 
                     color: whitesmoke;
@@ -344,7 +389,68 @@
                     color: whitesmoke;
                 }
             </style>
+            <div id="customer_modal_header" class="modal">
+                <div class="modal-content" style="width: 60%;">
+                    <div class="modal-header">
+                        <span class="close" onclick="closeModal('customer_modal_header')">×</span>
+                        <center><h2>Customer Search</h2></center>
+                    </div>
+                    <div class="modal-body">
+                        <div class="results">
+                            <div class="row">
+                                <div id="customer_modal_header">
+                                    <div id="customer_content_header"></div>
+                                </div>
 
+                                <div id="edit_customer_modal" class="modal">
+                                    <div class="modal-content" style="width: 70%;">
+                                        <div class="modal-header">
+                                            <span class="close" onclick="closeModal('edit_customer_modal')">×</span>
+                                            <center><h2>Edit Customer</h2></center>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="edit_customer_content"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="leadsHistoryModal" class="modal">
+                                    <div class="modal-content" style="width: 80%;">
+                                        <div class="modal-header">
+                                            <span class="close" onclick="closeModal('leadsHistoryModal')">×</span>
+                                            <center><h2>Leads History</h2></center>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="leadsHistoryContent"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="customer_error_modal" class="modal">
+                                    <div class="error-modal-content">
+                                        <div class="modal-header">
+                                            <span class="close" onclick="closeModal('customer_error_modal')">×</span>
+                                            <center><h2><div id="customer_error_status"></div></h2></center>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="customer_error_message"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="ticketsHistoryModal" class="modal">
+                                    <div class="modal-content" style="width: 80%;">
+                                        <div class="modal-header">
+                                            <span class="close" onclick="closeModal('ticketsHistoryModal')">×</span>
+                                            <center><h2>Tickets History</h2></center>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="ticketsHistoryContent"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--.results-->
+                    </div>
+                </div>
+            </div>
             <div id="header-nav-right">
                 <script src="JS/AdminFunctions.js"></script>
                 <style type="text/css">
@@ -384,95 +490,27 @@
                         z-index: 1;
                     }
                 </style>
-
-
-                <div class="dropdown">
+                <div class="dropdown" id="header_search">
                     <input type="text" id="customer_search_header" class="searchbar" placeholder="Search Customer">
                     <button class="btn btn-round btn-primary" onclick='customerSearchHeader("crm")' data-toggle="modal" data-target=".bs-example-modal-lg" style=" margin-right: 10px">
                         <i class="glyph-icon icon-search"></i>
                     </button>
                 </div>
-                <div id="customer_modal_header" class="modal">
-                    <div class="modal-content" style="width: 60%;">
-                        <div class="modal-header">
-                            <span class="close" onclick="closeModal('customer_modal_header')">×</span>
-                            <center><h2>Customer Search</h2></center>
-                        </div>
-                        <div class="modal-body">
-                            <div class="results">
-                                <div class="row">
-                                    <div id="customer_modal_header">
-                                        <div id="customer_content_header"></div>
-                                    </div>
-
-                                    <div id="edit_customer_modal" class="modal">
-                                        <div class="modal-content" style="width: 70%;">
-                                            <div class="modal-header">
-                                                <span class="close" onclick="closeModal('edit_customer_modal')">×</span>
-                                                <center><h2>Edit Customer</h2></center>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div id="edit_customer_content"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="leadsHistoryModal" class="modal">
-                                        <div class="modal-content" style="width: 80%;">
-                                            <div class="modal-header">
-                                                <span class="close" onclick="closeModal('leadsHistoryModal')">×</span>
-                                                <center><h2>Leads History</h2></center>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div id="leadsHistoryContent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="customer_error_modal" class="modal">
-                                        <div class="error-modal-content">
-                                            <div class="modal-header">
-                                                <span class="close" onclick="closeModal('customer_error_modal')">×</span>
-                                                <center><h2><div id="customer_error_status"></div></h2></center>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div id="customer_error_message"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="ticketsHistoryModal" class="modal">
-                                        <div class="modal-content" style="width: 80%;">
-                                            <div class="modal-header">
-                                                <span class="close" onclick="closeModal('ticketsHistoryModal')">×</span>
-                                                <center><h2>Tickets History</h2></center>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div id="ticketsHistoryContent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div><!--.row-->
-                            </div><!--.results-->
-                        </div>
-
-                    </div>
-                </div>
                 <%
                     if (moduleNames.contains("Admin")) {
                 %>
-                <div class="htooltip dropdown">
+                <div class="htooltip dropdown" id="ss_cal">
                     <a onclick="admViewCal()"><i class="glyph-icon icon-calendar-o"></i></a>
                     <span class='htooltiptext'>
                         View Site Survey Schedule
                     </span>
                 </div>
-                <div class="htooltip dropdown">
+                <div class="htooltip dropdown" id="ops_cal">
                     <a onclick="admViewMovCal()"><i class="glyph-icon icon-calendar"></i></a>
                     <span class='htooltiptext'>
                         View Operation Schedules
                     </span>
                 </div>
-
                 <div id="cal_modal" class="modal">
                     <div class="modal-content" style="width: 90%;">
                         <div class="modal-body">
@@ -495,12 +533,11 @@
                 <%
                     }
                 %>
-                
                 <%
                     ArrayList<Notification> notifications = NotificationDAO.getUserNotifications(user.getNric());
                     boolean notificationCheck = false;
-                    for(Notification notification : notifications){
-                        if(notification.getStatus().equals("New")){
+                    for (Notification notification : notifications) {
+                        if (notification.getStatus().equals("New")) {
                             notificationCheck = true;
                             break;
                         }
@@ -509,9 +546,9 @@
                 <div class="dropdown" id="notifications-btn" onclick="viewNotifications()">
                     <a data-toggle="dropdown" href="#" id="notifications-a">
                         <%
-                            if(notificationCheck){
+                            if (notificationCheck) {
                         %>
-                            <span class="small-badge bg-yellow" id="notifications-tag"></span>
+                        <span class="small-badge bg-yellow" id="notifications-tag"></span>
                         <%
                             }
                         %>
@@ -525,7 +562,7 @@
                         <div class="scrollable-content scrollable-slim-box">
                             <ul class="no-border notifications-box" id="notifications-section">
                                 <%
-                                    for(Notification notification : notifications){
+                                    for (Notification notification : notifications) {
                                         String fullMsg = notification.getMessage();
                                         String[] s = fullMsg.split(" : ");
                                         String notiDate = s[0];
@@ -535,7 +572,7 @@
                                     <a style="float: right;" onclick="clearSingleNotification('<%=notification.getMessage()%>', this)">x</a>
                                     <span><%=notiDate%></span> <br>
                                     <span class="notification-text font-blue"><%=notiMsg%></span>
-                                    </li>
+                                </li>
                                 <%
                                     }
                                 %>
@@ -667,10 +704,8 @@
                                 <li><a href="MyTickets.jsp" title="My Tickets"><span>My Tickets</span></a></li>
                                 <li><a href="TicketForum.jsp" title="TicketForum"><span>Ticket Forum</span></a></li>
                             </ul>
-
                         </div><!-- .sidebar-submenu -->
                     </li>
-
                     <%
                         if (moduleNames.contains("Admin")) {
                     %>

@@ -298,19 +298,7 @@
     %>
     <div id="page-wrapper">
         <div id="page-header" class="bg-gradient-9">
-            <div id="mobile-navigation">
-                <button id="nav-toggle" class="collapsed" data-toggle="collapse" data-target="#page-sidebar"><span></span></button>
-                <a href="HomePage.jsp" class="logo-content-small" title="VIMBOX"></a>
-            </div>
-            <div id="header-logo" class="logo-bg">
-                <a href="HomePage.jsp" class="logo-content-big" title="VIMBOX">
-                </a>
-                <a href="HomePage.jsp" class="logo-content-small" title="VIMBOX">
-                </a>
-                <a id="close-sidebar" href="#" title="Close sidebar">
-                    <i class="glyph-icon icon-angle-left"></i>
-                </a>
-            </div>
+            
             <div id="header-nav-custom" style="margin-top: 1%;">
                 <div class="dropdown">
                     <a href="#" data-toggle="dropdown" data-placement="bottom" class="popover-button-header tooltip-button" title="" data-original-title="Dashboard Quick Menu" aria-expanded="false">
@@ -318,10 +306,33 @@
                     </a>
                     <div class="dropdown-menu float-left" style="display: none;">
                         <div class="box-sm">
-                            <ul id="sidebar-menu" class="sf-js-enabled sf-arrows">
+                            <ul id="sidebar-menu">
+                                <li>
+                                    <a href="HomePage.jsp" title="HomePage">
+                                        <i class="glyph-icon icon-home"></i>
+                                        <span>Homepage</span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="#" data-toggle="dropdown" title="Mailbox">
+                                        <i class="glyph-icon icon-linecons-mail"></i>
+                                        <span>Mailbox</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="NewMessage.jsp" title="Compose New Message"><span>Compose New Message</span></a></li>
+                                        <li><a href="Inbox.jsp" title="Inbox"><span>Inbox</span></a></li>
+                                        <li><a href="Sentmail.jsp" title="Sent Mail"><span>Sent Mail</span></a></li>
+                                        <li><a href="Drafts.jsp" title="Drafts"><span>Drafts</span></a></li>
+                                        <li><a href="Spam.jsp" title="Spam"><span>Spam</span></a></li>
+                                        <li><a href="Trash.jsp" title="Trash"><span>Trash</span></a></li>
+                                    </ul>
+                                </li>
+                                <%
+                                    if (moduleNames.contains("Admin") || moduleNames.contains("HR")) {
+                                %>
                                 <li class="dropdown-submenu">
                                     <a href="#" data-toggle="dropdown" title="Human Resource" class="sf-with-ul">
-                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <i class="glyph-icon icon-group"></i>
                                         <span>Human Resource</span>
                                     </a>
                                     <ul class="dropdown-menu">
@@ -333,9 +344,13 @@
                                         <li> <a href="LeaveMCs.jsp" title="Leave / MC">Leave / MC</a></li>
                                     </ul>
                                 </li>
+                                <%
+                                    }
+                                    if (moduleNames.contains("Admin") || moduleNames.contains("Sales")) {
+                                %>
                                 <li class="dropdown-submenu">
                                     <a href="#" title="Sales" class="sf-with-ul">
-                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <i class="glyph-icon icon-dollar"></i>
                                         <span>Sales</span>
                                     </a>
                                     <ul class="dropdown-menu">
@@ -347,9 +362,13 @@
                                     </ul>
 
                                 </li>
+                                <%
+                                    }
+                                    if (moduleNames.contains("Admin") || moduleNames.contains("SiteSurvey")) {
+                                %>
                                 <li class="dropdown-submenu">
                                     <a href="#" title="Site Surveys" class="sf-with-ul">
-                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <i class="glyph-icon icon-building-o"></i>
                                         <span>Site Surveys</span>
                                     </a>
                                     <ul class="dropdown-menu">
@@ -357,19 +376,32 @@
                                         <li><a href="MySiteSurveySchedules.jsp" title="My Schedule"><span>My Schedule</span></a></li>
                                     </ul>
                                 </li>
+                                <%
+                                    }
+                                    if (moduleNames.contains("Admin") || moduleNames.contains("Supervisor")) {
+                                %>
                                 <li class="dropdown-submenu">
                                     <a href="#" title="Operations" class="sf-with-ul">
-                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <i class="glyph-icon icon-truck"></i>
                                         <span>Operations</span>
                                     </a>
                                     <ul class="dropdown-menu">
+                                        <%
+                                            if (moduleNames.contains("Admin")) {
+                                        %>
                                         <li><a href="AssignJobs.jsp" title="Assign Jobs"><span>Assign Jobs</span></a></li>
+                                            <% } %>
+                                        <li><a href="SupervisorJobs.jsp" title="Supervisor Jobs"><span>Supervisor Jobs</span></a></li>
+                                        <li><a href="SupervisorTakeAttendance.jsp" title="Supervisor Take Attendance"><span>Take Attendance</span></a></li>
                                     </ul>
 
                                 </li>
+                                <%
+                                    }
+                                %>
                                 <li class="dropdown-submenu">
                                     <a href="#" title="Tickets" class="sf-with-ul">
-                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <i class="glyph-icon icon-ticket"></i>
                                         <span>Tickets</span>
                                     </a>
                                     <ul class="dropdown-menu">
@@ -377,60 +409,36 @@
                                         <li><a href="MyTickets.jsp" title="My Tickets"><span>My Tickets</span></a></li>
                                         <li><a href="TicketForum.jsp" title="TicketForum"><span>Ticket Forum</span></a></li>
                                     </ul>
-
                                 </li>
+                                <%
+                                    if (moduleNames.contains("Admin")) {
+                                %>
                                 <li class="dropdown-submenu">
                                     <a href="#" title="Admin" class="sf-with-ul">
-                                        <i class="glyph-icon icon-linecons-diamond"></i>
+                                        <i class="glyph-icon icon-user"></i>
                                         <span>Admin</span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a href="ValueSetup.jsp" title="Value Setup"><span>Value Setup</span></a></li>
                                     </ul>
-
                                 </li>
-
+                                <%
+                                    }
+                                %>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="header-nav-left" style="margin-left: 3%;">
 
-                <!--                <div class="menu-custom-btn-dropdown">
-                                    <button class="dropbtn"><i class="glyph-icon icon-unlock-alt"></i></button>
-                                    <div class="menu-custom-btn-dropdown-content">
-                                        <a href="#">Link 1</a>
-                                        <a href="#">Link 2</a>
-                                        <a href="#">Link 3</a>
-                                    </div>
-                                </div>-->
-
-                <!--             <div class="menu-custom-btn dropdown">
-                                    <a href="#" title="Menu" class="menu clearfix" data-toggle="dropdown">
-                                    </a>
-                             </div>-->
-                <!--                    <div class="dropdown-menu float-right" style="left: 97px;">
-                                        <div class="box-sm" style="width: 250px;">  
-                                            <div class="pad5A button-pane button-pane-alt text-center">
-                                                <a href="ChangePassword.jsp" class="btn display-block font-normal btn-primary" style="margin-bottom: 5px">
-                                                    <i class="glyph-icon icon-unlock-alt"></i>
-                                                    Change Password
-                                                </a>
-                                                <a href="Logout.jsp" class="btn display-block font-normal btn-danger">
-                                                    <i class="glyph-icon icon-power-off"></i>
-                                                    Logout
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>-->
+            <div id="header-nav-left">
                 <div class="user-account-btn dropdown">
                     <a href="#" title="My Account" class="user-profile clearfix" data-toggle="dropdown">
-                        <span><%=name%></span>
+                        <span style="width: auto;"><%=name%></span>
                         <span><%=designation%></span>
                         <i class="glyph-icon icon-angle-down"></i>
                     </a>
-                    <div class="dropdown-menu float-left" style="left: 97px;">
+                    <div class="dropdown-menu float-left">
                         <div class="box-sm" style="width: 250px;">  
                             <div class="pad5A button-pane button-pane-alt text-center">
                                 <a href="ChangePassword.jsp" class="btn display-block font-normal btn-primary" style="margin-bottom: 5px">
@@ -445,6 +453,8 @@
                         </div>
                     </div>
                 </div>
+
+
             </div>
             <style>                                  
                 .searchbar {
@@ -476,6 +486,46 @@
             </style>
 
             <div id="header-nav-right">
+                <script src="JS/AdminFunctions.js"></script>
+                <style type="text/css">
+                    .htooltip {
+                        position: relative;
+                        z-index: 999;
+                    }
+
+                    .htooltip .htooltiptext {
+                        visibility: hidden;
+                        width: 180px;
+                        background-color: black;
+                        color: #fff;
+                        text-align: center;
+                        border-radius: 6px;
+                        padding: 5px 0;
+                        position: absolute;
+                        z-index: 1;
+                        top: 115%;
+                        left: -147%;
+                    }
+
+                    .htooltip .htooltiptext::after {
+                        content: "";
+                        position: absolute;
+                        bottom: 100%;
+                        left: 50%;
+                        margin-left: -5px;
+                        border-width: 5px;
+                        border-style: solid;
+                        border-color: transparent transparent black transparent;
+                    }
+
+                    .htooltip:hover .htooltiptext {
+                        visibility: visible;
+                        display: block;
+                        z-index: 1;
+                    }
+                </style>
+
+
                 <div class="dropdown">
                     <input type="text" id="customer_search_header" class="searchbar" placeholder="Search Customer">
                     <button class="btn btn-round btn-primary" onclick='customerSearchHeader("crm")' data-toggle="modal" data-target=".bs-example-modal-lg" style=" margin-right: 10px">
@@ -483,7 +533,7 @@
                     </button>
                 </div>
                 <div id="customer_modal_header" class="modal">
-                    <div class="modal-content" style="width: 700px;">
+                    <div class="modal-content" style="width: 60%;">
                         <div class="modal-header">
                             <span class="close" onclick="closeModal('customer_modal_header')">×</span>
                             <center><h2>Customer Search</h2></center>
@@ -496,7 +546,7 @@
                                     </div>
 
                                     <div id="edit_customer_modal" class="modal">
-                                        <div class="modal-content" style="width: 500px;">
+                                        <div class="modal-content" style="width: 70%;">
                                             <div class="modal-header">
                                                 <span class="close" onclick="closeModal('edit_customer_modal')">×</span>
                                                 <center><h2>Edit Customer</h2></center>
@@ -506,9 +556,8 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div id="leadsHistoryModal" class="modal">
-                                        <div class="modal-content" style="width: 900px;">
+                                        <div class="modal-content" style="width: 80%;">
                                             <div class="modal-header">
                                                 <span class="close" onclick="closeModal('leadsHistoryModal')">×</span>
                                                 <center><h2>Leads History</h2></center>
@@ -518,7 +567,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div id="customer_error_modal" class="modal">
                                         <div class="error-modal-content">
                                             <div class="modal-header">
@@ -530,9 +578,8 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div id="ticketsHistoryModal" class="modal">
-                                        <div class="modal-content" style="width: 900px;">
+                                        <div class="modal-content" style="width: 80%;">
                                             <div class="modal-header">
                                                 <span class="close" onclick="closeModal('ticketsHistoryModal')">×</span>
                                                 <center><h2>Tickets History</h2></center>
@@ -550,6 +597,44 @@
 
                     </div>
                 </div>
+                <%
+                    if (moduleNames.contains("Admin")) {
+                %>
+                <div class="htooltip dropdown">
+                    <a onclick="admViewCal()"><i class="glyph-icon icon-calendar-o"></i></a>
+                    <span class='htooltiptext'>
+                        View Site Survey Schedule
+                    </span>
+                </div>
+                <div class="htooltip dropdown">
+                    <a onclick="admViewMovCal()"><i class="glyph-icon icon-calendar"></i></a>
+                    <span class='htooltiptext'>
+                        View Operation Schedules
+                    </span>
+                </div>
+
+                <div id="cal_modal" class="modal">
+                    <div class="modal-content" style="width: 90%;">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('cal_modal')">×</span>
+                            <br>
+                            <div id="cal_content"></div>
+                            <br>
+                            <div id="ssCalTable"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="schedule_modal" class="modal">
+                    <div class="modal-content" style="width: 95%;">
+                        <div class="modal-body">
+                            <span class="close" onclick="closeModal('schedule_modal')">×</span>
+                            <div id="schedule_content"></div>
+                        </div>
+                    </div>
+                </div>
+                <%
+                    }
+                %>
 
                 <%
                     ArrayList<Notification> notifications = NotificationDAO.getUserNotifications(user.getNric());
@@ -573,14 +658,23 @@
                         <i class="glyph-icon icon-linecons-megaphone"></i>
                     </a>
                     <div class="dropdown-menu box-md float-right">
+                        <div class="popover-title display-block clearfix pad10A">
+                            Notifications
+                            <button class="text-transform-cap font-primary font-normal btn-link float-right" onclick="clearNotifications()">Clear all</button>
+                        </div>
                         <div class="scrollable-content scrollable-slim-box">
                             <ul class="no-border notifications-box" id="notifications-section">
                                 <%
                                     for (Notification notification : notifications) {
+                                        String fullMsg = notification.getMessage();
+                                        String[] s = fullMsg.split(" : ");
+                                        String notiDate = s[0];
+                                        String notiMsg = s[1];
                                 %>
-                                <li>
-                                    <span class="bg-blue icon-notification glyph-icon icon-user"></span>
-                                    <span class="notification-text font-blue"><%=notification.getMessage()%></span>
+                                <li onclick="redirectNotification('<%=notification.getHtml()%>')">
+                                    <a style="float: right;" onclick="clearSingleNotification('<%=notification.getMessage()%>', this)">x</a>
+                                    <span><%=notiDate%></span> <br>
+                                    <span class="notification-text font-blue"><%=notiMsg%></span>
                                 </li>
                                 <%
                                     }
@@ -589,9 +683,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><!-- #header-nav-right -->
         </div>
-    </div><!-- #header-nav-right -->
+    </div>
+</div><!-- #header-nav-right -->
 </div>
 <!-- WIDGETS -->
 <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>

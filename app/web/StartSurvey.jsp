@@ -73,7 +73,7 @@
                                                                 <td class="selected" id="siteInfo_tab" onclick='displaySiteInfo()'><center><b>Site Info</b></center></td>
                                             </tr>
                                             <tr>
-                                                <td><center>FROM</center></td>
+                                                <td bgcolor="#e6e6ff"><center><b>FROM</b></center></td>
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
@@ -111,7 +111,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td><center>TO</center></td>
+                                                <td bgcolor="#e6e6ff"><center><b>TO</b></center></td>
                                             </tr>
                                             <tr>
                                                 <td valign='top'>
