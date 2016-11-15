@@ -2338,112 +2338,7 @@ function viewSalesPortion(leadId) {
     });
     modal.style.display = "block";
 }
-function showSalesReport(selopt) {
-    var opt = selopt.value;
-    if (opt == 'week') {
-        showWeekReport();
 
-//    } else if (opt == 'month') {
-//        showMonthReport();
-//    } 
-    } else if (opt == 'year') {
-        showMonthReport();
-    }
-}
-
-function showWeekReport() {
-
-    var chdate = document.getElementById("seldate");
-    var chdatelbl = document.getElementById("seldatelbl");
-
-    chdatelbl.style.display = "block";
-    chdate.style.display = "block";
-
-
-//    var selyearlbl = document.getElementById("selyearlbl");
-//    var selyear = document.getElementById("selyear");
-//    if (selyearlbl.style.display == "block" && selyear.style.display == "block") {
-//        selyearlbl.style.display = "none";
-//        selyear.style.display = "none";
-//    }
-    $(document).ready(function () {
-        var schtable = document.getElementById("shwreport");
-        $.ajax({
-            url: 'LoadSalesReport.jsp',
-            data: {seldate: chdate.value},
-            type: 'POST',
-            success: function (response) {
-                $(schtable).html(response);
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-//                alert(xhr.status);
-//                alert(xhr.responseText);
-//                alert(thrownError);
-            }
-        });
-    });
-
-}
-function showMonthReport() {
-    var chdate = document.getElementById("seldate");
-    var chdatelbl = document.getElementById("seldatelbl");
-    if (chdate.style.display == "block" && chdatelbl.style.display == "block") {
-        chdatelbl.style.display = "none";
-        chdate.style.display = "none";
-    }
-//    var selyearlbl = document.getElementById("selyearlbl");
-//    var selyear = document.getElementById("selyear");
-//    if (selyearlbl.style.display == "block" && selyear.style.display == "block") {
-//        selyearlbl.style.display = "none";
-//        selyear.style.display = "none";
-//    }
-    var schtable = document.getElementById("shwreport");
-    $.ajax({
-        url: 'LoadMonthSalesReport.jsp',
-        type: 'POST',
-        success: function (response) {
-            $(schtable).html(response);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-//            alert(xhr.status);
-//            alert(xhr.responseText);
-//            alert(thrownError);
-        }
-    });
-
-}
-function showYearReport() {
-
-    var chdate = document.getElementById("seldate");
-    var chdatelbl = document.getElementById("seldatelbl");
-    if (chdate.style.display == "block" && chdatelbl.style.display == "block") {
-        chdatelbl.style.display = "none";
-        chdate.style.display = "none";
-    }
-    var selyearlbl = document.getElementById("selyearlbl");
-    var selyear = document.getElementById("selyear");
-    alert(selyear.value);
-    if (selyearlbl.style.display == "none" && selyear.style.display == "none") {
-        selyearlbl.style.display = "block";
-        selyear.style.display = "block";
-    }
-    var schtable = document.getElementById("shwreport");
-    $.ajax({
-        url: 'LoadYearSalesReport.jsp',
-        data: {selyear: selyear.value},
-        type: 'POST',
-        success: function (response) {
-            //alert(response);
-            $(schtable).html(response);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-//            alert(xhr.status);
-//            alert(xhr.responseText);
-//            alert(thrownError);
-        }
-    });
-
-}
 
 function viewQuotation(refNum) {
     var s = "quotation_modal_" + refNum;
@@ -2505,6 +2400,1077 @@ function reopenLead(leadId) {
             document.getElementById("lead_error_modal").style.display = "none";
         }, 1000);
     });
+}
+function showConfirmedSalesReport(selopt) {
+    var opt = selopt.value;
+    if (opt == null) {
+        opt = "week";
+    }
+    if (opt == 'week') {
+        showConfirmedWeekReport();
+    } else if (opt == 'year') {
+        showConfirmedYearReport();
+    }
+}
+function showConfirmedWeekReport() {
+    var chdate = document.getElementById("seldate");
+    chdate.style.display = 'block';
+    var chdatelbl = document.getElementById("seldatelbl");
+    chdatelbl.style.display = 'block';
+    var chyear = document.getElementById("selyear");
+    chyear.style.display = 'none';
+    var chyearlbl = document.getElementById("selyearlbl").style.display = 'none';
+    var seldate = chdate.value;
+    if (seldate == null) {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        var today = yyyy + '-' + mm + '-' + dd;
+        seldate = today;
+    }
+    $.getJSON("SalesReportController", {opt: "week", seldate: seldate})
+            .done(function (data) {
+                //alert(JSON.stringify(data));
+                var status = data.status;
+                if (status === "SUCCESS") {
+                    var mon = data.mon;
+                    var tues = data.tues;
+                    var weds = data.weds;
+                    var thurs = data.thurs;
+                    var fri = data.fri;
+                    var sat = data.sat;
+                    var sun = data.sun;
+                    var montotal = parseFloat(data.montotal);
+                    var tuestotal = parseFloat(data.tuestotal);
+                    var wedstotal = parseFloat(data.wedstotal)
+                    var thurstotal = parseFloat(data.thurstotal);
+                    var fritotal = parseFloat(data.fritotal);
+                    var sattotal = parseFloat(data.sattotal);
+                    var suntotal = parseFloat(data.suntotal);
+                    var max = data.max;
+                    var total = parseFloat(data.total);
+                    var maxAmt = parseFloat(data.maxAmt);
+                    var chartData = google.visualization.arrayToDataTable([
+                        ["Days", "No. Of Confirmed Sales for " + seldate],
+                        ["Monday", mon],
+                        ["Tuesday", tues],
+                        ["Wednesday", weds],
+                        ["Thursday", thurs],
+                        ["Friday", fri],
+                        ["Saturday", sat],
+                        ["Sunday", sun]
+                    ]);
+
+
+                    var options = "";
+                    if (max < 5) {
+                        options = {
+                            colors: ['#3F51B5'],
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '100%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '50%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            vAxis: {
+                                viewWindow: {
+                                    max: 15,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    } else {
+                        options = {
+                            colors: ['#3F51B5'],
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '100%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '50%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            vAxis: {
+                                viewWindow: {
+                                    max: max,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    }
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No. of Confirmed Sales for ' + seldate;
+                    var shwreport = document.getElementById('shwreport');
+                    shwreport.style.display = "block";
+                    var chart = new google.visualization.ColumnChart(document.getElementById('shwreport'));
+                    var totalTitle = document.getElementById('forTotalNo');
+                    totalTitle.style.display = "block";
+                    totalTitle.innerHTML = 'Total No. Of Sales: ' + (mon + tues + weds + thurs + fri + sat + sun);
+                    chart.draw(chartData, options);
+
+                    //draw amount chart
+                    var chartAmtData = google.visualization.arrayToDataTable([
+                        ["Days", "Total Amount Of Confirmed Sales for " + seldate],
+                        ["Monday", montotal],
+                        ["Tuesday", tuestotal],
+                        ["Wednesday", wedstotal],
+                        ["Thursday", thurstotal],
+                        ["Friday", fritotal],
+                        ["Saturday", sattotal],
+                        ["Sunday", suntotal]
+                    ]);
+
+                    var amtoptions = "";
+                    if (maxAmt <= 20) {
+                        amtoptions = {
+                            colors: ['#26C6DA'],
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '100%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '50%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            vAxis: {
+                                viewWindow: {
+                                    max: 20,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    } else {
+                        amtoptions = {
+                            colors: ['#26C6DA'],
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '100%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '50%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            vAxis: {
+                                viewWindow: {
+                                    max: maxAmt,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    }
+                    var amttitle = document.getElementById('rptAmtTitle');
+                    amttitle.innerHTML = 'Total Amount of Confirmed Sales for ' + seldate;
+                    var shwAmtreport = document.getElementById('shwAmtreport');
+                    shwAmtreport.style.display = "block";
+                    var totalTitle2 = document.getElementById('forTotalAmt');
+                    totalTitle2.style.display = "block";
+                    totalTitle2.innerHTML = 'Total Amt. Of Sales: $' + total;
+                    var chart = new google.visualization.ColumnChart(document.getElementById('shwAmtreport'));
+                    chart.draw(chartAmtData, amtoptions);
+
+
+                } else if (status == "noRecord") {
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No Records Found';
+                    var shwreport = document.getElementById('shwreport');
+                    shwreport.style.display = "none";
+                    var totalTitle = document.getElementById('forTotalAmt').style.display = "none";
+                    var totalTitle = document.getElementById('forTotalNo').style.display = "none";
+                    //amt details
+                    var amttitle = document.getElementById('rptAmtTitle');
+                    amttitle.innerHTML = 'No Records Found';
+                    var shwAmtreport = document.getElementById('shwAmtreport');
+                    shwAmtreport.style.display = "none";
+                }
+            }).fail(function (error) {
+        //alert(JSON.stringify(error));
+    });
+
+}
+
+function showConfirmedYearReport() {
+    var chdate = document.getElementById("seldate").style.display = 'none';
+    var chdatelbl = document.getElementById("seldatelbl").style.display = 'none';
+    var chyear = document.getElementById("selyear");
+    chyear.style.display = 'block';
+    var chyearlbl = document.getElementById("selyearlbl").style.display = 'block';
+    var selyear = chyear.value;
+   // alert(selyear);
+    $.getJSON("SalesReportController", {opt: "year", selyear: selyear})
+            .done(function (data) {
+                //alert(JSON.stringify(data));
+                var status = data.status;
+                //alert(status);
+                if (status === "SUCCESS") {
+                    var jan = data.jan;
+                    var feb = data.feb;
+                    var mar = data.mar;
+                    var apr = data.apr;
+                    var may = data.may;
+                    var june = data.june;
+                    var jul = data.jul;
+                    var aug = data.aug;
+                    var sep = data.sep;
+                    var oct = data.oct;
+                    var nov = data.nov;
+                    var dec = data.dec;
+                    var total = parseFloat(data.total);
+                    var jantotal = parseFloat(data.jantotal);
+                    var febtotal = parseFloat(data.febtotal);
+                    var martotal = parseFloat(data.martotal);
+                    var aprtotal = parseFloat(data.aprtotal);
+                    var maytotal = parseFloat(data.maytotal);
+                    var junetotal = parseFloat(data.junetotal);
+                    var jultotal = parseFloat(data.jultotal);
+                    var augtotal = parseFloat(data.augtotal);
+                    var septotal = parseFloat(data.septotal);
+                    var octtotal = parseFloat(data.octtotal);
+                    var novtotal = parseFloat(data.novtotal);
+                    var dectotal = parseFloat(data.dectotal);
+                    var maxAmt = parseFloat(data.maxAmt);
+                    var max = data.max;
+                    var chartData = google.visualization.arrayToDataTable([
+                        ["Months", "No. Of Confirmed Sales in " + selyear],
+                        ["January", jan],
+                        ["Feburary", feb],
+                        ["March", mar],
+                        ["April", apr],
+                        ["May", may],
+                        ["June", june],
+                        ["July", jul],
+                        ["August", aug],
+                        ["September", sep],
+                        ["October", oct],
+                        ["November", nov],
+                        ["December", dec]
+                    ]);
+                    if (max < 5) {
+                        var options = {
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '90%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '80%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            colors: ['#900C3F'],
+                            vAxis: {
+                                viewWindow: {
+                                    max: 15,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    } else {
+                        var options = {
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '90%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '80%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            colors: ['#900C3F'],
+                            vAxis: {
+                                viewWindow: {
+                                    max: max,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    }
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No. of Confirmed Sales in ' + selyear;
+                    var shwreport = document.getElementById('shwreport');
+                    shwreport.style.display = "block";
+                    var chart = new google.visualization.ColumnChart(document.getElementById('shwreport'));
+                    chart.draw(chartData, options);
+                    var totalTitle = document.getElementById('forTotalNo');
+                    totalTitle.style.display = "block";
+                    totalTitle.innerHTML = 'Total No. Of Sales: ' + (jan + feb + mar + apr + may + june + jul + aug + sep + oct + nov + dec);
+
+                    //amt chart
+                    var chartAmtData = google.visualization.arrayToDataTable([
+                        ["Months", "Total Amount Of Confirmed Sales in " + selyear],
+                        ["January", jantotal],
+                        ["Feburary", febtotal],
+                        ["March", martotal],
+                        ["April", aprtotal],
+                        ["May", maytotal],
+                        ["June", junetotal],
+                        ["July", jultotal],
+                        ["August", augtotal],
+                        ["September", septotal],
+                        ["October", octtotal],
+                        ["November", novtotal],
+                        ["December", dectotal]
+                    ]);
+                    var chartOptions = "";
+                    if (maxAmt <= 20) {
+                        chartOptions = {
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '90%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '80%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            colors: ['#BA68C8'],
+                            vAxis: {
+                                viewWindow: {
+                                    max: 20,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    } else {
+                        chartOptions = {
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '90%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '80%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            colors: ['#BA68C8'],
+                            vAxis: {
+                                viewWindow: {
+                                    max: maxAmt,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    }
+                    var amttitle = document.getElementById('rptAmtTitle');
+                    amttitle.innerHTML = 'Total Amount of Confirmed Sales in ' + selyear;
+                    var shwAmtreport = document.getElementById('shwAmtreport');
+                    shwAmtreport.style.display = "block";
+                    var totalTitle2 = document.getElementById('forTotalAmt');
+                    totalTitle2.style.display = "block";
+                    totalTitle2.innerHTML = 'Total Amt. Of Sales: $' + total;
+                    var chart = new google.visualization.ColumnChart(document.getElementById('shwAmtreport'));
+                    chart.draw(chartAmtData, chartOptions);
+
+
+                } else if (status == "noRecord") {
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No Records Found';
+                    var shwreport = document.getElementById('shwreport');
+                    shwreport.style.display = "none";
+                    var totalTitle = document.getElementById('forTotalAmt').style.display = "none";
+                    document.getElementById('forTotalNo').style.display = "none";
+                    //amt details
+                    var amttitle = document.getElementById('rptAmtTitle');
+                    amttitle.innerHTML = 'No Records Found';
+                    var shwAmtreport = document.getElementById('shwAmtreport');
+                    shwAmtreport.style.display = "none";
+                }
+            }).fail(function (error) {
+        //alert(JSON.stringify(error));
+    });
+}
+
+function confirmedReport() {
+    document.getElementById("optnspending").style.display = "none";
+    document.getElementById("seldate_pending").style.display = "none";
+    document.getElementById("selyear_pending").style.display = 'none';
+    document.getElementById("selyearlbl").style.display = 'none';
+    document.getElementById("optnsgeneral").style.display = "none";
+    document.getElementById("seldate_general").style.display = "none";
+    document.getElementById("selyear_general").style.display = "none";
+    document.getElementById('forTotalAmt').style.display = "none";
+    document.getElementById('forTotalNo').style.display = "none";
+    document.getElementById('rptAmtTitle').style.display = 'none';
+    document.getElementById('shwAmtreport').style.display = "none";
+    document.getElementById('shwReferralreport').style.display = "none";
+    document.getElementById('shwreport').style.display = "none";
+
+    document.getElementById("optns").style.display = "block";
+    document.getElementById("seldate").style.display = "block";
+    document.getElementById("seldatelbl").style.display = 'block';
+//    document.getElementById('rptAmtTitle').style.display = 'block';
+//    document.getElementById('shwAmtreport').style.display = "block";
+    showConfirmedSalesReport("week");
+}
+
+function pendingReport() {
+    document.getElementById("optns").style.display = "none";
+    document.getElementById("seldate").style.display = "none";
+    document.getElementById("selyear").style.display = 'none';
+    document.getElementById("selyearlbl").style.display = 'none';
+    document.getElementById('rptAmtTitle').style.display = 'none';
+    document.getElementById('shwAmtreport').style.display = "none";
+    document.getElementById('forTotalAmt').style.display = "none";
+    document.getElementById('forTotalNo').style.display = "none";
+    document.getElementById("optnsgeneral").style.display = "none";
+    document.getElementById("seldate_general").style.display = "none";
+    document.getElementById("selyear_general").style.display = "none";
+    document.getElementById('shwReferralreport').style.display = "none";
+    document.getElementById('shwreport').style.display = "none";
+
+    //show all fields related to pending
+    document.getElementById("seldatelbl").style.display = 'block';
+    document.getElementById("optnspending").style.display = "block";
+    document.getElementById("seldate_pending").style.display = "block";
+
+    showPendingSalesReport("week");
+}
+
+function showPendingSalesReport(selopt) {
+    var opt = selopt.value;
+    if (opt == null) {
+        opt = "week";
+    }
+    if (opt == 'week') {
+        showPendingWeekReport();
+    } else if (opt == 'year') {
+        showPendingYearReport();
+    }
+}
+function showPendingWeekReport() {
+    var chdate = document.getElementById("seldate_pending");
+    chdate.style.display = 'block';
+    var chdatelbl = document.getElementById("seldatelbl");
+    chdatelbl.style.display = 'block';
+    var chyear = document.getElementById("selyear_pending");
+    chyear.style.display = 'none';
+    var chyearlbl = document.getElementById("selyearlbl").style.display = 'none';
+    var seldate = chdate.value;
+    if (seldate == null) {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        var today = yyyy + '-' + mm + '-' + dd;
+        seldate = today;
+    }
+    $.getJSON("SalesReportController", {opt: "week_pending", seldate: seldate})
+            .done(function (data) {
+                //alert(JSON.stringify(data));
+                var status = data.status;
+                if (status === "SUCCESS") {
+                    var mon = data.mon;
+                    var tues = data.tues;
+                    var weds = data.weds;
+                    var thurs = data.thurs;
+                    var fri = data.fri;
+                    var sat = data.sat;
+                    var sun = data.sun;
+                    var montotal = parseFloat(data.montotal);
+                    var tuestotal = parseFloat(data.tuestotal);
+                    var wedstotal = parseFloat(data.wedstotal)
+                    var thurstotal = parseFloat(data.thurstotal);
+                    var fritotal = parseFloat(data.fritotal);
+                    var sattotal = parseFloat(data.sattotal);
+                    var suntotal = parseFloat(data.suntotal);
+                    var max = data.max;
+                    var total = parseFloat(data.total);
+                    var maxAmt = parseFloat(data.maxAmt);
+                    var chartData = google.visualization.arrayToDataTable([
+                        ["Days", "No. Of Pending Sales for " + seldate],
+                        ["Monday", mon],
+                        ["Tuesday", tues],
+                        ["Wednesday", weds],
+                        ["Thursday", thurs],
+                        ["Friday", fri],
+                        ["Saturday", sat],
+                        ["Sunday", sun]
+                    ]);
+                    var options = "";
+                    if (max < 5) {
+                        options = {
+                            colors: ['#3F51B5'],
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '100%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '80%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            vAxis: {
+                                viewWindow: {
+                                    max: 15,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    } else {
+                        options = {
+                            colors: ['#3F51B5'],
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '100%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '80%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            vAxis: {
+                                viewWindow: {
+                                    max: max,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    }
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No. of Pending Sales for ' + seldate;
+                    var shwreport = document.getElementById('shwreport');
+                    shwreport.style.display = "block";
+                    var totalTitle = document.getElementById('forTotalNo');
+                    totalTitle.style.display = "block";
+                    totalTitle.innerHTML = 'Total No. Of Sales: ' + (mon + tues + weds + thurs + fri + sat + sun);
+                    var chart = new google.visualization.ColumnChart(document.getElementById('shwreport'));
+                    chart.draw(chartData, options);
+
+                    //draw amount chart
+//                     var chartAmtData = google.visualization.arrayToDataTable([
+//                        ["Days", "Total Amount Of Pending Sales for " + seldate],
+//                        ["Monday", montotal],
+//                        ["Tuesday", tuestotal],
+//                        ["Wednesday", wedstotal],
+//                        ["Thursday", thurstotal],
+//                        ["Friday", fritotal],
+//                        ["Saturday", sattotal],
+//                        ["Sunday", suntotal]
+//                    ]);
+//                    var amtoptions = "";
+//                     if (maxAmt <=20) {
+//                        amtoptions = {
+//                            colors: ['#26C6DA'],
+//                            backgroundColor: 'transparent',
+//                            chartArea: {
+//                                left: 50,
+//                                top: 10,
+//                                width: '100%',
+//                                height: '70%'
+//                            },
+//                            bar: {
+//                                groupWidth: '50%'
+//                            },
+//                            hAxis: {
+//                                textStyle: {
+//                                    fontSize: 11
+//                                }
+//                            },
+//                            legend: {
+//                                position: 'bottom'
+//                            },
+//                            vAxis: {
+//                                viewWindow: {
+//                                    max: 20,
+//                                    min: 0
+//
+//                                }
+//                            }
+//                        };
+//                    } else {
+//                        amtoptions = {
+//                            colors: ['#26C6DA'],
+//                            backgroundColor: 'transparent',
+//                            chartArea: {
+//                                left: 50,
+//                                top: 10,
+//                                width: '100%',
+//                                height: '70%'
+//                            },
+//                            bar: {
+//                                groupWidth: '50%'
+//                            },
+//                            hAxis: {
+//                                textStyle: {
+//                                    fontSize: 11
+//                                }
+//                            },
+//                            legend: {
+//                                position: 'bottom'
+//                            },
+//                            vAxis: {
+//                                viewWindow: {
+//                                    max: maxAmt,
+//                                    min: 0
+//
+//                                }
+//                            }
+//                        };
+//                    }
+//                     var amttitle = document.getElementById('rptAmtTitle');
+//                    amttitle.innerHTML = 'Total Amount of Pending Sales for ' + seldate;
+//                    var shwAmtreport = document.getElementById('shwAmtreport');
+//                    shwAmtreport.style.display = "block";
+//                    var chart = new google.visualization.ColumnChart(document.getElementById('shwAmtreport'));
+//                    chart.draw(chartAmtData, amtoptions);
+
+
+
+                } else if (status == "noRecord") {
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No Records Found';
+                    var shwreport = document.getElementById('shwreport');
+                    shwreport.style.display = "none";
+                    document.getElementById('forTotalNo').style.display = "none";
+                    //amt details
+//                    var amttitle = document.getElementById('rptAmtTitle');
+//                    amttitle.innerHTML = 'No Records Found';
+//                    var shwAmtreport = document.getElementById('shwAmtreport');
+//                    shwAmtreport.style.display = "none";
+                }
+            }).fail(function (error) {
+       // alert(JSON.stringify(error));
+    });
+
+}
+
+function showPendingYearReport() {
+    var chdate = document.getElementById("seldate_pending").style.display = 'none';
+    var chdatelbl = document.getElementById("seldatelbl").style.display = 'none';
+    var chyear = document.getElementById("selyear_pending");
+    chyear.style.display = 'block';
+    var chyearlbl = document.getElementById("selyearlbl").style.display = 'block';
+    var selyear = chyear.value;
+    //alert(selyear);
+    $.getJSON("SalesReportController", {opt: "year_pending", selyear: selyear})
+            .done(function (data) {
+                //alert(JSON.stringify(data));
+                var status = data.status;
+                //alert(status);
+                if (status === "SUCCESS") {
+                    var jan = data.jan;
+                    var feb = data.feb;
+                    var mar = data.mar;
+                    var apr = data.apr;
+                    var may = data.may;
+                    var june = data.june;
+                    var jul = data.jul;
+                    var aug = data.aug;
+                    var sep = data.sep;
+                    var oct = data.oct;
+                    var nov = data.nov;
+                    var dec = data.dec;
+                    var jantotal = data.jantotal;
+                    var febtotal = data.febtotal;
+                    var martotal = data.martotal;
+                    var aprtotal = data.aprtotal;
+                    var maytotal = data.maytotal;
+                    var junetotal = data.junetotal;
+                    var jultotal = data.jultotal;
+                    var augtotal = data.augtotal;
+                    var septotal = data.septotal;
+                    var octtotal = data.octtotal;
+                    var novtotal = data.novtotal;
+                    var dectotal = data.dectotal;
+                    var max = data.max;
+                    var chartData = google.visualization.arrayToDataTable([
+                        ["Months", "No. Of Pending Sales in " + selyear],
+                        ["January", jan],
+                        ["Feburary", feb],
+                        ["March", mar],
+                        ["April", apr],
+                        ["May", may],
+                        ["June", june],
+                        ["July", jul],
+                        ["August", aug],
+                        ["September", sep],
+                        ["October", oct],
+                        ["November", nov],
+                        ["December", dec]
+                    ]);
+                    if (max < 5) {
+                        var options = {
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '90%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '50%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            colors: ['#900C3F'],
+                            vAxis: {
+                                viewWindow: {
+                                    max: 15,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    } else {
+                        var options = {
+                            backgroundColor: 'transparent',
+                            chartArea: {
+                                left: 50,
+                                top: 10,
+                                width: '90%',
+                                height: '70%'
+                            },
+                            bar: {
+                                groupWidth: '50%'
+                            },
+                            hAxis: {
+                                textStyle: {
+                                    fontSize: 11
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            colors: ['#900C3F'],
+                            vAxis: {
+                                viewWindow: {
+                                    max: max,
+                                    min: 0
+
+                                }
+                            }
+                        };
+                    }
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No. of Pending Sales in ' + selyear;
+                    var shwreport = document.getElementById('shwreport');
+                    shwreport.style.display = "block";
+                    var totalTitle = document.getElementById('forTotalNo');
+                    totalTitle.style.display = "block";
+                    totalTitle.innerHTML = 'Total No. Of Sales: ' + (jan + feb + mar + apr + may + june + jul + aug + sep + oct + nov + dec);
+                    var chart = new google.visualization.ColumnChart(document.getElementById('shwreport'));
+                    chart.draw(chartData, options);
+
+
+
+
+                } else if (status == "noRecord") {
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No Records Found';
+                    var shwreport = document.getElementById('shwreport');
+                    shwreport.style.display = "none";
+                    document.getElementById('forTotalNo').style.display = "none";
+                }
+            }).fail(function (error) {
+    });
+}
+
+
+function generalReport() {
+    document.getElementById("optns").style.display = "none";
+    document.getElementById("seldate").style.display = "none";
+    document.getElementById("selyear").style.display = 'none';
+    document.getElementById("selyearlbl").style.display = 'none';
+    document.getElementById('rptAmtTitle').style.display = 'none';
+    document.getElementById('shwAmtreport').style.display = "none";
+    document.getElementById('shwreport').style.display = "none";
+    document.getElementById('forTotalAmt').style.display = "none";
+    document.getElementById('forTotalNo').style.display = "none";
+    document.getElementById("optnspending").style.display = "none";
+    document.getElementById("seldate_pending").style.display = "none";
+    document.getElementById("selyear_pending").style.display = 'none';
+
+    //show all fields related to general
+    document.getElementById("seldatelbl").style.display = 'block';
+    document.getElementById("optnsgeneral").style.display = "block";
+    document.getElementById("seldate_general").style.display = "block";
+
+    showGeneralSalesReport("week");
+}
+function showGeneralSalesReport(selopt) {
+    var opt = selopt.value;
+    if (opt == null) {
+        opt = "week";
+    }
+    if (opt == 'week') {
+        showGeneralWeekReport();
+    } else if (opt == 'year') {
+        showGeneralYearReport();
+    }
+}
+function showGeneralWeekReport() {
+    var chdate = document.getElementById("seldate_general");
+    chdate.style.display = 'block';
+    var chdatelbl = document.getElementById("seldatelbl");
+    chdatelbl.style.display = 'block';
+    var chyear = document.getElementById("selyear_general").style.display = 'none';
+    document.getElementById("selyearlbl").style.display = 'none';
+
+    var seldate = chdate.value;
+    if (seldate == null) {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        var today = yyyy + '-' + mm + '-' + dd;
+        seldate = today;
+    }
+    $.getJSON("SalesReportController", {opt: "week_general_referral", seldate: seldate})
+            .done(function (data) {
+                var status = data.status;
+                if (status === "SUCCESS") {
+                    var fb = data.facebook;
+                    var fr = data.friend;
+                    var web = data.website;
+                    var mag = data.magazine;
+                    var others = data.others;
+
+                    var chartData = google.visualization.arrayToDataTable([
+                        ["Type", "Referral Type on " + seldate],
+                        ["Facebook", fb],
+                        ["Friend", fr],
+                        ["Website", web],
+                        ["Magazine", mag],
+                        ["Others", others]
+                    ]);
+                    var pieOptions = {
+                        title: 'Referral Types',
+                        titleTextStyle: {fontSize: '16', fontWidth: 'normal'},
+                        pieSliceText: 'value',
+                         width: 600,
+                        height: 400,
+                        pieHole: 0.2,
+                        tooltip: {
+                            text: 'percentage'
+                        },
+                         legend: {
+                            textStyle: {
+                                fontSize: 14
+                            }
+                        }
+                        
+                    };
+                    // draw pie chart
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'Overall report for the week of ' + seldate;
+                    var pieChart = new google.visualization.PieChart(document.getElementById('shwReferralreport'));
+                    pieChart.draw(chartData, pieOptions);
+                    var shwreport = document.getElementById('shwReferralreport');
+                    shwreport.style.display = "block";
+
+
+
+                } else if (status == "noRecord") {
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No Records Found';
+                    var shwreport = document.getElementById('shwreport');
+                    document.getElementById('shwReferralreport').style.display = "none";
+                    shwreport.style.display = "none";
+                    document.getElementById('forTotalNo').style.display = "none";
+                }
+            }).fail(function (error) {
+    });
+
+}
+
+function showGeneralYearReport() {
+    var chdate = document.getElementById("selyear_general");
+    chdate.style.display = 'block';
+    var chdatelbl = document.getElementById("selyearlbl");
+    chdatelbl.style.display = 'block';
+    var chyear = document.getElementById("seldate_general").style.display = 'none';
+    document.getElementById("seldatelbl").style.display = 'none';
+
+    var selyear = chdate.value;
+   
+    $.getJSON("SalesReportController", {opt: "year_general_referral", selyear: selyear})
+            .done(function (data) {
+                var status = data.status;
+                if (status === "SUCCESS") {
+                    var fb = data.facebook;
+                    var fr = data.friend;
+                    var web = data.website;
+                    var mag = data.magazine;
+                    var others = data.others;
+
+                    var chartData = google.visualization.arrayToDataTable([
+                        ["Type", "Referral Type on " + selyear],
+                        ["Facebook", fb],
+                        ["Friend", fr],
+                        ["Website", web],
+                        ["Magazine", mag],
+                        ["Others", others]
+                    ]);
+                    var pieOptions = {
+                        title: 'Referral Types',
+                        titleTextStyle: {fontSize: '16', fontWidth: 'normal'},
+                        pieSliceText: 'value',
+                         width: 600,
+                        height: 400,
+                        pieHole: 0.2,
+                        tooltip: {
+                            text: 'percentage'
+                        },
+                         legend: {
+                            textStyle: {
+                                fontSize: 14
+                            }
+                        }
+                        
+                    };
+                    // draw pie chart
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'Overall report for the year of ' + selyear;
+                    var pieChart = new google.visualization.PieChart(document.getElementById('shwReferralreport'));
+                    pieChart.draw(chartData, pieOptions);
+                    var shwreport = document.getElementById('shwReferralreport');
+                    shwreport.style.display = "block";
+
+
+
+                } else if (status == "noRecord") {
+                    var title = document.getElementById('rptTitle');
+                    title.innerHTML = 'No Records Found';
+                    var shwreport = document.getElementById('shwreport');
+                    document.getElementById('shwReferralreport').style.display = "none";
+                    shwreport.style.display = "none";
+                    document.getElementById('forTotalNo').style.display = "none";
+                }
+            }).fail(function (error) {
+    });
+
 }
 
 
