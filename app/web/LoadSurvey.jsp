@@ -37,7 +37,8 @@
                         <div class="form-group" style='margin-left:10%!important'>
                             <div class="col-sm-4">
                                 <div style="width: 300%;" class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                    <input type="text" id="<%=address%>_<%=areaCounter%>_search"  placeholder="Search Item Name" class="form-control" style="color:black;">
+                                    <input type="text" id="<%=address%>_<%=areaCounter%>_search"  placeholder="Search Item Name" class="form-control" style="color:black;" onkeyup="loadSurveyItemsTable($('#<%=address%>_<%=areaCounter%>_search').val(), '<%=address%>', '<%=areaCounter%>', '<%=salesDiv%>');
+                                                return false;">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default  bootstrap-touchspin-up" onclick="loadSurveyItemsTable($('#<%=address%>_<%=areaCounter%>_search').val(), '<%=address%>', '<%=areaCounter%>', '<%=salesDiv%>');
                                                 return false;">Search</button>
