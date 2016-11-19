@@ -23,7 +23,7 @@
                 border-radius: 2px;
                 box-shadow: inset 1px 1px 3px #f6f6f6;
             }
-            
+
             .email-box a{
                 cursor: pointer;
             }
@@ -43,6 +43,7 @@
     </head>
     <body>
         <%@include file="header.jsp"%>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
         <script type="text/javascript" src="assets/widgets/summernote-wysiwyg/summernote-wysiwyg.js"></script>
         <script type="text/javascript">
             /* WYSIWYG editor */
@@ -88,7 +89,6 @@
                                     </div>
 
                                 </div>
-
                                 <div class="divider"></div>
                                 <form class="form-horizontal mrg15T" role="form">
                                     <div class="form-group row">
@@ -131,22 +131,59 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="pad15A">
+                                        <div class="wysiwyg-editor"></div>
+                                    </div>
                                 </form>
-
-                                <div class="pad15A">
-                                    <div class="wysiwyg-editor"></div>
-                                </div>
-
-                                <div class="button-pane">
-                                    <button class="btn btn-info" onclick="sendEmail()">Send mail</button>
-                                    <button class="btn btn-link font-gray-dark">Cancel</button>
-                                </div>
-
+                                    <div class="button-pane">
+                                        <button onclick="sendEmail()" class="btn btn-info">Send Mail</button>
+                                    </div>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <script>
+            $('#send_message_form').ajaxForm({
+                dataType: 'json',
+                beforeSend: function () {
+                    var div = document.getElementById("loading-submit");
+                    div.style.display = "block";
+                },
+                success: function (data) {
+                    var div = document.getElementById("loading-submit");
+                    div.style.display = "none";
+                    var modal = document.getElementById("email_error_modal");
+                    var status = document.getElementById("email_error_status");
+                    var message = document.getElementById("email_error_message");
+                    status.innerHTML = data.status;
+                    message.innerHTML = data.message;
+                    modal.style.display = "block";
+
+                    if (data.status === "SUCCESS") {
+                        if (data.files != null) {
+                            $.get("ClearFolderController", {files: data.files}, function (data) {
+                            });
+                        }
+                        setTimeout(function () {
+                            modal.style.display = "none";
+                            location.reload();
+                        }, 800);
+                    }
+                },
+                error: function (data) {
+                    var div = document.getElementById("loading-submit");
+                    div.style.display = "none";
+                    var modal = document.getElementById("email_error_modal");
+                    var status = document.getElementById("email_error_status");
+                    var message = document.getElementById("email_error_message");
+                    status.innerHTML = "ERROR";
+                    message.innerHTML = data;
+                    modal.style.display = "block";
+                }
+            });
+        </script>
     </body>
 </html>

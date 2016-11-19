@@ -2345,48 +2345,38 @@ function viewQuotation(refNum) {
     document.getElementById(s).style.display = "block";
 }
 
-function emailQuotation(modalName){
-    var emailAdd = document.getElementById('quotationEmail').value;
+function emailQuotation(refNum){
+    var emailAdd = document.getElementById('quotationEmail' + refNum).value;
     if(!emailAdd){
         document.getElementById('lead_error_status').innerHTML = "ERROR";
         document.getElementById('lead_error_message').innerHTML = "Please enter an email address";
         document.getElementById('lead_error_modal').style.display = "block";
     }else{
-        var leadId = document.getElementById('leadId').value;
-        var refNum = document.getElementById('refNum').value;
-        var serviceIncludes = document.getElementById('serviceIncludes').value;
+        var leadId = document.getElementById('leadId' + refNum).value;
+        var refNum = document.getElementById('refNum' + refNum).value;
+        var serviceIncludes = document.getElementById('serviceIncludes' + refNum).value;
         var div = document.getElementById("loading-submit");
-        jQuery.ajax({
-            url: "EmailQuotationController",
-            dataType: "json",
-            data: {
-                "email": emailAdd,
-                "leadId": leadId,
-                "refNum": refNum,
-                "serviceIncludes": serviceIncludes,                
-            },
-            beforeSend: function () {
-                div.style.display = "block";
-            },
-            success: function (data) {
-                div.style.display = "none";
+        div.style.display = "block";
+        $.getJSON("EmailQuotationController", {email: emailAdd, leadId: leadId, refNum: refNum, serviceIncludes: serviceIncludes})
+            .done(function (data) {
                 document.getElementById('lead_error_status').innerHTML = data.status;
                 document.getElementById('lead_error_message').innerHTML = data.message;
                 document.getElementById('lead_error_modal').style.display = "block";
                 if(data.status === "SUCCESS"){
                     setTimeout(function () {
                         document.getElementById("lead_error_modal").style.display = "none";
-                        closeModal(modalName);
-                    }, 500);
+                    }, 1500);
                 }
-            },
-            error: function (data) {
-                div.style.display = "none";
-                document.getElementById('lead_error_status').innerHTML = data.status;
+            })
+            .fail(function (data) {
+                document.getElementById('lead_error_status').innerHTML = "ERROR";
                 document.getElementById('lead_error_message').innerHTML = data.message;
                 document.getElementById('lead_error_modal').style.display = "block";
-            }
-        });
+            });
+        setTimeout(function () {
+            div.style.display = "none";
+            closeModal('quotation_modal_' + refNum);
+        }, 1500);
     }
 }
 

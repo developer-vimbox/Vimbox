@@ -519,7 +519,7 @@ function replyEmail() {
             status.innerHTML = data.status;
             message.innerHTML = data.message;
             modal.style.display = "block";
-            
+
             if (data.status === "SUCCESS") {
                 var files = "";
                 if (data.files != null) {
@@ -692,7 +692,7 @@ function selectEmailAction(type) {
             var files = $('#message-files').val().split("|");
             var div = "";
             for (var i = 0; i < files.length; i++) {
-                if(files[i]){
+                if (files[i]) {
                     div += "<div class='email-box'><label>" + files[i].substr(files[i].lastIndexOf("/") + 1) + "</label><input type='hidden' name='files' value='" + files[i] + "'/>&nbsp;&nbsp;&nbsp;<a onclick=\"removeBox(this)\">x</a></div>"
                 }
             }
@@ -701,17 +701,17 @@ function selectEmailAction(type) {
             fwdMessage += "Date: " + document.getElementById("date-table").innerHTML + "<br>";
             fwdMessage += "Subject: " + document.getElementById("subject-table").innerHTML + "<br>";
             fwdMessage += "To: " + document.getElementById("to-table").innerHTML + "<br>";
-            if(document.getElementById("cc-table") != null){
+            if (document.getElementById("cc-table") != null) {
                 fwdMessage += "Cc: " + document.getElementById("cc-table").innerHTML + "<br>";
             }
             fwdMessage += "<br>" + document.getElementById("message-content").innerHTML;
             document.getElementById("email-message").innerHTML = fwdMessage;
-            
+
             document.getElementById("files-div").innerHTML = div + document.getElementById("files-div").innerHTML;
             actionImg.innerHTML = "<img src='Images/forward.png' height='25' width='30' style='padding: 3px 2px 0 0;'>";
-            if(rawSubject.includes("Re:")){
+            if (rawSubject.includes("Re:")) {
                 rawSubject = "Fwd" + rawSubject.substring(rawSubject.indexOf(":"));
-            }else if (!rawSubject.includes("Fwd:")){
+            } else if (!rawSubject.includes("Fwd:")) {
                 rawSubject = "Fwd: " + rawSubject;
             }
             $('#subject').val(rawSubject);

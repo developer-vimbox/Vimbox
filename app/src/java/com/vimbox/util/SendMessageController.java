@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -31,12 +32,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import org.apache.catalina.core.ApplicationPart;
 
 @WebServlet(name = "SendMessageController", urlPatterns = {"/SendMessageController"})
 @MultipartConfig
 public class SendMessageController extends HttpServlet {
+
     private String username;
     private String password;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -84,7 +88,6 @@ public class SendMessageController extends HttpServlet {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
 
-        
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -118,29 +121,33 @@ public class SendMessageController extends HttpServlet {
             InputStream filecontent = null;
             String filePaths = "";
             for (Part filePart : parts) {
-                String fileName = filePart.getSubmittedFileName();
-                String directoryName = System.getProperty("user.dir") + "/documents/attachments/" + user.getAccount().getUsername();
-                //String directoryName = "C:/Users/NYuSheng/Desktop/attachments/" + user.getAccount().getUsername() + "/send";
-                
-                File directory = new File(directoryName);
-                if (!directory.exists()) {
-                    directory.mkdirs();
+                ApplicationPart appFilePart = (ApplicationPart) filePart;
+                String fileName = appFilePart.getSubmittedFileName();
+                if (fileName != null) {
+                    String directoryName = System.getProperty("user.dir") + "/documents/attachments/" + user.getAccount().getUsername() + "/send";
+                    //String directoryName = "C:/Users/NYuSheng/Desktop/attachments/" + user.getAccount().getUsername() + "/send";
+
+                    File directory = new File(directoryName);
+                    if (!directory.exists()) {
+                        System.out.println(directoryName);
+                        directory.mkdirs();
+                    }
+
+                    String path = directoryName + "/" + fileName;
+
+                    out = new FileOutputStream(new File(path));
+                    filecontent = appFilePart.getInputStream();
+
+                    int read = 0;
+                    final byte[] bytes = new byte[1024];
+
+                    while ((read = filecontent.read(bytes)) != -1) {
+                        out.write(bytes, 0, read);
+                    }
+
+                    fileNames.add(path);
+                    filePaths += path + "|";
                 }
-
-                String path = directoryName + "/" + fileName;
-
-                out = new FileOutputStream(new File(path));
-                filecontent = filePart.getInputStream();
-
-                int read = 0;
-                final byte[] bytes = new byte[1024];
-
-                while ((read = filecontent.read(bytes)) != -1) {
-                    out.write(bytes, 0, read);
-                }
-
-                fileNames.add(path);
-                filePaths += path + "|";
             }
 
             long start = System.currentTimeMillis();
@@ -159,7 +166,7 @@ public class SendMessageController extends HttpServlet {
             if (filecontent != null) {
                 filecontent.close();
             }
-            if(!filePaths.isEmpty()){
+            if (!filePaths.isEmpty()) {
                 jsonOutput.addProperty("files", filePaths);
             }
 
@@ -174,16 +181,13 @@ public class SendMessageController extends HttpServlet {
 
             jsonOutput.addProperty("status", "SUCCESS");
             jsonOutput.addProperty("message", "Message sent!");
-
-//            for (String fileName : fileNames) {
-//                Files.delete(Paths.get(fileName));
-//            }
         } catch (Exception e) {
             e.printStackTrace();
             jsonOutput.addProperty("status", "ERROR");
             jsonOutput.addProperty("message", e.getMessage());
         }
-
+        
+        //response.sendRedirect("NewMessage.jsp");
         jsonOut.println(jsonOutput);
     }
 

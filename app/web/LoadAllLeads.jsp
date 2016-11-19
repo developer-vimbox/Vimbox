@@ -226,9 +226,9 @@
                         <br>
                         <div class="form-group">
                             <div class="col-sm-4">
-                                <textarea rows="4" cols="41" class="form-control" id="serviceIncludes" name="serviceIncludes"><%=qService%></textarea>
-                                <input type="hidden" name="leadId" id="leadId" value="<%=lead.getId()%>">
-                                <input type="hidden" name="refNum" id="refNum" value="<%=refNum%>">
+                                <textarea rows="4" cols="41" class="form-control" id="serviceIncludes<%=refNum%>" name="serviceIncludes"><%=qService%></textarea>
+                                <input type="hidden" name="leadId" id="leadId<%=refNum%>" value="<%=lead.getId()%>">
+                                <input type="hidden" name="refNum" id="refNum<%=refNum%>" value="<%=refNum%>">
                             </div>
                         </div>
                         <br>
@@ -236,13 +236,13 @@
                         <br>
                         <div class="form-group">
                             <div>
-                                <input type="text" class="form-control" id="quotationEmail" value="<%=email%>">
+                                <input type="text" class="form-control" id="quotationEmail<%=refNum%>" value="<%=email%>">
                             </div>
                         </div>
                         <br><br>
                         <div class="form-group text-center">
                             <input class='btn btn-primary' onclick="closeModal('quotation_modal_<%=refNum%>')" type="submit" value="Quotation" formaction="quotations/<%=refNum%>" formtarget="_blank">
-                            <button class='btn btn-primary' onclick="emailQuotation('quotation_modal_<%=refNum%>');return false;">Email</button>
+                            <button class='btn btn-primary' onclick="emailQuotation('<%=refNum%>');return false;">Email</button>
                         </div>
                     </form>
                 </div>
