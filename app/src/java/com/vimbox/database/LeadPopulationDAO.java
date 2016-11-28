@@ -38,7 +38,7 @@ public class LeadPopulationDAO {
     private static ArrayList<String[]> items = new ArrayList<String[]>();
     private static ArrayList<String[]> specialItems = new ArrayList<String[]>();
     private static ArrayList<String[]> vimboxItems = new ArrayList<String[]>();
-    
+
     public static ArrayList<String> getAllServices() {
         ArrayList<String> results = new ArrayList<String>();
         Connection con = null;
@@ -170,7 +170,7 @@ public class LeadPopulationDAO {
         }
         return results;
     }
-    
+
     public static String getMoveTypeAbb(String mtype) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -424,8 +424,8 @@ public class LeadPopulationDAO {
         }
         return description;
     }
-    
-      public static String getSelectedServiceDesc(String primaryService, String secondaryService) {
+
+    public static String getSelectedServiceDesc(String primaryService, String secondaryService) {
         String description = "";
         Connection con = null;
         PreparedStatement ps = null;
@@ -445,6 +445,73 @@ public class LeadPopulationDAO {
             ConnectionManager.close(con, ps, rs);
         }
         return description;
+    }
+
+    public static ArrayList<String[]> getAdminExistingVimboxMaterials(String keyword) {
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_EXISTING_VIMBOX_MATERIALS_SITE_SURVEY);
+            ps.setString(1, "%" + keyword + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String[] data = new String[]{rs.getString("name"), rs.getString("img"), rs.getInt("material_id") + "", "Material"};
+                results.add(data);
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
+    }
+
+    public static ArrayList<String[]> getAdminExistingItemsSiteSurvey(String keyword) {
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_EXISTING_ITEMS_SITE_SURVEY);
+            ps.setString(1, "%" + keyword + "%");
+            ps.setString(2, "%" + keyword + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String[] data = new String[]{rs.getString("name"), rs.getString("description"), rs.getString("dimensions"), rs.getString("units"), rs.getString("img"), rs.getInt("item_id") + ""};
+                results.add(data);
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
+    }
+
+    public static ArrayList<String[]> getAdminExistingSpecialItemsSiteSurvey(String keyword) {
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = ConnectionManager.getConnection();
+            ps = con.prepareStatement(GET_EXISTING_SPECIAL_ITEMS_SITE_SURVEY);
+            ps.setString(1, "%" + keyword + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String[] data = new String[]{rs.getString("name"), rs.getString("description"), rs.getString("dimensions"), rs.getString("units"), rs.getString("img"), rs.getInt("item_id") + "", "Special"};
+                results.add(data);
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            ConnectionManager.close(con, ps, rs);
+        }
+        return results;
     }
 
     public static ArrayList<String[]> getExistingItemsSiteSurvey(String keyword) {
@@ -471,8 +538,8 @@ public class LeadPopulationDAO {
             return items;
         }
         ArrayList<String[]> results = new ArrayList<String[]>();
-        for(String[] s : items) {
-            if(s[0].toLowerCase().contains(keyword.toLowerCase()) || s[1].toLowerCase().contains(keyword.toLowerCase())) {
+        for (String[] s : items) {
+            if (s[0].toLowerCase().contains(keyword.toLowerCase()) || s[1].toLowerCase().contains(keyword.toLowerCase())) {
                 results.add(s);
             }
         }
@@ -502,8 +569,8 @@ public class LeadPopulationDAO {
             return specialItems;
         }
         ArrayList<String[]> results = new ArrayList<String[]>();
-        for(String[] s : specialItems) {
-            if(s[0].toLowerCase().contains(keyword.toLowerCase()) || s[1].toLowerCase().contains(keyword.toLowerCase())) {
+        for (String[] s : specialItems) {
+            if (s[0].toLowerCase().contains(keyword.toLowerCase()) || s[1].toLowerCase().contains(keyword.toLowerCase())) {
                 results.add(s);
             }
         }
@@ -533,15 +600,15 @@ public class LeadPopulationDAO {
             return vimboxItems;
         }
         ArrayList<String[]> results = new ArrayList<String[]>();
-        for(String[] s : vimboxItems) {
-            if(s[0].toLowerCase().contains(keyword.toLowerCase()) || s[1].toLowerCase().contains(keyword.toLowerCase())) {
+        for (String[] s : vimboxItems) {
+            if (s[0].toLowerCase().contains(keyword.toLowerCase()) || s[1].toLowerCase().contains(keyword.toLowerCase())) {
                 results.add(s);
             }
         }
         return results;
     }
-    
-    public static void editItem(String itemValues, String itemName, String itemDescription, String itemDimensions, String itemUnits, String img){
+
+    public static void editItem(String itemValues, String itemName, String itemDescription, String itemDimensions, String itemUnits, String img) {
         Connection con = null;
         PreparedStatement ps = null;
         String[] valuesArr = itemValues.split("\\|");
@@ -561,8 +628,8 @@ public class LeadPopulationDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
-    public static void createNormalItem(String itemName, String itemDescription, String itemDimensions, String itemUnits, String fileName){
+
+    public static void createNormalItem(String itemName, String itemDescription, String itemDimensions, String itemUnits, String fileName) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -580,8 +647,8 @@ public class LeadPopulationDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
-    public static void createSpecialItem(String itemName, String itemDescription, String itemDimensions, String itemUnits, String fileName){
+
+    public static void createSpecialItem(String itemName, String itemDescription, String itemDimensions, String itemUnits, String fileName) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -599,8 +666,8 @@ public class LeadPopulationDAO {
             ConnectionManager.close(con, ps, null);
         }
     }
-    
-    public static void createMaterial(String itemName, String fileName){
+
+    public static void createMaterial(String itemName, String fileName) {
         Connection con = null;
         PreparedStatement ps = null;
         try {

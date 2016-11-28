@@ -2,6 +2,7 @@ package com.vimbox.user;
 
 import com.google.gson.JsonObject;
 import com.vimbox.database.UserDAO;
+import com.vimbox.database.UserLeaveDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -41,6 +42,7 @@ public class LoginController extends HttpServlet {
             String currPassword = account.getPassword();
             if (currPassword.equals(password)) {
                 HttpSession session = request.getSession();
+                UserLeaveDAO.updateLeaveMC();
                 session.setAttribute("session", user);
                 jsonOutput.addProperty("status", "SUCCESS");
             }else{

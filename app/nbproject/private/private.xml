@@ -3,11 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/JS/EmailFunctions.js</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/util/SendMessageController.java</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/AllLeads.jsp</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/web/NewMessage.jsp</file>
-            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sales/ConfirmLeadController.java</file>
+            <file>file:/C:/Users/NYuSheng/Documents/GitHub/Vimbox/app/src/java/com/vimbox/sitesurvey/SaveSiteSurveyController.java</file>
         </group>
     </open-files>
 </project-private>

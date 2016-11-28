@@ -1,8 +1,8 @@
 <%@page import="com.vimbox.database.LeadPopulationDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%
-    ArrayList<String[]> results = LeadPopulationDAO.getExistingItemsSiteSurvey("");
-    ArrayList<String[]> spcResults = LeadPopulationDAO.getExistingSpecialItemsSiteSurvey("");
+    ArrayList<String[]> results = LeadPopulationDAO.getAdminExistingItemsSiteSurvey("");
+    ArrayList<String[]> spcResults = LeadPopulationDAO.getAdminExistingSpecialItemsSiteSurvey("");
     spcResults.addAll(results);
     results = spcResults;
 %>

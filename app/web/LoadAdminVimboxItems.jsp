@@ -1,7 +1,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.vimbox.database.LeadPopulationDAO"%>
 <%
-    ArrayList<String[]> results = LeadPopulationDAO.getExistingVimboxMaterials("");
+    ArrayList<String[]> results = LeadPopulationDAO.getAdminExistingVimboxMaterials("");
 %>
 
 <table class='table table-bordered' valign="top" style="width:100%;table-layout: fixed;border-color: #dfe8f1;" border="1">
